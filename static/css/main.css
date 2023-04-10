@@ -80,7 +80,6 @@ body.regular-body {
 .legend-circle {
   width: .75em;
   height: .75em;
-  border-radius: 50%;
   border: 1px solid darkgray;
   margin-top: 6px;
 }

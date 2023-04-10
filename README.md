@@ -26,7 +26,8 @@ Current Version: 10.1 ([documentation](http://ontask-version-b.readthedocs.io/en
 
 - Functionality to export a set of actions from a single request.
 
-- Action to write a rubric with a feedback paragraph for each criteria and level of attainment and create a personalized message to each student.
+- Action to write a rubric with a feedback paragraph for each criterion and 
+  level of attainment and create a personalized message to each student.
 
 - Actions can now be executed incrementally. Execution can now be scheduled over a time window, and at ever execution, only those new learners that have not been considered before are processed. This action execution is **ideal** to implement triggers that send messages whenever a change in data is detected (requires data to be refreshed frequently)
  
@@ -62,14 +63,14 @@ Current Version: 10.1 ([documentation](http://ontask-version-b.readthedocs.io/en
 - Support for internationalization (initial versions for Spanish, Chinese and Finnish)
 
 **For a detailed description of the tool, how to install it, and how to use it
-check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
+check the [OnTask Documentation](http://ontask-version-b.readthedocs.io/en/latest/)**.
 
 ## OnTask FAQ
 
 Welcome to OnTask, the platform offering teachers and educational designers
 the capacity to use data to personalise the experience for the learners. For 
 a detailed description of what is OnTask, how to install it and use it, read
-the [OnTask Documentation](https://abelardopardo.github.io/ontask_b).
+the [OnTask Documentation](http://ontask-version-b.readthedocs.io/en/latest/).
 
 Here is a quick summary about OnTask:
 
@@ -87,8 +88,8 @@ Q2. **What kind of data?** OnTask assumes there exist data related to how
 
 Q3. **Does OnTask collect the data for me?** In its basic form, no. It assumes 
     that you have access to the data yourself and offers a simple way to upload
-    it into the platform to be then used to deploy *actions*. If you you have 
-    specific needs to obtain data, let us know and we can discuss other options.
+    it into the platform to be then used to deploy *actions*. If you have 
+    specific needs to obtain data, let us know, and we can discuss other options.
      
 Q4. **For which courses is OnTask most useful?** OnTask is ideal for courses 
     with a large number of students, in which it makes sense to contact the 
@@ -113,7 +114,7 @@ Q6. **But how is this personalisation done?** Simple. OnTask allows you to
     failed a set of questions in an exam. Or different suggestions for those 
     that are minimally, partially, or completely engaged with the course 
     activities (although you need data about this!). 
-    Theses rules are then applied to every learner to obtain the personalised 
+    These rules are then applied to every learner to obtain the personalised 
     text (or resource). This is particularly useful when you have a large 
     student cohort and want to provide some level of personalisation at a 
     reasonable effort. 
@@ -156,7 +157,7 @@ Q14. **Nice, but sometimes you only want to see a subset of the data**. No
 
 Q15. **After a course finishes, there seems to be quite a lot of information
      and intelligence captured in OnTask. How do I reuse it?** Easy. OnTask
-     offers you the possibility of exporting and importing your data so you 
+     offers you the possibility of exporting and importing your data, so you 
      can either archive it for future reference or share your actions, rules,
      views, etc with other user.
   
@@ -176,7 +177,7 @@ Q18. **This seems like a complex tool to install** OnTask is a web platform and
      have restricted functionality.
   
 Q19. **Where do I find the details on how to install it and some more 
-     information?** Check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b).   
+     information?** Check the [OnTask Documentation](https://ontask-version-b.readthedocs.io/en/latest/).   
      
 ## Roadmap
 
@@ -216,7 +217,7 @@ copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -241,81 +242,80 @@ SOFTWARE.
 OnTask uses the following additional libraries/modules with the following 
 licenses:
 
-- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT
+- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout): MIT
 
-- [Celery](https://github.com/celery/celery) BSD 3 Clause
+- [Celery](https://github.com/celery/celery): BSD 3 Clause
 
-- [coreapi](https://pypi.python.org/pypi/coreapi) BSD
+- [coreapi](https://pypi.python.org/pypi/coreapi): BSD
 
-- [Django](https://www.djangoproject.com) BSD License
+- [Django](https://www.djangoproject.com): BSD License
 
-- [django-admin-bootstrapped](https://github.com/django-admin-bootstrapped/django-admin-bootstrapped) Apache 2.0
+- [django-admin-bootstrapped](https://github.com/django-admin-bootstrapped/django-admin-bootstrapped): Apache 2.0
 
-- [django-braces](https://pypi.python.org/pypi/django-braces/1.12.0). BSD 
-  License
+- [django-braces](https://pypi.python.org/pypi/django-braces/1.12.0): BSD License
 
-- [django-celery-beat](https://github.com/celery/django-celery-beat) BSD 3 
+- [django-celery-beat](https://github.com/celery/django-celery-beat): BSD 3 
   Clause
 
-- [django-celery-results](https://github.com/celery/django-celery-results) 
+- [django-celery-results](https://github.com/celery/django-celery-results): 
   BSD 3 Clause
 
-- [django-crispy-forms](https://pypi.python.org/pypi/django-crispy-forms/1.7.0) 
+- [django-crispy-forms](https://pypi.python.org/pypi/django-crispy-forms/1.7.0): 
   MIT
   
-- [django-datetime-widget](https://github.com/asaglimbeni/django-datetime-widget) 
+- [django-datetime-widget](https://github.com/asaglimbeni/django-datetime-widget): 
   BSD 3 Clause
 
-- [django-environ](https://pypi.python.org/pypi/django-environ) MIT License
+- [django-environ](https://pypi.python.org/pypi/django-environ): MIT License
 
 - [django-extensions](https://github.com/django-extensions/django-extensions)
   MIT
 
-- [django-import-export](https://github.com/django-import-export/django-import-export) BSD
+- [django-import-export](https://github.com/django-import-export/django-import-export): BSD
 
-- [django-jquery](https://pypi.python.org/pypi/django-jquery/3.1.0) BSD
+- [django-jquery](https://pypi.python.org/pypi/django-jquery/3.1.0): BSD
 
-- [django-redis](https://github.com/niwinz/django-redis) BSD
+- [django-redis](https://github.com/niwinz/django-redis): BSD
 
 - [django-siteprefs](https://github.com/idlesign/django-siteprefs), BSD
 
-- [django-tables2](https://github.com/jieter/django-tables2) MIT
+- [django-tables2](https://github.com/jieter/django-tables2): MIT
 
-- [django-widget-tweaks](https://github.com/jazzband/django-widget-tweaks) MIT
+- [django-widget-tweaks](https://github.com/jazzband/django-widget-tweaks): MIT
 
-- [djangorestframework](https://pypi.python.org/pypi/djangorestframework/3.7.7) 
+- [djangorestframework](https://pypi.python.org/pypi/djangorestframework/3.7.7): 
   BSD
 
-- [email_validator](https://github.com/JoshData/python-email-validator) CC
+- [email_validator](https://github.com/JoshData/python-email-validator): CC
 
-- [ims-lti-py](https://github.com/tophatmonocle/ims_lti_py) MIT
+- [ims-lti-py](https://github.com/tophatmonocle/ims_lti_py): MIT
 
-- [Markdown](https://pypi.python.org/pypi/Markdown) BSD
+- [Markdown](https://pypi.python.org/pypi/Markdown): BSD
 
-- [mock](https://pypi.python.org/pypi/mock) BSD
+- [mock](https://pypi.python.org/pypi/mock): BSD
 
-- [oauth2](https://github.com/joestump/python-oauth2) MIT
+- [oauth2](https://github.com/joestump/python-oauth2): MIT
 
-- [pandas](https://pandas.pydata.org/) BSD
+- [pandas](https://pandas.pydata.org/): BSD
 
-- [psycopg2](https://pypi.python.org/pypi/psycopg2) LGPL with exceptions or ZPL
+- [psycopg2](https://pypi.python.org/pypi/psycopg2): LGPL with exceptions or ZPL
 
-- [Pygments](https://pypi.python.org/pypi/Pygments) BSD
+- [Pygments](https://pypi.python.org/pypi/Pygments): BSD
 
-- [Python](https://python.org) Python Software Foundation License
+- [Python](https://python.org): Python Software Foundation License
 
-- [python-ldap](https://bitbucket.org/psagers/django-auth-ldap/) BSD
+- [python-ldap](https://bitbucket.org/psagers/django-auth-ldap/): BSD
 
-- [pytz](https://pypi.python.org/pypi/pytz) MIT
+- [pytz](https://pypi.python.org/pypi/pytz): MIT
 
-- [Redis](https://redis.io) BSD
+- [Redis](https://redis.io): BSD
 
-- [sorl.thumbnails](https://pypi.org/project/sorl-thumbnail/) BSD
+- [sorl.thumbnails](https://pypi.org/project/sorl-thumbnail/): BSD
 
-- [Sphinx](https://pypi.python.org/pypi/Sphinx) BSD
+- [Sphinx](https://pypi.python.org/pypi/Sphinx): BSD
 
-- [SQLAlchemy](https://pypi.python.org/pypi/SQLAlchemy/1.2.0) MIT
+- [SQLAlchemy](https://pypi.python.org/pypi/SQLAlchemy/1.2.0): MIT
 
-- [tzlocal](https://pypi.python.org/pypi/tzlocal) MIT
+- [tzlocal](https://pypi.python.org/pypi/tzlocal): MIT
 
 

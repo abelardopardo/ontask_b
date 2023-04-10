@@ -1,7 +1,7 @@
 # 10.1 (2023-04-09)
 
 ## Added
-- 
+
 - Commands for sanity check, show configuration, upgrade to 9.0
 
 ## Changed
@@ -19,8 +19,6 @@
 - Updated list of institutions using the platform
 
 - Upgraded libraries
-
-## Fixed
 
 # 10.0 (2023-04-07)
 
