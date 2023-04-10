@@ -61,4 +61,4 @@ There are several platforms that implement similar functionality or follow a sim
 License
 *******
 
-The OnTask software is open source and available under the MIT License.
+The OnTask software is open source and available under the `MIT License <https://choosealicense.com/licenses/mit>`_.

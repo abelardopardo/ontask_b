@@ -72,6 +72,8 @@ When a workflow is open, the top-bar menu appears with the structure shown in th
 
 .. figure:: /scaptures/tutorial_top_menu_bar.png
    :align: center
+   :width: 100%
+
 
 .. include:: ../Tutorial/Tasks/include_top_menu.rst
 

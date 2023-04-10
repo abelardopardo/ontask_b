@@ -16,10 +16,21 @@
 #
 import os
 import sys
+from importlib import import_module
 
+import django
 import sphinx_material
+from django.conf import settings
+from django.urls import reverse
+from django.templatetags.static import static
+from django.utils.translation import gettext_lazy as _
 
-sys.path.insert(0, os.path.abspath('..'))
+# Load ontask package (access to the version)
+sys.path.append(os.path.abspath('..'))
+ontask = import_module('ontask')
+
+# Load django to have access to all required information
+django.setup()
 
 # -- General configuration ------------------------------------------------
 
@@ -35,7 +46,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx_copybutton',
-    'sphinx_search.extension',
+    # 'sphinx_search.extension',
     'sphinx.ext.ifconfig',
     'sphinx.ext.githubpages']
 
@@ -54,7 +65,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # The short X.Y version.
-version = 'v10.1'
+version = ontask.__version__
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -98,11 +109,31 @@ html_context = sphinx_material.get_html_context()
 html_theme = 'sphinx_material'
 
 html_theme_options = {
-    'nav_title': 'OnTask',
+    'nav_links': [
+        {
+            'href': 'https://ontasklearning.org',
+            'internal': False,
+            'title': 'OnTask Project Page'},
+        {
+            'href': reverse('home'),
+            'internal': False,
+            'title': 'Back to tool'},
+    ],
+
+    'heroes': {
+        'index':
+            """<div><img src="{0}" alt="{1}" style="width: 300px;"/>
+            </div><div>{2}</div>""".format(
+                static('img/ontask-logo-1.png'),
+                _('OnTask Home'),
+                _('A platform to deploy personalised feedback at scale')),
+    },
 
     # Set the repo location to get a badge with stats
+    'base_url': static(settings.ONTASK_HELP_URL),  # reverse('home'),
     'repo_url': 'https://github.com/abelardopardo/ontask_b/',
-    'repo_name': 'OnTask',
+    'repo_name': 'GitHub Repo',
+    'repo_type': 'github',
 
     # master doc
     'master_doc': 'index',
@@ -121,6 +152,9 @@ html_theme_options = {
     'globaltoc_collapse': True,
     # If True, show hidden TOC entries
     'globaltoc_includehidden': False,
+
+    'touch_icon': 'logo-big.png',
+    'version_dropdown': False,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
