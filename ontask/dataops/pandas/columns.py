@@ -122,7 +122,6 @@ def detect_datetime_columns(data_frame: pd.DataFrame) -> pd.DataFrame:
             try:
                 data_frame[column] = pd.to_datetime(
                     data_frame[column],
-                    infer_datetime_format=True,
                     utc=True)
             except (ValueError, TypeError):
                 # Datetime failed. Rows with no value may be read as NaN from

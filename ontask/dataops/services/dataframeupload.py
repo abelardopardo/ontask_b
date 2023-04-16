@@ -34,7 +34,6 @@ def load_df_from_csvfile(
     data_frame = pd.read_csv(
         file_obj,
         index_col=False,
-        infer_datetime_format=True,
         quotechar='"',
         skiprows=skiprows,
         skipfooter=skipfooter,
@@ -111,7 +110,6 @@ def load_df_from_s3(
     data_frame = pd.read_csv(
         smart_open.open(uri),
         index_col=False,
-        infer_datetime_format=True,
         quotechar='"',
         skiprows=skiprows,
         skipfooter=skipfooter,
