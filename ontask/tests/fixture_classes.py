@@ -170,3 +170,11 @@ class WrongEmailFixture:
     wflow_name = 'wflow1'
     fixtures = ['wrong_email']
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'wrong_email.sql')
+
+
+class FilterCorrectEmailsFixture:
+    wflow_name = 'wflow1'
+    fixtures = ['filter_correct_email']
+    filename = os.path.join(
+        settings.ONTASK_FIXTURE_DIR,
+        'filter_correct_email.sql')

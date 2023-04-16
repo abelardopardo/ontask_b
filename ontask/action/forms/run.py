@@ -193,15 +193,6 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
             pcolumn.pk if pcolumn else None)
         self.store_fields_in_dict([('confirm_items', None)])
 
-        # The given column must have unique values
-        if not sql.is_column_unique(
-            self.action.workflow.get_data_frame_table_name(),
-            pcolumn.name,
-        ):
-            self.add_error(
-                'item_column',
-                _('Column needs to have all unique values (no empty cells)'))
-
         return form_data
 
 
@@ -285,7 +276,8 @@ class EmailActionForm(
         try:
             column_data = sql.get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                column_names=[pcolumn.name])
+                column_names=[pcolumn.name],
+                filter_formula=self.action.get_filter_formula())
             if incorrect_email := get_incorrect_email(
                 [iname[0] for iname in column_data]
             ):
