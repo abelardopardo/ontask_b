@@ -366,6 +366,19 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             EC.invisibility_of_element_located((By.ID, 'div-spinner'))
         )
 
+    def click_on_element(self, by_string, string_value):
+        """Wait for an element to be clickable and then click
+
+        :by_string: String By.* to use in find_element
+        :sring_value: String to use as find criteria
+        :return: Element
+        """
+        element = self.selenium.find_element(by_string, string_value)
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(element))
+        element.click()
+        return element
+
     def login(self, uemail):
         self.open(reverse('accounts:login'))
         WebDriverWait(self.selenium, 10).until(
@@ -454,10 +467,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def cancel_modal(self):
         # Click in the cancel button
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//div[@id="modal-item"]//button[@data-bs-dismiss="modal"]'
-        ).click()
+            '//div[@id="modal-item"]//button[@data-bs-dismiss="modal"]')
         # Wail until the modal-open element disappears
         WebDriverWait(self.selenium, 10).until_not(
             EC.presence_of_element_located(
@@ -465,40 +477,34 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
         )
 
-    def click_dropdown_option(self, html_id: str, option_name: str):
+    def click_dropdown_option(self, ddown_id: str, option_name: str):
         """
-        Given a dropdown xpath, click to open and then click on the given option
-        :param html_id: id to locate the dropdown element (top level)
+        Given a dropdown id, click to open and then click on the given option
+        :param ddown_id: id to locate the dropdown element (top level)
         :param option_name: name of the option in the dropdown to click
         :return: Nothing
         """
-        self.selenium.find_element(By.ID, html_id).click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             '//*[@id="{0}"]//*[normalize-space() = "{1}"]'.format(
-                 html_id,
-                 option_name))
-        ))
-        self.selenium.find_element(
+        self.click_on_element(By.ID, ddown_id)
+        self.click_on_element(
             By.XPATH,
             '//*[@id="{0}"]//*[normalize-space() = "{1}"]'.format(
-                html_id,
-                option_name)).click()
+                 ddown_id,
+                 option_name))
 
     def click_dropdown_option_and_wait(
         self,
-        html_id: str,
+        ddown_id: str,
         option_name: str,
         wait_for: Optional[str] = None,
     ):
         """
-        Given a dropdown xpath, click to open and then click on the given option
-        :param html_id: id locate the dropdown element (top level)
+        Given a dropdown id, click to open and then click on the given option
+        :param ddown_id: id locate the dropdown element (top level)
         :param option_name: name of the option in the dropdown to click
         :param wait_for: @id to wait for, or modal open if none.
         :return: Nothing
         """
-        self.click_dropdown_option(html_id, option_name)
+        self.click_dropdown_option(ddown_id, option_name)
 
         if wait_for:
             WebDriverWait(self.selenium, 10).until(
@@ -507,27 +513,23 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         else:
             self.wait_for_modal_open()
 
-    def click_dropdown_option_by_number(self, html_id: str, option_num: int):
+    def click_dropdown_option_by_number(self, ddown_id: str, option_num: int):
         """Click the nth option in a dropdown menu.
 
         Given a dropdown xpath, click to open and then click on the given option
 
-        :param html_id: id to locate the dropdown element (top level)
+        :param ddown_id: id to locate the dropdown element (top level)
         :param option_num: position of the option in the dropdown to click
         :return: Nothing
         """
-        self.selenium.find_element(By.ID, html_id).click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             '//*[@id="{0}"]/div/*[{1}]'.format(html_id, option_num))))
-        self.selenium.find_element(
+        self.click_on_element(By.ID, ddown_id)
+        self.click_on_element(
             By.XPATH,
-            '//*[@id="{0}"]/div/*[{1}]'.format(html_id, option_num)
-        ).click()
+            '//*[@id="{0}"]/div/*[{1}]'.format(ddown_id, option_num))
 
     def click_dropdown_option_num_and_wait(
         self,
-        html_id: str,
+        ddown_id: str,
         option_num: int,
         wait_for: Optional[str] = None,
     ):
@@ -535,12 +537,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         Given a dropdown xpath, click to open and then click on the given option
 
-        :param html_id: id to locate the dropdown element (top level)
+        :param ddown_id: id to locate the dropdown element (top level)
         :param option_num: position of the option in the dropdown to click
         :param wait_for: @id to wait for, or modal open if none.
         :return: Nothing
         """
-        self.click_dropdown_option_by_number(html_id, option_num)
+        self.click_dropdown_option_by_number(ddown_id, option_num)
 
         if wait_for:
             WebDriverWait(self.selenium, 10).until(
@@ -549,12 +551,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         else:
             self.wait_for_modal_open()
 
-    def search_table_row_by_string(self, table_id, colidx, value):
+    def search_table_row_by_string(self, table_id, col_index, value):
         """
         Given a table id and a column index, it traverses the table searching
         for the given value in the column.
         :param table_id: ID of the HTML table element
-        :param colidx: Column index
+        :param col_index: Column index
         :param value: Value to search
         :return: Row Element
         """
@@ -565,7 +567,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             By.XPATH,
             '//table[@id="{0}"]/tbody/tr'
             '/td[{1}][starts-with(normalize-space(), "{2}")]/..'.format(
-                table_id, colidx, value
+                table_id, col_index, value
             )
         )
 
@@ -586,10 +588,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.assertIn('New workflow', self.selenium.page_source)
         self.assertIn('Import workflow', self.selenium.page_source)
 
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, xpath.format(wname))
-        ))
-        self.selenium.find_element(By.XPATH, xpath.format(wname)).click()
+        self.click_on_element(By.XPATH, xpath.format(wname))
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'action-index'))
         )
@@ -597,7 +596,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_home(self):
         # Goto the action page
-        self.selenium.find_element(By.ID, 'ontask-base-home').click()
+        self.click_on_element(By.ID, 'ontask-base-home')
         # Wait for page to refresh
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'workflow-index'))
@@ -607,7 +606,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_actions(self):
         # Goto the action page
-        self.selenium.find_element(By.ID, 'ontask-base-actions').click()
+        self.click_on_element(By.ID, 'ontask-base-actions')
         self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -619,15 +618,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_table(self):
         # Click in the top menu
-        self.selenium.find_element(By.ID, 'ontask-base-table').click()
-        # Wait for the Full View to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.LINK_TEXT, 'View data')
-            )
-        )
+        self.click_on_element(By.ID, 'ontask-base-table')
         # Click on the full view element
-        self.selenium.find_element(By.LINK_TEXT, 'View data').click()
+        self.click_on_element(By.LINK_TEXT, 'View data')
         # Wait for page to refresh
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'table-content'))
@@ -642,15 +635,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_workflow_operations(self):
         # Goto the details page
-        self.selenium.find_element(By.ID, 'ontask-base-settings').click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             self.class_and_text_xpath.format(
-                 'a',
-                 'dropdown-item',
-                 'Workflow operations'))
-        ))
-        self.selenium.find_element(By.ID, 'ontask-base-workflow').click()
+        self.click_on_element(By.ID, 'ontask-base-settings')
+        self.click_on_element(By.ID, 'ontask-base-workflow')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'workflow-detail'))
         )
@@ -659,15 +645,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_details(self):
         # Goto the details page
-        self.selenium.find_element(By.ID, 'ontask-base-settings').click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             self.class_and_text_xpath.format(
-                 'a',
-                 'dropdown-item',
-                 'Column operations'))
-        ))
-        self.selenium.find_element(By.ID, 'ontask-base-columns').click()
+        self.click_on_element(By.ID, 'ontask-base-settings')
+        self.click_on_element(By.ID, 'ontask-base-columns')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'workflow-detail'))
         )
@@ -730,140 +709,94 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_upload_merge(self):
         # Click in the top menu
-        self.selenium.find_element(By.ID, 'ontask-base-table').click()
+        self.click_on_element(By.ID, 'ontask-base-table')
         # Wait for the Full View to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.LINK_TEXT, 'Upload or merge data')
-            )
-        )
-        # Click on the upload and wait...
-        self.selenium.find_element(By.LINK_TEXT, 'Upload or merge data').click()
+        self.click_on_element(By.LINK_TEXT, 'Upload or merge data')
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, '//table[@id="dataops-table"]')
-            )
-        )
+                (By.XPATH, '//table[@id="dataops-table"]')))
 
     def go_to_csv_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
         # Go to CSV Upload/Merge
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//table[@id="dataops-table"]//a[normalize-space()="CSV"]').click()
+            '//table[@id="dataops-table"]//a[normalize-space()="CSV"]')
         WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//form')
-            )
-        )
+            EC.visibility_of_element_located((By.XPATH, '//form')))
 
     def go_to_excel_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
         # Go to CSV Upload/Merge
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="dataops-table"]'
-            '//a[normalize-space()="Excel"]').click()
+            '//a[normalize-space()="Excel"]')
         WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//form')
-            )
-        )
+            EC.visibility_of_element_located((By.XPATH, '//form')))
 
     def go_to_google_sheet_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
         # Go to CSV Upload/Merge
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//table[@id="dataops-table"]//a[normalize-space()="Google '
-            'Sheet"]').click()
+            '//table[@id="dataops-table"]//a[normalize-space()="Google Sheet"]')
         WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//form')
-            )
-        )
+            EC.visibility_of_element_located((By.XPATH, '//form')))
 
     def go_to_s3_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
         # Go to S3 upload/merge
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="dataops-table"]//a[normalize-space()="S3 Bucket '
-            'CSV"]').click()
+            'CSV"]')
         WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//form')
-            )
-        )
+            EC.visibility_of_element_located((By.XPATH, '//form')))
 
     def go_to_sql_upload_merge(self):
         self.go_to_upload_merge()
 
         # Goto SQL option
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="dataops-table"]//a[normalize-space()="SQL '
-            'Connection"]').click()
+            'Connection"]')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, '//div[@id = "connection-instructor"]')
-            )
-        )
+                (By.XPATH, '//div[@id = "connection-instructor"]')))
 
     def go_to_athena_upload_merge(self):
         self.go_to_upload_merge()
 
         # Goto Athena option
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="dataops-table"]//a[normalize-space()="Athena '
-            'Connection"]').click()
+            'Connection"]')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, '//div[@id = "connection-instructor"]')
-            )
-        )
+                (By.XPATH, '//div[@id = "connection-instructor"]')))
 
     def go_to_transform(self):
         # Click in the top menu
-        self.selenium.find_element(By.ID, 'ontask-base-table').click()
-        # Wait for the Full View to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.LINK_TEXT, 'Run Transformation')
-            )
-        )
-        # Click on the upload and wait...
-        self.selenium.find_element(By.LINK_TEXT, 'Run Transformation').click()
+        self.click_on_element(By.ID, 'ontask-base-table')
+        self.click_on_element(By.LINK_TEXT, 'Run Transformation')
         self.wait_for_id_and_spinner('transform-table_previous')
 
     def go_to_model(self):
         # Click in the top menu
-        self.selenium.find_element(By.ID, 'ontask-base-table').click()
-        # Wait for the Full View to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.LINK_TEXT, 'Run Model')
-            )
-        )
-        # Click on the upload and wait...
-        self.selenium.find_element(By.LINK_TEXT, 'Run Model').click()
+        self.click_on_element(By.ID, 'ontask-base-table')
+        self.click_on_element(By.LINK_TEXT, 'Run Model')
         self.wait_for_id_and_spinner('transform-table_previous')
 
     def go_to_attribute_page(self):
-        self.selenium.find_element(By.ID, 'ontask-base-settings').click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             self.class_and_text_xpath.format(
-                 'a',
-                 'dropdown-item',
-                 'Workflow operations'))
-        ))
-        self.selenium.find_element(By.LINK_TEXT, 'Workflow operations').click()
+        self.click_on_element(By.ID, 'ontask-base-settings')
+        self.click_on_element(By.LINK_TEXT, 'Workflow operations')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'js-attribute-create')))
@@ -872,14 +805,14 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Go first to the attribute page (workflow)
         self.go_to_attribute_page()
         # Click on the share
-        self.selenium.find_element(By.ID, 'share-tab').click()
+        self.click_on_element(By.ID, 'share-tab')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
         )
 
     def go_to_workflow_export(self):
         self.go_to_workflow_operations()
-        self.selenium.find_element(By.LINK_TEXT, 'Export').click()
+        self.click_on_element(By.LINK_TEXT, 'Export')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//form')))
@@ -887,10 +820,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def go_to_workflow_rename(self):
         # Click on the share
         self.go_to_workflow_operations()
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//button[contains(@class, "js-workflow-update")]'
-        ).click()
+            '//button[contains(@class, "js-workflow-update")]')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//form')))
@@ -901,10 +833,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def go_to_workflow_flush(self):
         # Go to workflow ops first
         self.go_to_workflow_operations()
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//button[contains(@class, "js-workflow-flush")]'
-        ).click()
+            '//button[contains(@class, "js-workflow-flush")]')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//form')))
@@ -914,24 +845,20 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_workflow_delete(self):
         self.go_to_workflow_operations()
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//button[contains(@class, "js-workflow-delete")]'
-        ).click()
+            '//button[contains(@class, "js-workflow-delete")]')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, '//div[@id="modal-item"]//form')
-            )
-        )
+                (By.XPATH, '//div[@id="modal-item"]//form')))
         WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, '//div[@id="modal-item"]'))
-        )
+            ElementHasFullOpacity((By.XPATH, '//div[@id="modal-item"]')))
 
     def go_to_table_views(self):
         self.go_to_table()
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//button[normalize-space()="Views"]').click()
+            '//button[normalize-space()="Views"]')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-view-add'))
         )
@@ -969,10 +896,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
 
         # Click on the Submit button
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//div[@id="modal-item"]//button[normalize-space()="Add column"]'
-        ).click()
+            '//div[@id="modal-item"]//button[normalize-space()="Add column"]')
         self.wait_close_modal_refresh_table('column-table_previous')
 
     def delete_column(self, col_name):
@@ -982,24 +908,19 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 col_name
             )
         # Click in the Delete button
-        self.selenium.find_element(
-            By.XPATH,
-            xpath_txt + '/td[2]/div/button[2]').click()
+        self.click_on_element(By.XPATH, xpath_txt + '/td[2]/div/button[2]')
         self.wait_for_modal_open()
 
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//div[@id="modal-item"]//button[@type="submit"]'
-        ).click()
+            '//div[@id="modal-item"]//button[@type="submit"]')
 
         # Wait for modal to close and refresh the table
         self.wait_close_modal_refresh_table('column-table_previous')
 
     def create_new_workflow(self, wname, wdesc=''):
         # Create the workflow
-        self.selenium.find_element(
-            By.CLASS_NAME,
-            'js-create-workflow').click()
+        self.click_on_element(By.CLASS_NAME, 'js-create-workflow')
         self.wait_for_modal_open()
 
         self.selenium.find_element(By.ID, 'id_name').send_keys(wname)
@@ -1009,13 +930,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, '//table[@id="dataops-table"]')
-            )
-        )
+                (By.XPATH, '//table[@id="dataops-table"]')))
 
     def create_new_action_out_basic(self, aname, action_type, adesc=''):
         # click on the create action button
-        self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
+        self.click_on_element(By.CLASS_NAME, 'js-create-action')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
 
@@ -1032,9 +951,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="action-out-editor"]')
-            )
-        )
+                (By.XPATH, '//*[@id="action-out-editor"]')))
 
     def create_new_personalized_text_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
@@ -1074,7 +991,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def create_new_survey_action(self, aname, adesc=''):
         # click on the create action button
-        self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
+        self.click_on_element(By.CLASS_NAME, 'js-create-action')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.ID, 'id_name')))
 
@@ -1091,15 +1008,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="action-in-editor"]')
-            )
-        )
+                (By.XPATH, '//*[@id="action-in-editor"]')))
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
-        self.selenium.find_element(
-            By.CLASS_NAME,
-            'js-attribute-create').click()
+        self.click_on_element(By.CLASS_NAME, 'js-attribute-create')
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'modal-title'),
@@ -1114,11 +1027,10 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element.send_keys(attribute_value)
 
         # Click in the create attribute button
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//div[@class="modal-footer"]/button[normalize-space()="Create '
-            'attribute"]'
-        ).click()
+            'attribute"]')
 
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
@@ -1131,10 +1043,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         # Make sure the page refreshes and shows again the filter tab
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'attachments')
-            )
-        )
+            EC.element_to_be_clickable((By.ID, 'attachments')))
         self.wait_for_spinner()
 
     def create_view(self, vname, vdesc, cols):
@@ -1147,20 +1056,18 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_modal_open()
 
         # Insert data to create the view
-        element = self.selenium.find_element(By.ID, 'id_name')
-        element.click()
+        element = self.click_on_element(By.ID, 'id_name')
         element.clear()
         element.send_keys(vname)
         if vdesc:
-            element = self.selenium.find_element(By.ID, 'id_description_text')
-            element.click()
+            element = self.click_on_element(By.ID, 'id_description_text')
             element.clear()
             element.send_keys(vdesc)
 
         # Focus on the column area
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//*[@placeholder="Click here to search"]').click()
+            '//*[@placeholder="Click here to search"]')
         options = self.selenium.find_element(
             By.XPATH,
             '//*[@id="div_id_columns"]//div[@class="sol-selection"]'
@@ -1171,13 +1078,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 'div/label/div[normalize-space()="{0}"]'.format(cname)
             ).click()
 
-        self.selenium.find_element(By.CSS_SELECTOR, 'div.modal-title').click()
+        self.click_on_element(By.CSS_SELECTOR, 'div.modal-title')
 
         # Save the view
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//button[normalize-space()="Add view"]'
-        ).click()
+            '//button[normalize-space()="Add view"]')
         self.wait_close_modal_refresh_table('table-data_previous')
 
     def open_add_regular_column(self):
@@ -1193,20 +1099,20 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             'Formula-derived column')
 
     def open_column_edit(self, name):
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="column-table"]'
             '//td[3][normalize-space() = "{0}"]/'
-            '../td[2]/div/button[1]'.format(name)).click()
+            '../td[2]/div/button[1]'.format(name))
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//form[contains(@class, "js-column-edit-form")]')))
 
     def open_action_edit(self, name: str, wait_id: str = 'text') -> None:
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//div[@id="action-cards"]'
-            '//h5[normalize-space() = "{0}"]'.format(name)).click()
+            '//h5[normalize-space() = "{0}"]'.format(name))
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')))
@@ -1223,29 +1129,20 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             '//div[@id="action-cards"]' \
             '//h5[normalize-space() = "{0}"]/..'.format(name)
         try:
-            elem = self.selenium.find_element(
+            elem = self.click_on_element(
                 By.XPATH,
                 xpath_str
                 + '/div/div/button/i[contains(@class, "{0}")]'.format(
                     operation))
         except NoSuchElementException:
             # Operation not found, so look in the pull down menu
-            elem = self.selenium.find_element(
+            self.click_on_element(
                 By.XPATH,
                 xpath_str + '//*[contains(@class, "dropdown-toggle")]')
-
-            elem.click()
-            WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-                (By.XPATH,
-                 xpath_str + '//i[contains(@class, "{0}")]'.format(
-                     operation))))
-            elem = self.selenium.find_element(
+            self.click_on_element(
                 By.XPATH,
-                xpath_str + '//i[contains(@class, "{0}")]'.format(
-                    operation))
+                xpath_str + '//i[contains(@class, "{0}")]'.format(operation))
 
-        # Click in the selected operation
-        elem.click()
         if wait_for:
             WebDriverWait(self.selenium, 10).until(
                 EC.presence_of_element_located((By.ID, wait_for)))
@@ -1260,7 +1157,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element = self.search_action(name)
         element.find_element(
             By.XPATH,
-            'div/div/button/i[contains(@class, "bi-rocket-takeoff-fill")]').click()
+            'div/div/button/i[contains(@class, "bi-rocket-takeoff-fill")]'
+        ).click()
         if is_action_in:
             self.wait_for_id_and_spinner('actioninrun-data_previous')
         else:
@@ -1268,9 +1166,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             WebDriverWait(self.selenium, 10).until(
                 EC.element_to_be_clickable(
                     (By.XPATH,
-                     '//button[contains(@class, "js-action-preview")]'),
-                )
-            )
+                     '//button[contains(@class, "js-action-preview")]')))
         self.wait_for_spinner()
 
     def open_preview(self):
@@ -1293,11 +1189,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.open_preview()
 
         for x in range(n):
-            self.selenium.find_element(
+            self.click_on_element(
                 By.XPATH,
                 '//div[@id="modal-item"]'
                 '//button[contains(@class, "js-action-preview-nxt")]'
-            ).click()
+            )
 
             # Wait for the modal to appear
             WebDriverWait(self.selenium, 10).until(
@@ -1312,10 +1208,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
 
         if close:
-            self.selenium.find_element(
+            self.click_on_element(
                 By.XPATH,
-                '//div[@id="modal-item"]//button[@data-bs-dismiss="modal"]'
-            ).click()
+                '//div[@id="modal-item"]//button[@data-bs-dismiss="modal"]')
             # Close modal (wail until the modal-open element disappears)
             WebDriverWait(self.selenium, 10).until_not(
                 EC.presence_of_element_located(
@@ -1337,8 +1232,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.XPATH, xpath))
         )
-        self.selenium.find_element(
-            By.XPATH, xpath).click()
+        self.click_on_element(By.XPATH, xpath)
 
         # Wait for the modal to open
         WebDriverWait(self.selenium, 10).until(
@@ -1349,10 +1243,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_filter(self):
         # Click on the right button
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//button[contains(@class, "js-filter-edit")]',
-        ).click()
+            '//button[contains(@class, "js-filter-edit")]')
 
         # Wait for the modal to open
         WebDriverWait(self.selenium, 10).until(
@@ -1373,8 +1266,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def select_tab(self, tab_id) -> None:
         """Given a tab_id, click and wait for it to be the only one visible."""
-        tab_element = self.selenium.find_element(By.ID, tab_id)
-        tab_element.click()
+        tab_element = self.click_on_element(By.ID, tab_id)
 
         # Obtain all tab-pane elements and wait for the proper visibility
         tab_body_id = tab_element.get_dom_attribute('href')[1:]
@@ -1393,29 +1285,24 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def select_questions_condition(self, qname, cname):
         # Click in the pull down menu
-        element = self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="column-selected-table"]'
             '//td[2][normalize-space() = "{0}"]/'
             '../td[5]/div/button'.format(qname))
-        element.click()
         # Click in the condition name
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="column-selected-table"]'
             '//td[2][normalize-space() = "{0}"]/'
             '../td[5]/div/div/button[normalize-space() = "{1}"]'.format(
                 qname,
-                cname
-            )
-        ).click()
+                cname))
         self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH,
-                 '//button[contains(@class, "js-action-question-add")]')
-            )
-        )
+                 '//button[contains(@class, "js-action-question-add")]')))
 
     def create_condition_base(self, zone_xpath, cname, cdesc, rule_tuples):
         # Open the right modal
@@ -1425,15 +1312,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         if cname:
             form_field = self.selenium.find_element(
                 By.XPATH,
-                '//div[@id="modal-item"]//input[@id="id_name"]'
-            )
+                '//div[@id="modal-item"]//input[@id="id_name"]')
             form_field.clear()
             form_field.send_keys(cname)
         if cdesc:
-            form_field = self.selenium.find_element(
-                By.ID,
-                'id_description_text')
-            form_field.click()
+            form_field = self.click_on_element(By.ID, 'id_description_text')
             form_field.clear()
             form_field.send_keys(cdesc)
 
@@ -1446,22 +1329,18 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
             if not form_field:
                 # Click in the Add rule of the filter builder button
-                self.selenium.find_element(
+                self.click_on_element(
                     By.XPATH,
                     '//div[@id="builder_group_0"]'
-                    '//button[normalize-space()="Add rule"]'
-                ).click()
+                    '//button[normalize-space()="Add rule"]')
                 WebDriverWait(self.selenium, 10).until(
                     EC.element_to_be_clickable(
                         (By.XPATH,
                          '//select[@name="builder_rule_{0}_filter"]'.format(
-                             idx))
-                    )
-                )
+                             idx))))
                 form_field = self.selenium.find_element(
                     By.NAME,
-                    'builder_rule_{0}_filter'.format(idx)
-                )
+                    'builder_rule_{0}_filter'.format(idx))
             else:
                 form_field = form_field[0]
 
@@ -1470,18 +1349,17 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
             # Set the operator
             if rule_operator:
-                form_field = self.selenium.find_element(
+
+                form_field = self.click_on_element(
                     By.NAME,
                     'builder_rule_{0}_operator'.format(idx))
-                form_field.click()
                 Select(form_field).select_by_visible_text(rule_operator)
 
             if rule_value is not None:
                 # Set the value
                 form_item = self.selenium.find_elements(
                     By.NAME,
-                    'builder_rule_{0}_value_0'.format(idx)
-                )
+                    'builder_rule_{0}_value_0'.format(idx))
                 if len(form_item) == 1:
                     # There is a single place to put the value
                     form_item = form_item[0]
@@ -1503,21 +1381,16 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                     else:
                         raise Exception('Unexpected rule value')
 
-                    self.selenium.find_element(
+                    self.click_on_element(
                         By.XPATH,
                         '(//input[@name="builder_rule_{0}_value_0"])'
-                        '[{1}]'.format(
-                            idx,
-                            value_idx
-                        )
-                    ).click()
+                        '[{1}]'.format(idx, value_idx))
             idx += 1
 
         # Save the condition
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//div[@id="modal-item"]//button[@type="submit"]'
-        ).click()
+            '//div[@id="modal-item"]//button[@type="submit"]')
 
         # Wait for modal close
         self.wait_for_modal_close()
@@ -1561,25 +1434,22 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.select_tab('conditions-tab')
 
         # Get the button for the condition
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//*[contains(@class, "card-header") and text() = "{0}"]/'
             '../div[@class = "cond-buttons"]/'
-            'button[contains(@class, "js-condition-delete")]'.format(cname),
-        ).click()
+            'button[contains(@class, "js-condition-delete")]'.format(cname))
         # Wait for the screen to delete the condition
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, '//div[@id="modal-item"]/div/div/form/div/h4'),
-                'Confirm condition deletion')
-        )
+                'Confirm condition deletion'))
 
         # Click in the confirm button
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//div[@id="modal-item"]//button[normalize-space()="Delete '
-            'condition"]'
-        ).click()
+            'condition"]')
         self.wait_for_page(element_id='conditions')
 
     def create_filter(self, cdesc, rule_tuples):
@@ -1593,10 +1463,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             rule_tuples)
         # Make sure the page refreshes and shows again the filter tab
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'filter-set-header')
-            )
-        )
+            EC.element_to_be_clickable((By.ID, 'filter-set-header')))
         self.wait_for_page(element_id='filter')
 
     def edit_filter(self, cname, cdesc, rule_tuples):
@@ -1615,28 +1482,26 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Click in the delete Icon
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-filter-delete')))
-        self.selenium.find_element(By.CLASS_NAME, 'js-filter-delete').click()
+        self.click_on_element(By.CLASS_NAME, 'js-filter-delete')
         # Wait for the confirmation screen
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, '//div[@id="modal-item"]/div/div/form/div/h4'),
-                'Confirm filter deletion')
-        )
+                'Confirm filter deletion'))
 
         # Click in the 'delete filter'
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
-            '//div[@id="modal-item"]//button[normalize-space()="Delete filter"]'
-        ).click()
+            '//div[@id="modal-item"]//button[normalize-space()='
+            '"Delete filter"]')
         self.wait_for_page(element_id='filter')
 
     def edit_attribute(self, attribute_key, nkey, nvalue):
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//table[@id="attribute-table"]'
             '//tr/td[2][normalize-space() = "{0}"]/'
-            '../td[1]/div/button[1]'.format(attribute_key)
-        ).click()
+            '../td[1]/div/button[1]'.format(attribute_key))
         self.wait_for_modal_open()
 
         # Fill out the form
@@ -1648,11 +1513,10 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element.send_keys(nvalue)
 
         # Click in the create attribute button
-        self.selenium.find_element(
+        self.click_on_element(
             By.XPATH,
             '//div[@class="modal-footer"]/button[normalize-space()="Update '
-            'attribute"]'
-        ).click()
+            'attribute"]')
 
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
