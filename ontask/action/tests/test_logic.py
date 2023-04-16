@@ -3,13 +3,12 @@ import os
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core import signing
 from django.shortcuts import reverse
 from rest_framework import status
-from django.core import signing
 
 from ontask import models, tests
 from ontask.action import services
-from ontask.core import SessionPayload
 from ontask.dataops import pandas
 
 
@@ -103,7 +102,7 @@ class EmailActionDetectIncorrectEmail(
         self.assertTrue(
             'Incorrect email address ' in str(resp.content))
         self.assertTrue(
-            'incorrectemail.com' in str(resp.content))
+            'incorrectemail_com' in str(resp.content))
 
 
 class EmailActionChecksOnlySelectedEmails(

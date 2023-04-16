@@ -41,7 +41,7 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_5" (
 --
 
 COPY public."__ONTASK_WORKFLOW_TABLE_5" (age, email, sid, another, name, one, registered, "when") FROM stdin;
-12	incorrectemail.com	1	bbb	Carmelo Coton	aaa	t	2017-10-10 22:03:44+10:30
+12	incorrectemail_com	1	bbb	Carmelo Coton	aaa	t	2017-10-10 22:03:44+10:30
 12.1	student02@bogus.com	2	aaa	Carmelo Coton	bbb	f	2017-10-10 22:02:44+10:30
 13.2	student03@bogus.com	3	bbb	Carmelo Coton2	aaa	t	2017-10-10 22:02:44+10:30
 \.
