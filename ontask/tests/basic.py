@@ -1076,7 +1076,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # click on the create action button
         self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name')))
+            EC.element_to_be_clickable((By.ID, 'id_name')))
 
         # Set the name, description and type of the action
         self.selenium.find_element(By.ID, 'id_name').send_keys(aname)

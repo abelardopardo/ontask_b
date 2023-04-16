@@ -94,7 +94,7 @@ class ColumnAddRandomNumberColumnForm(ColumnAddRandomColumnFormBasic):
             req_params={
                 'name': cname,
                 'data_type': 'double',
-                'raw_categories': '-3.0 - -5.0',
+                'raw_categories': '-3 - -5',
                 'position': 0},
             is_ajax=True)
 
