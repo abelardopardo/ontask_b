@@ -104,8 +104,8 @@ def _change_vname(match) -> str:
     """
     re_dict = match.groupdict()
 
-    if 'ot_insert_report' in re_dict.get('mup_pre'):
-        # Match is a ot_insert_report macro
+    if '{% ot_insert_report' in re_dict.get('mup_pre'):
+        # Match is an ot_insert_report macro
         args = shlex.split(re_dict['args'])
         return (
             match.group('mup_pre')
@@ -128,8 +128,8 @@ def _change_unescape_vname(match) -> str:
     """
     re_dict = match.groupdict()
 
-    if 'ot_insert_report' in re_dict.get('mup_pre'):
-        # Match is a ot_insert_report macro
+    if '{% ot_insert_report' in re_dict.get('mup_pre'):
+        # Match is an ot_insert_report macro
         args = [
             arg.replace(
                 '&amp;', '&').replace(

@@ -10,7 +10,7 @@ from django.contrib.auth import (
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import RedirectURLMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import redirect, resolve_url
+from django.shortcuts import redirect, resolve_url, reverse
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -163,7 +163,7 @@ class LoginView(
 
     def dispatch(self, *args, **kwargs):
         if not self.allow_authenticated and self.request.user.is_authenticated:
-            return redirect(self.get_success_url())
+            return redirect(reverse('home'))
         return super(LoginView, self).dispatch(*args, **kwargs)
 
     def get_form_class(self):

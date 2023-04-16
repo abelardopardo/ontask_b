@@ -208,16 +208,18 @@ class TableApiJSONCreateError(TableApiBase):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.get(id=response.data['id'])
 
-        # Upload the table
-        response = self.client.post(
-            reverse('table:api_ops', kwargs={'wid': workflow.id}),
-            {'data_frame': self.incorrect_table_1},
-            format='json')
-
-        self.assertTrue(
-            'The data has no column with unique values per row' in
-            response.data
-        )
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Upload the table
+            response = self.client.post(
+                reverse('table:api_ops', kwargs={'wid': workflow.id}),
+                {'data_frame': self.incorrect_table_1},
+                format='json')
+            self.assertIn(
+                "ERROR:ontask:"
+                "'The data has no column with unique values per row. "
+                "At least one column must have unique values.'",
+                log_context.output)
+            self.assertTrue('Error when overriding dataframe' in response.data)
 
 
 class TableApiPandasCreate(TableApiBase):
@@ -388,21 +390,25 @@ class TableApiJSONMergeToEmpty(TableApiBase):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
-        # Get the data through the API
-        response = self.client.put(
-            reverse('table:api_merge', kwargs={'wid': workflow.id}),
-            {
-                "src_df": self.new_table,
-                "how": "inner",
-                "left_on": "sid",
-                "right_on": "sid"
-            },
-            format='json')
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Get the data through the API
+            response = self.client.put(
+                reverse('table:api_merge', kwargs={'wid': workflow.id}),
+                {
+                    "src_df": self.new_table,
+                    "how": "inner",
+                    "left_on": "sid",
+                    "right_on": "sid"
+                },
+                format='json')
 
-        self.assertEqual(
-            response.data['detail'],
-            'Unable to perform merge operation: '
-            + 'Merge operation produced a result with no rows')
+            self.assertEqual(
+                response.data['detail'],
+                'Unable to perform merge operation')
+            self.assertIn(
+                "ERROR:ontask:Unable to perform merge operation: "
+                "Merge operation produced a result with no rows",
+                log_context.output)
 
 
 class TableApiPandasMergeToEmpty(TableApiBase):
@@ -414,21 +420,25 @@ class TableApiPandasMergeToEmpty(TableApiBase):
         # Transform new table into string
         r_df = pd.DataFrame(self.new_table)
 
-        # Get the data through the API
-        response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
-            {
-                "src_df": serializers.df_to_string(r_df),
-                "how": "inner",
-                "left_on": "sid",
-                "right_on": "sid"
-            },
-            format='json')
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Get the data through the API
+            response = self.client.put(
+                reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
+                {
+                    "src_df": serializers.df_to_string(r_df),
+                    "how": "inner",
+                    "left_on": "sid",
+                    "right_on": "sid"
+                },
+                format='json')
 
-        self.assertEqual(
-            response.data['detail'],
-            'Unable to perform merge operation: '
-            + 'Merge operation produced a result with no rows')
+            self.assertEqual(
+                response.data['detail'],
+                'Unable to perform merge operation')
+            self.assertIn(
+                "ERROR:ontask:Unable to perform merge operation: "
+                "Merge operation produced a result with no rows",
+                log_context.output)
 
 
 class TableApiJSONMergeInner(TableApiBase):

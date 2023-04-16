@@ -60,7 +60,7 @@ def create_db_engine(**kwargs):
         dbname=kwargs.get('dbname'))
 
     if settings.DEBUG:
-        LOGGER.debug('Creating engine: %s', database_url)
+        LOGGER.debug('Creating engine with dtabase parameters')
 
     return sqlalchemy.create_engine(
         database_url,

@@ -12,7 +12,8 @@ from ontask.dataops import sql
 
 INITIAL_VALUE_LENGTH = 512
 
-INTERVAL_PATTERN = '(?P<from>-?\\d+)\\s+-\\s+(?P<to>-?\\d+)'
+INT_RE = '[-+]?([1-9]\d*|0)'
+INTERVAL_PATTERN = '^(?P<from>' + INT_RE + ')\\s+-\\s+(?P<to>' + INT_RE + ')$'
 
 
 def _parse_category_string(
@@ -37,7 +38,7 @@ def _parse_category_string(
         allow_interval_syntax
         and (data_type == 'double' or data_type == 'integer')
     ):
-        match = re.search(INTERVAL_PATTERN, category)
+        match = re.search(INTERVAL_PATTERN, category.strip())
         if match:
             # If it is a number column, and there is an interval string
             from_val = int(match.group('from'))

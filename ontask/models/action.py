@@ -33,7 +33,7 @@ VAR_USE_RES = [
     # {% ot_insert_report "c1" "c2" "c3" %}
     re.compile(
         r'(?P<mup_pre>{%\s+ot_insert_report\s+)'
-        r'(?P<args>(".+?"\s+)+)(?P<mup_post>%})')]
+        r'(?P<args>("[^"\']+?"\s+)+)(?P<mup_post>%})')]
 
 ACTION_TYPE_LENGTH = 64
 

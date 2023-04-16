@@ -5,7 +5,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
-from ontask import get_incorrect_email, models
+from ontask import get_incorrect_email, models, LOGGER
 from ontask.dataops import sql
 from ontask.scheduler.services import SCHEDULE_CRUD_FACTORY
 
@@ -69,17 +69,17 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
             ).first()
             if not item_column:
                 raise APIException(
-                    _('Invalid column name for selecting items'))
+                    _('Invalid column name for selecting items.'))
 
         exclude_values = payload.get('exclude_values', [])
         # Exclude_values has to be a list
         if exclude_values is not None and not isinstance(exclude_values, list):
-            raise APIException(_('Exclude_values must be a list'))
+            raise APIException(_('Exclude values must be a list.'))
 
         # Exclude_values can only have content if item_column is given.
         if not item_column and payload.get('exclude_values'):
             raise APIException(
-                _('Exclude items needs a column in item_column'))
+                _('Exclude items needs a column in item_column.'))
 
     def create(self, validated_data, **kwargs) -> models.ScheduledOperation:
         """Create a new instance of the scheduled data."""
@@ -90,9 +90,9 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
                 self.context['request'].user,
                 validated_data)
         except Exception as exc:
-            raise APIException(
-                gettext('Scheduled action could not be created: {0}').format(
-                    str(exc)))
+            msg = 'Scheduled action could not be created'
+            LOGGER.error(msg + ': ' + str(exc))
+            raise APIException(gettext(msg))
 
         return scheduled_obj
 
@@ -105,9 +105,9 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
                 validated_data,
                 instance)
         except Exception as exc:
-            raise APIException(
-                gettext('Unable to update scheduled action: {0}').format(
-                    str(exc)))
+            msg = 'Unable to update scheduled action.'
+            LOGGER.error(msg + ': ' + str(exc))
+            raise APIException(gettext(msg))
 
         return scheduled_obj
 

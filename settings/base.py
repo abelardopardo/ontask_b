@@ -534,7 +534,9 @@ def show_configuration() -> None:
     print('# -----------------------')
     print('AWS_ACCESS_KEY_ID:', AWS_ACCESS_KEY_ID)
     print('AWS_LOCATION:', AWS_LOCATION)
-    print('AWS_SECRET_ACCESS_KEY:', AWS_SECRET_ACCESS_KEY)
+    print(
+        'AWS_SECRET_ACCESS_KEY:',
+        'GIVEN' if AWS_SECRET_ACCESS_KEY else 'None')
     print('AWS_STORAGE_BUCKET_NAME:', AWS_STORAGE_BUCKET_NAME)
     print('BASE_URL:', BASE_URL)
     print('DATABASE_URL:', DATABASE_URL)
@@ -573,7 +575,9 @@ def show_configuration() -> None:
     print('DEBUG_TOOLBAR (conf):', DEBUG_TOOLBAR)
     print('EMAIL_HOST (conf):', EMAIL_HOST)
     print('EMAIL_HOST_USER (conf):', EMAIL_HOST_USER)
-    print('EMAIL_HOST_PASSWORD (conf):', EMAIL_HOST_PASSWORD)
+    print(
+        'EMAIL_HOST_PASSWORD (conf):',
+        'Given' if EMAIL_HOST_PASSWORD else 'None')
     print('EMAIL_PORT (conf):', EMAIL_PORT)
     print('EMAIL_USE_TLS (conf):', EMAIL_USE_TLS)
     print('EMAIL_USE_SSL (conf):', EMAIL_USE_SSL)
@@ -589,7 +593,6 @@ def show_configuration() -> None:
     print('PROFILE_CPROFILE (conf):', PROFILE_CPROFILE)
     print('PROFILE_SILK (conf):', PROFILE_SILK)
     print('ROOT_URLCONF:', ROOT_URLCONF)
-    print('SECRET_KEY (conf):', SECRET_KEY)
     print('SHORT_DATETIME_FORMAT:', SHORT_DATETIME_FORMAT)
     print('SECURE_PROXY_SSL_HEADER:', SECURE_PROXY_SSL_HEADER)
     print('TEMPLATES:', TEMPLATES)
