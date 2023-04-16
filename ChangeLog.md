@@ -1,3 +1,15 @@
+# 10.3 (2023-04-??)
+
+## Changed
+
+- Email now accepts a non-unique column, and only those email addresses used in the action are verified (Issue #216)
+
+- Allow image manipulation in TinyMCE
+
+## Fixed
+
+- Fixed error in session timeout.
+
 # 10.2 (2023-04-10)
 
 ## Fixed

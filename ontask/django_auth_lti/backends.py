@@ -60,7 +60,7 @@ class LTIAuthBackend(ModelBackend):
             LOGGER.debug('Could not get a secret for key %s', request_key)
             raise PermissionDenied
 
-        LOGGER.debug('using key/secret %s/%s', request_key, secret)
+        LOGGER.debug('using key/secret %s', request_key)
         tool_provider = DjangoToolProvider(
             request_key,
             secret,

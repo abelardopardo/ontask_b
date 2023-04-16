@@ -2,7 +2,7 @@
 from typing import Dict
 
 from django import http
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
 from django.views import generic
 
 from ontask import models, core
@@ -150,6 +150,8 @@ class ActionOutEditProducerBase(ActionEditProducerBase):
         self.action.log(self.request.user, models.Log.ACTION_UPDATE)
 
         if self.request.POST['Submit'] == 'Submit':
-            return redirect(self.request.get_full_path())
+            return redirect(reverse(
+                'action:edit',
+                kwargs={'pk': self.action.id}))
 
         return redirect('action:index')

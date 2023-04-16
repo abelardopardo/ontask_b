@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 18:39+0930\n"
-"PO-Revision-Date: 2023-04-10 18:44+0930\n"
+"POT-Creation-Date: 2023-04-16 10:47+0930\n"
+"PO-Revision-Date: 2023-04-16 10:49+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
 "Language: es\n"
@@ -102,8 +102,8 @@ msgstr ""
 msgid "Incorrect type of action"
 msgstr "Tipo de acción incorrecta"
 
+#: ontask/action/evaluate/template.py:305
 #: ontask/action/evaluate/template.py:309
-#: ontask/action/evaluate/template.py:313
 #, python-brace-format
 msgid "Name {0} is reserved."
 msgstr "El nombre {0} está reservado."
@@ -179,114 +179,110 @@ msgstr "¿Comprobar/excluir elementos antes de enviarlos?"
 msgid "Allows a last minute check and select some elements to be excluded."
 msgstr "Permite eliminar algunos elementos antes de ejecutar."
 
-#: ontask/action/forms/run.py:203
-msgid "Column needs to have all unique values (no empty cells)"
-msgstr "La columna no tiene valores únicos en cada celda."
-
-#: ontask/action/forms/run.py:214
+#: ontask/action/forms/run.py:205
 msgid "Authentication Token"
 msgstr "Ficha de autenticación"
 
-#: ontask/action/forms/run.py:225
+#: ontask/action/forms/run.py:216
 msgid "Authentication token provided by the external platform."
 msgstr "Ficha de autenticación obtenida de la plataforma externa."
 
-#: ontask/action/forms/run.py:244
+#: ontask/action/forms/run.py:235
 msgid "Send you a summary message?"
 msgstr "¿Enviar un mensaje con el resúmen de envios?"
 
-#: ontask/action/forms/run.py:249
+#: ontask/action/forms/run.py:240
 msgid "Track email reading in an extra column?"
 msgstr "¿Rastrear la lectura del correo en una columna extra?"
 
-#: ontask/action/forms/run.py:250
+#: ontask/action/forms/run.py:241
 msgid "Adds an extra column to the workflow. Results are aproximate."
 msgstr "Añade una columna extra al flujo. Los resultados son aproximados."
 
-#: ontask/action/forms/run.py:258 ontask/action/forms/run.py:313
+#: ontask/action/forms/run.py:249 ontask/action/forms/run.py:309
 msgid "Column to use for target email address"
 msgstr "Columna con la dirección de correo"
 
-#: ontask/action/forms/run.py:295
+#: ontask/action/forms/run.py:291
 #, python-brace-format
 msgid "Incorrect email address \"{0}\"."
 msgstr "Direcciones de correo incorrectas “{0}."
 
-#: ontask/action/forms/run.py:300 ontask/scheduler/serializers.py:173
+#: ontask/action/forms/run.py:296 ontask/scheduler/serializers.py:173
 msgid "The column with email addresses has incorrect values."
 msgstr "La columna con las direcciones de correo tiene valores incorrectos."
 
-#: ontask/action/forms/run.py:329
+#: ontask/action/forms/run.py:325
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: ontask/action/forms/run.py:350
+#: ontask/action/forms/run.py:346
 msgid "Field needs a valid email address."
 msgstr "Este campo necesita una dirección de correo válida."
 
-#: ontask/action/forms/run.py:375
+#: ontask/action/forms/run.py:371
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
 msgstr ""
 "Columna a usar para el prefijo de fichero (“Full name” si el ZIP es para "
 "Moodle)"
 
-#: ontask/action/forms/run.py:387
+#: ontask/action/forms/run.py:383
 msgid "This ZIP will be uploaded to Moodle as feedback"
 msgstr "Este ZIP será cargado en Moodle como feedback"
 
-#: ontask/action/forms/run.py:394
+#: ontask/action/forms/run.py:390
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
 msgstr ""
 "Columna clave de la que extraer el prefijo del nombre de fichero "
 "(“Participant id” si el ZIP es para Moodle)"
 
-#: ontask/action/forms/run.py:446
+#: ontask/action/forms/run.py:442
 msgid "The two columns must be different"
 msgstr "Las dos columnas deben ser diferentes"
 
-#: ontask/action/forms/run.py:454
+#: ontask/action/forms/run.py:450
 msgid "A Moodle ZIP requires two column names"
 msgstr "Un ZIP para Moodle requiere dos columnas"
 
-#: ontask/action/forms/run.py:465
+#: ontask/action/forms/run.py:461
 msgid "Values in column must have format \"Participant [number]\""
 msgstr ""
 "Los valores en la columna deben tener el formato “Participant [número]”"
 
-#: ontask/action/forms/run.py:488
+#: ontask/action/forms/run.py:484
 msgid "Canvas Host"
 msgstr "Servidor Canvas"
 
-#: ontask/action/forms/run.py:489
+#: ontask/action/forms/run.py:485
 msgid "Name of the Canvas host to send the messages"
 msgstr "Nombre del servidor Canvas al que mandar los mensajes"
 
-#: ontask/action/forms/run.py:493
+#: ontask/action/forms/run.py:489
 msgid "Column with the Canvas ID"
 msgstr "Columna con identificadores de usuario Canvas"
 
-#: ontask/action/forms/run.py:495
+#: ontask/action/forms/run.py:491
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "¿Comprobar/excluir identificadores de Canvas antes de enviar?"
 
-#: ontask/action/forms/run.py:516
+#: ontask/action/forms/run.py:512
 msgid "No Canvas Service available for this action."
 msgstr "No hay ningún servicio Canvas disponible para esta acción."
 
-#: ontask/action/forms/run.py:530
+#: ontask/action/forms/run.py:526
 msgid "The column does not contain valid Canvas IDs."
 msgstr "La columna no contiene identificadores de Canvas válidos."
 
-#: ontask/action/forms/run.py:557
+#: ontask/action/forms/run.py:553
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "Columna para excluir objetos del envío (vacío para saltar este paso)"
 
-#: ontask/action/forms/run.py:597
+#: ontask/action/forms/run.py:593
 msgid "Values to exclude"
 msgstr "Valores a excluir"
 
-#: ontask/action/forms/run.py:634 ontask/action/forms/run.py:637
-#: ontask/column/forms.py:147 ontask/column/forms.py:148
+#: ontask/action/forms/run.py:630 ontask/action/forms/run.py:633
+#: ontask/column/forms.py:148 ontask/column/forms.py:149
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
@@ -532,108 +528,108 @@ msgstr "Acción no pertenece al flujo actual. "
 msgid "OnTask"
 msgstr "OnTask"
 
-#: ontask/column/forms.py:60
+#: ontask/column/forms.py:61
 msgid "Comma separated list of values allowed in this column"
 msgstr "Lista de valores permitidos separados por comas"
 
-#: ontask/column/forms.py:108
+#: ontask/column/forms.py:109
 msgid "There is a column already with this name"
 msgstr "Ya hay una columna con este nombre"
 
-#: ontask/column/forms.py:122
+#: ontask/column/forms.py:123
 msgid "Changes not allowed. Column is part of rubric action"
 msgstr ""
 "No se permiten cambios. La columna es parte de una rúbrica en una acción"
 
-#: ontask/column/forms.py:184
+#: ontask/column/forms.py:185
 msgid "Value to assign to all cells in the column"
 msgstr "Valor a asignar a toda la columna"
 
-#: ontask/column/forms.py:208 ontask/dataops/services/plugin_admin.py:302
+#: ontask/column/forms.py:209 ontask/dataops/services/plugin_admin.py:302
 msgid "Incorrect initial value"
 msgstr "Valor inicial incorrecto"
 
-#: ontask/column/forms.py:215
+#: ontask/column/forms.py:216
 msgid "This value is not in the list of allowed values"
 msgstr "Este valor no está en la lista de valores permitidos"
 
-#: ontask/column/forms.py:239
+#: ontask/column/forms.py:240
 msgid "Question name"
 msgstr "Nombre de la pregunta"
 
-#: ontask/column/forms.py:241 ontask/column/forms.py:271
+#: ontask/column/forms.py:242 ontask/column/forms.py:272
 msgid "Description (shown to the learners)"
 msgstr "Descripción (se muestra a los estudiantes)"
 
-#: ontask/column/forms.py:243
+#: ontask/column/forms.py:244
 msgid "Question position (zero to insert last)"
 msgstr "Posición de la pregunta (cero para insertar última)"
 
-#: ontask/column/forms.py:244
+#: ontask/column/forms.py:245
 msgid "Question active from"
 msgstr "Pregunta activa desde"
 
-#: ontask/column/forms.py:245
+#: ontask/column/forms.py:246
 msgid "Question active until"
 msgstr "Pregunta activa hasta"
 
-#: ontask/column/forms.py:269
+#: ontask/column/forms.py:270
 msgid "Item name"
 msgstr "Nombre del elemento"
 
-#: ontask/column/forms.py:273
+#: ontask/column/forms.py:274
 msgid "Item position (zero to insert last)"
 msgstr "Posición del elemento (cero para insertar al final)"
 
-#: ontask/column/forms.py:274
+#: ontask/column/forms.py:275
 msgid "Item active from"
 msgstr "Elemento activo desde"
 
-#: ontask/column/forms.py:275
+#: ontask/column/forms.py:276
 msgid "Item active until"
 msgstr "Elemento activo hasta"
 
-#: ontask/column/forms.py:306
+#: ontask/column/forms.py:307
 msgid "Criterion name"
 msgstr "Nombre del criterio"
 
-#: ontask/column/forms.py:308
+#: ontask/column/forms.py:309
 msgid "Criterion Description"
 msgstr "Descripción del criterio"
 
-#: ontask/column/forms.py:317
+#: ontask/column/forms.py:318
 msgid "Comma-separated list of levels of attainment"
 msgstr "Lista de niveles alcanzados separados por comas"
 
-#: ontask/column/forms.py:337
+#: ontask/column/forms.py:338
 msgid "The criterion needs a non-empty set of values"
 msgstr "El criterio necesita un conjunto de  valores no vacío"
 
-#: ontask/column/forms.py:377
+#: ontask/column/forms.py:378
 msgid "There must be at least one column with unique values"
 msgstr "Debe haber una columna con valores únicos (clave)"
 
-#: ontask/column/forms.py:390
+#: ontask/column/forms.py:391
 msgid "The column does not have unique values for each row."
 msgstr "La columna no tiene valores únicos en cada celda."
 
-#: ontask/column/forms.py:420
+#: ontask/column/forms.py:421
 msgid "Columns to combine*"
 msgstr "Columnas a combinar*"
 
-#: ontask/column/forms.py:452
+#: ontask/column/forms.py:453
 msgid "A column with that name already exists"
 msgstr "Una columna con este nombre ya existe"
 
-#: ontask/column/forms.py:460
+#: ontask/column/forms.py:461
 msgid "You need to select the columns to combine"
 msgstr "Se necesita seleccionar las columnas a combinar"
 
-#: ontask/column/forms.py:480
+#: ontask/column/forms.py:481
 msgid "Incorrect data type for the selected operand"
 msgstr "Tipo de datos incorrecto para el operando seleccionado"
 
-#: ontask/column/forms.py:512
+#: ontask/column/forms.py:513
 msgid ""
 "Comma-separated list of values. If a number, m - n means integer values from "
 "that interval."
@@ -641,7 +637,7 @@ msgstr ""
 "Lista de valores separados por comas. Si es un numero, m - n significa "
 "valores enteros en este intervalo."
 
-#: ontask/column/forms.py:522
+#: ontask/column/forms.py:523
 msgid "Columns to insert"
 msgstr "Columnas a insertar"
 
@@ -1161,7 +1157,7 @@ msgstr ""
 msgid "This method should be implemented!"
 msgstr "¡Este método se debería haber implementado!"
 
-#: ontask/dataops/services/dataframeupload.py:273 ontask/table/api.py:302
+#: ontask/dataops/services/dataframeupload.py:273
 #, python-brace-format
 msgid "Unable to perform merge operation: {0}"
 msgstr "No se ha podido ejecutar la operación de mezcla: {0}"
@@ -2429,16 +2425,6 @@ msgstr "La exclusión de valores debe ser una lista"
 msgid "Exclude items needs a column in item_column"
 msgstr "La exclusión de elementos necesita una columna en item_column"
 
-#: ontask/scheduler/serializers.py:94
-#, python-brace-format
-msgid "Scheduled action could not be created: {0}"
-msgstr "No se ha podido crear la acción planificada: {0}"
-
-#: ontask/scheduler/serializers.py:109
-#, python-brace-format
-msgid "Unable to update scheduled action: {0}"
-msgstr "No se puede actualizar la acción planificada: {0}"
-
 #: ontask/scheduler/serializers.py:144 ontask/scheduler/serializers.py:214
 msgid "Personalized text need a column name in payload field item_column."
 msgstr ""
@@ -2584,6 +2570,10 @@ msgstr "URL Prefijo para acceder a la documentación"
 msgid "New ontask user profile for %s created"
 msgstr "Nuevo perfil de usuario OnTask creado para %s"
 
+#: ontask/table/api.py:65
+msgid "Error when overriding dataframe"
+msgstr "Ha habido un error sobreescribiendo el data frame"
+
 #: ontask/table/api.py:101
 msgid "Post request requires workflow without a table"
 msgstr "El post necesita un flujo sin tabla"
@@ -2591,6 +2581,10 @@ msgstr "El post necesita un flujo sin tabla"
 #: ontask/table/api.py:264
 msgid "Merge request requires a workflow with a non-empty table"
 msgstr "La petición de mezcla requiere un flujo con una tabla no vacía"
+
+#: ontask/table/api.py:301
+msgid "Unable to perform merge operation"
+msgstr "No se ha podido ejecutar la operación de mezcla"
 
 #: ontask/table/forms.py:24
 msgid "View name"
@@ -2620,23 +2614,27 @@ msgstr "Ya hay una vista con este nombre."
 msgid "JSON string encoding a pandas data frame"
 msgstr "String en formato JSON codificando un data frame de pandas"
 
-#: ontask/table/serializers/merge.py:42
+#: ontask/table/serializers/merge.py:31
+msgid "Unable to create dataframe with the given data"
+msgstr "No se ha podido crear el data frame con los datos"
+
+#: ontask/table/serializers/merge.py:45
 msgid "One of the following values: inner, outer, left or right"
 msgstr "Uno de los siguientes valores: inner, outer, left o right"
 
-#: ontask/table/serializers/merge.py:49
+#: ontask/table/serializers/merge.py:52
 msgid "ID of the column in destination data frame with unique key"
 msgstr "Identificador de la columna clave en el data frame destino"
 
-#: ontask/table/serializers/merge.py:54
+#: ontask/table/serializers/merge.py:57
 msgid "ID of column in source data frame with unique key"
 msgstr "Identificador de la columna clave en el data frame fuente"
 
-#: ontask/table/serializers/merge.py:62
+#: ontask/table/serializers/merge.py:65
 msgid "Field must be a JSON string encoding a pandas data frame"
 msgstr "Este campo debe ser un pandas data frame codificado como string JSON"
 
-#: ontask/table/serializers/merge.py:71 ontask/workflow/serializers.py:76
+#: ontask/table/serializers/merge.py:74 ontask/workflow/serializers.py:76
 msgid ""
 "This field must be the Base64 encoded result of pandas.to_pickle() function"
 msgstr ""
@@ -2755,7 +2753,7 @@ msgstr "No se ha podido procesar la petición."
 
 #: ontask/templates/404.html:10 ontask/templates/action/action_zip_done.html:15
 #: ontask/templates/action/item_filter.html:27
-#: ontask/templates/action/run_done.html:20
+#: ontask/templates/action/run_done.html:19
 #: ontask/templates/action/run_survey.html:70
 #: ontask/templates/action/run_survey_row.html:21
 #: ontask/templates/action/run_survey_row.html:32
@@ -3627,11 +3625,8 @@ msgid "Action scheduled for execution"
 msgstr "Acción planificada para su ejecución"
 
 #: ontask/templates/action/run_done.html:16
-#: ontask/templates/dataops/operation_done.html:9
 #, python-format
-msgid ""
-"You may check the status in\n"
-"      log number %(log_id)s."
+msgid "You may check the status in log number %(log_id)s."
 msgstr ""
 "Puedes comprobar el estado de la ejecución en el registro número %(log_id)s."
 
@@ -4497,6 +4492,14 @@ msgstr "Ejecución de la operación de datos"
 #: ontask/templates/scheduler/schedule_done.html:7
 msgid "Operation scheduled for execution"
 msgstr "Operación planificada para su ejecución"
+
+#: ontask/templates/dataops/operation_done.html:9
+#, python-format
+msgid ""
+"You may check the status in\n"
+"      log number %(log_id)s."
+msgstr ""
+"Puedes comprobar el estado de la ejecución en el registro número %(log_id)s."
 
 #: ontask/templates/dataops/plugin_admin.html:8
 msgid "Plugin Admin"
@@ -5937,6 +5940,17 @@ msgstr ""
 "La API de OnTask ofrece funcionalidad para manipular los flujos, tablas y "
 "registros. El interfaz provee operaciones CRUD (crear, leer, actualizar y "
 "borrar) sobre estos objetos."
+
+#~ msgid "Column needs to have all unique values (no empty cells)"
+#~ msgstr "La columna no tiene valores únicos en cada celda."
+
+#, python-brace-format
+#~ msgid "Scheduled action could not be created: {0}"
+#~ msgstr "No se ha podido crear la acción planificada: {0}"
+
+#, python-brace-format
+#~ msgid "Unable to update scheduled action: {0}"
+#~ msgstr "No se puede actualizar la acción planificada: {0}"
 
 #~ msgid "Manual"
 #~ msgstr "Manual"

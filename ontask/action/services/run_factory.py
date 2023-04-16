@@ -137,7 +137,7 @@ class ActionRunProducerBase(generic.FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({
-            'columns': self.workflow.columns.filter(is_key=True),
+            'columns': self.workflow.columns.all(),
             'action': self.action,
             'form_info': self.payload})
         return kwargs

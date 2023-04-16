@@ -13,7 +13,8 @@ from ontask.tests.fixture_classes import (
     SymbolsInConditionNameFixture, TestEmptyKeyAfterMergeFixture,
     TestConditionEvaluationFixture, TestMergeFixture,
     TestPersonalisedSurveyFixture, TestRubricFixture, ThreeActionsFixture,
-    ViewAsFilterFixture, WflowSymbolsFixture, WrongEmailFixture)
+    ViewAsFilterFixture, WflowSymbolsFixture, WrongEmailFixture,
+    FilterCorrectEmailsFixture)
 
 standard_library.install_aliases()
 

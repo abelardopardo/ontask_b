@@ -13,6 +13,8 @@ class ScheduleApiBasic(tests.ThreeActionsFixture, tests.OnTaskApiTestCase):
     s_name = 'Scheduling first JSON'
     s_desc = 'First JSON intervention'
     s_execute = '2119-05-03 12:32:18+10:30'
+    api_error_msg = 'Scheduled action could not be created'
+    log_msg = 'ERROR:ontask:' + api_error_msg + ': '
 
     def setUp(self):
         super().setUp()
@@ -39,30 +41,35 @@ class ScheduleApiCreate(ScheduleApiBasic):
             name=action_name,
             workflow__name='user2 workflow')
 
-        # Schedule one of the actions
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': self.s_name,
-                'description_text': self.s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'subject': 'subject',
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule one of the actions
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': self.s_name,
+                    'description_text': self.s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email',
+                        'subject': 'subject',
+                        'cc_email': '',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
-
-        # Element has been scheduled
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue('Incorrect permission' in response.data['detail'])
+                format='json')
+    
+            # Element has been scheduled
+            self.assertEqual(response.status_code, 500)
+            self.assertIn(self.api_error_msg, response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'Incorrect permission to manipulate workflow.',
+                log_context.output)
 
 
 class ScheduleApiAnomalies(ScheduleApiBasic):
@@ -105,270 +112,311 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
         # Error detected
         self.assertEqual(response.status_code, 500)
 
-        # Schedule the action in the past
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': '2000-11-12 12:05:07+10:30',
-                'payload': {
-                    'item_column': 'email',
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule the action in the past
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': '2000-11-12 12:05:07+10:30',
+                    'payload': {
+                        'item_column': 'email',
+                        'subject': s_subject,
+                        'cc_email': '',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(
-            'Execution time is in the past' in response.data['detail'])
+                format='json')
+            self.assertEqual(response.status_code, 500)
+            self.assertIn(self.api_error_msg, response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'Execution time is in the past. No execution possible.',
+                log_context.output)
 
-        # Schedule with the wrong item column
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email2',
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule with the wrong item column
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email2',
+                        'subject': s_subject,
+                        'cc_email': '',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue('Invalid column' in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg + 'Invalid column name for selecting items.',
+                log_context.output)
 
-        # Schedule with the wrong exclude value type
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'action': action.id,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'exclude_values': {},
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule with the wrong exclude value type
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'action': action.id,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email',
+                        'exclude_values': {},
+                        'subject': s_subject,
+                        'cc_email': '',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue('must be a list' in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'Exclude values must be a list.',
+                log_context.output)
 
-        # Schedule without payload
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-            },
-            format='json')
-
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue('need a payload' in response.data['detail'])
-
-        # Schedule without subject
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule without payload
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue('needs a subject' in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg + 'Scheduled objects need a payload.',
+                log_context.output)
 
-        # Schedule without item_column
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule without subject
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email',
+                        'cc_email': '',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(
-            'need a column name in payload' in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg + 'Personalized text needs a subject.',
+                log_context.output)
 
-        # Schedule with item column with incorrect emails
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'sid',
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule without item_column
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'subject': s_subject,
+                        'cc_email': '',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(
-            'Incorrect email value "1"' in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'Personalized text need a column name in payload '
+                'field item_column.',
+                log_context.output)
 
-        # Schedule with incorrect values in cc_email
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'subject': s_subject,
-                    'cc_email': 1,
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule with item column with incorrect emails
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'sid',
+                        'subject': s_subject,
+                        'cc_email': '',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(
-            'must be a space-separated list of emails'
-            in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg + 'Incorrect email value "1".',
+                log_context.output)
 
-        # Schedule with incorrect vlues in cc_email
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'subject': s_subject,
-                    'cc_email': 'xxx yyy',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule with incorrect values in cc_email
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email',
+                        'subject': s_subject,
+                        'cc_email': 1,
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(
-            'must be a space-separated list of emails'
-            in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'cc_email must be a space-separated list of emails.',
+                log_context.output)
 
-        # Schedule with incorrect vlues in bcc_email
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': 1,
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule with incorrect values in cc_email
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email',
+                        'subject': s_subject,
+                        'cc_email': 'xxx yyy',
+                        'bcc_email': '',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(
-            'must be a space-separated list of emails'
-            in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'cc_email must be a space-separated list of emails.',
+                log_context.output)
 
-        # Schedule with incorrect vlues in bcc_email
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': s_name,
-                'description_text': s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow_id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': 'xxx yyy',
-                    'track_read': False,
-                    'send_confirmation': False,
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule with incorrect values in bcc_email
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email',
+                        'subject': s_subject,
+                        'cc_email': '',
+                        'bcc_email': 1,
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
                 },
-            },
-            format='json')
+                format='json')
 
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(
-            'must be a space-separated list of emails'
-            in response.data['detail'])
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'bcc_email must be a space-separated list of emails.',
+                log_context.output)
+
+        with self.assertLogs(logger='ontask', level='ERROR') as log_context:
+            # Schedule with incorrect values in bcc_email
+            response = self.client.post(
+                reverse('scheduler:api_scheduled_email'),
+                {
+                    'name': s_name,
+                    'description_text': s_desc,
+                    'operation_type': 'action_run_personalized_email',
+                    'workflow': action.workflow_id,
+                    'action': action.id,
+                    'execute': self.s_execute,
+                    'payload': {
+                        'item_column': 'email',
+                        'subject': s_subject,
+                        'cc_email': '',
+                        'bcc_email': 'xxx yyy',
+                        'track_read': False,
+                        'send_confirmation': False,
+                    },
+                },
+                format='json')
+
+            self.assertEqual(response.status_code, 500)
+            self.assertTrue(self.api_error_msg in response.data['detail'])
+            self.assertIn(
+                self.log_msg +
+                'bcc_email must be a space-separated list of emails.',
+                log_context.output)
 
 
 class ScheduleApiEmail(ScheduleApiBasic):

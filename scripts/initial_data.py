@@ -152,7 +152,8 @@ def run(*script_args):
     debug = False
     email_column_name = 'email'
     make_instructors = False
-    password = 'changethepassword'
+    password_default = 'changethepassword'
+    password = password_default
 
     # Parse options
     try:
@@ -180,7 +181,9 @@ def run(*script_args):
         print(' Debug:' + str(debug))
         print(' Email column name:', email_column_name)
         print(' Make instructors:', str(make_instructors))
-        print(' Default password: ', password)
+        print(
+            ' Default password: ',
+            'default' if password == password_default else 'GIVEN')
         print(' Files: ' + ', '.join(filenames))
 
     if debug:

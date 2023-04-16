@@ -87,14 +87,14 @@ class ColumnAddRandomNumberColumnForm(ColumnAddRandomColumnFormBasic):
         new_column = self.workflow.columns.filter(name=cname).first()
         self.assertIsNone(new_column)
 
-        # JSON POST request for column creation with a interval integer
+        # JSON POST request for column creation with an interval integer
         resp = self.get_response(
             'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
                 'data_type': 'double',
-                'raw_categories': '-3.0 - -5.0',
+                'raw_categories': '-3 - -5',
                 'position': 0},
             is_ajax=True)
 
@@ -329,7 +329,7 @@ class ColumnAddRandomDatetimeColumnForm(ColumnAddRandomColumnFormBasic):
         self.assertIsNone(new_column)
 
         # JSON POST request for column creation with a multiple strings
-        dtimes = [
+        date_times = [
             parse_datetime('2020-09-11 12:04:43+0930'),
             parse_datetime('2020-09-12 12:04:43+0930')]
         resp = self.get_response(
@@ -355,6 +355,6 @@ class ColumnAddRandomDatetimeColumnForm(ColumnAddRandomColumnFormBasic):
         data_frame = pandas.load_table(
             self.workflow.get_data_frame_table_name())
         self.assertTrue(all(
-            element in dtimes for element in data_frame[cname]))
+            element in date_times for element in data_frame[cname]))
         # Delete the column
         services.delete_column(self.workflow.user, self.workflow, new_column)

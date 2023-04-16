@@ -116,7 +116,7 @@ class TableTestSerializersJSON(TableTestSerializersBasic):
                     '2018-10-11 21:12:04+00:00',
                     '2018-10-12 21:12:04+00:00'],
             })
-        df['d5'] = pd.to_datetime(df['d5'], infer_datetime_format=True)
+        df['d5'] = pd.to_datetime(df['d5'])
 
         new_df = serializers.DataFrameJSONMergeSerializer(
             data={

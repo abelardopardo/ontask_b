@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 18:39+0930\n"
+"POT-Creation-Date: 2023-04-16 10:47+0930\n"
 "PO-Revision-Date: 2019-09-14 19:37+0930\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -112,8 +112,8 @@ msgstr "密码已更改。请重新登录"
 msgid "Incorrect type of action"
 msgstr "不正确的操作类型"
 
+#: ontask/action/evaluate/template.py:305
 #: ontask/action/evaluate/template.py:309
-#: ontask/action/evaluate/template.py:313
 #, python-brace-format
 msgid "Name {0} is reserved."
 msgstr "名称{0}已保存。"
@@ -194,112 +194,108 @@ msgstr "在发送前检查/排除项目？"
 msgid "Allows a last minute check and select some elements to be excluded."
 msgstr ""
 
-#: ontask/action/forms/run.py:203
-msgid "Column needs to have all unique values (no empty cells)"
-msgstr "列需要具有所有唯一值（没有空单元格）"
-
-#: ontask/action/forms/run.py:214
+#: ontask/action/forms/run.py:205
 msgid "Authentication Token"
 msgstr "身份验证令牌"
 
-#: ontask/action/forms/run.py:225
+#: ontask/action/forms/run.py:216
 msgid "Authentication token provided by the external platform."
 msgstr "由外部平台提供的身份认证令牌。"
 
-#: ontask/action/forms/run.py:244
+#: ontask/action/forms/run.py:235
 msgid "Send you a summary message?"
 msgstr "是否发送摘要信息？"
 
-#: ontask/action/forms/run.py:249
+#: ontask/action/forms/run.py:240
 msgid "Track email reading in an extra column?"
 msgstr "是否跟踪电子邮件阅读额外列？"
 
-#: ontask/action/forms/run.py:250
+#: ontask/action/forms/run.py:241
 msgid "Adds an extra column to the workflow. Results are aproximate."
 msgstr ""
 
-#: ontask/action/forms/run.py:258 ontask/action/forms/run.py:313
+#: ontask/action/forms/run.py:249 ontask/action/forms/run.py:309
 msgid "Column to use for target email address"
 msgstr "用于目标邮件地址的列"
 
-#: ontask/action/forms/run.py:295
+#: ontask/action/forms/run.py:291
 #, fuzzy, python-brace-format
 #| msgid "Incorrect action id {0}"
 msgid "Incorrect email address \"{0}\"."
 msgstr "无效列名{0}。"
 
-#: ontask/action/forms/run.py:300 ontask/scheduler/serializers.py:173
+#: ontask/action/forms/run.py:296 ontask/scheduler/serializers.py:173
 msgid "The column with email addresses has incorrect values."
 msgstr "具有电子邮件地址的列含有不正确的值。"
 
-#: ontask/action/forms/run.py:329
+#: ontask/action/forms/run.py:325
 msgid "Recipient"
 msgstr "收信人"
 
-#: ontask/action/forms/run.py:350
+#: ontask/action/forms/run.py:346
 msgid "Field needs a valid email address."
 msgstr "字段需要一个有效的电子邮件地址。"
 
-#: ontask/action/forms/run.py:375
+#: ontask/action/forms/run.py:371
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
 msgstr "用于文件名前缀（如果是Moodle压缩文件的话就是全名）的列"
 
-#: ontask/action/forms/run.py:387
+#: ontask/action/forms/run.py:383
 msgid "This ZIP will be uploaded to Moodle as feedback"
 msgstr "此压缩文件将作为评价上传至Moodle"
 
-#: ontask/action/forms/run.py:394
+#: ontask/action/forms/run.py:390
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
 msgstr "用于文件名前缀（如果是Moodle压缩文件的话就是参与者账户）的键列"
 
-#: ontask/action/forms/run.py:446
+#: ontask/action/forms/run.py:442
 msgid "The two columns must be different"
 msgstr "这两列必须不同"
 
-#: ontask/action/forms/run.py:454
+#: ontask/action/forms/run.py:450
 msgid "A Moodle ZIP requires two column names"
 msgstr "一个Moodle压缩文件需要两个列名"
 
-#: ontask/action/forms/run.py:465
+#: ontask/action/forms/run.py:461
 msgid "Values in column must have format \"Participant [number]\""
 msgstr "列中的值必须具有”Participant [number]”格式"
 
-#: ontask/action/forms/run.py:488
+#: ontask/action/forms/run.py:484
 msgid "Canvas Host"
 msgstr "Canvas主机"
 
-#: ontask/action/forms/run.py:489
+#: ontask/action/forms/run.py:485
 msgid "Name of the Canvas host to send the messages"
 msgstr "用于发送信息的Canvas主机名称"
 
-#: ontask/action/forms/run.py:493
+#: ontask/action/forms/run.py:489
 msgid "Column with the Canvas ID"
 msgstr "具有Canvas账户的列"
 
-#: ontask/action/forms/run.py:495
+#: ontask/action/forms/run.py:491
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "在发送前检查/排除Canvas账户？"
 
-#: ontask/action/forms/run.py:516
+#: ontask/action/forms/run.py:512
 msgid "No Canvas Service available for this action."
 msgstr "此操作没有可用的Canvas服务。"
 
-#: ontask/action/forms/run.py:530
+#: ontask/action/forms/run.py:526
 #, fuzzy
 #| msgid "The selected column does not contain email addresses."
 msgid "The column does not contain valid Canvas IDs."
 msgstr "选中的列不包含邮箱地址。"
 
-#: ontask/action/forms/run.py:557
+#: ontask/action/forms/run.py:553
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "用来排除要发送对象的列 (空格跳过步骤）"
 
-#: ontask/action/forms/run.py:597
+#: ontask/action/forms/run.py:593
 msgid "Values to exclude"
 msgstr "排除值"
 
-#: ontask/action/forms/run.py:634 ontask/action/forms/run.py:637
-#: ontask/column/forms.py:147 ontask/column/forms.py:148
+#: ontask/action/forms/run.py:630 ontask/action/forms/run.py:633
+#: ontask/column/forms.py:148 ontask/column/forms.py:149
 msgid "Incorrect date/time window"
 msgstr "错误的日期/时间窗口"
 
@@ -571,127 +567,127 @@ msgstr ""
 msgid "OnTask"
 msgstr "OnTask"
 
-#: ontask/column/forms.py:60
+#: ontask/column/forms.py:61
 msgid "Comma separated list of values allowed in this column"
 msgstr "本列中允许的逗号分隔列表值"
 
-#: ontask/column/forms.py:108
+#: ontask/column/forms.py:109
 msgid "There is a column already with this name"
 msgstr "已存在以此命名的列"
 
-#: ontask/column/forms.py:122
+#: ontask/column/forms.py:123
 msgid "Changes not allowed. Column is part of rubric action"
 msgstr ""
 
-#: ontask/column/forms.py:184
+#: ontask/column/forms.py:185
 msgid "Value to assign to all cells in the column"
 msgstr "分配给列中所有单元格的值"
 
-#: ontask/column/forms.py:208 ontask/dataops/services/plugin_admin.py:302
+#: ontask/column/forms.py:209 ontask/dataops/services/plugin_admin.py:302
 msgid "Incorrect initial value"
 msgstr "初始值不正确"
 
-#: ontask/column/forms.py:215
+#: ontask/column/forms.py:216
 msgid "This value is not in the list of allowed values"
 msgstr "此值不在允许值列表中"
 
-#: ontask/column/forms.py:239
+#: ontask/column/forms.py:240
 msgid "Question name"
 msgstr "问题名称"
 
-#: ontask/column/forms.py:241 ontask/column/forms.py:271
+#: ontask/column/forms.py:242 ontask/column/forms.py:272
 msgid "Description (shown to the learners)"
 msgstr "描述(显示给学习者)"
 
-#: ontask/column/forms.py:243
+#: ontask/column/forms.py:244
 msgid "Question position (zero to insert last)"
 msgstr "问题位置(最后插入零)"
 
-#: ontask/column/forms.py:244
+#: ontask/column/forms.py:245
 msgid "Question active from"
 msgstr "问题活跃于"
 
-#: ontask/column/forms.py:245
+#: ontask/column/forms.py:246
 msgid "Question active until"
 msgstr "问题活跃直到"
 
-#: ontask/column/forms.py:269
+#: ontask/column/forms.py:270
 #, fuzzy
 #| msgid "View name"
 msgid "Item name"
 msgstr "视图名称"
 
-#: ontask/column/forms.py:273
+#: ontask/column/forms.py:274
 #, fuzzy
 #| msgid "column position (zero to insert last)"
 msgid "Item position (zero to insert last)"
 msgstr "列位置(最后插入零)"
 
-#: ontask/column/forms.py:274
+#: ontask/column/forms.py:275
 #, fuzzy
 #| msgid "Column active from"
 msgid "Item active from"
 msgstr "列活跃于"
 
-#: ontask/column/forms.py:275
+#: ontask/column/forms.py:276
 #, fuzzy
 #| msgid "Column active until"
 msgid "Item active until"
 msgstr "列将活跃直到"
 
-#: ontask/column/forms.py:306
+#: ontask/column/forms.py:307
 #, fuzzy
 #| msgid "Question name"
 msgid "Criterion name"
 msgstr "问题名称"
 
-#: ontask/column/forms.py:308
+#: ontask/column/forms.py:309
 #, fuzzy
 #| msgid "View Description"
 msgid "Criterion Description"
 msgstr "视图描述"
 
-#: ontask/column/forms.py:317
+#: ontask/column/forms.py:318
 #, fuzzy
 #| msgid "Comma-separated list of CC Emails"
 msgid "Comma-separated list of levels of attainment"
 msgstr "抄送邮件的逗号分隔列表"
 
-#: ontask/column/forms.py:337
+#: ontask/column/forms.py:338
 msgid "The criterion needs a non-empty set of values"
 msgstr ""
 
-#: ontask/column/forms.py:377
+#: ontask/column/forms.py:378
 msgid "There must be at least one column with unique values"
 msgstr "必须至少有一个具有唯一值的列"
 
-#: ontask/column/forms.py:390
+#: ontask/column/forms.py:391
 msgid "The column does not have unique values for each row."
 msgstr "该列对每个行没有唯一值。"
 
-#: ontask/column/forms.py:420
+#: ontask/column/forms.py:421
 msgid "Columns to combine*"
 msgstr "待合并的列*"
 
-#: ontask/column/forms.py:452
+#: ontask/column/forms.py:453
 msgid "A column with that name already exists"
 msgstr "具有该名称的列已经存在"
 
-#: ontask/column/forms.py:460
+#: ontask/column/forms.py:461
 msgid "You need to select the columns to combine"
 msgstr "选择要合并的列"
 
-#: ontask/column/forms.py:480
+#: ontask/column/forms.py:481
 msgid "Incorrect data type for the selected operand"
 msgstr "所选操作数的不正确数据类型"
 
-#: ontask/column/forms.py:512
+#: ontask/column/forms.py:513
 msgid ""
 "Comma-separated list of values. If a number, m - n means integer values from "
 "that interval."
 msgstr ""
 
-#: ontask/column/forms.py:522
+#: ontask/column/forms.py:523
 #, fuzzy
 #| msgid "Columns to combine*"
 msgid "Columns to insert"
@@ -1235,7 +1231,7 @@ msgstr "合并操作产生了一个没有键列的结果。请检查待上传数
 msgid "This method should be implemented!"
 msgstr "这个方法应该实现！"
 
-#: ontask/dataops/services/dataframeupload.py:273 ontask/table/api.py:302
+#: ontask/dataops/services/dataframeupload.py:273
 #, python-brace-format
 msgid "Unable to perform merge operation: {0}"
 msgstr "无法执行合并操作 {0}"
@@ -2620,16 +2616,6 @@ msgstr "Exclude_values必须是一个列表"
 msgid "Exclude items needs a column in item_column"
 msgstr "排除项目需要item_column有一个值"
 
-#: ontask/scheduler/serializers.py:94
-#, python-brace-format
-msgid "Scheduled action could not be created: {0}"
-msgstr "无法创建已排程的操作：{0}"
-
-#: ontask/scheduler/serializers.py:109
-#, python-brace-format
-msgid "Unable to update scheduled action: {0}"
-msgstr "无法更新已排程的操作：{0}"
-
 #: ontask/scheduler/serializers.py:144 ontask/scheduler/serializers.py:214
 #, fuzzy
 #| msgid "Personalized text needs an item_column"
@@ -2796,6 +2782,12 @@ msgstr "用于访问文档的URL前缀"
 msgid "New ontask user profile for %s created"
 msgstr "已为{inst}创建 ontask 新用户个人信息资料"
 
+#: ontask/table/api.py:65
+#, fuzzy
+#| msgid "Exception while loading data frame"
+msgid "Error when overriding dataframe"
+msgstr "加载数据框时异常"
+
 #: ontask/table/api.py:101
 msgid "Post request requires workflow without a table"
 msgstr "发布请求需要没有表格的工作流"
@@ -2805,6 +2797,12 @@ msgstr "发布请求需要没有表格的工作流"
 #| msgid "Post request requires workflow without a table"
 msgid "Merge request requires a workflow with a non-empty table"
 msgstr "发布请求需要没有表格的工作流"
+
+#: ontask/table/api.py:301
+#, fuzzy
+#| msgid "Unable to perform merge operation: {0}"
+msgid "Unable to perform merge operation"
+msgstr "无法执行合并操作 {0}"
 
 #: ontask/table/forms.py:24
 msgid "View name"
@@ -2834,23 +2832,29 @@ msgstr "已存在以此命名的视图。"
 msgid "JSON string encoding a pandas data frame"
 msgstr "JSON字符串编码pandas数据帧"
 
-#: ontask/table/serializers/merge.py:42
+#: ontask/table/serializers/merge.py:31
+#, fuzzy
+#| msgid "Unable to create data frame"
+msgid "Unable to create dataframe with the given data"
+msgstr "无法创建数据帧"
+
+#: ontask/table/serializers/merge.py:45
 msgid "One of the following values: inner, outer, left or right"
 msgstr "以下数值之一：内，外，左或者右"
 
-#: ontask/table/serializers/merge.py:49
+#: ontask/table/serializers/merge.py:52
 msgid "ID of the column in destination data frame with unique key"
 msgstr "具有唯一密钥的目的地数据帧中的列ID"
 
-#: ontask/table/serializers/merge.py:54
+#: ontask/table/serializers/merge.py:57
 msgid "ID of column in source data frame with unique key"
 msgstr "具有唯一键的源数据框中的列的ID"
 
-#: ontask/table/serializers/merge.py:62
+#: ontask/table/serializers/merge.py:65
 msgid "Field must be a JSON string encoding a pandas data frame"
 msgstr "字段必须是编码pandas数据帧的JSON字符串"
 
-#: ontask/table/serializers/merge.py:71 ontask/workflow/serializers.py:76
+#: ontask/table/serializers/merge.py:74 ontask/workflow/serializers.py:76
 msgid ""
 "This field must be the Base64 encoded result of pandas.to_pickle() function"
 msgstr "此字段必须是pandas.to_pickle()函数Base64编码的结果"
@@ -2982,7 +2986,7 @@ msgstr "无法访问工作流"
 
 #: ontask/templates/404.html:10 ontask/templates/action/action_zip_done.html:15
 #: ontask/templates/action/item_filter.html:27
-#: ontask/templates/action/run_done.html:20
+#: ontask/templates/action/run_done.html:19
 #: ontask/templates/action/run_survey.html:70
 #: ontask/templates/action/run_survey_row.html:21
 #: ontask/templates/action/run_survey_row.html:32
@@ -3914,11 +3918,11 @@ msgid "Action scheduled for execution"
 msgstr "计划执行的操作"
 
 #: ontask/templates/action/run_done.html:16
-#: ontask/templates/dataops/operation_done.html:9
-#, python-format
-msgid ""
-"You may check the status in\n"
-"      log number %(log_id)s."
+#, fuzzy, python-format
+#| msgid ""
+#| "You may check the status in\n"
+#| "      log number %(log_id)s."
+msgid "You may check the status in log number %(log_id)s."
 msgstr ""
 "您可以检查\n"
 "日志记录号%(log_id)s的状态。"
@@ -4900,6 +4904,15 @@ msgstr "操作执行"
 #| msgid "Action scheduled for execution"
 msgid "Operation scheduled for execution"
 msgstr "计划执行的操作"
+
+#: ontask/templates/dataops/operation_done.html:9
+#, python-format
+msgid ""
+"You may check the status in\n"
+"      log number %(log_id)s."
+msgstr ""
+"您可以检查\n"
+"日志记录号%(log_id)s的状态。"
 
 #: ontask/templates/dataops/plugin_admin.html:8
 msgid "Plugin Admin"
@@ -6428,6 +6441,17 @@ msgid ""
 "logs. The interface provides CRUD operations over these objects."
 msgstr ""
 "OnTask API提供操作工作流、表和日志的功能。该接口提供对这些对象的CRUD操作。"
+
+#~ msgid "Column needs to have all unique values (no empty cells)"
+#~ msgstr "列需要具有所有唯一值（没有空单元格）"
+
+#, python-brace-format
+#~ msgid "Scheduled action could not be created: {0}"
+#~ msgstr "无法创建已排程的操作：{0}"
+
+#, python-brace-format
+#~ msgid "Unable to update scheduled action: {0}"
+#~ msgstr "无法更新已排程的操作：{0}"
 
 #, fuzzy
 #~| msgid "Create condition"

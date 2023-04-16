@@ -409,7 +409,7 @@ class TutorialCaptures(ScreenTests):
         )
         self.selenium.find_element(By.ID, 'id_confirm_items').click()
 
-        # Screen shot of the body
+        # Screenshot of the body
         self.body_ss('action_personalized_text_email.png')
 
         # Click in the preview

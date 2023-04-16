@@ -9,7 +9,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ontask import OnTaskDataFrameNoKey, models
+from ontask import OnTaskDataFrameNoKey, models, LOGGER
 from ontask.core import UserIsInstructor, get_workflow
 from ontask.dataops import pandas
 from ontask.table import serializers
@@ -61,8 +61,8 @@ class TableBasicOps(APIView):
             # Store the content in the db and...
             pandas.store_dataframe(df, workflow)
         except OnTaskDataFrameNoKey as exc:
-            return Response(
-                str(exc),
+            LOGGER.error(str(exc))
+            return Response(_('Error when overriding dataframe'),
                 status=status.HTTP_400_BAD_REQUEST)
 
         # Update all the counters in the conditions
@@ -298,8 +298,9 @@ class TableBasicMerge(APIView):
                     'rename_column_names': list(src_df.columns),
                     'columns_to_upload': [True] * len(list(src_df.columns))})
         except Exception as exc:
-            raise APIException(
-                _('Unable to perform merge operation: {0}').format(str(exc)))
+            msg = _('Unable to perform merge operation')
+            LOGGER.error(msg + ': ' + str(exc))
+            raise APIException(msg)
 
         # Merge went through.
         return Response(serializer.data, status=status.HTTP_201_CREATED)

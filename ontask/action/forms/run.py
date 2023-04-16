@@ -135,13 +135,13 @@ class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
                     for email in form_data['bcc_email'].split() if email]))])
 
         if incorrect_email := get_incorrect_email(
-            form_data['cc_email'].split()):
+                form_data['cc_email'].split()):
             self.add_error(
                 'cc_email',
                 _('Incorrect email value "{0}".').format(incorrect_email))
 
         if incorrect_email := get_incorrect_email(
-            form_data['bcc_email'].split()):
+                form_data['bcc_email'].split()):
             self.add_error(
                 'bcc_email',
                 _('Incorrect email value "{0}".').format(incorrect_email))
@@ -192,15 +192,6 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
             'item_column',
             pcolumn.pk if pcolumn else None)
         self.store_fields_in_dict([('confirm_items', None)])
-
-        # The given column must have unique values
-        if not sql.is_column_unique(
-            self.action.workflow.get_data_frame_table_name(),
-            pcolumn.name,
-        ):
-            self.add_error(
-                'item_column',
-                _('Column needs to have all unique values (no empty cells)'))
 
         return form_data
 
@@ -275,6 +266,10 @@ class EmailActionForm(
         """Verify email values."""
         form_data = super().clean()
 
+        if self.errors:
+            # Errors have been detected, return
+            return form_data
+
         # Move data to the payload so that is ready to be used
         self.store_fields_in_dict([
             ('send_confirmation', None),
@@ -285,7 +280,8 @@ class EmailActionForm(
         try:
             column_data = sql.get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                column_names=[pcolumn.name])
+                column_names=[pcolumn.name],
+                filter_formula=self.action.get_filter_formula())
             if incorrect_email := get_incorrect_email(
                 [iname[0] for iname in column_data]
             ):
@@ -437,9 +433,9 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
         # If both participant column and ufname column are given, and they are
         # identical, return with error
         if (
-            (pcolumn := form_data['item_column'])
-            and (ufname_column := form_data['user_fname_column'])
-            and pcolumn == ufname_column
+                (pcolumn := form_data['item_column'])
+                and (ufname_column := form_data['user_fname_column'])
+                and pcolumn == ufname_column
         ):
             self.add_error(
                 None,
@@ -456,10 +452,10 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
 
             # Participant columns must match the pattern 'Participant [0-9]+'
             if any(
-                not PARTICIPANT_RE.search(str(row[pcolumn.name]))
-                for row in sql.get_rows(
-                    self.action.workflow.get_data_frame_table_name(),
-                    column_names=[pcolumn.name])):
+                    not PARTICIPANT_RE.search(str(row[pcolumn.name]))
+                    for row in sql.get_rows(
+                        self.action.workflow.get_data_frame_table_name(),
+                        column_names=[pcolumn.name])):
                 self.add_error(
                     'item_column',
                     _('Values in column must have format '
@@ -518,12 +514,12 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
         # The given column for email destination has to have integers or
         # floats that can be transformed into integers
         if any(
-            not isinstance(row_item[0], (int, float))
-            or not float.is_integer(float(row_item[0]))
-            for row_item in sql.get_rows(
-                self.action.workflow.get_data_frame_table_name(),
-                column_names=[form_data['item_column'].name],
-                filter_formula=self.action.get_filter_formula())
+                not isinstance(row_item[0], (int, float))
+                or not float.is_integer(float(row_item[0]))
+                for row_item in sql.get_rows(
+                    self.action.workflow.get_data_frame_table_name(),
+                    column_names=[form_data['item_column'].name],
+                    filter_formula=self.action.get_filter_formula())
         ):
             self.add_error(
                 'item_column',
@@ -625,9 +621,9 @@ class EnableURLForm(forms.ModelForm):
 
         # Check the date/times. One needs to be after the other
         if (
-            (a_from := self.cleaned_data.get('active_from'))
-            and (a_to := self.cleaned_data.get('active_to'))
-            and a_from >= a_to
+                (a_from := self.cleaned_data.get('active_from'))
+                and (a_to := self.cleaned_data.get('active_to'))
+                and a_from >= a_to
         ):
             self.add_error(
                 'active_from',

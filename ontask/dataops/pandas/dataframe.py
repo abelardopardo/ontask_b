@@ -16,7 +16,7 @@ def _verify_dataframe_columns(
     """Verify that the df columns are compatible with those in the wflow.
 
     This function is crucial to make sure the information stored in the
-    workflow and the one in the dataframe is consistent. It it assumed that
+    workflow and the one in the dataframe is consistent. It is assumed that
     the data frame given as parameter contains a superset of the columns
     already present in the workflow. The function traverses those columns in
     the data frame that are already included in the workflow and checks the

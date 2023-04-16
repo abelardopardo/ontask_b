@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 import pandas as pd
 from rest_framework import serializers
 
+from ontask import LOGGER
 from ontask.dataops import pandas
 from ontask.table.serializers.pandas import DataFramePandasField
 
@@ -27,7 +28,9 @@ class DataFrameJSONField(serializers.Field):
             # Detect date/time columns
             df = pandas.detect_datetime_columns(df)
         except Exception as exc:
-            raise serializers.ValidationError(str(exc))
+            msg = _('Unable to create dataframe with the given data')
+            LOGGER.error(msg + ': ' + str(exc))
+            raise serializers.ValidationError(msg)
 
         return df
 

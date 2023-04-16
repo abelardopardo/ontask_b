@@ -59,7 +59,7 @@ LOGGING['loggers'] = {
         'level': 'DEBUG',
     },
     'ontask': {
-        'handlers': ['django_log_file'],
+        'handlers': ['ontask_log_file'],
         'level': 'DEBUG',
     },
     'scripts': {

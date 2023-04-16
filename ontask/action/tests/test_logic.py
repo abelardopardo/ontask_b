@@ -87,7 +87,6 @@ class EmailActionDetectIncorrectEmail(
     user_pwd = 'boguspwd'
 
     def test(self):
-        user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = models.Workflow.objects.get(name=self.wflow_name)
         email_column = wflow.columns.get(name='email')
         action = wflow.actions.first()
@@ -100,9 +99,37 @@ class EmailActionDetectIncorrectEmail(
             req_params={
                 'item_column': email_column.pk,
                 'subject': 'message subject'})
-        payload = SessionPayload.get_session_payload(self.last_request)
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue(
             'Incorrect email address ' in str(resp.content))
         self.assertTrue(
             'incorrectemail.com' in str(resp.content))
+
+
+class EmailActionChecksOnlySelectedEmails(
+    tests.FilterCorrectEmailsFixture,
+    tests.OnTaskTestCase,
+):
+    """Test if incorrect email addresses filtered out are allowed."""
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    def test(self):
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
+        email_column = wflow.columns.get(name='email')
+        action = wflow.actions.first()
+
+        # POST a send operation with the wrong email
+        resp = self.get_response(
+            'action:run',
+            url_params={'pk': action.id},
+            method='POST',
+            req_params={
+                'item_column': email_column.pk,
+                'subject': 'message subject'})
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertTrue(
+            'Action scheduled for execution' in str(resp.content))
+        self.assertTrue(
+            'You may check the status in log number' in str(resp.content))
