@@ -87,7 +87,6 @@ class EmailActionDetectIncorrectEmail(
     user_pwd = 'boguspwd'
 
     def test(self):
-        user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = models.Workflow.objects.get(name=self.wflow_name)
         email_column = wflow.columns.get(name='email')
         action = wflow.actions.first()
@@ -100,7 +99,6 @@ class EmailActionDetectIncorrectEmail(
             req_params={
                 'item_column': email_column.pk,
                 'subject': 'message subject'})
-        payload = SessionPayload.get_session_payload(self.last_request)
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue(
             'Incorrect email address ' in str(resp.content))

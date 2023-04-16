@@ -21,7 +21,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 
         - The action name corresponds with a valid action for the user.
 
-        - The execute time must be in the future
+        - The execution time must be in the future
 
         - The received object has a payload
 
@@ -40,7 +40,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         workflow = validated_data['workflow']
         if workflow.user != this_user:
             raise APIException(
-                _('Incorrect permission to manipulate workflow'))
+                _('Incorrect permission to manipulate workflow.'))
 
         # If action is given, it should be owned by the user
         action = validated_data['action']

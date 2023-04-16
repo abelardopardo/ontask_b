@@ -243,5 +243,6 @@ def setup(app):
     """Add additional stylesheets."""
     app.add_css_file('css/custom.css')  # may also be a URL
     app.add_css_file(
-        'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css'
+        'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/'
+        'font/bootstrap-icons.css'
     )

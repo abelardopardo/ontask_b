@@ -381,9 +381,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def login(self, uemail):
         self.open(reverse('accounts:login'))
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_username')))
         self.wait_for_spinner()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, 'id_username')))
         self.selenium.find_element(By.ID, 'id_username').send_keys(uemail)
         self.selenium.find_element(By.ID, 'id_password').send_keys(boguspwd)
         self.selenium.find_element(By.ID, 'submit-id-sign_in').click()
@@ -659,15 +659,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.assertIn('Column Operations', self.selenium.page_source)
 
     def go_to_scheduler(self):
-        self.selenium.find_element(By.ID, 'ontask-base-settings').click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             self.class_and_text_xpath.format(
-                 'a',
-                 'dropdown-item',
-                 'Scheduled operations'))
-        ))
-        self.selenium.find_element(By.ID, 'ontask-base-scheduler').click()
+        self.click_on_element(By.ID, 'ontask-base-settings')
+        self.click_on_element(By.ID, 'ontask-base-scheduler')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'scheduler-index'))
         )
@@ -675,15 +668,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.assertIn('Scheduled Operations', self.selenium.page_source)
 
     def go_to_logs(self):
-        self.selenium.find_element(By.ID, 'ontask-base-settings').click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             self.class_and_text_xpath.format(
-                 'a',
-                 'dropdown-item',
-                 'View logs'))
-        ))
-        self.selenium.find_element(By.ID, 'ontask-base-logs').click()
+        self.click_on_element(By.ID, 'ontask-base-settings')
+        self.click_on_element(By.ID, 'ontask-base-logs')
         # Wait for ajax table to refresh
         element = self.selenium.find_element(By.ID, 'log-table')
         if element:

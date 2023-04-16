@@ -1,4 +1,4 @@
-"""Manipulate template text within OnTask and evaluat it s content."""
+"""Manipulate template text within OnTask and evaluate its content."""
 import re
 import shlex
 import string
@@ -26,7 +26,7 @@ WHITE_SPACE_RES = [
 _ONTASK_TEMPLATE_PRELUDE = '{% load ontask_tags %}'
 
 
-def make_xlat(*args, **kwds) -> Callable:
+def make_translate(*args, **keywords) -> Callable:
     """Apply multiple character substitutions.
 
     Auxiliary function to define a translator that applies multiple character
@@ -36,25 +36,25 @@ def make_xlat(*args, **kwds) -> Callable:
     Alex Martelli", Section 1.18
 
     :param args: Dictionary
-    :param kwds:
+    :param keywords:
     :return: A function that uses the given dictionary to apply multiple
     changes to a string
     """
-    adict = dict(*args, **kwds)
+    adict = dict(*args, **keywords)
     re_exec = re.compile(r'|'.join(map(re.escape, adict)))
 
-    def one_xlat(match: str) -> str:
+    def one_translate(match) -> str:
         """Translate match."""
         return adict[match.group(0)]
 
-    def xlat(text: str) -> str:
+    def translate(text: str) -> str:
         """Apply regext substitution."""
-        return re_exec.sub(one_xlat, text)
+        return re_exec.sub(one_translate, text)
 
-    return xlat
+    return translate
 
 
-# Dictionary to translate non alphanumeric symbols into alphanumeric pairs
+# Dictionary to translate non-alphanumeric symbols into alphanumeric pairs
 # 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 # !#$%&()*+,-./:;<=>?@[\]^_`{|}~
 # abcdefghijklmnopqrstuvwxyz01234
@@ -92,11 +92,11 @@ TR_DICT = {
     ' ': '_4',
 }
 
-TR_ITEM = make_xlat(TR_DICT)
-RTR_ITEM = make_xlat(dict((val, key) for key, val in TR_DICT.items()))
+TR_ITEM = make_translate(TR_DICT)
+RTR_ITEM = make_translate(dict((val, key) for key, val in TR_DICT.items()))
 
 
-def _change_vname(match) -> str:
+def _change_variable_name(match) -> str:
     """Change variable name using the match object from re.
 
     :param match:
@@ -110,18 +110,16 @@ def _change_vname(match) -> str:
         return (
             match.group('mup_pre')
             + ' '.join(['"' + _translate(cname) + '"' for cname in args])
-            + match.group('mup_post')
-        )
+            + match.group('mup_post'))
 
     return (
         match.group('mup_pre')
         + _translate(match.group('vname'))
-        + match.group('mup_post')
-    )
+        + match.group('mup_post'))
 
 
-def _change_unescape_vname(match) -> str:
-    """Change unscaped variable name using the match object from re.
+def _change_unescape_variable_name(match) -> str:
+    """Change unescaped variable name using the match object from re.
 
     :param match:
     :return: String with the variable name translated
@@ -142,8 +140,7 @@ def _change_unescape_vname(match) -> str:
         return (
             match.group('mup_pre')
             + ' '.join(['"' + _translate(cname) + '"' for cname in args])
-            + match.group('mup_post')
-        )
+            + match.group('mup_post'))
 
     var_name = match.group('vname').replace(
         '&amp;', '&').replace(
@@ -154,15 +151,14 @@ def _change_unescape_vname(match) -> str:
     return (
         match.group('mup_pre')
         + _translate(var_name)
-        + match.group('mup_post')
-    )
+        + match.group('mup_post'))
 
 
 def _translate(varname: str) -> str:
     """Apply several translations to a variable name.
 
     Function that given a string representing a variable name applies a
-    translation to each of the non alphanumeric characters in that name.
+    translation to each of the non-alphanumeric characters in that name.
     Additionally, it needs to guarantee that the name starts with a letter
     (not a digit), and it detects and fixes this condition by introducing a
     prefix.
@@ -263,7 +259,7 @@ def render_action_template(
 
        The transformation is based on:
        - Every non-letter or number is replaced by '_' followed by a
-         letter/number as specified by the global dictionary.
+         letter/number, as specified by the global dictionary.
 
        - If the original variable does not start by a letter, insert a prefix.
 
@@ -283,16 +279,16 @@ def render_action_template(
     for regex in models.VAR_USE_RES:
         if action and action.has_html_text:
             new_template_text = regex.sub(
-                _change_unescape_vname,
+                _change_unescape_variable_name,
                 new_template_text)
         else:
             new_template_text = regex.sub(
-                _change_vname,
+                _change_variable_name,
                 new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and
     # {% endif %} conditions (to reduce white space when using non HTML
-    # content.
+    # content).
     new_template_text = _clean_whitespace(new_template_text)
 
     # Step 3. Apply the translation process to the context keys
@@ -315,7 +311,7 @@ def render_action_template(
         ))
     new_context[VIZ_NUMBER_CONTEXT_VAR] = 0
 
-    # Step 4. Return the redering of the new elements
+    # Step 4. Return the rendering of the new elements
     return Template(
         _ONTASK_TEMPLATE_PRELUDE + new_template_text,
     ).render(Context(new_context))
