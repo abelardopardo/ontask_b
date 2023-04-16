@@ -59,6 +59,10 @@ def do_clone_action(
     new_action.save()
 
     try:
+        # Clone the conditions
+        for condition in action.conditions.all():
+            services.do_clone_condition(user, condition, new_action)
+
         # Clone the column/condition pairs field.
         for acc_tuple in action.column_condition_pair.all():
             cname = acc_tuple.condition.name if acc_tuple.condition else None
@@ -66,7 +70,8 @@ def do_clone_action(
                 action=new_action,
                 column=new_action.workflow.columns.get(
                     name=acc_tuple.column.name),
-                condition=new_action.conditions.filter(name=cname).first(),
+                condition=new_action.conditions.get(
+                    name=cname) if cname else None,
             )
 
         # Clone the rubric cells if any
@@ -78,10 +83,6 @@ def do_clone_action(
                 loa_position=rubric_cell.loa_position,
                 description_text=rubric_cell.description_text,
                 feedback_text=rubric_cell.feedback_text)
-
-        # Clone the conditions
-        for condition in action.conditions.all():
-            services.do_clone_condition(user, condition, new_action)
 
         # Update
         new_action.save()
