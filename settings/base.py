@@ -475,14 +475,19 @@ TINYMCE_JS_URL = os.path.join(STATIC_URL, 'js', 'tinymce/tinymce.min.js')
 TINYMCE_DEFAULT_CONFIG = {
     "theme": "silver",
     "height": 500,
-    "menubar": False,
+    "menubar": "file edit view insert format tools table help",
+
     "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
     "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,"
-    "paste,code,help,wordcount",
-    "toolbar": "undo redo | formatselect | "
+    "paste,code,help,wordcount,emoticons,imagetools",
+
+    "toolbar": "undo redo | fontselect fontsizeselect formatselect | "
     "bold italic backcolor | alignleft aligncenter "
     "alignright alignjustify | bullist numlist outdent indent | "
-    "removeformat | help",
+    "forecolor backcolor | image removeformat | link unlink openlink | "
+    "searchreplace | fullscreen | emoticons | help",
+
+    "toolbar_mode": "sliding",
 }
 TINYMCE_COMPRESSOR = False
 
