@@ -35,7 +35,7 @@ coreapi==2.3.3
 coreschema==0.0.4
 crispy-bootstrap5==0.7
 cron-descriptor==1.2.35
-cryptography==40.0.1
+cryptography==41.0.0
 css-html-js-minify==2.5.5
 defusedxml==0.7.1
 diff-match-patch==20200713
