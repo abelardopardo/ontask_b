@@ -50,7 +50,6 @@ class TableStatView(UserIsInstructor, WorkflowView, generic.DetailView):
     is_view = False
     template_name = None  # Set on a per-request basis
     model = models.View
-    view = None
     wf_pf_related = ['columns', 'views']
     context_object_name = 'table_view'
 
@@ -100,7 +99,7 @@ class TableStatView(UserIsInstructor, WorkflowView, generic.DetailView):
         # Get the data frame and the columns
         data_frame, columns_to_view = services.get_df_and_columns(
             self.workflow,
-            self.view)
+            self.object)
 
         row = None
         if bool(row_select_key):

@@ -2,9 +2,8 @@
 
 from rest_framework import status
 
-from ontask import tests
-from ontask.dataops import pandas
 import ontask.dataops.sql.row_queries
+from ontask import tests
 
 
 class TableTestStatView(tests.SimpleTableFixture, tests.OnTaskTestCase):
@@ -14,7 +13,7 @@ class TableTestStatView(tests.SimpleTableFixture, tests.OnTaskTestCase):
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Test the use of forms in to schedule actions."""
+        """Test the visualisation for the table."""
         # Remove is_key from column 'age'
         col = self.workflow.columns.get(name='age')
         col.is_key = False
@@ -27,6 +26,7 @@ class TableTestStatView(tests.SimpleTableFixture, tests.OnTaskTestCase):
         # GEt the visualization of the view
         view = self.workflow.views.get(name='simple view')
         resp = self.get_response('table:stat_table_view', {'pk': view.id})
+        self.assertNotIn('another', str(resp.content))
         self.assertTrue(status.is_success(resp.status_code))
 
         # Get one of the rows
