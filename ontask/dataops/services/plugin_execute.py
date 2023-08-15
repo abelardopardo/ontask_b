@@ -1,11 +1,11 @@
 """Service functions to execute a plugin."""
 from datetime import datetime
 from typing import Dict, Optional
+from zoneinfo import ZoneInfo
 
+import pandas as pd
 from django.conf import settings
 from django.utils.translation import gettext
-import pandas as pd
-from zoneinfo import ZoneInfo
 
 from ontask import OnTaskServiceException, models
 from ontask.dataops import pandas
@@ -28,7 +28,7 @@ def _execute_plugin(
     workflow
 
     :param workflow: Workflow object being processed
-    :param plugin_info: PluginReistry object being processed
+    :param plugin_info: PluginRegistry object being processed
     :param input_column_names: List of input column names
     :param output_column_names: List of output column names
     :param output_suffix: Suffix that is added to the output column names
@@ -191,7 +191,7 @@ class ExecuteRunPlugin:
         Execute the run method in a plugin with the dataframe from the given
         workflow and a payload with:
 
-        - plugin_id: Id of the plugin being executed
+        - plugin_id: Identifier of the plugin being executed
         - input_column_names: List of input column names
         - output_column_names: List of output column names
         - output_suffix: Suffix that is added to the output column names

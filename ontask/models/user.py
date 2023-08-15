@@ -106,17 +106,16 @@ class OnTaskUser(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name='ontask_info',
-        primary_key=True,
-    )
+        primary_key=True)
 
     @functional.cached_property
     def is_instructor(self) -> bool:
         """Return boolean with is_instructor answer (cache)."""
         return (
-                self.user.is_authenticated
-                and (
-                    self.user.groups.filter(name='instructor').exists()
-                    or self.user.is_superuser))
+            self.user.is_authenticated
+            and (
+                self.user.groups.filter(name='instructor').exists()
+                or self.user.is_superuser))
 
     def __str__(self) -> str:
         """Provide string representation (email)."""

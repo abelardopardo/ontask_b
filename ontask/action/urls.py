@@ -5,7 +5,6 @@ from django.views.generic import TemplateView
 from ontask import models
 from ontask.action import forms, services, views
 
-
 app_name = 'action'
 
 urlpatterns = [
@@ -14,7 +13,10 @@ urlpatterns = [
     #
     # List them all
     path('', views.ActionIndexView.as_view(), name='index'),
-    path('<int:wid>/index/', views.ActionIndexView.as_view(), name='index_set'),
+    path(
+        '<int:wid>/index/',
+        views.ActionIndexView.as_view(),
+        name='index_set'),
 
     # Create an action
     path(

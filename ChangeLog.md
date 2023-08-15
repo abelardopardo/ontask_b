@@ -1,4 +1,16 @@
-# 10.3 (2023-04-??)
+# 10.4 (2023-08-16)
+
+## Changed
+
+- Various code style changes (no change in functionality)
+
+- Insert condition in action text while keeping selection in Canvas Action (Issue #243) 
+
+## Fixed
+
+- Error in Dashboard for view showing too many columns (Issue #242)
+
+# 10.3 (2023-04-16)
 
 ## Changed
 

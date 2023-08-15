@@ -3,21 +3,20 @@ import io
 import math
 import os
 import subprocess
-from typing import Dict, Mapping, Optional
 from importlib import import_module
+from typing import Dict, Mapping, Optional
 
+import pandas as pd
 from PIL import Image
 from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.contrib.sessions.middleware import SessionMiddleware
 from django.db import connection
 from django.template.response import SimpleTemplateResponse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve, reverse
-import pandas as pd
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
@@ -367,10 +366,10 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def click_on_element(self, by_string, string_value):
-        """Wait for an element to be clickable and then click
+        """Wait for an element to be clickable and then click.
 
-        :by_string: String By.* to use in find_element
-        :sring_value: String to use as find criteria
+        :param by_string: String By.* to use in find_element
+        :param string_value: String to use as find criteria
         :return: Element
         """
         element = self.selenium.find_element(by_string, string_value)
@@ -440,7 +439,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         Function used  to wait for a modal window to close and for a table
         with certain ID to appear again as a consequence of the browser's
         response.
-        :param table_id: Id of the table being refreshed
+        :param table_id: Identifier of the table being refreshed
         :return:
         """
         self.wait_for_modal_close()
@@ -488,8 +487,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.click_on_element(
             By.XPATH,
             '//*[@id="{0}"]//*[normalize-space() = "{1}"]'.format(
-                 ddown_id,
-                 option_name))
+                ddown_id,
+                option_name))
 
     def click_dropdown_option_and_wait(
         self,
@@ -516,7 +515,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def click_dropdown_option_by_number(self, ddown_id: str, option_num: int):
         """Click the nth option in a dropdown menu.
 
-        Given a dropdown xpath, click to open and then click on the given option
+        Given a dropdown xpath, click to open and click on the given option
 
         :param ddown_id: id to locate the dropdown element (top level)
         :param option_num: position of the option in the dropdown to click
@@ -535,7 +534,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     ):
         """Click the nth option in a dropdown menu and wait.
 
-        Given a dropdown xpath, click to open and then click on the given option
+        Given a dropdown xpath, click to open and click on the given option
 
         :param ddown_id: id to locate the dropdown element (top level)
         :param option_num: position of the option in the dropdown to click
@@ -729,7 +728,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Go to CSV Upload/Merge
         self.click_on_element(
             By.XPATH,
-            '//table[@id="dataops-table"]//a[normalize-space()="Google Sheet"]')
+            '//table[@id="dataops-table"]//a[normalize-space()='
+            '"Google Sheet"]')
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.XPATH, '//form')))
 
@@ -1115,7 +1115,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             '//div[@id="action-cards"]' \
             '//h5[normalize-space() = "{0}"]/..'.format(name)
         try:
-            elem = self.click_on_element(
+            self.click_on_element(
                 By.XPATH,
                 xpath_str
                 + '/div/div/button/i[contains(@class, "{0}")]'.format(
@@ -1507,11 +1507,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
 
-    def insert_string_in_text_editor(self, id: str, message: str):
+    def insert_string_in_text_editor(self, identifier: str, message: str):
         """Given text editor ID insert the string in the text editor"""
         self.selenium.execute_script(
-            """tinymce.get('{0}').execCommand('mceInsertContent', 
-            false, '{1}')""".format(id, message))
+            """tinymce.get('{0}').execCommand('mceInsertContent',
+            false, '{1}')""".format(identifier, message))
 
     def assert_column_name_type(self, name, col_type, row_idx=None):
         """
@@ -1620,8 +1620,8 @@ class ScreenTests(OnTaskLiveTestCase):
                     (0,
                      0,
                      math.ceil(dims['width'] * self.device_pixel_ratio),
-                     math.ceil((coord['y'] + dims['height'] + 5) *
-                               self.device_pixel_ratio))
+                     math.ceil((coord['y'] + dims['height'] + 5)
+                               * self.device_pixel_ratio))
                 )
         except NoSuchElementException:
             pass

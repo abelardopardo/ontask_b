@@ -20,10 +20,10 @@ class ActionRunFactory(core.FactoryBase):
     """
 
     def process_request(
-        self,
-        request: http.HttpRequest,
-        operation_type: int,
-        **kwargs
+            self,
+            request: http.HttpRequest,
+            operation_type: int,
+            **kwargs
     ) -> http.HttpResponse:
         """Execute function to process a run request.
 
@@ -72,11 +72,11 @@ class ActionRunProducerBase(generic.FormView):
     is_finish_request = None  # Flagging if the request is the last step.
 
     def _create_log_event(
-        self,
-        user,
-        action: models.Action,
-        payload: Optional[Dict] = None,
-        log_item: Optional[models.Log] = None,
+            self,
+            user,
+            action: models.Action,
+            payload: Optional[Dict] = None,
+            log_item: Optional[models.Log] = None,
     ):
         """Create an ACTION RUN log if needed."""
         if log_item and not self.log_event:
@@ -129,8 +129,8 @@ class ActionRunProducerBase(generic.FormView):
             'action': self.action,
             'num_msgs': self.action.get_rows_selected(),
             'all_false_conditions': any(
-                 cond.selected_count == 0
-                 for cond in self.action.conditions.all()),
+                cond.selected_count == 0
+                for cond in self.action.conditions.all()),
             'value_range': range(2)})
         return context
 
@@ -157,10 +157,10 @@ class ActionRunProducerBase(generic.FormView):
         return self.finish(self.request, self.workflow, self.payload)
 
     def finish(
-        self,
-        request: http.HttpRequest,
-        workflow: models.Workflow,
-        payload: SessionPayload,
+            self,
+            request: http.HttpRequest,
+            workflow: models.Workflow,
+            payload: SessionPayload,
     ) -> http.HttpResponse:
         """Finish processing the request after item selection."""
         # Get the information from the payload
@@ -198,12 +198,12 @@ class ActionRunProducerBase(generic.FormView):
             {'log_id': log_item.id, 'download': export_wf})
 
     def execute_operation(
-        self,
-        user,
-        workflow: Optional[models.Workflow] = None,
-        action: Optional[models.Action] = None,
-        payload: Optional[Dict] = None,
-        log_item: Optional[models.Log] = None,
+            self,
+            user,
+            workflow: Optional[models.Workflow] = None,
+            action: Optional[models.Action] = None,
+            payload: Optional[Dict] = None,
+            log_item: Optional[models.Log] = None,
     ):
         """Run the action."""
         del user, workflow, action, payload, log_item

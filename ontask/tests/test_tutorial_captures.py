@@ -1,6 +1,5 @@
 """Screen captures for scenario 4"""
 import os
-from time import sleep
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -434,7 +433,7 @@ class TutorialCaptures(ScreenTests):
                 'Select items to exclude from action')
         )
 
-        # Select two emails to exclude from the send.
+        # Select two emails to exclude from the operation
         self.selenium.find_element(
             By.CSS_SELECTOR,
             'div.sol-input-container > input[type="text"]'
@@ -568,7 +567,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_for_id_and_spinner('action-index')
 
         #
-        # Click on the create action SURVEY
+        # Click on the 'create' action SURVEY
         #
         self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
@@ -696,7 +695,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_for_id_and_spinner('action-index')
 
         #
-        # Create an new action combining existing data with survey data
+        # Create a new action combining existing data with survey data
         #
         self.create_new_personalized_text_action('More Strategies', '')
 

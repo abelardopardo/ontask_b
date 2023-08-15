@@ -43,7 +43,7 @@ class RoundColumn(OnTaskTransformation):
         """
 
         # Check that the number of elements in the coefficients is
-        # identical to the number of input columns and they are all doubles.
+        # identical to the number of input columns, and they are all doubles.
 
         # Number of elements in the comma separated list is identical to the
         # number of columns

@@ -23,7 +23,7 @@ class RubricCell(models.Model):
 
     - A description text (to define the level of attainment)
 
-    - A feedback text (to provide when a student scores the level of attainment
+    - A feedback text (to provide when student scores the level of attainment)
 
     @DynamicAttrs
     """

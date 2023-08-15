@@ -850,7 +850,7 @@ class ActionJSONReportActionCreate(
 
         self.selenium.find_element(By.ID, 'id_token').send_keys(
             'bogus_token')
-        # Click in the submit
+        # Click in the submit button
         self.selenium.find_element(
             By.XPATH,
             '//button[@name="Submit"]'

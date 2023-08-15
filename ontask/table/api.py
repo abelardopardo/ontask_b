@@ -62,7 +62,8 @@ class TableBasicOps(APIView):
             pandas.store_dataframe(df, workflow)
         except OnTaskDataFrameNoKey as exc:
             LOGGER.error(str(exc))
-            return Response(_('Error when overriding dataframe'),
+            return Response(
+                _('Error when overriding dataframe'),
                 status=status.HTTP_400_BAD_REQUEST)
 
         # Update all the counters in the conditions
@@ -162,15 +163,15 @@ class TablePandasOps(TableBasicOps):
 
     This API is provided because OnTask stores the table internally as a
     Pandas data frame. When using conventional API transactions using JSON
-    strings, it is possible to loose information because JSON cannot handle
+    strings, it is possible to lose information because JSON cannot handle
     NaN or NaT (specific values for Pandas data frames).
 
-    For example, if a column has boolean values and a NaN and it is
+    For example, if a column has boolean values and a NaN, and it is
     transformed to JSON and transmitted, the NaN will be encoded as an empty
     string, and the column will no longer contain booleans but strings.
-    Similar situations ocurr with integers, dates, etc.
+    Similar situations occur with integers, dates, etc.
 
-    Use this API when you require to have a consisten handling of NaN and NaT.
+    Use this API when you require to have a consistent handling of NaN and NaT.
 
     The code to handle the Base64 encoded data in Python is:
 
@@ -325,15 +326,15 @@ class TablePandasMerge(TableBasicMerge):
 
     This API is provided because OnTask stores the table internally as a
     Pandas data frame. When using conventional API transactions using JSON
-    strings, it is possible to loose information because JSON cannot handle
+    strings, it is possible to lose information because JSON cannot handle
     NaN or NaT (specific values for Pandas data frames).
 
-    For example, if a column has boolean values and a NaN and it is
+    For example, if a column has boolean values and a NaN, and it is
     transformed to JSON and transmitted, the NaN will be encoded as an empty
     string, and the column will no longer contain booleans but strings.
-    Similar situations ocurr with integers, dates, etc.
+    Similar situations occur with integers, dates, etc.
 
-    Use this API when you require to have a consisten handling of NaN and NaT.
+    Use this API when you require to have a consistent handling of NaN and NaT.
 
     The code to handle the Base64 encoded data in Python is:
 

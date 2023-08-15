@@ -6,11 +6,11 @@ from django.utils.translation import gettext_lazy as _
 
 from ontask.dataops import formula as dataops_formula, sql
 from ontask.models.column import Column
-from ontask.models.workflow import Workflow
 from ontask.models.common import (
     CHAR_FIELD_LONG_SIZE, CreateModifyFields, NameAndDescription,
 )
 from ontask.models.logs import Log
+from ontask.models.workflow import Workflow
 
 
 class ConditionBase(CreateModifyFields):
@@ -33,7 +33,7 @@ class ConditionBase(CreateModifyFields):
         max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
-        null=True,
+        null=False,
         verbose_name=_('formula text'))
 
     # Number of rows selected by the expression

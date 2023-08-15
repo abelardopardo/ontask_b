@@ -12,4 +12,4 @@ class OnTaskConfig(AppConfig):
         """Register the signals."""
         # Needed so that the signal registration is done
         # noinspection PyUnresolvedReferences
-        from ontask import signals
+        from ontask import signals  # noqa: F401

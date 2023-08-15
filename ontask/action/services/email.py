@@ -3,7 +3,9 @@ import datetime
 from email.mime.text import MIMEText
 from time import sleep
 from typing import Dict, List, Optional, Union
+from zoneinfo import ZoneInfo
 
+import html2text
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core import mail, signing
@@ -12,8 +14,6 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
-import html2text
-from zoneinfo import ZoneInfo
 
 from ontask import (
     get_incorrect_email, models, settings as ontask_settings,
@@ -165,14 +165,14 @@ def _create_single_message(
 ) -> Union[EmailMessage, EmailMultiAlternatives]:
     """Create either an EmailMessage or EmailMultiAlternatives object.
 
-    :param msg_body_sbj_to: List with body, subject, to
-    :param track_str: String to add to track
-    :param from_email: From email
-    :param cc_email_list: CC list
-    :param bcc_email_list: BCC list
-    :param attachments: List of views to attach to the message (optional)
-    :param filter_formula: Filter attached ot the action (optional)
-    :return: Either EmailMessage or EmailMultiAlternatives
+    :param msg_body_sbj_to: List with 'body', 'subject', and 'to'.
+    :param track_str: String to add to track.
+    :param from_email: From email.
+    :param cc_email_list: CC list.
+    :param bcc_email_list: BCC list.
+    :param attachments: List of views to attach to the message (optional).
+    :param filter_formula: Filter attached ot the action (optional).
+    :return: Either EmailMessage or EmailMultiAlternatives.
     """
     if settings.EMAIL_HTML_ONLY:
         # Message only has the HTML text

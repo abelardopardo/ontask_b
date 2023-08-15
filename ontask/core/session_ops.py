@@ -21,11 +21,11 @@ def _store_workflow_nrows_in_session(
     session: SessionStore,
     wflow: models.Workflow
 ):
-    """Store the workflow id and name in the request.session dictionary.
+    """Store the workflow id and name in the 'request.session' dictionary.
 
-    :param session: Session object to store the worklfow
-    :param wflow: Workflow object
-    :return: Nothing. Store the id and the name in the session
+    :param session: Session object to store the workflow.
+    :param wflow: Workflow object.
+    :return: Nothing. Store the id and the name in the session.
     """
     session['ontask_workflow_rows'] = wflow.nrows
     session.save()

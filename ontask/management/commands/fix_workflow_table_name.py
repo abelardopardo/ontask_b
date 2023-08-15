@@ -7,11 +7,10 @@ from ontask.models import Workflow
 class Command(BaseCommand):
     """Class implementing a command to fix workflow table names."""
 
-    help = """This command traverses all workflows in the database and overrides
-    the table name field with the correct one created with the id. If the
-    argument --dry-run is given, the discrepancies are printed, but no action is 
-    taken.
-    """
+    help = """This command traverses all workflows in the database and
+    overrides the table name field with the correct one created with the id.
+    If the argument --dry-run is given, the discrepancies are printed,
+    but no action is taken."""
 
     def add_arguments(self, parser):
         # Optional argument -n to do a dry run, flag but not run operations

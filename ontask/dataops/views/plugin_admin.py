@@ -8,8 +8,7 @@ from django.views import generic
 
 from ontask import OnTaskServiceException, models
 from ontask.core import (
-    JSONFormResponseMixin, UserIsAdmin, UserIsInstructor,
-    WorkflowView, ajax_required)
+    JSONFormResponseMixin, UserIsAdmin, UserIsInstructor, ajax_required)
 from ontask.core.session_ops import remove_workflow_from_session
 from ontask.dataops import services
 
@@ -81,7 +80,7 @@ class PluginMoreInfoView(
     template_name = 'dataops/includes/partial_plugin_long_description.html'
 
     p_instance = None
-    
+
     def get_context_data(self, **kwargs) -> Dict:
         context = super().get_context_data(**kwargs)
         context['p_instance'] = self.p_instance

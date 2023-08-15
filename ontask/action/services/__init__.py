@@ -26,4 +26,5 @@ from ontask.action.services.serve_action import (
 from ontask.action.services.survey import (
     ActionEditProducerSurvey, ActionRunProducerSurvey, ActionRunProducerTODO,
     create_survey_table)
-from ontask.action.services.zip import ActionRunProducerZip, create_and_send_zip
+from ontask.action.services.zip import (
+    ActionRunProducerZip, create_and_send_zip)

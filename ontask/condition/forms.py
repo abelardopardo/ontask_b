@@ -23,7 +23,8 @@ class FilterForm(forms.ModelForm):
         if not include_description:
             self.fields.pop('description_text')
 
-        # Required enforced in the server (not in the browser)
+        # The property 'Required' is enforced in the server (not in the
+        # browser)
         self.fields['_formula'].required = False
 
     class Meta:

@@ -4,9 +4,9 @@ from typing import Optional
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
+from ontask.condition.services import do_clone_filter
 from ontask.dataops import formula
 from ontask.table.services.errors import OnTaskTableCloneError
-from ontask.condition.services import do_clone_filter
 
 
 def do_clone_view(
@@ -19,8 +19,8 @@ def do_clone_view(
 
     :param user: User requesting the operation
     :param view: Object to clone
-    :param new_workflow: Non empty if it has to point to a new workflow
-    :param new_name: Non empty if it has to be renamed.
+    :param new_workflow: Non-empty if it has to point to a new workflow
+    :param new_name: Non-empty if it has to be renamed.
     :result: New clone object
     """
     if view is None:
@@ -43,7 +43,7 @@ def do_clone_view(
     new_view.save()
 
     try:
-        # Update the many to many field.
+        # Update the many-to-many field.
         new_view.columns.set(list(view.columns.all()))
     except Exception:
         raise OnTaskTableCloneError(

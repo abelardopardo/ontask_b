@@ -395,18 +395,6 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
             'file_suffix',
             'zip_for_moodle'])
 
-        # Get the initial values for certain fields
-        # user_fname_column = self.fields['user_fname_column'].initial
-        #
-        # ufn_field = self.fields['user_fname_column']
-        # if user_fname_column:
-        #     ufn_field.choices = [(col.name, col.name) for col in self.columns]
-        #     ufn_field.initial = user_fname_column
-        # else:
-        #     ufn_field.choices = [('', '---')] + [
-        #         (col.name, col.name) for col in self.columns]
-        #     ufn_field.initial = ('', '---')
-
         self.fields['user_fname_column'].queryset = self.columns
 
         self.order_fields([

@@ -3,6 +3,7 @@ import datetime
 import re
 import shlex
 from typing import List, Optional
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -11,7 +12,6 @@ from django.db import models, transaction
 from django.db.models import JSONField
 from django.utils import functional, html
 from django.utils.translation import gettext_lazy as _
-from zoneinfo import ZoneInfo
 
 import ontask
 from ontask.dataops import formula, sql
@@ -185,7 +185,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             # Separate filter from conditions
             cond_list = self.conditions.all()
 
-            # Workflow has a data frame and condition list is non empty
+            # Workflow has a data frame and condition list is non-empty
 
             # Get the list of indexes
             self.rows_all_false = sql.select_ids_all_false(
@@ -211,7 +211,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         """
 
         if self.filter and (
-            column is None or column in self.conditions.columns.all()
+                column is None or column in self.conditions.columns.all()
         ):
             # Recalculate number of selected rows for the filter
             old_count = self.filter.selected_count
@@ -322,11 +322,10 @@ class ActionDataOut(ActionBase):  # noqa Z214
     @property
     def has_html_text(self) -> bool:
         """Check if the action has HTML text."""
-        return (
-            self.text_content
+        return self.text_content \
             and (
                 self.action_type == self.PERSONALIZED_TEXT
-                or self.action_type == self.EMAIL_REPORT))
+                or self.action_type == self.EMAIL_REPORT)
 
     def rename_variable(self, old_name: str, new_name: str) -> None:
         """Rename a variable present in the action content.
@@ -496,12 +495,12 @@ class Action(ActionDataOut, ActionDataIn):
         :return: None if it is executable, or a message explaining why.
         """
         if (
-            self.action_type == Action.PERSONALIZED_TEXT
-            or self.action_type == Action.RUBRIC_TEXT
-            or self.action_type == Action.EMAIL_REPORT
-            or self.action_type == Action.JSON_REPORT
-            or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
-                and settings.CANVAS_INFO_DICT is not None)
+                self.action_type == Action.PERSONALIZED_TEXT
+                or self.action_type == Action.RUBRIC_TEXT
+                or self.action_type == Action.EMAIL_REPORT
+                or self.action_type == Action.JSON_REPORT
+                or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
+                    and settings.CANVAS_INFO_DICT is not None)
         ):
             return None
 
@@ -510,7 +509,6 @@ class Action(ActionDataOut, ActionDataIn):
                 return _('Action cannot run because it needs a valid URL.')
 
             # Validate the URL
-            valid_url = True
             try:
                 URLValidator()(self.target_url)
             except ValidationError:
@@ -529,7 +527,7 @@ class Action(ActionDataOut, ActionDataIn):
             return None
 
         return _('Action type {0} cannot be executed.'.format(
-                self.get_action_type_display()))
+            self.get_action_type_display()))
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""

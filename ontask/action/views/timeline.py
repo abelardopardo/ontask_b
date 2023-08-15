@@ -46,8 +46,8 @@ class ActionShowTimelineView(
             models.Log.SCHEDULE_EDIT,
             models.Log.SCHEDULE_DELETE]
 
-        # Filter the logs to display and transform into values (process the json
-        # and the long value for the log name
+        # Filter the logs to display and transform into values (process the
+        # json and the long value for the log name
         context['event_list'] = logs.filter(name__in=event_names).exclude(
             payload__action=None)
 

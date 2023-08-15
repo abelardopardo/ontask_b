@@ -1,14 +1,14 @@
 """Basic functions and definitions used all over the platform."""
-from datetime import datetime
 import logging
+from datetime import datetime
 from typing import List, Optional
+from zoneinfo import ZoneInfo
 
 from django import conf
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
-from zoneinfo import ZoneInfo
 
 from ontask.celery import app as celery_app
 
@@ -29,7 +29,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = '10.3'
+__version__ = '10.4'
 
 LOGGER = logging.getLogger('ontask')
 
@@ -44,7 +44,7 @@ class OnTaskDBIdentifier(sql.Identifier):
         if not strings:
             raise TypeError('Identifier cannot be empty')
 
-        super().__init__(*[strval.replace('%', '%%') for strval in strings])
+        super().__init__(*[str_val.replace('%', '%%') for str_val in strings])
 
 
 class OnTaskSharedState:
@@ -122,17 +122,17 @@ class OnTaskServiceException(OnTaskException):
         return self.message
 
 
-def is_legal_name(strval: str) -> Optional[str]:
+def is_legal_name(str_val: str) -> Optional[str]:
     """Check if a string is a valid column, attribute or condition name.
 
     These are the characters that have been found to be problematic with
     these names and the responsible for these anomalies:
 
-    - \" Provokes a db error when handling the templates due to the encoding
+    - '"' Provokes a db error when handling the templates due to the encoding
       produced by the text editor.
 
-    - ' String delimiter, python messes around with it, and it is too complex to
-        handle all possible cases and translations.
+    - ' String delimiter, python messes around with it, and it is too complex
+      to handle all possible cases and translations.
 
     In principle, arbitrary combinations of the following symbols should be
     handle by OnTask::
@@ -141,16 +141,16 @@ def is_legal_name(strval: str) -> Optional[str]:
 
     Additionally, any column name that starts with __ is reserved for OnTask.
 
-    :param strval: String with the column name
+    :param str_val: String with the column name
     :return: String with message suggesting changes, or None if string correct
     """
-    if "'" in strval:
+    if "'" in str_val:
         return _("The symbol ' cannot be used in the name.")
 
-    if '"' in strval:
+    if '"' in str_val:
         return _('The symbol " cannot be used in the name.')
 
-    if strval.startswith('__'):
+    if str_val.startswith('__'):
         return _('The name cannot start with "__"')
 
     return None

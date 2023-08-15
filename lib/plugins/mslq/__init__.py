@@ -1,5 +1,5 @@
-from builtins import str
 import random
+from builtins import str
 from typing import Dict, Optional
 
 import pandas as pd
@@ -116,7 +116,6 @@ class MSLQEvaluate(OnTaskTransformation):
         :param parameters: Dictionary with (name, value) pairs.
         :return: a Pandas data_frame to merge with the existing one 
         """
-
 
         if not (alist := parameters.get('answer_list')):
             raise Exception('Required parameter "answer_list" not found.')

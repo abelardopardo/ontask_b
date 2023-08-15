@@ -37,11 +37,12 @@ class RequestValidatorMixin:
                 headers=headers,
                 parameters=parameters)
 
-            # After the oauth_request has been created, the signature needs to
-            # be encoded to be compliant with the oauth2 comparison algorithm
-            # That compares the signature encoded as bytes (not as str). In
-            # Python 2 this comparison was performed assuming the two data types
-            # were equivalent, but it is no longer the case in Python 3
+            # After the oauth_request has been created, the signature needs
+            # to be encoded to be compliant with the oauth2 comparison
+            # algorithm That compares the signature encoded as bytes (not as
+            # str). In Python 2 this comparison was performed assuming the
+            # two data types were equivalent, but it is no longer the case
+            # in Python 3
             oauth_request['oauth_signature'] = \
                 oauth_request['oauth_signature'].encode()
 

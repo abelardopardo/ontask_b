@@ -2,11 +2,11 @@
 from typing import Dict, List
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
+import django_tables2 as tables
 from django import http
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-import django_tables2 as tables
 
 from ontask import models
 from ontask.action.services.edit_factory import ActionEditProducerBase
@@ -299,4 +299,3 @@ class ActionRunProducerTODO(ActionRunProducerBase):
 
     # Type of event to log when running the action
     log_event = models.Log.ACTION_TODO_INPUT
-

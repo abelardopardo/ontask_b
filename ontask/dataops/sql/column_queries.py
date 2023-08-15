@@ -9,7 +9,6 @@ from ontask import OnTaskDBIdentifier
 
 COLUMN_NAME_SIZE = 63
 
-
 sql_to_ontask_datatype_names = {
     # Translation between SQL data type names, and those handled in OnTask
     'text': 'string',
@@ -26,10 +25,10 @@ ontask_to_sql_datatype_names = {
 
 
 def add_column_to_db(
-    table_name: str,
-    col_name: str,
-    col_type: str,
-    initial=None,
+        table_name: str,
+        col_name: str,
+        col_type: str,
+        initial=None,
 ):
     """Add an extra column of the given type with initial value.
 
@@ -56,9 +55,9 @@ def add_column_to_db(
 
 
 def copy_column_in_db(
-    table_name: str,
-    col_from: str,
-    col_to: str,
+        table_name: str,
+        col_from: str,
+        col_to: str,
 ):
     """Copy the values in one column to another.
 
@@ -203,15 +202,14 @@ def is_unique_column(table_name: str, column_name: str) -> bool:
 
     :param table_name: Name of the table
     :param column_name: Name of the column
-    :return: Boolean encoding he answer
+    :return: Boolean encoding the answer
     """
     query = sql.SQL(
-        'SELECT CASE WHEN COUNT(DISTINCT {0}) = COUNT(*) ' +
-        'THEN TRUE ELSE FALSE END FROM {1}').format(
+        'SELECT CASE WHEN COUNT(DISTINCT {0}) = COUNT(*) '
+        + 'THEN TRUE ELSE FALSE END FROM {1}').format(
         OnTaskDBIdentifier(column_name),
         sql.Identifier(table_name))
 
     with connection.connection.cursor() as cursor:
         cursor.execute(query)
         return cursor.fetchone()[0]
-

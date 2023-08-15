@@ -1,7 +1,7 @@
 """Implementation of visualizations using the Plotly JS library."""
+import json
 from abc import abstractmethod
 from builtins import str
-import json
 
 from django.utils.translation import gettext as _
 
@@ -17,7 +17,7 @@ class PlotlyHandler(VisHandler):
         'plotly-cartesian.min.js']
 
     html_skel = """<div id="{id}" style="{style}"></div>
-        <script>Plotly.newPlot("{id}", {data}, 
+        <script>Plotly.newPlot("{id}", {data},
         {layout},
         {{displaylogo: false}});</script>"""
 
@@ -148,8 +148,8 @@ class PlotlyColumnHistogram(PlotlyHandler):
         # Special case for bool and datetime. Turn into strings to be
         # treated as such
         if (
-            column_dtype == 'boolean' or column_dtype == 'datetime' or
-            column_dtype == 'string'
+            column_dtype == 'boolean' or column_dtype == 'datetime'
+                or column_dtype == 'string'
         ):
             data_list = [str(x) for x in data_list]
 

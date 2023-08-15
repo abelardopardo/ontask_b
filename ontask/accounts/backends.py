@@ -16,7 +16,7 @@ class CaseInsensitiveUsernameFieldBackendMixin:
     that users cannot create usernames that differ only in case (e.g.,
     joe@test.org and JOE@test.org). It is advised that you use this backend
     in conjunction with the CaseInsensitiveUsernameFieldCreationForm provided
-    in the forms module.
+    in the 'forms' module.
     """
 
     def authenticate(self, request, username=None, password=None, **kwargs):

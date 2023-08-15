@@ -60,8 +60,8 @@ class RubricCellSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def create_rubric(
-        validated_data: Dict,
-        context: Dict
+            validated_data: Dict,
+            context: Dict
     ) -> models.RubricCell:
         """Create the tuple object with column, condition, action.
 
@@ -226,9 +226,9 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                 raise Exception(_('Incorrect column name.'))
 
             # Search for the column in the workflow columns
-            if not (col := self.context['workflow'].columns.filter(
-                name=cname).first()
-            ):
+            if not (
+                    col := self.context['workflow'].columns.filter(
+                    name=cname).first()):
                 # Accumulate the new columns just in case we have to undo
                 # the changes
                 if citem['is_key']:
@@ -240,9 +240,9 @@ class ActionSelfcontainedSerializer(ActionSerializer):
 
             # Processing an existing column. Check data type compatibility
             if (
-                col.data_type != citem.get('data_type')
-                or col.is_key != citem['is_key']
-                or set(col.categories) != set(citem['categories'])
+                    col.data_type != citem.get('data_type')
+                    or col.is_key != citem['is_key']
+                    or set(col.categories) != set(citem['categories'])
             ):
                 # The two columns are different
                 raise Exception(_(
@@ -267,7 +267,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
         """
         workflow = self.context['workflow']
         if workflow.views.filter(
-            name__in=[view_data['name'] for view_data in validated_data]
+                name__in=[view_data['name'] for view_data in validated_data]
         ).exists():
             raise Exception(_(
                 'The new action creates duplicate view names'))
@@ -301,7 +301,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                 validated_data.pop('used_columns'))
 
             new_views = self._process_views(
-                 validated_data.pop('used_views', []))
+                validated_data.pop('used_views', []))
 
             # Contains attachment/view names, to be processed later
             attachments_data = validated_data.pop('attachments', [])

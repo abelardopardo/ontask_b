@@ -1,12 +1,12 @@
 """Generic forms to be used in various placdes in the platform."""
 from typing import Any, List, Optional
+from zoneinfo import ZoneInfo
 
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import gettext_lazy as _
-from zoneinfo import ZoneInfo
 
 from ontask.settings import MAX_UPLOAD_SIZE
 
@@ -84,11 +84,11 @@ class FormWithPayload(forms.Form):
         key: str,
         default: Optional[Any] = None
     ) -> Any:
-        """"Get a field stored in the payload."""
+        """Get a field stored in the payload."""
         return self.__form_info.get(key, default)
 
     def set_field_from_dict(self, field_name: str):
-        """Initialize the field with the value in __form_info it it exists.
+        """Initialize the field with the value in __form_info if it exists.
 
     :param field_name: Field to be initialized
     :return: Effect reflected in the field within the form.

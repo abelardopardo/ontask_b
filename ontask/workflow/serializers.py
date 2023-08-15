@@ -15,7 +15,8 @@ from ontask.table.serializers import DataFramePandasField, ViewSerializer
 try:
     profile  # noqa: Z444
 except NameError:
-    def profile(bogus: int) -> int: return bogus  # noqa: E731
+    def profile(bogus: int) -> int:
+        return bogus  # noqa: E731
 
 
 class WorkflowListSerializer(serializers.ModelSerializer):
@@ -146,7 +147,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                 for column_data in columns_data]
 
             # If there is any column with position = 0, recompute (this is to
-            # guarantee backward compatibility.
+            # guarantee backward compatibility)
             if any(col.position == 0 for col in columns):
                 for idx, col in enumerate(columns):
                     col.position = idx + 1
@@ -162,7 +163,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                 pandas.store_table(
                     data_frame_data,
                     workflow_obj.get_data_frame_table_name(),
-                    dtype={col.name: col.data_type for col in columns})
+                    dict_type={col.name: col.data_type for col in columns})
 
             # Create the views pointing to the workflow
             self.context['columns'] = columns

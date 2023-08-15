@@ -3,7 +3,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from ontask import models
 from ontask.connection.services import create_sql_connection_runtable
 from ontask.core import (
     SessionPayload, UserIsInstructor, WorkflowView)
@@ -44,7 +43,8 @@ class SchedulerConnectionIndex(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['table'] = create_sql_connection_runtable('scheduler:sqlupload')
+        context['table'] = create_sql_connection_runtable(
+            'scheduler:sqlupload')
         return context
 
     def get(self, request, *args, **kwargs):

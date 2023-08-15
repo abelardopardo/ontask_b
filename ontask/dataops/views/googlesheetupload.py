@@ -13,8 +13,8 @@ from ontask.dataops.views import common
 class GoogleSheetUploadStart(common.UploadStart, generic.FormView):
     """Upload the GoogleSheet file as first step.
 
-    The four step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set
+    The four-step process will populate the following dictionary with name
+    upload_data (divided by steps in which they are set)
 
     STEP 1:
 
@@ -30,8 +30,8 @@ class GoogleSheetUploadStart(common.UploadStart, generic.FormView):
     form_class = forms.UploadGoogleSheetForm
     template_name = 'dataops/upload1.html'
 
-    dtype = 'Google Sheet'
-    dtype_select = _('Google Sheet URL')
+    data_type = 'Google Sheet'
+    data_type_select = _('Google Sheet URL')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

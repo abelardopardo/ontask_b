@@ -42,7 +42,7 @@ class SQLConnection(Connection):
         blank=True,
         help_text=_('Driver implementing the DBAPI'))
 
-    # User name to connect
+    # Username to connect
     db_user = models.CharField(
         verbose_name=_('User'),
         max_length=CHAR_FIELD_LONG_SIZE,
@@ -83,7 +83,7 @@ class SQLConnection(Connection):
         max_length=CHAR_FIELD_LONG_SIZE,
         verbose_name=_('Database table'),
         default='',
-        null=True,
+        null=False,
         blank=True,
         help_text=_('Leave empty to enter at execution'))
 

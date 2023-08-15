@@ -139,7 +139,7 @@ try:
             afull_type for afull_type in models.Action.ACTION_TYPES.keys()
             if atype == afull_type)
         models.Action.AVAILABLE_ACTION_TYPES.pop(to_remove)
-except Exception as exc:
+except Exception:
     raise Exception(
         'Unable to configure available action types. '
         + 'Review variable DISABLED_ACTIONS')

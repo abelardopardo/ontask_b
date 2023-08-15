@@ -62,7 +62,9 @@ class EditActionOutForm(forms.ModelForm):
                 },
             )
 
-        if self.instance.action_type == models.Action.PERSONALIZED_CANVAS_EMAIL:
+        if (
+                self.instance.action_type
+                == models.Action.PERSONALIZED_CANVAS_EMAIL):
             # Modify the content field so that it uses the TextArea
             self.fields['text_content'].widget = forms.Textarea(
                 attrs={
@@ -116,7 +118,7 @@ class EnterActionIn(forms.Form):
             if not self.show_key and cc_item.column.is_key:
                 continue
 
-            # Skip the element if there is a condition and it is false
+            # Skip the element if there is a condition, and it is false
             if cc_item.condition and not self.context[cc_item.condition.name]:
                 continue
 
@@ -145,7 +147,7 @@ class EnterActionIn(forms.Form):
         where_value = None
         # Create the SET name = value part of the query
         for idx, colcon in enumerate(self.tuples):
-            # Skip the element if there is a condition and it is false
+            # Skip the element if there is a condition, and it is false
             if colcon.condition and not self.context[colcon.condition.name]:
                 continue
 

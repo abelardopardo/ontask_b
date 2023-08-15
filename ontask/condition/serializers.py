@@ -24,7 +24,7 @@ class ConditionBaseSerializer(serializers.ModelSerializer):
     # An action is connected to a workflow which has a set of columns
     # attached to it. Thus, the column records are created through the
     # workflow structure, and at this point in the model, only the names are
-    # required to restore the many to many relationship.
+    # required to restore the many-to-many relationship.
     columns = ColumnNameSerializer(required=False, many=True)
 
     @staticmethod

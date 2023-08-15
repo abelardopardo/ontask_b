@@ -69,7 +69,7 @@ class SchedulerForms(SchedulerFormsBasic):
 
         self.assertEqual(sc_item.name, 'First scheduling round2')
 
-        # Select the confirm items
+        # Select the 'confirm' items
         sc_item = models.ScheduledOperation.objects.first()
         resp = self.get_response(
             'scheduler:edit_scheduled_operation',

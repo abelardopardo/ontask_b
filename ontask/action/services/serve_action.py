@@ -18,9 +18,9 @@ from ontask.dataops import sql
 
 
 def serve_action_out(
-    user,
-    action: models.Action,
-    user_attribute_name: str,
+        user,
+        action: models.Action,
+        user_attribute_name: str,
 ):
     """Serve request for an action out.
 
@@ -69,10 +69,10 @@ def serve_action_out(
 
 
 def get_survey_context(
-    request: http.HttpRequest,
-    is_manager: bool,
-    action: models.Action,
-    user_attribute_name: str,
+        request: http.HttpRequest,
+        is_manager: bool,
+        action: models.Action,
+        user_attribute_name: str,
 ) -> Dict:
     """Get the context to render a survey page.
 
@@ -82,8 +82,8 @@ def get_survey_context(
     :param user_attribute_name: Name of the column to use for username
     :return: Dictionary with the context
     """
-    # Get the attribute value depending if the user is managing the workflow
-    # User is instructor, and either owns the workflow or is allowed to access
+    # Get the attribute value if the user is managing the workflow,
+    # is instructor, and either owns the workflow or is allowed to access
     # it as shared
     user_attribute_value = None
     if is_manager:
@@ -93,8 +93,8 @@ def get_survey_context(
 
     # Get the row from the table with the appropriate values
     row = get_row_values(
-            action,
-            (user_attribute_name, user_attribute_value))
+        action,
+        (user_attribute_name, user_attribute_value))
     if row is None:
         # Proper row was not found
         raise OnTaskActionSurveyDataNotFound(
@@ -114,9 +114,9 @@ def get_survey_context(
 
 
 def update_row_values(
-    request: http.HttpRequest,
-    action: models.Action,
-    row_data: Tuple[List, List, str, Any],
+        request: http.HttpRequest,
+        action: models.Action,
+        row_data: Tuple[List, List, str, Any],
 ):
     """Serve a request for action in.
 
@@ -158,8 +158,8 @@ def update_row_values(
 
 
 def extract_survey_questions(
-    action: models.Action,
-    user_seed: str,
+        action: models.Action,
+        user_seed: str,
 ) -> List[models.ActionColumnConditionTuple]:
     """Extract the set of questions to include in a survey.
 

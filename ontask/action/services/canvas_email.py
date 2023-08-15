@@ -3,7 +3,9 @@ import datetime
 import json
 from time import sleep
 from typing import Dict, Optional, Tuple
+from zoneinfo import ZoneInfo
 
+import requests
 from celery.utils.log import get_task_logger
 from django import http
 from django.conf import settings
@@ -13,8 +15,6 @@ from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
-from zoneinfo import ZoneInfo
-import requests
 from rest_framework import status
 
 from ontask import models
@@ -299,7 +299,7 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
                 oauth_info,
             )
             if settings.ONTASK_TESTING:
-                # Print the sent JSON
+                # Print the JSON object sent to the server
                 LOGGER.info(
                     'SEND JSON(%s): %s',
                     target_url,

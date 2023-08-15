@@ -31,9 +31,10 @@ class SchedulerCRUDFactory(core.FactoryBase):
         ):
             # If the item has different operation_type field than the given
             # operation type, register it with both (one is for creation,
-            # the other
-            # is once created, for editing)
-            super().register_producer(producer_item.operation_type, to_register)
+            # the other is once created, for editing)
+            super().register_producer(
+                producer_item.operation_type,
+                to_register)
 
     def crud_view(
         self,
@@ -89,9 +90,8 @@ SCHEDULE_CRUD_FACTORY = SchedulerCRUDFactory()
 class ScheduledOperationUpdateBaseView(generic.UpdateView):
     """Base class for all the scheduled operation CRUD producers.
 
-    :Attribute operation_type: The value to store in the scheduled item
-    and needs to be overwritten by subclasses
-
+    Attribute operation_type is the value to store in the scheduled item
+    and needs to be overwritten by subclasses.
     """
 
     operation_type: Optional[int] = None
@@ -188,9 +188,9 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
             self.action = self.scheduled_item.action
         self.connection = kwargs.pop('connection', None)
         if (
-            not self.connection and
-            self.scheduled_item and
-            'connection_id' in self.scheduled_item.payload
+            not self.connection
+                and self.scheduled_item
+                and 'connection_id' in self.scheduled_item.payload
         ):
             self.connection = models.SQLConnection.objects.get(
                 pk=self.scheduled_item.payload['connection_id'])

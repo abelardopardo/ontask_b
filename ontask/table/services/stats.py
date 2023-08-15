@@ -1,9 +1,9 @@
 """Functions to support stats visualisation."""
 from typing import Dict, List, Optional, Tuple
 
+import pandas as pd
 from django.utils.translation import gettext as _
 from pandas import DataFrame
-import pandas as pd
 
 from ontask import models
 from ontask.dataops import pandas
@@ -23,15 +23,15 @@ def _get_column_visualisations(
 ) -> List[str]:
     """Create a column visualization.
 
-    Given a column object and a dataframe, create the visualisations for this
+    Given a column object and a dataframe, create the visualizations for this
     column. The list vis_scripts is modified to include the scripts to
     include in the HTML page. If single_val is not None, its position in the
-    visualisation is marked (place individual value in population measure.
+    visualization is marked (place individual value in population measure).
 
     :param column: Column element to visualize
     :param col_data: Data in the column (extracted from the data frame)
     :param viz_id: String to use to label the visualization
-    :param vis_scripts: Collection of visualisation scripts needed in HTML
+    :param vis_scripts: Collection of visualization scripts needed in HTML
     :param single_val: Mark a specific value (or None)
     :param context: Dictionary to pass to the rendering
     :return: List of Javascript code
@@ -79,8 +79,8 @@ def get_df_and_columns(
 ) -> Optional[Tuple[DataFrame, List]]:
     """Get the DF and the columns to process.
 
-    :param workflow: Workflow object
-    :param view: Optional view (None if not  needed
+    :param workflow: Workflow object.
+    :param view: Optional view (None if not needed).
     :return: Tuple DataFrame, List of columns.
     """
     if view:
@@ -154,9 +154,9 @@ def get_table_visualization_items(
         # If all values are empty, no need to proceed
         if all(not col_data for col_data in data_frame[column.name]):
             visualizations.append(
-                '<p class="text-center">' +
-                _('No values in this column') +
-                '</p>')
+                '<p class="text-center">'
+                + _('No values in this column')
+                + '</p>')
             continue
 
         if row and not row[column.name]:

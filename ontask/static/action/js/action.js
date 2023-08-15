@@ -28,7 +28,8 @@ let insertConditionInContent = function() {
       condition_text = range_text;
     }
   } else {
-      condition_text = '';
+      textarea_el = document.getElementById('id_text_content');
+      condition_text = textarea_el.value.substring(textarea_el.selectionStart, textarea_el.selectionEnd);
   }
   let insert_text = "{% if " + btn.text() +
       " %}" + condition_text + "{% endif %}";

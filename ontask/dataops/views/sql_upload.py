@@ -14,8 +14,8 @@ from ontask.dataops.views import common
 class SQLUploadStart(common.UploadStart, generic.UpdateView):
     """Load a data frame using a SQL connection.
 
-    The four step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set
+    The four-step process will populate the following dictionary with name
+    upload_data (divided by steps in which they are set)
 
     STEP 1:
 
@@ -31,8 +31,8 @@ class SQLUploadStart(common.UploadStart, generic.UpdateView):
     form_class = forms.SQLRequestConnectionParam
     template_name = 'dataops/sqlupload_start.html'
 
-    dtype = 'SQL'
-    dtype_select = _('SQL connection')
+    data_type = 'SQL'
+    data_type_select = _('SQL connection')
     prev_step_url = 'connection:sqlconns_index'
 
     def get_queryset(self):

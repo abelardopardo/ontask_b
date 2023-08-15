@@ -1,7 +1,7 @@
 """Functions to manipulate other workflow ops."""
+import django_tables2 as tables
 from django import http
 from django.utils.translation import gettext_lazy as _
-import django_tables2 as tables
 
 from ontask import core, get_incorrect_email, models, tasks
 from ontask.dataops import sql
@@ -60,7 +60,7 @@ class WorkflowShareTable(tables.Table):
 
 
 def check_luser_email_column_outdated(workflow: models.Workflow):
-    """Detect if the luser_email column is up to date.
+    """Detect if the luser_email column is up-to-date.
 
     :param workflow: Workflow being manipulated.
     :return: Side effect, md5_hash_is_outdated is updated.

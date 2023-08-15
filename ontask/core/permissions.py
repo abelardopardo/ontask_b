@@ -117,8 +117,7 @@ class IsOwner(permissions.BasePermission):
     """Custom permission to only allow owners of an object to access it."""
 
     def has_object_permission(self, request, view, obj):
-        """Check if obj.user and request user are the same."""
-        # Access only allowed to the "user" field of the object.
+        """Check if 'obj.user' and 'request.user' are the same."""
         return obj.user == request.user
 
 

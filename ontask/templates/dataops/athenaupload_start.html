@@ -4,14 +4,14 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% blocktrans with n=dtype %}Upload/Merge {{ n }}{% endblocktrans %}{% endblock %}
+{% block title %}{{ block.super }}{% blocktrans with n=data_type %}Upload/Merge {{ n }}{% endblocktrans %}{% endblock %}
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
 {% block container %}
   <div class="container" id="athena-load-step1">
     {% include 'step_by_step.html' with value_range=value_range step=2 %}
-    <h1 class="text-center">{% blocktrans with n=dtype_select %}Upload/Merge using {{ n }}{% endblocktrans %}</h1>
+    <h1 class="text-center">{% blocktrans with n=data_type_select %}Upload/Merge using {{ n }}{% endblocktrans %}</h1>
 
     <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>
 

@@ -1,7 +1,7 @@
 from collections import defaultdict
 
-from lxml import etree, objectify
 import oauth2
+from lxml import etree, objectify
 
 from .outcome_response import OutcomeResponse
 from .utils import InvalidLTIConfigError
@@ -97,7 +97,7 @@ class OutcomeRequest:
         return self.operation == READ_REQUEST
 
     def was_outcome_post_successful(self):
-        return self.outcome_response and\
+        return self.outcome_response and \
             self.outcome_response.is_success()
 
     def post_outcome_request(self):
@@ -128,13 +128,14 @@ class OutcomeRequest:
         Parse Outcome Request data from XML.
         """
         root = objectify.fromstring(xml)
-        self.message_identifier = str(root.imsx_POXHeader.
-                                      imsx_POXRequestHeaderInfo.imsx_messageIdentifier)
+        self.message_identifier = str(
+            root.imsx_POXHeader.
+            imsx_POXRequestHeaderInfo.imsx_messageIdentifier)
         try:
             result = root.imsx_POXBody.replaceResultRequest
             self.operation = REPLACE_REQUEST
             # Get result sourced id from resultRecord
-            self.lis_result_sourcedid = result.resultRecord.\
+            self.lis_result_sourcedid = result.resultRecord. \
                 sourcedGUID.sourcedId
             self.score = str(result.resultRecord.result.
                              resultScore.textString)
@@ -145,7 +146,7 @@ class OutcomeRequest:
             result = root.imsx_POXBody.deleteResultRequest
             self.operation = DELETE_REQUEST
             # Get result sourced id from resultRecord
-            self.lis_result_sourcedid = result.resultRecord.\
+            self.lis_result_sourcedid = result.resultRecord. \
                 sourcedGUID.sourcedId
         except Exception:
             pass
@@ -154,17 +155,17 @@ class OutcomeRequest:
             result = root.imsx_POXBody.readResultRequest
             self.operation = READ_REQUEST
             # Get result sourced id from resultRecord
-            self.lis_result_sourcedid = result.resultRecord.\
+            self.lis_result_sourcedid = result.resultRecord. \
                 sourcedGUID.sourcedId
         except Exception:
             pass
 
     def has_required_attributes(self):
-        return self.consumer_key != None\
-            and self.consumer_secret != None\
-            and self.lis_outcome_service_url != None\
-            and self.lis_result_sourcedid != None\
-            and self.operation != None
+        return self.consumer_key is not None \
+            and self.consumer_secret is not None \
+            and self.lis_outcome_service_url is not None \
+            and self.lis_result_sourcedid is not None \
+            and self.operation is not None
 
     def generate_request_xml(self):
         root = etree.Element('imsx_POXEnvelopeRequest',

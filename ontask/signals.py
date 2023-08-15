@@ -56,8 +56,8 @@ def create_scheduled_task(sender, **kwargs):
     del sender
 
     if (
-        not (instance := kwargs.get('instance')) or
-        not instance.status == models.scheduler.STATUS_PENDING
+        not (instance := kwargs.get('instance'))
+            or not instance.status == models.scheduler.STATUS_PENDING
     ):
         return
     services.schedule_task(instance)

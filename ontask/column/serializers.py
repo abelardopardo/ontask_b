@@ -5,12 +5,13 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.dataops import pandas, sql
+from ontask.dataops import sql
 
 try:
     profile  # noqa: Z444
 except NameError:
-    def profile(bogus_param: int) -> int: return bogus_param  # noqa: E731
+    def profile(bogus_param: int) -> int:
+        return bogus_param  # noqa: E731
 
 
 class ColumnSerializer(serializers.ModelSerializer):

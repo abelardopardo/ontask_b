@@ -1,9 +1,10 @@
 """Model description for the Workflow."""
 import datetime
-from importlib import import_module
 import json
+from importlib import import_module
 from typing import List, Tuple
 
+import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
@@ -14,7 +15,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-import pandas as pd
 
 from ontask.dataops import pandas, sql
 from ontask.models.column import Column
@@ -309,7 +309,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
             self.session_key = session.session_key
             self.save(update_fields=['session_key'])
 
-        # The request has a temporary session (non persistent). This is the
+        # The request has a temporary session (non-persistent). This is the
         # case when the API is invoked. There are four possible case:
         #
         # Case 1: The workflow has empty lock information: CREATE SESSION and
@@ -318,10 +318,10 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # Case 2: The workflow has a session, but is not in the DB: CREATE
         # SESSION and UPDATE
         #
-        # Case 3: The workflow has a session but it has expired: UPDATE THE
-        # EXPIRE DATE OF THE SESSION
+        # Case 3: The workflow has a session, but it has expired: 'UPDATE
+        # EXPIRE DATE OF THE SESSION'
         #
-        # Case 4: The workflow has a perfectly valid session: UPDATE THE
+        # Case 4: The workflow has a perfectly valid session: UPDATE
         # EXPIRE DATE OF THE SESSION
         #
         if update_session:
