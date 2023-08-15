@@ -2,11 +2,11 @@
 from typing import Dict, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
+import pandas as pd
+import smart_open
 from django.conf import settings
 from django.utils.translation import gettext as _
-import pandas as pd
 from pyathena import connect
-import smart_open
 
 from ontask import models
 from ontask.dataops import pandas, sql
@@ -20,8 +20,8 @@ def load_df_from_csvfile(
     """Load a data frame from a CSV file.
 
     Given a file object, try to read the content as a CSV file and transform
-    into a data frame. The skiprows and skipfooter are number of lines to skip
-    from the top and bottom of the file (see read_csv in pandas).
+    into a data frame. The skip_rows and skip_footer are number of lines to
+    skip from the top and bottom of the file (see read_csv in pandas).
 
     It also tries to convert as many columns as possible to date/time format
     (testing the conversion on every string column).
@@ -45,9 +45,9 @@ def load_df_from_csvfile(
 
 
 def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
-    """Load a data frame from a sheet in an excel file.
+    """Load a data frame from a sheet in an Excel file.
 
-    Given a file object, try to read the content as a Excel file and transform
+    Given a file object, try to read the content as an Excel file and transform
     into a data frame. The sheet_name is the name of the sheet to read.
 
     It also tries to convert as many columns as possible to date/time format
@@ -85,12 +85,12 @@ def load_df_from_s3(
     It also tries to convert as many columns as possible to date/time format
     (testing the conversion on every string column).
 
-    :param aws_key: Key to access the S3 bucket
-    :param aws_secret: Secret to access the S3 bucket
-    :param bucket_name: Bucket name
-    :param file_path: Path to access the file within the bucket
-    :param skiprows: Number of lines to skip at the top of the document
-    :param skipfooter: Number of lines to skip at the bottom of the document
+    :param aws_key: Key to access the S3 bucket.
+    :param aws_secret: Secret to access the S3 bucket.
+    :param bucket_name: Bucket name.
+    :param file_path: Path to access the file within the bucket.
+    :param skiprows: Number of lines to skip at the top of the document.
+    :param skipfooter: Number of lines to skip at the bottom of the document.
     :return: Resulting data frame, or an Exception.
     """
     path_prefix = ''
@@ -123,21 +123,21 @@ def load_df_from_s3(
 
 def load_df_from_googlesheet(
     url_string: str,
-    skiprows: Optional[int] = 0,
-    skipfooter: Optional[int] = 0,
+    skip_rows: Optional[int] = 0,
+    skip_footer: Optional[int] = 0,
 ) -> pd.DataFrame:
-    """Load a Pandas DataFrame from a google sheet.
+    """Load a Pandas DataFrame from a Google sheet.
 
     Given a file object, try to read the content as a CSV file and transform
-    into a data frame. The skiprows and skipfooter are number of lines to skip
-    from the top and bottom of the file (see read_csv in pandas).
+    into a data frame. 'skip_rows' and 'skip_footer' are number of lines to
+    skip from the top and bottom of the file (see read_csv in pandas).
 
     It also tries to convert as many columns as possible to date/time format
     (testing the conversion on every string column).
 
     :param url_string: URL where the file is available
-    :param skiprows: Number of lines to skip at the top of the document
-    :param skipfooter: Number of lines to skip at the bottom of the document
+    :param skip_rows: Number of lines to skip at the top of the document
+    :param skip_footer: Number of lines to skip at the bottom of the document
     :return: Resulting data frame, or an Exception.
     """
     # Process the URL provided by google. If the URL is obtained using the
@@ -166,7 +166,7 @@ def load_df_from_googlesheet(
         ])
 
     # Process the link using pandas read_csv
-    return load_df_from_csvfile(url_string, skiprows, skipfooter)
+    return load_df_from_csvfile(url_string, skip_rows, skip_footer)
 
 
 def batch_load_df_from_athenaconnection(

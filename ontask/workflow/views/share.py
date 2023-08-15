@@ -2,8 +2,8 @@
 from typing import Dict
 
 from django import http
-from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views import generic
 
@@ -28,7 +28,7 @@ class WorkflowShareCreateView(
     template_name = 'workflow/includes/partial_share_create.html'
 
     def get_form_kwargs(self) -> Dict:
-        """Store workflow and request.user in kwargs"""
+        """Store workflow and 'request.user' in kwargs"""
         form_kwargs = super().get_form_kwargs()
         form_kwargs['workflow'] = self.workflow
         form_kwargs['user'] = self.request.user

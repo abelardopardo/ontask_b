@@ -27,9 +27,8 @@ class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
             return models.ScheduledOperation.objects.all()
 
         return models.ScheduledOperation.objects.filter(
-            Q(user=self.request.user) |
-            Q(action__workflow__shared=self.request.user)
-        ).distinct()
+            Q(user=self.request.user)
+            | Q(action__workflow__shared=self.request.user)).distinct()
 
     def perform_create(self, serializer):
         """Create the operation."""
@@ -85,11 +84,10 @@ class ScheduledOperationEmailAPIListCreate(ScheduledOperationAPIListCreate):
             )
 
         return models.ScheduledOperation.objects.filter(
-            Q(user=self.request.user) |
-            Q(action__workflow__shared=self.request.user)
+            Q(user=self.request.user)
+            | Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=models.Action.PERSONALIZED_TEXT
-        ).distinct()
+            action__action_type=models.Action.PERSONALIZED_TEXT).distinct()
 
 
 class ScheduledOperationJSONAPIListCreate(ScheduledOperationAPIListCreate):
@@ -110,11 +108,10 @@ class ScheduledOperationJSONAPIListCreate(ScheduledOperationAPIListCreate):
             )
 
         return models.ScheduledOperation.objects.filter(
-            Q(user=self.request.user) |
-            Q(action__workflow__shared=self.request.user)
+            Q(user=self.request.user)
+            | Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=models.Action.PERSONALIZED_JSON
-        ).distinct()
+            action__action_type=models.Action.PERSONALIZED_JSON).distinct()
 
 
 class ScheduledEmailAPIRetrieveUpdateDestroy(
@@ -143,11 +140,9 @@ class ScheduledEmailAPIRetrieveUpdateDestroy(
             )
 
         return models.ScheduledOperation.objects.filter(
-            Q(user=self.request.user) |
-            Q(action__workflow__shared=self.request.user)
-        ).filter(
-            action__action_type=models.Action.PERSONALIZED_TEXT
-        ).distinct()
+            Q(user=self.request.user)
+            | Q(action__workflow__shared=self.request.user)).filter(
+            action__action_type=models.Action.PERSONALIZED_TEXT).distinct()
 
 
 class ScheduledJSONAPIRetrieveUpdateDestroy(
@@ -176,8 +171,6 @@ class ScheduledJSONAPIRetrieveUpdateDestroy(
             )
 
         return models.ScheduledOperation.objects.filter(
-            Q(user=self.request.user) |
-            Q(action__workflow__shared=self.request.user)
-        ).filter(
-            action__action_type=models.Action.PERSONALIZED_JSON
-        ).distinct()
+            Q(user=self.request.user)
+            | Q(action__workflow__shared=self.request.user)).filter(
+            action__action_type=models.Action.PERSONALIZED_JSON).distinct()

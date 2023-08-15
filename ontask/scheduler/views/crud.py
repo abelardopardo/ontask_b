@@ -22,7 +22,7 @@ from ontask.scheduler import services
 class SchedulerIndexView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    WorkflowView, 
+    WorkflowView,
     generic.DetailView
 ):
     model = models.ScheduledOperation
@@ -37,19 +37,19 @@ class SchedulerIndexView(
         context.update({
             's_vals': services.get_item_value_dictionary(self.object),
             'timedelta': services.create_timedelta_string(
-                    self.object.execute,
-                    self.object.frequency,
-                    self.object.execute_until)})
+                self.object.execute,
+                self.object.frequency,
+                self.object.execute_until)})
         return context
 
 
 @user_passes_test(is_instructor)
 @get_action()
 def create_action_run(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None
+        request: http.HttpRequest,
+        pk: int,
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None
 ) -> http.HttpResponse:
     """Create a new scheduled action run operation.
 
@@ -69,9 +69,9 @@ def create_action_run(
 @user_passes_test(is_instructor)
 @get_workflow()
 def create_sql_upload(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
+        request: http.HttpRequest,
+        pk: int,
+        workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
     """Create a new scheduled SQL upload operation.
 
@@ -100,9 +100,9 @@ def create_sql_upload(
 @user_passes_test(is_instructor)
 @get_workflow()
 def edit_scheduled_operation(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
+        request: http.HttpRequest,
+        pk: int,
+        workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
     """Edit an existing scheduled email action.
 
@@ -128,8 +128,8 @@ def edit_scheduled_operation(
 @user_passes_test(is_instructor)
 @get_workflow()
 def finish_scheduling(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
+        request: http.HttpRequest,
+        workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
     """Finish the create/edit operation of a scheduled operation."""
     del workflow

@@ -30,8 +30,8 @@ class CSVUploadStart(common.UploadStart, generic.FormView):
     form_class = forms.UploadCSVFileForm
     template_name = 'dataops/upload1.html'
 
-    dtype = 'CSV'
-    dtype_select = _('CSV file')
+    data_type = 'CSV'
+    data_type_select = _('CSV file')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

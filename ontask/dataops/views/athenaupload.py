@@ -20,8 +20,8 @@ class AthenaUploadStart(common.UploadStart, generic.UpdateView):
     form_class = forms.AthenaRequestConnectionParam
     template_name = 'dataops/athenaupload_start.html'
 
-    dtype = 'Athena'
-    dtype_select = _('Athena connection')
+    data_type = 'Athena'
+    data_type_select = _('Athena connection')
     prev_step_url = 'connection:athenaconns_index'
 
     def get_queryset(self):
@@ -35,7 +35,7 @@ class AthenaUploadStart(common.UploadStart, generic.UpdateView):
         return kwargs
 
     def form_valid(self, form):
-        log_item = self.workflow.log(
+        self.workflow.log(
             self.request.user,
             models.Log.WORKFLOW_DATA_ATHENA_UPLOAD,
             connection=self.object.name,

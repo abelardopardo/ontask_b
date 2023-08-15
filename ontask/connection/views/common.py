@@ -5,9 +5,9 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 
 from ontask.connection import services
-from ontask.core import ajax_required
 from ontask.core import (
     JSONFormResponseMixin, UserIsAdmin, UserIsInstructor, WorkflowView)
+from ontask.core import ajax_required
 
 
 class ConnectionAdminIndexView(UserIsAdmin, generic.TemplateView):
@@ -16,7 +16,11 @@ class ConnectionAdminIndexView(UserIsAdmin, generic.TemplateView):
     title = None  # Set in urlpatterns
 
 
-class ConnectionIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
+class ConnectionIndexView(
+    UserIsInstructor,
+    WorkflowView,
+    generic.TemplateView
+):
     """Base class to show the connections to instructors."""
 
     title = None  # Set in urlpatterns
@@ -112,5 +116,3 @@ class ConnectionToggleView(
         conn.save(update_fields=['enabled'])
         conn.log(request.user, conn.toggle_event, enabled=conn.enabled)
         return http.JsonResponse({'is_checked': conn.enabled})
-
-

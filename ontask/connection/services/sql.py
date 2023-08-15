@@ -74,7 +74,8 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
         extra_columns=[('operations', op_column)])
 
 
-def create_sql_connection_runtable(select_url: str) -> SQLConnectionTableSelect:
+def create_sql_connection_runtable(
+        select_url: str) -> SQLConnectionTableSelect:
     """Create the table structure with the SQL connections for Running.
 
     :return: SQL Connection Table Run object.

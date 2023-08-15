@@ -1,10 +1,11 @@
 """Service functions to handle plugin invocations."""
-from datetime import datetime
 import inspect
 import os
 import time
+from datetime import datetime
 from typing import List, Tuple, Union
 
+import django_tables2 as tables
 from django import http
 from django.conf import settings
 from django.contrib import messages
@@ -13,7 +14,6 @@ from django.template.loader import render_to_string
 from django.utils.dateparse import parse_datetime
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _
-import django_tables2 as tables
 
 from ontask import models, settings as ontask_settings
 from ontask.dataops import services
@@ -155,7 +155,7 @@ def _get_plugin_path():
     return os.path.join(settings.BASE_DIR, plugin_folder)
 
 
-def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
+def _verify_plugin(pin_obj: models.Plugin) -> List[Tuple[str, str]]:
     """Verify that plugin complies with certain tests.
 
     Run some tests in the plugin instance to make sure it complies with the
@@ -164,7 +164,7 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
 
     1. Class inherits from OnTaskPluginAbstract
 
-    2. Class has a non empty __doc__
+    2. Class has a non-empty __doc__
 
     3. Presence of string field "name"
 
@@ -176,7 +176,7 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
     6. Presence of a list of strings with name "output_column_names". If the
        list is empty, the columns present in the result will be used.
 
-    7. Presence of a dictionary with name "parametes" that contains the
+    7. Presence of a dictionary with name "parameters" that contains the
        tuples of the form:
 
        key: (type string, [list of allowed values], initial value, help text)
@@ -193,22 +193,22 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
     8. Class has a method with name run that receives a data frame and a
        dictionary.
 
-    :param pinobj: Plugin instance
+    :param pin_obj: Plugin instance
     :return: List of Booleans with the result of the tests
     """
     diag = ['Unchecked'] * len(_checks)
     check_idx = 0
     try:
         # Verify that the class inherits from OnTaskPluginAbstract
-        if issubclass(type(pinobj), ontask_plugin.OnTaskPluginAbstract):
+        if issubclass(type(pin_obj), ontask_plugin.OnTaskPluginAbstract):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect parent class')
             return list(zip(diag, _checks))
         check_idx += 1
 
-        # Verify that the class has a non empty documentation string
-        if pinobj.__doc__ and isinstance(pinobj.__doc__, str):
+        # Verify that the class has a non-empty documentation string
+        if pin_obj.__doc__ and isinstance(pin_obj.__doc__, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Class is not documented')
@@ -216,15 +216,15 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
 
         # Verify that all the fields and methods are present in the instance
         diag[check_idx] = _('Not found')
-        if pinobj.name and isinstance(pinobj.name, str):
+        if pin_obj.name and isinstance(pin_obj.name, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.description_text and isinstance(
-            pinobj.description_text,
+        if pin_obj.description_text and isinstance(
+            pin_obj.description_text,
             str
         ):
             diag[check_idx] = _('Ok')
@@ -233,12 +233,12 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.input_column_names is not None and isinstance(
-            pinobj.input_column_names,
+        if pin_obj.input_column_names is not None and isinstance(
+            pin_obj.input_column_names,
             list,
         ) and all(
             isinstance(colname, str)
-            for colname in pinobj.input_column_names
+            for colname in pin_obj.input_column_names
         ):
             diag[check_idx] = _('Ok')
         else:
@@ -246,12 +246,12 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.output_column_names is not None and isinstance(
-            pinobj.output_column_names,
+        if pin_obj.output_column_names is not None and isinstance(
+            pin_obj.output_column_names,
             list,
         ) and all(
             isinstance(cname, str)
-            for cname in pinobj.output_column_names
+            for cname in pin_obj.output_column_names
         ):
             diag[check_idx] = _('Ok')
         else:
@@ -259,15 +259,15 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.parameters is None or not isinstance(
-            pinobj.parameters,
+        if pin_obj.parameters is None or not isinstance(
+            pin_obj.parameters,
             list
         ):
             diag[check_idx] = _('Incorrect type')
             return list(zip(diag, _checks))
 
         # Loop over all the parameters to check it s format
-        for key, ptype, pallow, pinit, phelp in pinobj.parameters:
+        for key, ptype, pallow, pinit, phelp in pin_obj.parameters:
             if not isinstance(key, str):
                 # The type should be a string
                 diag[check_idx] = _('Key values should be strings')
@@ -313,10 +313,10 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         # Test the method run
-        run_method = getattr(pinobj, 'run', None)
+        run_method = getattr(pin_obj, 'run', None)
         if callable(run_method) and (
             inspect.signature(ontask_plugin.OnTaskPluginAbstract.run)
-            == inspect.signature(pinobj.__class__.run)
+            == inspect.signature(pin_obj.__class__.run)
         ):
             diag[check_idx] = _('Ok')
         else:

@@ -36,9 +36,9 @@ def rename_table(table: str, new_name: str):
 
 
 def get_boolean_clause(
-    filter_formula: Optional[Dict] = None,
-    filter_pairs: Optional[Mapping] = None,
-    conjunction: bool = True,
+        filter_formula: Optional[Dict] = None,
+        filter_pairs: Optional[Mapping] = None,
+        conjunction: bool = True,
 ) -> Tuple[sql.Composed, List]:
     """Create the boolean clause based on a formula and a list of pairs.
 
@@ -81,10 +81,10 @@ def get_boolean_clause(
 
 
 def get_select_query(
-    table_name: str,
-    column_names: Optional[List[str]] = None,
-    filter_formula: Optional[Dict] = None,
-    filter_pairs: Optional[Mapping] = None,
+        table_name: str,
+        column_names: Optional[List[str]] = None,
+        filter_formula: Optional[Dict] = None,
+        filter_pairs: Optional[Mapping] = None,
 ) -> Tuple[sql.Composed, List[Any]]:
     """Calculate pair query, fields to execute a select statement.
 
@@ -96,7 +96,7 @@ def get_select_query(
     """
     if column_names:
         select_fields = sql.SQL(', ').join([
-                OnTaskDBIdentifier(cname) for cname in column_names])
+            OnTaskDBIdentifier(cname) for cname in column_names])
     else:
         select_fields = sql.SQL('*')
 
@@ -118,10 +118,10 @@ def get_select_query(
 
 
 def get_select_query_txt(
-    table_name: str,
-    column_names: Optional[List[str]] = None,
-    filter_formula: Optional[Dict] = None,
-    filter_pairs: Optional[Mapping] = None,
+        table_name: str,
+        column_names: Optional[List[str]] = None,
+        filter_formula: Optional[Dict] = None,
+        filter_pairs: Optional[Mapping] = None,
 ) -> Tuple[str, List[Any]]:
     """Calculate the text representation of a query to select table subset.
 
@@ -143,23 +143,23 @@ def get_select_query_txt(
 
 
 def search_table(
-    table_name: str,
-    search_value: str,
-    columns_to_search: Optional[List] = None,
-    filter_formula: Optional[Dict] = None,
-    any_join: bool = True,
-    order_col_name: str = None,
-    order_asc: bool = True,
+        table_name: str,
+        search_value: str,
+        columns_to_search: Optional[List] = None,
+        filter_formula: Optional[Dict] = None,
+        any_join: bool = True,
+        order_col_name: str = None,
+        order_asc: bool = True,
 ):
     """Search the content of all cells in the table.
 
-    Select rows where for every (column, value) pair, column contains value (
-    as in LIKE %value%, these are combined with OR if any is TRUE, or AND if
-    any is false, and the result is ordered by the given column and type (if
-    given)
+    Select rows where for every (column, value) pair, column contains value
+    (as in 'LIKE %value%'), these are combined with OR if any is TRUE,
+    or AND if any is false, and the result is ordered by the given column
+    and type (if given)
 
     :param table_name: table name
-    :param filter_formula: Optional filter condition to pre filter the query
+    :param filter_formula: Optional filter condition to pre-filter the query
     :param columns_to_search: A column, value, type tuple to search the value
     in the column set. the query is built with these terms as requirement AND
     the cv_tuples.

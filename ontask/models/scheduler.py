@@ -70,7 +70,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
     # Crontab string encoding the frequency of execution (if  needed
     frequency = models.CharField(
         max_length=CHAR_FIELD_MID_SIZE,
-        null=True,
+        null=False,
         blank=True,
         default='')
 
@@ -131,20 +131,20 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
 
     @staticmethod
     def validate_times(execute, frequency, execute_until) -> Optional[str]:
-        """Verify that the execute, frequency and execute_until are correct.
+        """Verify that fields execute, frequency and execute_until are correct.
 
         There are eight possible combinations when specifying the start,
-        stop and frequency parameters in the item depending if they are None or
-        a valid value (execute, frequency, execute_until:
+        stop and frequency parameters in the item depending on their values
+        None or a valid value (execute, frequency, execute_until:
 
-        1) None None None -> ERROR. Something is needed
-        2) None None True -> ERROR. Only execute_until. Not allowed
-        3) None True None -> Never ending crontab starting immediately
-        4) None True True -> Crontab with an expiry date
-        5) True None None -> SINGLE execution at a given date/time
-        6) True None True -> ERROR: Missing frequency
-        7) True True None -> Crontab that starts at a given time in the future
-        8) True True True -> Crontab starting and stopping at a given time.
+        1) None, None, None -> ERROR. Something is needed
+        2) None, None, True -> ERROR. Only execute_until. Not allowed
+        3) None, True, None -> Never ending crontab starting immediately
+        4) None, True, True -> Crontab with an expiry date
+        5) True, None, None -> SINGLE execution at a given date/time
+        6) True, None, True -> ERROR: Missing frequency
+        7) True, True, None -> Crontab that starts at a time in the future
+        8) True, True, True -> Crontab starting and stopping at a given time.
 
         :param execute: Datetime to start execution
         :param frequency: String with a crontab format

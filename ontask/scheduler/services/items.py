@@ -41,7 +41,7 @@ def create_timedelta_string(
     The rendering proceeds gradually to see if the words days, hours, minutes
     etc. are needed.
 
-    :param ftime: datetime object (may be in the past)
+    :param ftime: datetime object (maybe in the past)
     :param frequency: string with the cron frequency (or empty)
     :param utime: until datetime object
     :return: String rendering

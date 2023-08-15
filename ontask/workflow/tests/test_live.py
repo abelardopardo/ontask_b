@@ -491,7 +491,7 @@ class WorkflowImport(
             settings.ONTASK_FIXTURE_DIR,
             'ontask_workflow.gz'))
 
-        # Click in the submit
+        # Click in the submit button
         self.selenium.find_element(
             By.XPATH,
             "//button[@type='Submit']"

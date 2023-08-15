@@ -2,7 +2,6 @@
 
 Current Version: 10.3 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
-![Twitter Follow](https://img.shields.io/twitter/follow/clariate?label=Follow&style=social)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
 ![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)

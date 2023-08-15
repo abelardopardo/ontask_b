@@ -13,8 +13,8 @@ from ontask.dataops.views import common
 class S3UploadStart(common.UploadStart, generic.FormView):
     """Upload the S3 data as first step.
 
-    The four step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set
+    The four-step process will populate the following dictionary with name
+    upload_data (divided by steps in which they are set)
 
     STEP 1:
 
@@ -30,8 +30,8 @@ class S3UploadStart(common.UploadStart, generic.FormView):
     form_class = forms.UploadS3FileForm
     template_name = 'dataops/upload1.html'
 
-    dtype = 'S3 CSV'
-    dtype_select = _('S3 CSV file')
+    data_type = 'S3 CSV'
+    data_type_select = _('S3 CSV file')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

@@ -1,5 +1,5 @@
-from collections import defaultdict
 import time
+from collections import defaultdict
 from urllib.parse import unquote, urlparse
 
 import oauth2
@@ -40,7 +40,7 @@ class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
         """
         Set launch data from a ToolConfig.
         """
-        if self.launch_url == None:
+        if self.launch_url is None:
             self.launch_url = config.launch_url
             self.custom_params.update(config.custom_params)
 
@@ -56,8 +56,14 @@ class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
     def generate_launch_data(self):
         # Validate params
         if not self.has_required_params():
-            raise InvalidLTIConfigError('ToolConsumer does not have all required attributes: consumer_key = %s, consumer_secret = %s, resource_link_id = %s, launch_url = %s' % (
-                self.consumer_key, self.consumer_secret, self.resource_link_id, self.launch_url))
+            raise InvalidLTIConfigError(
+                'ToolConsumer does not have all required attributes: '
+                'consumer_key = %s, consumer_secret = %s, '
+                'resource_link_id = %s, launch_url = %s' % (
+                    self.consumer_key,
+                    self.consumer_secret,
+                    self.resource_link_id,
+                    self.launch_url))
 
         params = self.to_params()
         params['lti_version'] = 'LTI-1.0'
@@ -78,7 +84,7 @@ class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
         if uri.query != '':
             for param in uri.query.split('&'):
                 key, val = param.split('=')
-                if params.get(key) == None:
+                if params.get(key) is None:
                     params[key] = str(val)
 
         request = oauth2.Request(method='POST',
@@ -90,10 +96,10 @@ class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
 
         # Request was made by an HTML form in the user's browser.
         # Return the dict of post parameters ready for embedding
-        # in an html view.
+        # in an HTML view.
         return_params = {}
         for key in request:
-            if request[key] == None:
+            if request[key] is None:
                 return_params[key] = None
             elif isinstance(request[key], list):
                 return_params[key] = request.get_parameter(key)

@@ -1,13 +1,13 @@
 """Functions to manipulate Pandas DataFrames and related operations."""
 from typing import Dict, List, Mapping, Optional
 
+import pandas as pd
+import sqlalchemy
+import sqlalchemy.engine
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import gettext as _
-import pandas as pd
-import sqlalchemy
-import sqlalchemy.engine
 
 from ontask import LOGGER, OnTaskDataFrameNoKey, OnTaskSharedState
 from ontask.dataops import pandas, sql
@@ -60,7 +60,7 @@ def create_db_engine(**kwargs):
         dbname=kwargs.get('dbname'))
 
     if settings.DEBUG:
-        LOGGER.debug('Creating engine with dtabase parameters')
+        LOGGER.debug('Creating engine with database parameters')
 
     return sqlalchemy.create_engine(
         database_url,
@@ -118,11 +118,11 @@ def load_table(
 def store_table(
     data_frame: pd.DataFrame,
     table_name: str,
-    dtype: Optional[Mapping] = None,
+    dict_type: Optional[Mapping] = None,
 ):
     """Store a data frame in the DB.
 
-    dtype is a dictionary of (column_name, column_type) column type can be:
+    dict_type is a dictionary of (column_name, column_type) column type can be:
 
     - 'boolean',
     - 'datetime',
@@ -140,8 +140,8 @@ def store_table(
 
     :param data_frame: The data frame to store
     :param table_name: The name of the table in the DB
-    :param dtype: dictionary with (column_name, data type) to force the storage
-    of certain data types
+    :param dict_type: dictionary with (column_name, data type) to force the
+    storage of certain data types
     :return: Nothing. Side effect in the DB
     """
     # Check the length of the column names
@@ -150,8 +150,8 @@ def store_table(
             _('Column name is longer than {0} characters').format(
                 sql.COLUMN_NAME_SIZE))
 
-    if dtype is None:
-        dtype = {}
+    if dict_type is None:
+        dict_type = {}
 
     with cache.lock(table_name):
         # We overwrite the content and do not create an index
@@ -162,7 +162,7 @@ def store_table(
             index=False,
             dtype={
                 key: ONTASK_TO_SQLALCHEMY[type_value]
-                for key, type_value in dtype.items()
+                for key, type_value in dict_type.items()
             },
         )
 

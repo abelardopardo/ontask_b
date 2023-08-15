@@ -2,6 +2,7 @@
 from datetime import timedelta
 from typing import Dict, Optional
 
+import requests
 from django import http
 from django.conf import settings
 from django.shortcuts import redirect
@@ -9,7 +10,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
-import requests
 from rest_framework import status
 
 from ontask import models
@@ -35,7 +35,7 @@ def get_initial_token_step1(
         #   client_secret: VALUE ,
         #   authorize_url: VALUE (format {0} for domain_port),
         #   access_token_url: VALUE (format {0} for domain_port),
-        #   aux_params: DICT with additional parameters)
+        #   aux_params: DICT with additional parameters
         # }
     :param return_url: URL to store as return URL after obtaining the token
     :return: Http response

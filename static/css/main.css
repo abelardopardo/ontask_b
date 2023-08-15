@@ -311,11 +311,11 @@ table td,
 #attribute-table td,
 #column-selected-table td,
 #column-table td,
-#log-table td,
-#rubric-table td,
-#scheduler-table td,
 #conn-instructor-table td,
 #connection-admin-table td,
+#log-table td,
+#rubric-table td.rubric-criterion,
+#scheduler-table td,
 #table-data td,
 #transform-diagnostics-table td,
 #transform-table td,
@@ -323,6 +323,8 @@ table td,
 #workflow-table td {
     vertical-align: middle;
 }
+
+#rubric-table td.rubric-loa { vertical-align: top; }
 
 /*.table {
   overflow-y: visible !important;

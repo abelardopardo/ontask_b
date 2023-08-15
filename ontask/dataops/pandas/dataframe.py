@@ -1,10 +1,10 @@
 """Operations to manipulate dataframes."""
 from typing import Dict, List, Optional
 
-from django.conf import settings
-from django.utils.translation import gettext, gettext_lazy as _
 import numpy as np
 import pandas as pd
+from django.conf import settings
+from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask.dataops import formula, pandas, sql
 
@@ -190,7 +190,7 @@ def store_workflow_table(
         - column_types: List of types detected after storing in DB
         - keep_key_column: List of booleans to flag if key property is kept
         - columns_to_upload: List of booleans to flag column upload
-        The first field is mandatory. The have default values if not provided.
+        The first field is mandatory. They have default values if not provided.
     :return: Nothing. Anomalies are raised as Exceptions
     """
     # Check information on update_info and complete if needed
@@ -278,7 +278,7 @@ def add_column_to_df(
     :param initial_value: initial value in the column
     :return: new data frame with the additional column
     """
-    # Should we use pd.Series instead: pd.Series(dtype=np.int64)
+    # Should we use Series instead? pd.Series(dtype=np.int64)
     column_type = column.data_type
     if initial_value is None:
         # Choose the right numpy type

@@ -116,19 +116,17 @@ class WorkflowAssignLUserColumn(
                 _(
                     'Workflow has no data. '
                     + 'Go to "Manage table data" to upload data.'))
-            return http.JsonResponse({'html_redirect': reverse('action:index')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('action:index')})
 
         pk = kwargs.get('pk')
         column = None
 
         try:
             if pk:
-                column = self.workflow.columns.filter(
-                        pk=pk,
-                    ).filter(
-                        Q(workflow__user=request.user)
-                        | Q(workflow__shared=request.user),
-                    ).distinct().get()
+                column = self.workflow.columns.filter(pk=pk).filter(
+                    Q(workflow__user=request.user)
+                    | Q(workflow__shared=request.user)).distinct().get()
             services.update_luser_email_column(
                 request.user,
                 pk,
@@ -136,8 +134,7 @@ class WorkflowAssignLUserColumn(
                 column)
             messages.success(
                 request,
-                _('The list of workflow users will be updated shortly.'),
-            )
+                _('The list of workflow users will be updated shortly.'))
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
 

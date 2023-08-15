@@ -40,9 +40,11 @@ class ActionSelectColumnSurveyView(
             return http.JsonResponse({'html_redirect': ''})
 
         # Get the column
-        column = self.workflow.columns.filter(pk=self.kwargs.get('cpk')).first()
+        column = self.workflow.columns.filter(
+            pk=self.kwargs.get('cpk')).first()
         if not column:
-            return http.JsonResponse({'html_redirect': reverse('action:index')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('action:index')})
 
         # Parameters are correct, so add the column to the action.
         if self.key_column:

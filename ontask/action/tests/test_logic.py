@@ -15,32 +15,33 @@ from ontask.dataops import pandas
 class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test Email tracking."""
 
-    trck_tokens = [signing.dumps(item) for item in
+    trck_tokens = [
+        signing.dumps(item) for item in
         [{
             'action': 2,
             'sender': 'instructor01@bogus.com',
             'to': 'student01@bogus.com',
             'column_to': 'email',
             'column_dst': 'EmailRead_1'},
-        {
-            'action': 2,
-            'sender': 'instructor01@bogus.com',
-            'to': 'student02@bogus.com',
-            'column_to': 'email',
-            'column_dst': 'EmailRead_1'},
-        {
-            'action': 2,
-            'sender': 'instructor01@bogus.com',
-            'to': 'student03@bogus.com',
-            'column_to': 'email',
-            'column_dst': 'EmailRead_1'}]]
+            {
+                'action': 2,
+                'sender': 'instructor01@bogus.com',
+                'to': 'student02@bogus.com',
+                'column_to': 'email',
+                'column_dst': 'EmailRead_1'},
+            {
+                'action': 2,
+                'sender': 'instructor01@bogus.com',
+                'to': 'student03@bogus.com',
+                'column_to': 'email',
+                'column_dst': 'EmailRead_1'}]]
 
     def test(self):
         # Repeat the checks two times to test if they are accumulating
         for idx in range(1, 3):
             # Iterate over the tracking items
-            for trck in self.trck_tokens:
-                self.client.get(reverse('trck') + '?v=' + trck)
+            for track in self.trck_tokens:
+                self.client.get(reverse('trck') + '?v=' + track)
 
             # Get the workflow and the data frame
             workflow = models.Workflow.objects.get(name=self.wflow_name)
@@ -48,12 +49,12 @@ class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
                 workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
-            for uemail in [x[1] for x in tests.user_info
-                           if x[1].startswith('student')]:
+            for user_email in [
+                x[1] for x in tests.user_info if x[1].startswith('student')]:
                 self.assertEqual(
                     int(
                         data_frame.loc[
-                            data_frame['email'] == uemail,
+                            data_frame['email'] == user_email,
                             'EmailRead_1'].values[0]),
                     idx)
 
@@ -66,10 +67,10 @@ class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
         wflow = models.Workflow.objects.get(name=self.wflow_name)
 
         with open(
-            os.path.join(
-                settings.ONTASK_FIXTURE_DIR,
-                'survey_to_import.gz'),
-            'rb'
+                os.path.join(
+                    settings.ONTASK_FIXTURE_DIR,
+                    'survey_to_import.gz'),
+                'rb'
         ) as file_obj:
             services.do_import_action(user, workflow=wflow, file_item=file_obj)
 

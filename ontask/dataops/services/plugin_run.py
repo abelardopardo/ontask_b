@@ -3,12 +3,12 @@ import datetime
 import json
 from typing import Dict, Union
 
+import django_tables2 as tables
 from django import http
 from django.db.models.expressions import F
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-import django_tables2 as tables
 
 from ontask import models, tasks
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
@@ -30,7 +30,7 @@ class PluginAvailableTable(tables.Table):
     last_exec = tables.DateTimeColumn(verbose_name=_('Last executed'))
 
     def __init__(self, *args, **kwargs):
-        """Set workflow and user to get latest execution time."""
+        """Set workflow and user from the given args."""
         self.workflow = kwargs.pop('workflow')
         self.user = kwargs.pop('user')
 

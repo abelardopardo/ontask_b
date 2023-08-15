@@ -77,7 +77,7 @@ class AthenaConnection(Connection):
         verbose_name=_('AWS S3 Bucket file path'),
         max_length=CHAR_FIELD_MID_SIZE,
         default='',
-        null=True,
+        null=False,
         blank=True)
 
     # AWS region name
@@ -93,7 +93,7 @@ class AthenaConnection(Connection):
         verbose_name=_('Table name'),
         max_length=CHAR_FIELD_MID_SIZE,
         default='',
-        null=True,
+        null=False,
         blank=True,
         help_text=_('Leave blank to provide at execution'))
 

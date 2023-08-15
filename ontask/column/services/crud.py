@@ -3,10 +3,10 @@ import copy
 import random
 from typing import Any, List, Optional
 
+import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-import pandas as pd
 
 from ontask import create_new_name, models
 from ontask.column.services import errors
@@ -27,7 +27,7 @@ _op_distrib = {
 _ontask_type_to_pd_type = {
     'string': 'object',
     'integer': 'int64',
-    'double':  'float64',
+    'double': 'float64',
     'boolean': 'bool',
     'datetime': 'datetime64[ns, {0}]'.format(settings.TIME_ZONE)}
 
@@ -66,9 +66,9 @@ def add_column_to_workflow(
     is being used.
     :return: Nothing. Column added to Wflow and DB
     """
-    # Catch the special case of integer type and no initial value. Pandas
-    # encodes it as NaN but a cycle through the database transforms it into
-    # a string. To avoid this case, integer + empty value => double
+    # Catch the special case of integer type and no initial value. The Pandas
+    # library encodes it as NaN but a cycle through the database transforms it
+    # into a string. To avoid this case, integer + empty value => double
     if column.data_type == 'integer' and column_initial_value is None:
         column.data_type = 'double'
 
@@ -115,12 +115,12 @@ def add_formula_column(
 ):
     """Add the formula column to the workflow.
 
-    :param user: User making the request
-    :param workflow: Workflow to add the column
-    :param column: Column being added
-    :param operation: string denoting the operation
+    :param user: User making the request.
+    :param workflow: Workflow to add the column.
+    :param column: Column being added.
+    :param operation: string denoting the operation.
     :param selected_columns: List of columns selected for the operation.
-    :return: Column is added to the workflow
+    :return: Column is added to the workflow.
     """
     # Save the column object attached to the form and add additional fields
     column.workflow = workflow
@@ -166,10 +166,10 @@ def add_random_column(
 ):
     """Add the formula column to the workflow.
 
-    :param user: User making the request
-    :param workflow: Workflow to add the column
-    :param column: Column being added
-    :return: Column is added to the workflow
+    :param user: User making the request.
+    :param workflow: Workflow to add the column.
+    :param column: Column being added.
+    :return: Column is added to the workflow.
     """
     # Empty new column
     new_column = [None] * workflow.nrows
@@ -193,7 +193,10 @@ def add_random_column(
         dtype=_ontask_type_to_pd_type[column.data_type],
         index=data_frame.index)
 
-    if column.data_type == 'datetime' and data_frame[column.name].dt.tz is None:
+    if (
+            column.data_type == 'datetime'
+            and data_frame[column.name].dt.tz is None
+    ):
         data_frame[column.name] = data_frame[column.name].dt.tz_localize(
             settings.TIME_ZONE)
 
@@ -252,13 +255,12 @@ def update_column(
 
     column.save()
 
-    # Go back to the DB because the prefetch columns are not valid
-    # any more
+    # Go back to the DB because the prefetch columns are no longer valid
     workflow = models.Workflow.objects.prefetch_related('columns').get(
         id=workflow.id,
     )
 
-    # Propagate the rename to the other actions and views
+    # Propagate the "rename" operation to the other actions and views
     if old_name != column.name:
         pandas.rename_column(workflow, old_name, column.name)
 

@@ -2,9 +2,9 @@
 from collections import OrderedDict
 from typing import Dict, List
 
+import django_tables2 as tables
 from django.template.loader import render_to_string
 from django.utils.translation import gettext, gettext_lazy as _
-import django_tables2 as tables
 
 from ontask import models
 from ontask.action.services import OnTaskActionRubricIncorrectContext
@@ -17,7 +17,9 @@ LOGGER = get_task_logger('celery_execution')
 class RubricTable(tables.Table):
     """Table to represent the rubric."""
 
-    criterion = tables.Column(verbose_name=_('Criterion'))
+    criterion = tables.Column(
+        verbose_name=_('Criterion'),
+        attrs={'td': {'class': 'rubric-criterion'}})
 
     class Meta:
         """Define fields, sequence, attrs, etc."""
@@ -63,8 +65,9 @@ def _create_rubric_table(
     for idx, loa in enumerate(loas):
         extra_columns.append((
             'loa_{0}'.format(idx),
-            tables.Column(verbose_name=loa)
-        ))
+            tables.Column(
+                verbose_name=loa,
+                attrs={'td': {'class': 'rubric-loa'}})))
 
     # Create the table data
     table_data = []

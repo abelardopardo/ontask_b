@@ -1,4 +1,4 @@
-"""View to start the excel upload process."""
+"""View to start the Excel upload process."""
 
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -13,8 +13,8 @@ from ontask.dataops.views import common
 class ExcelUploadStart(common.UploadStart, generic.FormView):
     """Upload the Excel file as first step.
 
-    The four step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set
+    The four-step process will populate the following dictionary with name
+    upload_data (divided by steps in which they are set)
 
     STEP 1:
 
@@ -30,8 +30,8 @@ class ExcelUploadStart(common.UploadStart, generic.FormView):
     form_class = forms.UploadExcelFileForm
     template_name = 'dataops/upload1.html'
 
-    dtype = 'Excel'
-    dtype_select = _('Excel file')
+    data_type = 'Excel'
+    data_type_select = _('Excel file')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

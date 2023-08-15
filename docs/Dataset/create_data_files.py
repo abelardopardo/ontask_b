@@ -8,8 +8,8 @@ import random
 import string
 import sys
 
-from numpy.random import choice
 import pandas as pd
+from numpy.random import choice
 
 # Initial file fields
 #
@@ -326,10 +326,11 @@ def create_forum_data(all_students):
         for week_n in range(2, 6):
 
             #
-            # International or part time have many days online
+            # International or part-time have many days online
             #
-            if student_info['Enrolment Type'] == 'International' or \
-                student_info['Attendance'] == 'Part Time':
+            if (
+                    student_info['Enrolment Type'] == 'International' or
+                    student_info['Attendance'] == 'Part Time'):
                 days_online = \
                     int(round(random.normalvariate(midterm_score * 7 / 10,
                                                    6 - week_n)))
@@ -362,8 +363,8 @@ def create_forum_data(all_students):
             # Contributions
             #
             # International students almost null
-            # Part time, high
-            # High score, much higher!
+            # Part time, high.
+            # High score, much higher!.
             # Rest, modest.
             if student_info['Enrolment Type'] == 'International':
                 contr = int(round(random.normalvariate(0, 0.5)))

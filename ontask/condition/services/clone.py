@@ -85,7 +85,7 @@ def do_clone_filter(
     new_filter.save()
 
     try:
-        # Update the many to many field.
+        # Update the many-to-many field.
         new_filter.columns.set(new_filter.workflow.columns.filter(
             name__in=formula.get_variables(new_filter.formula),
         ))

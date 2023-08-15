@@ -1,15 +1,15 @@
 """Django settings for OnTask project."""
 import json
 import os
-from os.path import dirname, exists, join
 import sys
+from os.path import dirname, exists, join
 
+import environ
 from celery.schedules import crontab
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-import environ
 
 # import ldap
 # from django_auth_ldap.config import (
@@ -168,7 +168,7 @@ CACHES = {
         'TIMEOUT': 1000,
         'KEY_PREFIX': 'ontask',
         'OPTIONS': {
-             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
@@ -310,9 +310,10 @@ SHORT_DATETIME_FORMAT = 'r'
 
 SITEPREFS_EXPOSE_MODEL_TO_ADMIN = True
 SITEPREFS_DISABLE_AUTODISCOVER = not (
-    'manage' not in sys.argv[0] or
-    (len(sys.argv) > 1) and
-    sys.argv[1] in ['runserver', 'runserver_plus', 'run_gnunicorn', 'celeryd'])
+    'manage' not in sys.argv[0]
+    or (len(sys.argv) > 1)
+    and sys.argv[1] in
+    ['runserver', 'runserver_plus', 'run_gnunicorn', 'celeryd'])
 SITEPREFS_MODULE_NAME = 'settings'
 
 TEMPLATES = [{
@@ -477,9 +478,10 @@ TINYMCE_DEFAULT_CONFIG = {
     "height": 500,
     "menubar": "file edit view insert format tools table help",
 
-    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
-    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,"
-    "paste,code,help,wordcount,emoticons,imagetools",
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,"
+               "anchor,searchreplace,visualblocks,code,fullscreen,"
+               "insertdatetime,media,table,paste,code,help,wordcount,"
+               "emoticons,imagetools",
 
     "toolbar": "undo redo | fontselect fontsizeselect formatselect | "
     "bold italic backcolor | alignleft aligncenter "

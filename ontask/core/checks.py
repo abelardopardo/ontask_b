@@ -14,7 +14,8 @@ def _check_logs(workflow: models.Workflow) -> bool:
     :param workflow: Workflow being processed.
     :result: True or a failed assertion
     """
-    assert(not workflow.logs.exclude(name__in=models.Log.LOG_TYPES).exists())
+    assert (not (workflow.logs.exclude(
+        name__in=models.Log.LOG_TYPES).exists()))
     return True
 
 
@@ -79,8 +80,9 @@ def check_workflow(workflow: models.Workflow) -> bool:
 
     # Verify the name of the workflow
     assert (
-        workflow.data_frame_table_name ==
-        workflow.df_table_prefix.format(workflow.id)), 'Inconsistent table name'
+        workflow.data_frame_table_name
+        == workflow.df_table_prefix.format(workflow.id)), \
+        'Inconsistent table name'
 
     # Verify the sanity of all the actions
     for action in workflow.actions.all():
@@ -128,12 +130,11 @@ def check_key_columns(workflow: models.Workflow):
     :param workflow: Object to use for the verification.
     :return: Nothing. Raise exception if key column lost the property.
     """
-    col_name = next(
-        (
-            col.name for col in workflow.columns.filter(is_key=True)
-            if not sql.is_column_unique(
-                workflow.get_data_frame_table_name(),
-                col.name)),
+    col_name = next((
+        col.name for col in workflow.columns.filter(is_key=True)
+        if not sql.is_column_unique(
+            workflow.get_data_frame_table_name(),
+            col.name)),
         None)
     if col_name:
         raise Exception(_(
@@ -142,8 +143,8 @@ def check_key_columns(workflow: models.Workflow):
 
 
 def fix_non_unique_object_names(
-    obj_names: Set[str],
-    duplicates: List[db.models.Model],
+        obj_names: Set[str],
+        duplicates: List[db.models.Model],
 ):
     """Rename objects to remove duplicated names.
 

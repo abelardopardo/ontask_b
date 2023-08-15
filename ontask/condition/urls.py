@@ -35,7 +35,8 @@ urlpatterns = [
         '<int:pk>/create_condition/',
         views.ConditionCreateView.as_view(
             form_class=forms.ConditionForm,
-            template_name='condition/includes/partial_condition_add_edit.html'),
+            template_name='condition/includes/'
+                          'partial_condition_add_edit.html'),
         name='create_condition'),
     path(
         '<int:pk>/edit_condition/',

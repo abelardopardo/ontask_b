@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from ontask import OnTaskServiceException, models
+from ontask import OnTaskServiceException
 from ontask.core import WorkflowView, UserIsInstructor
 from ontask.workflow import forms, services
 

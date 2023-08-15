@@ -89,12 +89,12 @@ class OutcomeResponse:
         try:
             root = objectify.fromstring(xml)
             # Get message idenifier from header info
-            self.message_identifier = root.imsx_POXHeader.\
-                imsx_POXResponseHeaderInfo.\
+            self.message_identifier = root.imsx_POXHeader. \
+                imsx_POXResponseHeaderInfo. \
                 imsx_messageIdentifier
 
-            status_node = root.imsx_POXHeader.\
-                imsx_POXResponseHeaderInfo.\
+            status_node = root.imsx_POXHeader. \
+                imsx_POXResponseHeaderInfo. \
                 imsx_statusInfo
 
             # Get status parameters from header info status
@@ -112,7 +112,7 @@ class OutcomeResponse:
             except AttributeError:
                 # Not a readResult, just ignore!
                 pass
-        except:
+        except Exception:
             pass
 
     def generate_response_xml(self):
@@ -139,13 +139,15 @@ class OutcomeResponse:
         message_ref_identifier = etree.SubElement(status_info,
                                                   'imsx_messageRefIdentifier')
         message_ref_identifier.text = str(self.message_ref_identifier)
-        operation_ref_identifier = etree.SubElement(status_info,
-                                                    'imsx_operationRefIdentifier')
+        operation_ref_identifier = etree.SubElement(
+            status_info,
+            'imsx_operationRefIdentifier')
         operation_ref_identifier.text = str(self.operation)
 
         body = etree.SubElement(root, 'imsx_POXBody')
-        response = etree.SubElement(body, '%s%s' % (self.operation,
-                                                    'Response'))
+        response = etree.SubElement(
+            body,
+            '%s%s' % (self.operation, 'Response'))
 
         if self.score:
             result = etree.SubElement(response, 'result')

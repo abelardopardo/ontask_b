@@ -109,7 +109,7 @@ def has_variable(node, var_name):
     :return: Boolean encoding if formula has id.
     """
     if 'condition' in node:
-        # Node is a condition, get the values of the sub classes and take a
+        # Node is a condition, get the values of the subclasses and take a
         # disjunction of the results.
 
         return any(

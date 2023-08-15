@@ -70,10 +70,11 @@ class ActionServeActionBasicView(generic.FormView):
 
         # Intercept when using an incorrect action.
         if (
-            not is_instructor(self.request.user) and (
-                not self.action or
-                not self.action.serve_enabled or
-                not self.action.is_active)
+                not is_instructor(self.request.user)
+                and (
+                not self.action
+                or not self.action.serve_enabled
+                or not self.action.is_active)
         ):
             messages.error(request, _('Action is not enabled.'))
             return redirect('action:index')
@@ -98,8 +99,8 @@ class ActionServeActionBasicView(generic.FormView):
                 self.action,
                 self.user_attribute_name)
         except (
-            services.OnTaskActionSurveyDataNotFound,
-            services.OnTaskActionSurveyNoTableData
+                services.OnTaskActionSurveyDataNotFound,
+                services.OnTaskActionSurveyNoTableData
         ) as exc:
             raise http.Http404(str(exc))
 

@@ -2,20 +2,20 @@
 from time import time
 from typing import Mapping, Optional
 
+import oauth2
 from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
-import oauth2
 
 from ontask import LOGGER
 from ontask.lti.tool_provider import DjangoToolProvider
 
 
 class LTIAuthBackend(ModelBackend):
-    """Class to authenticate a LTI  request.
+    """Class to authenticate an LTI  request.
 
     By default, the ``authenticate`` method creates ``User`` objects for
     usernames that don't already exist in the database.  Subclasses can disable
@@ -24,7 +24,7 @@ class LTIAuthBackend(ModelBackend):
     """
     # Create a User object if not already in the database?
     create_unknown_user = True
-    # Username prefix for users without an sis source id
+    # Username prefix for users without a sis source id
     unknown_user_prefix = 'cuid:'
 
     def authenticate(

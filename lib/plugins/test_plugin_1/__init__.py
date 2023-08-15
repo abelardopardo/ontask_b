@@ -21,7 +21,7 @@ class OnTaskTestPlugin(OnTaskTransformation):
 
     - The file must have the field with name "class_name" containing the name
       of the class implementing the plugin (allows for multiple classes to be
-      defined in the same file.
+      defined in the same file).
 
     - The class implementing the plugin must inherit from OnTaskPluginAbstract
 

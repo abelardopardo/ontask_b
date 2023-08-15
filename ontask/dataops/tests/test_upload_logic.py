@@ -38,7 +38,7 @@ class DataopsCSVUpload(DataopsUploadBasic):
 
 
 class DataopsExcelUpload(DataopsUploadBasic):
-    """Test the excel upload code."""
+    """Test the Excel upload code."""
 
     def test(self):
         # Get the regular form

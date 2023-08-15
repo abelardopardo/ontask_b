@@ -88,11 +88,12 @@ class ColumnRestrictValuesView(
     def get(self, request, *args, **kwargs):
         # First get the object
         self.object = self.get_object()
-        # If the columns is unique and it is the only one, we cannot allow
+        # If the columns is unique, and it is the only one, we cannot allow
         # the operation
         if self.object.is_key:
             messages.error(request, _('You cannot restrict a key column'))
-            return http.JsonResponse({'html_redirect': reverse('column:index')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('column:index')})
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

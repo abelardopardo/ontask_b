@@ -118,7 +118,7 @@ class FilterLiveTest(ConditionTestBasic):
             )
         )
 
-        # Select the when filter
+        # Select the 'when' filter
         sel = Select(self.selenium.find_element(
             By.NAME,
             'builder_rule_1_filter'))

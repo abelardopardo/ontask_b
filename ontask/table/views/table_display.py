@@ -31,8 +31,8 @@ class TableDisplayBasicView(UserIsInstructor, generic.TemplateView):
                 'columns_datatables': [{'data': 'Operations'}] + [
                     {'data': col.name.replace('.', '\\.')}
                     for col in columns],
-                'columns_show_stat': self.workflow.columns.filter(is_key=False),
-            })
+                'columns_show_stat': self.workflow.columns.filter(
+                    is_key=False)})
         else:
             context.update({'columns': None, 'columns_datatables': []})
 

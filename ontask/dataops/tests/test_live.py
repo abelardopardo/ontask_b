@@ -121,10 +121,8 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.wait_for_id_and_spinner('column-selected-table_previous')
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
-        )
+            EC.element_to_be_clickable(
+                (By.ID, 'column-selected-table_previous')))
 
         # Set some parameters
         self.select_tab('parameters-tab')

@@ -15,7 +15,7 @@ from ontask.oauth import services
 def callback(request: WSGIRequest) -> http.HttpResponse:
     """Process the call received from the server.
 
-    This is supposed to contain the token so it is saved to the database and
+    This is supposed to contain the token, so it is saved to the database and
     then redirects to a page previously stored in the session object.
 
     :param request: Request object

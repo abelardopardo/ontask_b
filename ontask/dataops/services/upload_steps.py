@@ -18,7 +18,7 @@ def upload_step_two(
     select_column_data: Dict,
     upload_data: Dict,
 ) -> http.HttpResponse:
-    """Process the received dataframe and either store or continue merge.
+    """Process the received dataframe and either store or continue the merge.
 
     :param request: Http request received.
     :param workflow: workflow being processed.
@@ -122,7 +122,7 @@ def upload_prepare_step_four(upload_data: Dict) -> List[Tuple[str, bool, str]]:
         if colname == src_selected_key or colname == dst_selected_key:
             continue
 
-        # Case 2: Column is in DST and left untouched (no counter part in SRC)
+        # Case 2: Column is in DST and left untouched (no counterpart in SRC)
         if colname not in list(src_info.keys()):
             column_info.append((colname, False, ''))
             continue

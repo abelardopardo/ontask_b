@@ -1,6 +1,5 @@
 """Functions to manipulate workflow CRUD ops."""
 import copy
-from typing import Dict
 
 from django import http
 from django.db.models.query_utils import Q
@@ -13,7 +12,6 @@ from ontask.column.services import do_clone_column_only
 from ontask.core import store_workflow_in_session
 from ontask.dataops import sql
 from ontask.table.services import do_clone_view
-from ontask.workflow import forms
 
 
 def log_workflow_createupdate(

@@ -2,6 +2,7 @@
 
 from typing import Dict
 
+import six
 from braces import views as bracesviews
 from django.conf import settings
 from django.contrib import auth, messages
@@ -18,8 +19,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import FormView, RedirectView, TemplateView
-import six
+from django.views.generic import FormView, RedirectView
 
 from ontask.accounts import forms
 

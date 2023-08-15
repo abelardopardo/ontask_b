@@ -36,7 +36,7 @@ class ActionShowURLView(
         """Get context data: The absolute URL for this action."""
         context = super().get_context_data(**kwargs)
         context['url_text'] = self.request.build_absolute_uri(
-                    reverse('action:serve_lti') + '?pk=' + str(self.object.id))
+            reverse('action:serve_lti') + '?pk=' + str(self.object.id))
         return context
 
     def form_valid(self, form) -> http.JsonResponse:
@@ -78,7 +78,8 @@ class ActionAddRemoveAttachmentView(
         if not view or self.object.action_type != models.Action.EMAIL_REPORT:
             # View is not there, or does not point to the action or points to
             # the wrong action.
-            return http.JsonResponse({'html_redirect': reverse('action:index')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('action:index')})
 
         # If the request has 'action_content', update the action
         action_content = request.POST.get('action_content')

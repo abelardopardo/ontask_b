@@ -41,15 +41,15 @@ class UploadStepBasicView(UserIsInstructor, WorkflowView):
     def request_is_valid(self) -> Optional[http.HttpResponse]:
         """Verify some requirements for the incoming request.
 
-        If the expected data is not there, return a HTTP response. If
+        If the expected data is not there, return an HTTP response. If
         everything is correct, return None.
         """
         # Get the dictionary to store information about the upload
         # is stored in the session.
         self.upload_data = self.request.session.get('upload_data')
         if not self.upload_data:
-            # If there is no object, or it is an empty dict, it denotes a direct
-            # jump to this step, get back to the home page
+            # If there is no object, or it is an empty dict, it denotes a
+            # direct jump to this step, get back to the home page
             return redirect('home')
 
     def dispatch(self, request, *args, **kwargs):
@@ -63,8 +63,8 @@ class UploadStepBasicView(UserIsInstructor, WorkflowView):
 class UploadStepTwoView(UploadStepBasicView, generic.FormView):
     """Second step of the upload process.
 
-    The four step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set
+    The four-step process will populate the following dictionary with name
+    upload_data (divided by steps in which they are set)
 
     ASSUMES:
 
@@ -98,7 +98,7 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
     def request_is_valid(self) -> Optional[http.HttpResponse]:
         """Verify some requirements for the incoming request.
 
-        If the expected data is not there, return a HTTP response. If
+        If the expected data is not there, return an HTTP response. If
         everything is correct, return None.
         """
         error_response = super().request_is_valid()
@@ -146,7 +146,8 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
             'value_range': (
                 range(5) if self.workflow.has_data_frame else range(3)),
             'df_info': df_info,
-            'next_name': _('Finish') if self.workflow.has_data_frame else None})
+            'next_name':
+                _('Finish') if self.workflow.has_data_frame else None})
 
         return context
 
@@ -267,7 +268,7 @@ class UploadStepThreeView(UploadStepBasicView, generic.FormView):
             self.upload_data['dst_unique_col_names'] = dst_unique_col_names
         kwargs['dst_keys'] = dst_unique_col_names
 
-        # Get the names of he unique columns to upload in the source DF
+        # Get the names of the unique columns to upload in the source DF
         columns_to_upload = self.upload_data['columns_to_upload']
         src_column_names = self.upload_data['rename_column_names']
         src_is_key_column = self.upload_data['src_is_key_column']
@@ -331,7 +332,7 @@ class UploadStepFourView(UploadStepBasicView, generic.TemplateView):
             'prev_step': reverse('dataops:upload_s3'),
             'value_range': (
                 range(5) if self.workflow.has_data_frame else range(3)),
-            'next_name':  _('Finish'),
+            'next_name': _('Finish'),
             'info': services.upload_prepare_step_four(self.upload_data)})
         return context
 

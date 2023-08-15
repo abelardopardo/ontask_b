@@ -1,5 +1,4 @@
 """Forms to manage Views."""
-from builtins import next
 from typing import Dict
 
 from django import forms
