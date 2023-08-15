@@ -78,6 +78,9 @@ tmp
 /html
 /doctrees
 
+# Media cache
+media/cache
+
 # Sublime annotations
 *.sublime-project
 *.sublime-workspace
@@ -96,3 +99,8 @@ ontask/tests/fixtures/*.gz
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# CodeQL
+.codeql_ontask
+.codeqlrc
+codeql_output.csv
