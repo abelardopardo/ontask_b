@@ -394,6 +394,10 @@ else:
     STATIC_URL = BASE_URL + '/' + STATIC_URL_SUFFIX + '/'
     STATICFILES_DIRS = [join(BASE_DIR(), STATIC_URL_SUFFIX)]
 
+# Django-Tables2
+# -----------------------------------------------------------------------------
+DJANGO_TABLES2_TABLE_TEMPLATE = 'django_tables2/bootstrap5-responsive.html'
+
 # Django-crispy-forms
 # -----------------------------------------------------------------------------
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
