@@ -11,12 +11,12 @@
 # 2. Upgrade pip
 #    python3 -m pip install --upgrade pip
 # 3. Install Wheel
-#    python3 -m pip install wheel
+#    python3 -m pip install --upgrade wheel
 # 4. Install essential:
 #    LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip install -r requirements/essential.txt
 # 5. LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip freeze | sort > requirements/freeze.txt
 # 6. python3 -m pip check
-# 7. Copy freeze.txt into base.txt
+# 7. cp requirements/freeze.txt requirements/base.txt
 # 8. Move lines in base.txt to development.txt
 #
 Django[argon2]==4.2  # BSD-3-Clause
