@@ -32,6 +32,7 @@ ENV_FILENAME = join(
     env('ENV_FILENAME', default='local.env'))
 
 print('SYS.ARGV:', sys.argv)
+print('SYS.VERSION:', sys.version)
 print('BASE_DIR:', BASE_DIR)
 print('ENV_FILENAME:', ENV_FILENAME)
 print('DJANGO_SETTINGS_MODULE:', env('DJANGO_SETTINGS_MODULE'))
