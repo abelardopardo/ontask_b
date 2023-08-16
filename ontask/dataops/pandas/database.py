@@ -1,5 +1,6 @@
 """Functions to manipulate Pandas DataFrames and related operations."""
 from typing import Dict, List, Mapping, Optional
+from urllib import parse
 
 import pandas as pd
 import sqlalchemy
@@ -55,7 +56,7 @@ def create_db_engine(**kwargs):
         dial=kwargs.get('dialect'),
         drv=kwargs.get('driver'),
         usr=kwargs.get('username'),
-        pwd=kwargs.get('password'),
+        pwd=parse.quote(kwargs.get('password')),
         h=kwargs.get('host'),
         dbname=kwargs.get('dbname'))
 
