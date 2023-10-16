@@ -1,6 +1,6 @@
 {
-    "canvas_base_url": "https://canvas.instructure.com",
-    "canvas_api_token": "<Your_Canvas_API_Token>",
-    "ontask_base_url": "https://demo2.ontasklearning.org/",
-    "ontask_api_token": "<Your_OnTask_API_Token>"
+    "canvas_base_url": "https://canvas-dev.c3l.ai",
+    "canvas_api_token": "LX59dHQWrFBr15fZOXYnagk9soYgytQAzYY7oiHL9uicfHnCaFplnT8CO6c2dQwL",
+    "ontask_base_url": "http://127.0.0.1:8000/",
+    "ontask_api_token": "96ceb3b04c66be6b1ba60aca9e7ac09fcc153509"
 }
