@@ -95,9 +95,6 @@ celerybeat-schedule
 celerybeat.pid
 ontask/tests/fixtures/*.gz
 
-# avoid to leak the API key
-/ontask/agent/config.json
-
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

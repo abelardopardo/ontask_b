@@ -1,0 +1,6 @@
+{
+    "canvas_base_url": "https://canvas-dev.c3l.ai",
+    "canvas_api_token": "",
+    "ontask_base_url": "http://127.0.0.1:8000/",
+    "ontask_api_token": ""
+}
