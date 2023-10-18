@@ -1,0 +1,13 @@
+<h3>Practical</h3>
+<h4>Overview</h4>
+<p><span lang="EN-US">In this Practical we will revisit rule-based classifiers and learn how to build and interpret k-nearest neighbor (KNN) and Na&iuml;ve Bayes classifiers.</span></p>
+<p><span lang="EN-US">We will learn about several useful packages (some being used before) and introduce a method for finding an optimal KNN model.</span></p>
+<h4>Objectives</h4>
+<ul>
+    <li><span lang="EN-US">Build a predictive model using KNN algorithm.</span></li>
+    <li><span lang="EN-US">Choose optimal<i><span>&nbsp;</span>K<span>&nbsp;</span></i>for a KNN model.</span></li>
+    <li><span lang="EN-US">Build a Na&iuml;ve Bayes classification model.</span></li>
+    <li><span lang="EN-US">Build a rule-based classification predictive model.</span></li>
+    <li><span lang="EN-US">Make a prediction using models we built.</span></li>
+</ul>
+<div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207340"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Week 8 Practical<span class="accesshide ">File</span></span></a><span>&nbsp;</span><a class="inline_disabled" href="https://lo.unisa.edu.au/pluginfile.php/3986489/mod_folder/content/0/L7_rule_based.pdf?forcedownload=1" target="_blank" rel="noopener noreferrer"></a></div>

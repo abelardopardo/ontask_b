@@ -134,6 +134,7 @@ PROFILE_CPROFILE = env('PROFILE_CPROFILE', default=False)
 PROFILE_SILK = env('PROFILE_SILK', default=False)
 
 REDIS_URL = env.cache('REDIS_URL')
+#REDIS_URL = env('REDIS_URL')
 
 SECRET_KEY = env('SECRET_KEY')
 

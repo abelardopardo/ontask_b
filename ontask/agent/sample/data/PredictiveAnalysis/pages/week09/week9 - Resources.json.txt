@@ -1,0 +1,33 @@
+<h3 id="yui_3_17_2_1_1691844091569_76">Videos</h3>
+<ul id="yui_3_17_2_1_1691844091569_41" class="section img-text">
+    <li id="module-3207367" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207367"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Use a Neural Network (via LinkedIn Learning - 3m 45s)<span class="accesshide ">URL</span></span></a>
+        <p id="yui_3_17_2_1_1691844091569_87">The video is a part of the Artificial Intelligence Foundations: Neural Networks course, by Doug Rose.</p>
+    </li>
+    <li id="module-3207368" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207368"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Multilayer perceptrons (via LinkedIn Learning - 4m 4s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Artificial Intelligence Foundations: Neural Networks course, by Doug Rose.</p>
+    </li>
+    <li id="module-3207369" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207369"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Make decisions with neurons (via LinkedIn Learning - 4m 14s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Artificial Intelligence Foundations: Neural Networks course, by Doug Rose.</p>
+    </li>
+    <li id="module-3207370" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207370"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Neurons and artificial neurons (via LinkedIn Learning - 4m 31s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Neural Networks and Convolutional Neural Networks Essential Training course, by Jonathan Fernandes.</p>
+    </li>
+    <li id="module-3207371" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207371"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Gradient descent (via LinkedIn Learning - 3m 34s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Neural Networks and Convolutional Neural Networks Essential Training course, by Jonathan Fernandes.</p>
+    </li>
+    <li id="module-3207372" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207372"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Neural Networks (via LinkedIn Learning - 3m 11s)<span class="accesshide ">URL</span></span></a>
+        <p id="yui_3_17_2_1_1691844091569_92">The video is a part of the Neural Networks and Convolutional Neural Networks Essential Training course, by Jonathan Fernandes.</p>
+    </li>
+</ul>
+<h4>Week 9: Neural Networks - Gradient descent and Backpropagation</h4>
+<p>(Credit to&nbsp;Dr Weijia Zhang)</p>
+<ul id="yui_3_17_2_1_1691844091569_41" class="section img-text">
+    <li id="module-3207374" class="activity label modtype_label  hasinfo"><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=df3e0d9f-b810-4699-97f7-ac4600684206&amp;v=1" width="450" height="300" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe></li>
+</ul>
+<div class="mod-indent-outer w-100">
+    <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3257776"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Lecture 9 Slides<span class="accesshide ">File</span></span></a></div>
+    <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3257776"></a></div>
+    <h4>Week 9 Lecture</h4>
+    <p>(Uploaded May 9, 2023)</p>
+    <div class="embed-responsive-container"><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=b393d50a-5eb9-4f43-8b07-affd00652bd3&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe></div>
+</div>

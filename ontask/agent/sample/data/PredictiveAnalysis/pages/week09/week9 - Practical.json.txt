@@ -1,0 +1,16 @@
+<h3>Practical</h3>
+<h4>Overview</h4>
+<p><span lang="EN-US">Covering neural networks requires more than one week in a single course. Therefore, in this practical, we will focus on learning basic principles that underlay more complex implementations of neural networks.</span></p>
+<p id="yui_3_17_2_1_1691844091569_68"><span lang="EN-US">We will implement a simple Perceptron using Python. As we discussed in the lecture, the Perceptron is a simple learning algorithm designed by Frank Rosenblatt. In this practical, we will do a step-by-step calculation to better understand how Perceptron works, before going into an implementation of a simple neural network with one hidden layer.</span></p>
+<h4>Objectives</h4>
+<ul>
+    <li><span lang="EN-US">Understand basic principles behind Perceptron learning algorithm.</span></li>
+    <li><span lang="EN-US">Computing AND gate using neural networks.</span></li>
+    <li><span lang="EN-US">Implementing a neural network with one hidden layer</span></li>
+</ul>
+<div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207365"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Week 9 Practical<span class="accesshide ">File</span></span></a><span>&nbsp;</span></div>
+<div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3257780"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Perceptron Learning<span class="accesshide ">File</span></span></a><span>&nbsp;</span></div>
+<div class="activityinstance">
+    <p style="padding-left: 40px;" dir="ltr">As we discussed in the lecture, perceptron learning algorithm was covered in our practical.&nbsp;</p>
+    <p style="padding-left: 40px;" dir="ltr">Please take a look at those slides and familiarise yourself with the procedure.</p>
+</div>

@@ -1,0 +1,18 @@
+{
+  "question[question_name]": "Question 2",
+  "question[question_text]": "<p>Which of the following option is true about k-NN algorithm?</p><p>Select one:</p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "It can be used for classification.", 
+  "question[answers][0][answer_weight]": 0, 
+  "question[answers][1][answer_text]": "It can be used in both classification and regression.", 
+  "question[answers][1][answer_weight]": 100,
+  "question[answers][2][answer_text]": "It can be used for regression.", 
+  "question[answers][2][answer_weight]": 0
+}

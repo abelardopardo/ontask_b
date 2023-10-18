@@ -1,0 +1,22 @@
+{
+  "question[question_name]": "Question 3",
+  "question[question_text]": "<p>Feed-forward neural networks have the following characteristics (select all that apply):</p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_answers_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "The first layer is the input and the last layer is the output. If there is more than one hidden layer, we call them “deep” neural networks.",
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "Perceptrons in the same layer are connected.",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "Each perceptron in one layer is connected to every perceptron on the next layer.",
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "The activities of the neurons in each layer are a non-linear function of the activities in the layer below.",
+  "question[answers][3][answer_weight]": 100,
+  "question[answers][4][answer_text]": "There are no feedback connections in which outputs of the model are fed back into itself.",
+  "question[answers][4][answer_weight]": 100
+}

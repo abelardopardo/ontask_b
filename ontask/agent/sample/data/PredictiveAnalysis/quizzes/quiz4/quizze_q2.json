@@ -1,0 +1,22 @@
+{
+  "question[question_name]": "Question 2",
+  "question[question_text]": "<p>Suppose you are using a linear SVM classifier with 2 class classification problem. Observe the following data in which labeled points represent support vectors (1-3).</p><p><img src=\"https://lo.unisa.edu.au/pluginfile.php/3986037/question/questiontext/5398955/2/19023118/svm.png?time=1621566657562\"/></p><p>What happens with the decision boundary in the following cases (select one correct answer)?</p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Decision boundary will not change if you remove data point labeled with 1.", 
+  "question[answers][0][answer_weight]": 0, 
+  "question[answers][1][answer_text]": "Decision boundary will not change if you remove data point labeled with 2.", 
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "Decision boundary will not change if you remove data point labeled with 3.", 
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "The three examples are positioned such that removing any of them the decision boundary will change.", 
+  "question[answers][3][answer_weight]": 100,
+  "question[answers][4][answer_text]": "None of the above", 
+  "question[answers][4][answer_weight]": 0
+}

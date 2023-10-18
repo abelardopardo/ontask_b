@@ -1,0 +1,42 @@
+<p>In this Practical we will introduce some of the commonly used data exploration techniques in R. We will focus on several useful R commands which allow you to observe data and prepare descriptive statistics.</p>
+<h5><strong>Objectives</strong>:</h5>
+<ul>
+    <li>Load and explore data</li>
+    <li><span>Create descriptive statistics</span></li>
+    <li>Observe data using univariate plots</li>
+</ul>
+<h5><strong>Practical Overview</strong></h5>
+<p>This short video provides an introduction to practical activities that we will be covering in the course.</p>
+<div><a href="https://unisa.au.panopto.com/Panopto/Pages/Viewer.aspx?id=bed97531-e4e3-4894-b4d9-ad7c002ef1bf" target="_blank" rel="noopener">week2_practical_intro</a></div>
+<p><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=bed97531-e4e3-4894-b4d9-ad7c002ef1bf&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-mce-fragment="1"></iframe> </p>
+<p>&nbsp;</p>
+<ul>
+    <li>
+        <table>
+            <tbody>
+                <tr>
+                    <td><a class="ygtvspacer" href="https://lo.unisa.edu.au/course/view.php?id=28611&amp;sectionid=661823#">&nbsp;</a></td>
+                    <td><img class="icon " title="Practical data" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/folder-24" alt="Practical data" />Practical data</td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="ygtvtableel2" class="ygtvtable ygtvdepth1 ygtv-expanded ygtv-highlight0" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr class="ygtvrow">
+                    <td class="ygtvcell ygtvblankdepthcell"></td>
+                    <td class="ygtvcell ygtvtn"></td>
+                    <td id="ygtvcontentel2" class="ygtvcell ygtvhtml ygtvcontent"><span class="fp-filename-icon"><a href="https://lo.unisa.edu.au/pluginfile.php/3986354/mod_folder/content/0/camden_census_data.csv?forcedownload=1"><span class="fp-icon"><img class="icon " title="camden_census_data.csv" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/spreadsheet-24" alt="camden_census_data.csv" /></span><span class="fp-filename">camden_census_data.csv</span></a></span></td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="ygtvtableel3" class="ygtvtable ygtvdepth1 ygtv-expanded ygtv-highlight0" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr class="ygtvrow">
+                    <td class="ygtvcell ygtvblankdepthcell"></td>
+                    <td class="ygtvcell ygtvln"></td>
+                    <td id="ygtvcontentel3" class="ygtvcell ygtvhtml ygtvcontent"><span class="fp-filename-icon"><a href="https://lo.unisa.edu.au/pluginfile.php/3986354/mod_folder/content/0/Week%202%20Practical.pdf?forcedownload=1"><span class="fp-icon"><img class="icon " title="Week 2 Practical.pdf" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="Week 2 Practical.pdf" /></span><span class="fp-filename">Week 2 Practical.pdf</span></a></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </li>
+</ul>

@@ -1,0 +1,20 @@
+<h3>Practical</h3>
+<h4>Overview</h4>
+<p id="yui_3_17_2_1_1691839755294_129"><span>In this Practical we will learn how to produce a set of classification rules using the RIPPER algorithm.</span></p>
+<h4>Objectives</h4>
+<ul>
+    <li><span lang="EN-US">Understand the principles of the RIPPER algorithm.</span></li>
+    <li><span lang="EN-US">Learn classification rules on a sample dataset.</span></li>
+    <li><span lang="EN-US">Apply the learned rules on test tuples.</span></li>
+</ul>
+<div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207319"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Practical 7<span class="accesshide ">File</span></span></a><span>&nbsp;</span></div>
+<div class="contentafterlink">
+    <div class="no-overflow">
+        <div class="no-overflow">
+            <p style="padding-left: 40px;" dir="ltr">The provided sample (p7-ripper-sample.xlsx) explains the RIPPER algorithm on a different dataset.</p>
+            <p dir="ltr"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207320"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/spreadsheet-24" alt="" aria-hidden="true" /><span class="instancename">Practical 7 example<span class="accesshide ">File</span></span></a></p>
+            <p dir="ltr"><span class="instancename"><span class="accesshide "><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207321"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/spreadsheet-24" alt="" aria-hidden="true" />DataFile</a><span>&nbsp;</span><br /></span></span></p>
+            <p dir="ltr"><a class="inline_disabled" href="https://lo.unisa.edu.au/pluginfile.php/3986489/mod_folder/content/0/L7_rule_based.pdf?forcedownload=1" target="_blank" rel="noopener noreferrer"><span class="instancename"><span class="accesshide "><span><img src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="L7_rule_based.pdf" /> L7_rule_based.pdf</span></span></span></a></p>
+        </div>
+    </div>
+</div>

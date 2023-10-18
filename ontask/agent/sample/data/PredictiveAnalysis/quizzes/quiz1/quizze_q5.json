@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 5",
+  "question[question_text]": "<p><span>Which of the following statements does&nbsp;</span><strong>NOT</strong><span>&nbsp;describe sampling?</span></p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Because it is easier and viable to use.",
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "It is the main technique employed for data selection.",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "Statisticians sample because obtaining the entire set of data of interest is too expensive or time consuming.",
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "It is used in data mining because processing the entire set of data or interest is too expensive or time consuming.",
+  "question[answers][3][answer_weight]": 0
+}

@@ -1,0 +1,22 @@
+<div class="v-sheet theme--light transparent" data-v-5bf4cec4="" data-resource-identifier=""><span>Videos</span></div>
+<ul>
+    <li>
+        <div class="activityinstance">
+            <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207164">
+            <span class="instancename">A definition of data mining (via LinkedIn Learning - 1m 8s)<span class="accesshide ">URL</span></span></a></div>
+            <p>The video is a part of the Essentials Elements of Predictive Analytics and Data Mining course, by Keith McCormik.</p>
+        </div>
+    </li>
+    <li>
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207165">What's data mining and predictive analytics (via LinkedIn Learning - 2m 5s)</a>
+        <p>The video is a part of the Essentials Elements of Predictive Analytics and Data Mining course, by Keith McCormik.</p>
+    </li>
+    <li>
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207166">What are the essential elements? (via LinkedIn Learning - 1m 48s)</a>
+        <p>The video is a part of the Essentials Elements of Predictive Analytics and Data Mining course, by Keith McCormik.</p>
+    </li>
+    <li>
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207167">Predictive analytics (via LinkedIn Learning - 2m 14s)</a>
+        <p>The video is a part of the Data Analytics for Business Professionals course, by John Johnson.</p>
+    </li>
+</ul>

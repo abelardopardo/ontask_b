@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 4",
+  "question[question_text]": "<p>The learning rate is a hyperparameter that controls how much to change the model in response to the estimated error each time the model weights are updated. Select all that applies:</div>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_answers_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "<div class=\"specificfeedback\"><span class=\"formattedusercontent\">Your answer is correct.</span></div>\n<div class=\"generalfeedback\">\n<p dir=\"ltr\">Techniques:</p>\n<p dir=\"ltr\">&nbsp;</p>\n<ul>\n<li>Brute force approach:</li>\n<ul>\n<li>Try all possible feature subsets as input to data mining algorithm</li>\n</ul>\n<li>Embedded approaches:</li>\n<ul>\n<li>Feature selection occurs naturally as part of the data mining&nbsp;<span>algorithm</span></li>\n</ul>\n<li>Filter approaches:</li>\n<ul>\n<li>Features are selected before data mining algorithm is run</li>\n</ul>\n<li>Wrapper approaches:</li>\n<ul>\n<li>Use the data mining algorithm as a black box to find best subset&nbsp;<span>of attributes</span></li>\n</ul>\n</ul>\n<p>&nbsp;</p>\n</div>\n<div class=\"rightanswer\">The correct answers are:\n<p dir=\"ltr\">Brute-force approach<br>,</p>\n<p dir=\"ltr\">Embedded approaches<br>,</p>\n<p dir=\"ltr\">Filter approaches<br>,</p>\n<p dir=\"ltr\">Wrapper approaches</p>\n</div>",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Learning rate defines how big the steps are gradient descent takes into the direction of the local minimum.",
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "If we set the learning rate to a very small value, gradient descent will reach the local minimum in a shortest time and converge quickly.",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "For gradient descent to reach the local minimum we must set the learning rate to an appropriate value, which is neither too low nor too high.",
+  "question[answers][2][answer_weight]": 100,
+  "question[answers][3][answer_text]": "If gradient descent is working properly, the cost function should increase after every iteration.",
+  "question[answers][3][answer_weight]": 0
+}

@@ -1,0 +1,60 @@
+<h3 id="yui_3_17_2_1_1691844091569_76">Videos</h3>
+<ul>
+    <li class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207391"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Linear SVM (via LinkedIn Learning - 8m 2s)<span class="accesshide ">URL</span></span></a></li>
+</ul>
+<div class="contentafterlink">
+    <div class="no-overflow">
+        <div class="no-overflow">
+            <p style="padding-left: 40px;">The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormick.</p>
+            <ul>
+                <li><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207392"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">What is Support Vector Machine (via LinkedIn Learning - 4m 47s)<span class="accesshide ">URL</span></span></a></li>
+            </ul>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p style="padding-left: 40px;">The video is a part of the Applied Machine Learning Algorithms course, by Derek Jedamski.</p>
+                        <ul id="yui_3_17_2_1_1691845026476_37" class="section img-text">
+                            <li id="module-3207393" class="activity url modtype_url  hasinfo">
+                                <div class="mod-indent-outer w-100">
+                                    <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207393"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">When you should consider using SVM (via LinkedIn Learning - 2m 55s)<span class="accesshide ">URL</span></span></a></div>
+                                    <div class="contentafterlink">
+                                        <div class="no-overflow">
+                                            <div class="no-overflow">
+                                                <p>The video is a part of the Applied Machine Learning Algorithms course, by Derek Jedamski.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li id="module-3207394" class="activity url modtype_url  hasinfo">
+                                <div class="mod-indent-outer w-100">
+                                    <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207394"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">What are the key hyperparameters to consider (via LinkedIn Learning - 4m 35s)<span class="accesshide ">URL</span></span></a></div>
+                                    <div class="contentafterlink">
+                                        <div class="no-overflow">
+                                            <div class="no-overflow">
+                                                <p>The video is a part of the Applied Machine Learning Algorithms course, by Derek Jedamski.</p>
+                                                <p><a class="inline_disabled" href="https://lo.unisa.edu.au/pluginfile.php/3986562/mod_folder/content/0/L10_svm.pptx?forcedownload=1" target="_blank" rel="noopener noreferrer"><span class="fp-icon"><img class="icon " title="L10_svm.pptx" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/powerpoint-24" alt="L10_svm.pptx" /></span><span class="fp-filename">L10_svm.pptx</span></a></p>
+                                                <p>&nbsp;</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mod-indent-outer w-100">
+    <div class="embed-responsive-container"><span>The lecture by Professor Yaser Abu-Mostafa is&nbsp;</span><strong>OPTIONAL</strong><span>. It provides a great overview of the math behind the SVM and it is an excellent resource.</span></div>
+    <div class="embed-responsive-container">
+        <div><iframe id="id_videojs_64d781a6a2bee_1_youtube_api" class="vjs-tech" title="Lecture 14 - Support Vector Machines" src="https://www.youtube.com/embed/eHsErlPJWUU?controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0&amp;loop=0&amp;fs=0&amp;hl=en&amp;enablejsapi=1&amp;origin=https%3A%2F%2Flo.unisa.edu.au&amp;widgetid=1" width="640" height="360" allowfullscreen="allowfullscreen" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" data-mce-fragment="1"></iframe></div>
+        <div>
+            <h4>Week 10 Lecture Recording</h4>
+            <p>(Uploaded May 16, 2023)</p>
+            <p><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=67e699bf-5392-4d60-80c1-b0040059b019&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen"></iframe></p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+{
+  "question[question_name]": "Question 4",
+  "question[question_text]": "<p><span>Select all the feature subset selection techniques</span></p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_answers_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "<div class=\"specificfeedback\"><span class=\"formattedusercontent\">Your answer is correct.</span></div>\n<div class=\"generalfeedback\">\n<p dir=\"ltr\">Techniques:</p>\n<p dir=\"ltr\">&nbsp;</p>\n<ul>\n<li>Brute force approach:</li>\n<ul>\n<li>Try all possible feature subsets as input to data mining algorithm</li>\n</ul>\n<li>Embedded approaches:</li>\n<ul>\n<li>Feature selection occurs naturally as part of the data mining&nbsp;<span>algorithm</span></li>\n</ul>\n<li>Filter approaches:</li>\n<ul>\n<li>Features are selected before data mining algorithm is run</li>\n</ul>\n<li>Wrapper approaches:</li>\n<ul>\n<li>Use the data mining algorithm as a black box to find best subset&nbsp;<span>of attributes</span></li>\n</ul>\n</ul>\n<p>&nbsp;</p>\n</div>\n<div class=\"rightanswer\">The correct answers are:\n<p dir=\"ltr\">Brute-force approach<br>,</p>\n<p dir=\"ltr\">Embedded approaches<br>,</p>\n<p dir=\"ltr\">Filter approaches<br>,</p>\n<p dir=\"ltr\">Wrapper approaches</p>\n</div>",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Brute-force approach",
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "Embedded approaches",
+  "question[answers][1][answer_weight]": 100,
+  "question[answers][2][answer_text]": "Filter approaches",
+  "question[answers][2][answer_weight]": 100,
+  "question[answers][3][answer_text]": "Wrapper approaches",
+  "question[answers][3][answer_weight]": 100,
+  "question[answers][4][answer_text]": "Stratified approaches",
+  "question[answers][4][answer_weight]": 0
+}

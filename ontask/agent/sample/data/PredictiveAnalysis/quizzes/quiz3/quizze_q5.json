@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 5",
+  "question[question_text]": "<div><p>Consider a classification problem we did in one of the lectures:</p><p><img src=\"https://lo.unisa.edu.au/pluginfile.php/3986037/question/questiontext/5350362/5/19023114/image.png\"/></p><p>Suppose a rule-based classifier produces the following rule set:</p><p>R1: (Give Birth = no), (Can Fly = yes) = Birds</p><p>R2: (Give Birth = no), (Live in Water = yes) = Fishes</p><p>R3: (Give Birth = yes), (Blood Type = warm) = Mammals</p><p>R4: (Give Birth = no), (Can Fly = no) = Reptiles</p><p>R5: (Live in Water = sometimes) = Amphibians</p></div><div>Select one or more:</div>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_answers_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "The rules are mutually exclusive.",
+  "question[answers][0][answer_weight]": 0, 
+  "question[answers][1][answer_text]": "The rule set is exhaustive.",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "Ordering is needed for this set of rules.",
+  "question[answers][2][answer_weight]": 100,
+  "question[answers][3][answer_text]": "Default class is needed for the rule set.",
+  "question[answers][3][answer_weight]": 100
+}

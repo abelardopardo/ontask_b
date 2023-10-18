@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 1",
+  "question[question_text]": "<p><span>Please select all the characteristics of&nbsp;</span><strong id=\"yui_3_17_2_1_1689068637489_100\">Ordinal data</strong><span>.</span></p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_answers_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Measured", 
+  "question[answers][0][answer_weight]": 0, 
+  "question[answers][1][answer_text]": "Ordered", 
+  "question[answers][1][answer_weight]": 100,
+  "question[answers][2][answer_text]": "Equidistant", 
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "Have meaningful zero", 
+  "question[answers][3][answer_weight]": 0
+}

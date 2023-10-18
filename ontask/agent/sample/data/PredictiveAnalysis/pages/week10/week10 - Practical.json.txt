@@ -1,0 +1,13 @@
+<h3>Practical</h3>
+<h4>Overview</h4>
+<p><span lang="EN-US">Support Vector Machine (SVM) is one of the most used classifiers. It has been applied in many real-world problems.</span></p>
+<p><span lang="EN-US">In this Practical, we will explain the basic idea behind SVM, model an SVM classifier using three kernels, and show the parameter tuning procedure for each of those three kernels.</span></p>
+<h4>Objectives</h4>
+<ul>
+    <li><span lang="EN-US">Understand basic principles behind SVM.</span></li>
+    <li><span lang="EN-US">Implement SVM (with<span>&nbsp;</span></span><span lang="EN-US">linear</span><span lang="EN-US"><span>&nbsp;</span>kernel) using R.</span></li>
+    <li><span lang="EN-US">Tune parameters for SVM with<span>&nbsp;</span></span><span lang="EN-US">linear</span><span lang="EN-US"><span>&nbsp;</span>kernel.</span></li>
+    <li><span lang="EN-US">Tune parameters for SVM with<span>&nbsp;</span></span><span lang="EN-US">polynomial</span><span lang="EN-US"><span>&nbsp;</span>kernel.</span></li>
+    <li>Tune parameters for SVM with&nbsp;<span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;" lang="EN-US">rbf</span><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;" lang="EN-US">&nbsp;kernel.</span></li>
+</ul>
+<p><span lang="EN-US"><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207389"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Week 10 Practical<span class="accesshide ">File</span></span></a><span>&nbsp;</span></span></p>

@@ -1,0 +1,8 @@
+{
+  "module[name]": "Contents",
+  "module[unlock_at]":"2023-07-01T01:00Z",                  
+  "module[position]": 1,                   
+  "module[require_sequential_progress]": false,
+  "module[prerequisite_module_ids][]":[],
+  "module[publish_final_grade]": true
+}

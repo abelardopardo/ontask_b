@@ -1,0 +1,13 @@
+<h3>TO DO</h3>
+<ul>
+    <li><p>✔<span>&nbsp;</span><span><strong>Read</strong>&nbsp;Summary Statistics&nbsp;and&nbsp;Visualisation&nbsp;Sections from Chapter&nbsp;3 of the course textbook (OLAP&nbsp;is optional). Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>)&nbsp;any additional resources you might find relevant.</span></p></li>
+    <li><p>✔<span>&nbsp;</span><span><strong>Complete&nbsp;</strong>Week&nbsp;3 Practical.</span></p></li>
+    <li><p>✔<span>&nbsp;</span><span><strong>Watch&nbsp;</strong>suggested videos.<strong>&nbsp;</strong>This week we provided several videos that focus on data visualisation techniques and understanding data.</span></p></li>
+</ul>
+<h3><span>What you will learn?</span></h3>
+<ul>
+    <li><p><span>Basic terms from statistics, such as mean, median, or variance.</span></p></li>
+    <li><p><span>Techniques used in data exploration.</span></p></li>
+    <li><p><span>Understand and Plot basic&nbsp;graph types, including histograms, bar charts, boxplots.</span></p></li>
+    <li><p><span>Basics of On-Line Analytical Processing.</span></p></li>
+</ul>

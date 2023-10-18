@@ -1,0 +1,8 @@
+<h3>Readings</h3>
+<ul>
+    <li class="activityinstance">
+        <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207386"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/book/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Textbook: Chapter 5 (Section 5.5). Classification: Alternative Techniques</span></a></div>
+    </li>
+</ul>
+<p style="padding-left: 40px;"><a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207285"></a><strong><span lang="EN-AU">Chapter 5, Section 5.5. Support Vector Machine (SVM)</span></strong><span id="yui_3_17_2_1_1691845026476_57" lang="EN-AU">, introduces one of the most commonly used classification techniques. You will find SVM in text classification,&nbsp;hand-writing recognition, and face detection, to name a few applications.</span></p>
+<p style="padding-left: 40px;"><span><iframe id="eres_res_link_19238" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=19238" width="100%" height="100" data-gtm-yt-inspected-6="true"></iframe></span></p>

@@ -1,0 +1,18 @@
+<h3>Additional Resources</h3>
+<p id="yui_3_17_2_1_1691842771139_113">A very good explanation of Rule-Based Classifiers with Python code.</p>
+<ul>
+    <li style="list-style-type: none;">
+        <ul>
+            <li>https://towardsdatascience.com/how-to-perform-explainable-machine-learning-classification-without-any-trees-873db4192c68</li>
+        </ul>
+    </li>
+</ul>
+<p>Also, not mandatory, but highly recommended - a recent paper that introduces RuleKit, a&nbsp;<span>flexible experimental environment allows straightforward investigation of different induction schemes.&nbsp;</span></p>
+<p><span>Gudyś, A., Sikora, M., &amp; Wr&oacute;bel, Ł. (2020). RuleKit: A comprehensive suite for rule-based learning.&nbsp;<i>Knowledge-Based Systems</i>, 105480.</span></p>
+<p><span><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207316"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">RuleKit: A comprehensive suite for rule-based learning</span></a></span></p>
+<h4 id="yui_3_17_2_1_1691842771139_130">Week 7 Lecture - Rule-Based classifiers</h4>
+<p dir="ltr">We are moving from decision trees and this week we are starting to discuss other classification methods. As I mentioned in the lecture, each of the topics we will be covering in the next several weeks can be (and usually is) a course on its own. Please make sure you go through all the materials (lectures, readings and practicals) and feel free to reach out if anything remains unclear.</p>
+<p dir="ltr"><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=30d7a5f7-a39a-4a14-881e-ae880096a5a0&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true"></iframe></p>
+<h4>Guest Lecture by Damien Coyle</h4>
+<h5>Data Science in the Workplace</h5>
+<p><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=23c4748d-6f86-4c09-aa5c-adda0007e642&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true"></iframe></p>

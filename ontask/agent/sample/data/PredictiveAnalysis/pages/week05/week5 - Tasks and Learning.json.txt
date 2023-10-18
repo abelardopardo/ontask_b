@@ -1,0 +1,28 @@
+<h3>TO DO</h3>
+<ul>
+    <li>
+        <p>✔<span>&nbsp;</span><span><strong>Read</strong> <span id="yui_3_17_2_1_1691839755294_70">Section 4.4 Model Overfitting&nbsp;</span>from Chapter 4 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>)&nbsp;any additional resources you might find relevant.</span></p>
+    </li>
+    <li>
+        <p>✔<span>&nbsp;</span><strong>Complete<span>&nbsp;</span></strong>Week 5 Practical.</p>
+    </li>
+    <li><span>✔&nbsp;</span><span><strong>Submit&nbsp;</strong>Quiz 2. Please note that this quiz is a part of your continuous assessment.</span></li>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>Watch&nbsp;</strong>suggested videos. We provide several videos that provide further clarification on model overfitting. Please make sure to watch those videos as model overfitting is an important, yet challenging concept to understand.</span></p>
+    </li>
+</ul>
+<h3 id="yui_3_17_2_1_1691832705207_59"><span>What you will learn?</span></h3>
+<ul>
+    <li>
+        <p><span>Classification Errors - training, test, and generalisation errors.</span></p>
+    </li>
+    <li>
+        <p><span>Model overfitting and underfitting - when models become too complex or too simple.</span></p>
+    </li>
+    <li>
+        <p><span>Cross-validation.</span></p>
+    </li>
+    <li><span>Model selection for Decision Trees - pre-pruning and post-pruning.</span>
+        <p>&nbsp;</p>
+    </li>
+</ul>

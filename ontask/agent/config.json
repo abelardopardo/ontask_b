@@ -1,6 +1,6 @@
 {
     "canvas_base_url": "https://canvas-dev.c3l.ai",
-    "canvas_api_token": "LX59dHQWrFBr15fZOXYnagk9soYgytQAzYY7oiHL9uicfHnCaFplnT8CO6c2dQwL",
+    "canvas_api_token": "uioyJk4K9cAudt7pRRreZGkJXiOTkhkNvE6N0DoVDFZLd5yBuVJh4GBX8YPlLSTG",
     "ontask_base_url": "http://127.0.0.1:8000/",
-    "ontask_api_token": "96ceb3b04c66be6b1ba60aca9e7ac09fcc153509"
+    "ontask_api_token": "7fd5a40438ba6cb6a1fb0cd25282eefbf501e990"
 }

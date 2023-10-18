@@ -1,0 +1,28 @@
+<h3>TO DO</h3>
+<ul>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>Read</strong>&nbsp;Section 4.5 Evaluating the Performance of a Classifier&nbsp;from Chapter 4 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>)&nbsp;any additional resources you might find relevant.</span></p>
+    </li>
+    <li>
+        <p>✔<span>&nbsp;</span><strong>Complete<span>&nbsp;</span></strong>Week 6 Practical.</p>
+    </li>
+    <li><span>✔&nbsp;</span><span><strong>Watch&nbsp;</strong>suggested videos. We added several videos on model evaluation. You might find these very useful.</span></li>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>(If you need)&nbsp;</strong>Go back to Week 3 and watch LinkedIn Learning videos about Properties of Data. We will need to understand basic properties of normal distribution for this lecture.</span></p>
+    </li>
+</ul>
+<h3 id="yui_3_17_2_1_1691832705207_59"><span>What you will learn?</span></h3>
+<ul>
+    <li>
+        <p><span>Metrics for Performance Evaluation</span></p>
+    </li>
+    <li>
+        <p><span>Methods for Performance Evaluation</span></p>
+    </li>
+    <li>
+        <p><span>Methods for Model Comparison</span></p>
+    </li>
+    <li><span>Advantages and Limitations of introduced metrics and methods</span><br />
+        <p>&nbsp;</p>
+    </li>
+</ul>

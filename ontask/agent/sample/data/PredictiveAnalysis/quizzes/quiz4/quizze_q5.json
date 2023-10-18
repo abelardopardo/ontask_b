@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 5",
+  "question[question_text]": "<div><p>The effectiveness of an SVM depends upon:</p></div><div>Select one:</div>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Selection of Kernel.",
+  "question[answers][0][answer_weight]": 0, 
+  "question[answers][1][answer_text]": "Kernel Parameters",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "Soft Margin Parameter C",
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "All of the above",
+  "question[answers][3][answer_weight]": 100
+}
