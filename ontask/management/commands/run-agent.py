@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from ontask.agent.utils.authenticate import authenticate_canvas, fetch_canvas_data, update_ontask_table
+from ontask.agent.utils.authenticate import authenticate_canvas
+from ontask.agent.data_operations.data_ops import fetch_canvas_data, data_has_changes
 import logging
 
 class Command(BaseCommand):
@@ -21,19 +22,30 @@ class Command(BaseCommand):
 
         # Fetch the current Canvas data
         canvas_data = fetch_canvas_data()
-        if not canvas_data:
+        
+        if canvas_data.empty:
             logging.error('Failed to fetch data from Canvas.')
             return
-
-        # Fetch existing data in OnTask
-        ontask_data = self.fetch_ontask_data()
-
-        # Check for data changes and update OnTask accordingly
-        if self.data_has_changes(canvas_data, ontask_data):
-            update_ontask_table(canvas_data)
-            logging.info('OnTask table updated successfully.')
-        
         else:
-            logging.info('No changes detected. OnTask table update skipped.')
+            pass
+        
+         # Fetch existing data in OnTask
+        ontask_data = self.fetch_ontask_data()  
 
-        self.stdout.write(self.style.SUCCESS('Agent operation completed.'))
+        # Check if there are changes between the two dataframes
+        if data_has_changes(canvas_data, ontask_data):
+            print("Data has changed. Proceed with updating OnTask.")
+            # Check for data changes and update OnTask accordingly
+            if self.data_has_changes(canvas_data, ontask_data):
+           # merge_data_to_ontask(canvas_data)
+                logging.info('OnTask table updated successfully.')
+        
+            else:
+                logging.info('No changes detected. OnTask table update skipped.')
+
+            self.stdout.write(self.style.SUCCESS('Agent operation completed.'))
+
+        else:
+            print("Data has not changed. No need to update OnTask.")
+
+        
