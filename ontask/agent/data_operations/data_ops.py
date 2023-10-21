@@ -2,60 +2,77 @@ import json
 import os
 import requests
 import logging
-from colorama import Fore
 import pandas as pd
+from colorama import Fore
 
-# Setting up logging
+# Initialize logging
 logging.basicConfig(level=logging.INFO)
 
-# Load config.json
+# Read configuration from JSON file
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
 
 with open(CONFIG_PATH, 'r') as file:
     config = json.load(file)
 
-    
-def fetch_canvas_data():
+def fetch_canvas_data(course_id, quiz_id):
     headers = {
         "Authorization": f"Bearer {config['canvas_api_token']}"
     }
-    endpoint = f"{config['canvas_base_url']}/api/v1/courses/396/quizzes/377/submissions"
+    endpoint = f"{config['canvas_base_url']}/api/v1/courses/{course_id}/quizzes/{quiz_id}/submissions"
     response = requests.get(endpoint, headers=headers)
+    
     if response.status_code == 200:
-        return response.json()
+        try:
+            data = response.json()
+            return pd.DataFrame(data['quiz_submissions'])
+        except json.JSONDecodeError:
+            logging.error(f"Failed to decode JSON: {response.text}")
+            return pd.DataFrame()
     else:
-        logging.error(f"Error fetching courses: {response.text}")
-        return []
+        logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
+        return pd.DataFrame()
 
-def data_has_changes(canvas_data, ontask_data):
-    # Check if either DataFrame is empty
-    if canvas_data.empty and ontask_data.empty:
-        return False  # No changes if both are empty
-    
-    if canvas_data.empty or ontask_data.empty:
-        return True  # One is empty, and the other is not, so they can't be equal
-    
-    # If neither are empty, then compare them based on your criteria
-    return not canvas_data.equals(ontask_data)
-
-
-# # Merging data from Canvas to OnTask workflow
-def merge_data_to_ontask(df, wid):
+def fetch_ontask_data():
     headers = {
-        "authorization": f"Basic 96ceb3b04c66be6b1ba60aca9e7ac09fcc153509",
-        "accept": "application/json",
-        "X-CSRFToken": f"{config['ontask_api_token']}"
+        "accept": "application/json" ,
+        "X-CSRFToken": "BD0VkMLFKLrpOnwuGC8qjgG1LAGfGjt4A1vtJ4vMpJRwhASntwaebIo01VzSl5dI",
+        "Authorization": f"Bearer {config['ontask_api_token']}"
     }
-    endpoint = f"{config['ontask_base_url']}/table/{wid}/merge"  
+    endpoint = f"{config['ontask_base_url']}/table"
+    response = requests.get(endpoint, headers=headers)
+
+    if response.status_code == 200:
+        try:
+            return pd.DataFrame(response.json())
+        except json.JSONDecodeError:
+            logging.error(f"Failed to decode JSON: {response.text}")
+            return pd.DataFrame()
+    else:
+        logging.error(f"Error fetching OnTask data: {response.status_code}, {response.text}")
+        return pd.DataFrame()
+
+
+def update_ontask_table(new_data, wid):
+    headers = {
+        "accept": "application/json" ,
+        "X-CSRFToken": "",
+        "Authorization": f"Bearer {config['ontask_api_token']}"
+    }
+    endpoint = f"{config['ontask_base_url']}/table/{wid}/merge/"
+    data_payload = new_data.to_dict(orient="records")
+    response = requests.post(endpoint, headers=headers, json=data_payload)
     
-    data_payload = df.to_dict()  # Assuming df is a DataFrame
-    
-    response = requests.put(endpoint, headers=headers, json=data_payload)
-    if response.status_code == 200:  
-        logging.info("Successfully merged data to OnTask.")
+    if response.status_code == 201:
+        logging.info("Successfully updated OnTask table.")
         return True
     else:
-        logging.error(f"Failed to merge data to OnTask. Status Code: {response.status_code}")
-        logging.error(response.text)
+        logging.error(f"Failed to update OnTask table: {response.text}")
         return False
+
+def data_has_changes(canvas_data, ontask_data):
+    if canvas_data.empty and ontask_data.empty:
+        return False
+    if canvas_data.empty or ontask_data.empty:
+        return True
+    return not canvas_data.equals(ontask_data)
