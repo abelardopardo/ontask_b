@@ -24,7 +24,7 @@ BASE_DIR = environ.Path(
 ONTASK_TESTING = 'test' in sys.argv
 
 # Add the run-agent ENV file
-RUN_AGENT = 'run-agent' in sys.argv
+RUN_AGENT = 'run-agent' in sys.argv or 'run-agent1' in sys.argv
 if RUN_AGENT:
     os.environ["ENV_FILENAME"] = "../ontask/agent/agent.env"
 

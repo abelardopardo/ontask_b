@@ -2,22 +2,35 @@ import json
 import os
 import requests
 import logging
-<<<<<<< HEAD
 import environ
-=======
 from colorama import Fore
 import pandas as pd
->>>>>>> 9e720d5c396f3457d2fbc7ed98577ff0ea029354
 
+from ontask.agent.canvas_api.c3l import C3L
 # Setting up logging
 logging.basicConfig(level=logging.INFO)
 
 env = environ.Env()
 
-print("CANVAS_BASE_URL" ,env("CANVAS_BASE_URL" , default=""))
-print("CANVAS_API_TOKEN",env("CANVAS_API_TOKEN", default=""))
-print("ONTASK_BASE_URL" ,env("ONTASK_BASE_URL" , default=""))
-print("ONTASK_API_TOKEN",env("ONTASK_API_TOKEN", default=""))
+class agent:
+    def __init__(self):
+        self.canvas_base_url  = env("CANVAS_BASE_URL" , default="")
+        self.canvas_api_token = env("CANVAS_API_TOKEN", default="")
+        self.ontask_base_url  = env("ONTASK_BASE_URL" , default="")
+        self.ontask_api_token = env("ONTASK_API_TOKEN", default="")
+
+        self.__base_path__ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.__c3l__ = C3L(
+            self.canvas_base_url,
+            self.canvas_api_token
+        )
+
+    def create_course(self):
+        pass
+
+    def get_quizes(self):
+        pass
+
 
 # Load config.json
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
