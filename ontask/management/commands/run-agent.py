@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from ontask.agent.utils.authenticate import authenticate_canvas
-from ontask.agent.data_operations.data_ops import fetch_canvas_data, fetch_ontask_data, data_has_changes, update_ontask_table
+from ontask.agent.data_operations.data_ops import fetch_canvas_data_submissions, fetch_ontask_data, data_has_changes, update_ontask_table, fetch_canvas_data_quiz_stats
 import logging
 
 class Command(BaseCommand):
@@ -14,8 +14,14 @@ class Command(BaseCommand):
         course_id = 396
         quiz_id = 377
 
-        # Fetch the current Canvas data
-        canvas_data = fetch_canvas_data(course_id, quiz_id)
+        # Fetch the current Canvas quiz stats
+        # Call the function to fetch quiz statistics data
+        self.stdout.write(self.style.SUCCESS(f'Starting to fetch data for course {course_id}, quiz {quiz_id}'))
+        fetch_canvas_data_quiz_stats(course_id, quiz_id)
+
+        self.stdout.write(self.style.SUCCESS('Finished fetching data. Check aaa.csv for output.'))
+        # Fetch the quiz submissions Canvas data
+        canvas_data = fetch_canvas_data_submissions(course_id, quiz_id)
         
         if canvas_data.empty:
             logging.error('Failed to fetch data from Canvas.')
