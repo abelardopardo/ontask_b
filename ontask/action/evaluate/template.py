@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from ontask import models
 # Variable name to store the action ID in the context used to render a
 # template
-from ontask.templatetags import ACTION_CONTEXT_VAR
+from ontask.templatetags.ontask_tags import ACTION_CONTEXT_VAR
 
 VIZ_NUMBER_CONTEXT_VAR = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
 

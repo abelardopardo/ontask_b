@@ -3,8 +3,7 @@ import os
 import requests
 import logging
 import pandas as pd
-from colorama import Fore
-
+import functools
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
 
@@ -15,7 +14,7 @@ CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
 with open(CONFIG_PATH, 'r') as file:
     config = json.load(file)
 
-def fetch_canvas_data(course_id, quiz_id):
+def fetch_canvas_data_submissions(course_id, quiz_id):
     headers = {
         "Authorization": f"Bearer {config['canvas_api_token']}"
     }
@@ -32,6 +31,41 @@ def fetch_canvas_data(course_id, quiz_id):
     else:
         logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
         return pd.DataFrame()
+# Fetch quiz statistics    
+def fetch_canvas_data_quiz_stats(course_id, quiz_id):
+    headers = {
+        "Authorization": f"Bearer {config['canvas_api_token']}"
+    }
+    endpoint = f"{config['canvas_base_url']}/api/v1/courses/{course_id}/quizzes/{quiz_id}/statistics"
+    response = requests.get(endpoint, headers=headers)
+    
+    if response.status_code == 200:
+        try:
+            quizStat = json.loads(response.json())
+            res = []
+            for qstat in quizStat['quiz_statistics']:
+                questions = qstat['question_statistics']
+                for ques in questions:
+                    user_names = set(functools.reduce(lambda x, y: x + y['user_names'], ques['answers'], []))
+                    temp_ret = {}
+                    for ans in ques['answers']:
+                        for user in ans['user_names']:
+                            if not temp_ret.__contains__(user):
+                                temp_ret[user] = {
+                                    "user": user, 
+                                    "question": ques['question_text'], 
+                                    "answers": ""
+                                }
+                            temp_ret[user]['answers'] += ans['text'] + ","
+                    res.extend(temp_ret.values())
+            pd.read_json(json.dumps(res)).to_csv('aaa.csv')
+            
+        except json.JSONDecodeError:
+            logging.error(f"Failed to decode JSON: {response.text}")
+            return pd.DataFrame()
+    else:
+        logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
+        return pd.DataFrame()      
 
 def fetch_ontask_data():
     headers = {
