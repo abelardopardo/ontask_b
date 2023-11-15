@@ -10,8 +10,7 @@ env = environ.Env()
 print("CANVAS_BASE_URL", env("CANVAS_BASE_URL", default=""))
 print("CANVAS_API_TOKEN", env("CANVAS_API_TOKEN", default=""))
 print("ONTASK_BASE_URL", env("ONTASK_BASE_URL", default=""))
-print("ONTASK_API_TOKEN", env("CANVAS_API_TOKEN", default=""))
-
+print("ONTASK_API_TOKEN", env("ONTASK_API_TOKEN", default=""))
 # Load config.json
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')

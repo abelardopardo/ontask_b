@@ -4,7 +4,6 @@ import requests
 import logging
 import pandas as pd
 import functools
-# Initialize logging
 logging.basicConfig(level=logging.INFO)
 
 # Read configuration from JSON file
@@ -34,48 +33,74 @@ def fetch_canvas_data_submissions(course_id, quiz_id):
 # Fetch quiz statistics    
 def fetch_canvas_data_quiz_stats(course_id, quiz_id):
     headers = {
-        "Authorization": f"Bearer {config['canvas_api_token']}"
+        "Authorization": f"Bearer {config['canvas_api_token']}",
     }
     endpoint = f"{config['canvas_base_url']}/api/v1/courses/{course_id}/quizzes/{quiz_id}/statistics"
     response = requests.get(endpoint, headers=headers)
-    
     if response.status_code == 200:
         try:
-            quizStat = json.loads(response.json())
             res = []
+            quizStat = response.json()
             for qstat in quizStat['quiz_statistics']:
                 questions = qstat['question_statistics']
                 for ques in questions:
-                    user_names = set(functools.reduce(lambda x, y: x + y['user_names'], ques['answers'], []))
-                    temp_ret = {}
+                    user_answers = {}
                     for ans in ques['answers']:
-                        for user in ans['user_names']:
-                            if not temp_ret.__contains__(user):
-                                temp_ret[user] = {
-                                    "user": user, 
-                                    "question": ques['question_text'], 
-                                    "answers": ""
+                        for user_name in ans['user_names']:
+                            if user_name not in user_answers:
+                                user_answers[user_name] = {
+                                    "user": user_name,
+                                    "question": ques['question_text'].strip(),
+                                    "answers": []
                                 }
-                            temp_ret[user]['answers'] += ans['text'] + ","
-                    res.extend(temp_ret.values())
-            pd.read_json(json.dumps(res)).to_csv('aaa.csv')
-            
+                            user_answers[user_name]['answers'].append(ans['text'])
+                    # Flatten the answers and add to the result
+                    for user_data in user_answers.values():
+                        user_data['answers'] = ", ".join(user_data['answers'])
+                        res.append(user_data)
+            # Create DataFrame and return
+            quiz_stats = pd.DataFrame(res)
+            return quiz_stats
         except json.JSONDecodeError:
             logging.error(f"Failed to decode JSON: {response.text}")
             return pd.DataFrame()
     else:
         logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
-        return pd.DataFrame()      
+        return pd.DataFrame()
+    
+def update_ontask_table(new_data, wid):
+    src_df = new_data.to_dict(orient='records')
+    data_payload = {
+        "how": "left",  # or "right", "inner", "outer", etc.
+        "left_on": ["name", "id"],
+        "right_on": ["name", "id"],
+        "src_df": src_df
+    }
+    headers = {
+        "accept": "application/json",
+        "X-CSRFToken": "OOo3TZhegRU27xXMRmbrmiz23oX9KKzino2uTvHRh9zz8tjrTOP6LNedTMSeaMv2", 
+        "Authorization": f"Bearer {config['ontask_api_token']}",
+    }
+    endpoint = f"{config ['ontask_base_url']}/table/{wid}/pmerge/"
+    response = requests.put(endpoint, headers=headers, json=data_payload)
+    if response.status_code == 201:  # Check if this is the correct success status code
+        logging.info("Data merged successfully into OnTask")
+        return True
+    else:
+        logging.error(f"Failed to merge OnTask table: {response.status_code}, {response.text}")
+        return False
 
-def fetch_ontask_data():
+
+def fetch_ontask_data(wid):
     headers = {
         "accept": "application/json" ,
-        "X-CSRFToken": "BD0VkMLFKLrpOnwuGC8qjgG1LAGfGjt4A1vtJ4vMpJRwhASntwaebIo01VzSl5dI",
         "Authorization": f"Bearer {config['ontask_api_token']}"
     }
-    endpoint = f"{config['ontask_base_url']}/table"
+    endpoint = f"{config['ontask_base_url']}/table/{wid}/merge"
     response = requests.get(endpoint, headers=headers)
 
+    logging.info(f"Request to {endpoint} with headers {headers} returned {response.status_code}")
+    logging.error(f"Error fetching OnTask data: {response.status_code}, Response: {response.text}")
     if response.status_code == 200:
         try:
             return pd.DataFrame(response.json())
@@ -86,23 +111,6 @@ def fetch_ontask_data():
         logging.error(f"Error fetching OnTask data: {response.status_code}, {response.text}")
         return pd.DataFrame()
 
-
-def update_ontask_table(new_data, wid):
-    headers = {
-        "accept": "application/json" ,
-        "X-CSRFToken": "",
-        "Authorization": f"Bearer {config['ontask_api_token']}"
-    }
-    endpoint = f"{config['ontask_base_url']}/table/{wid}/merge/"
-    data_payload = new_data.to_dict(orient="records")
-    response = requests.post(endpoint, headers=headers, json=data_payload)
-    
-    if response.status_code == 201:
-        logging.info("Successfully updated OnTask table.")
-        return True
-    else:
-        logging.error(f"Failed to update OnTask table: {response.text}")
-        return False
 
 def data_has_changes(canvas_data, ontask_data):
     if canvas_data.empty and ontask_data.empty:
