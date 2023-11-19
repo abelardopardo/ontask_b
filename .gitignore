@@ -109,3 +109,6 @@ ontask/tests/fixtures/*.gz
 .codeql_ontask
 .codeqlrc
 codeql_output.csv
+
+# hide ontask agent config file
+ontask/agent/config.json
