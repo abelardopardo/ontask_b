@@ -57,7 +57,7 @@ def fetch_canvas_data_quiz_stats(course_id, quiz_id):
                     # Flatten the answers and add to the result
                     for user_data in user_answers.values():
                         user_data['answers'] = ", ".join(user_data['answers'])
-                        res.append(user_data)
+                        res.append(user_data)    
             # Create DataFrame and return
             quiz_stats = pd.DataFrame(res)
             return quiz_stats
@@ -72,18 +72,16 @@ def update_ontask_table(new_data, wid):
     src_df = new_data.to_dict(orient='records')
     data_payload = {
         "how": "left",  # or "right", "inner", "outer", etc.
-        "left_on": ["name", "id"],
-        "right_on": ["name", "id"],
+        "left_on": ["user", "id"],
+        "right_on": ["user","id"],
         "src_df": src_df
     }
     headers = {
-        "accept": "application/json",
-        "X-CSRFToken": "OOo3TZhegRU27xXMRmbrmiz23oX9KKzino2uTvHRh9zz8tjrTOP6LNedTMSeaMv2", 
-        "Authorization": f"Bearer {config['ontask_api_token']}",
+        "Authorization": f"Token {config['ontask_api_token']}"
     }
     endpoint = f"{config ['ontask_base_url']}/table/{wid}/pmerge/"
     response = requests.put(endpoint, headers=headers, json=data_payload)
-    if response.status_code == 201:  # Check if this is the correct success status code
+    if response.status_code == 200:  # Check if this is the correct success status code
         logging.info("Data merged successfully into OnTask")
         return True
     else:
