@@ -5,6 +5,9 @@ import logging
 import pandas as pd
 import functools
 import environ
+import re
+import html
+
 logging.basicConfig(level=logging.INFO)
 env = environ.Env()
 
@@ -33,7 +36,13 @@ def fetch_canvas_data_submissions(course_id, quiz_id):
     else:
         logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
         return pd.DataFrame()
-# Fetch quiz statistics   
+    
+def clean_text(text):
+    text = re.sub(r'<.*?>', '', text)
+    text = html.unescape(text)
+    text = text.replace('####', '')
+    return text.strip()
+
 def fetch_canvas_data_quiz_stats(course_id, quiz_id):
     headers = {
         "Authorization": f"Bearer {config['canvas_api_token']}",
@@ -51,16 +60,18 @@ def fetch_canvas_data_quiz_stats(course_id, quiz_id):
                     for ans in ques['answers']:
                         for user_name in ans['user_names']:
                             if user_name not in user_answers:
+                                # Apply the clean_html_tags function to the question text
+                                cleaned_question_text = clean_text(ques['question_text'].strip())
                                 user_answers[user_name] = {
                                     "user": user_name,
-                                    "question": ques['question_text'].strip(),
+                                    "question": cleaned_question_text,
                                     "answers": []
                                 }
                             user_answers[user_name]['answers'].append(ans['text'])
                     # Flatten the answers and add to the result
                     for user_data in user_answers.values():
                         user_data['answers'] = ", ".join(user_data['answers'])
-                        res.append(user_data)    
+                        res.append(user_data)
             # Create DataFrame and return
             quiz_stats = pd.DataFrame(res)
             return quiz_stats
@@ -70,13 +81,14 @@ def fetch_canvas_data_quiz_stats(course_id, quiz_id):
     else:
         logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
         return pd.DataFrame()
+
     
 def update_ontask_table(new_data, wid):
     src_df = new_data.to_dict(orient='records')
     data_payload = {
         "how": "left",  # or "right", "inner", "outer", etc.
-        "left_on": ["user", "id"],
-        "right_on": ["user","id"],
+        "left_on": "user",
+        "right_on": "user",
         "src_df": src_df
     }
     headers = {
