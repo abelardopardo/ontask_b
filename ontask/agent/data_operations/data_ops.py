@@ -4,14 +4,17 @@ import requests
 import logging
 import pandas as pd
 import functools
+import environ
 logging.basicConfig(level=logging.INFO)
+env = environ.Env()
 
-# Read configuration from JSON file
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
+config = {
+    'canvas_base_url': env("CANVAS_BASE_URL"),
+    'canvas_api_token': env("CANVAS_API_TOKEN"),
+    'ontask_base_url': env("ONTASK_BASE_URL"),
+    'ontask_api_token': env("ONTASK_API_TOKEN")
+}
 
-with open(CONFIG_PATH, 'r') as file:
-    config = json.load(file)
 
 def fetch_canvas_data_submissions(course_id, quiz_id):
     headers = {
@@ -30,7 +33,7 @@ def fetch_canvas_data_submissions(course_id, quiz_id):
     else:
         logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
         return pd.DataFrame()
-# Fetch quiz statistics    
+# Fetch quiz statistics   
 def fetch_canvas_data_quiz_stats(course_id, quiz_id):
     headers = {
         "Authorization": f"Bearer {config['canvas_api_token']}",

@@ -7,16 +7,18 @@ import environ
 # Setting up logging
 logging.basicConfig(level=logging.INFO)
 env = environ.Env()
+
+config = {
+    'canvas_base_url': env("CANVAS_BASE_URL"),
+    'canvas_api_token': env("CANVAS_API_TOKEN"),
+    'ontask_base_url': env("ONTASK_BASE_URL"),
+    'ontask_api_token': env("ONTASK_API_TOKEN")
+}
+
 print("CANVAS_BASE_URL", env("CANVAS_BASE_URL", default=""))
 print("CANVAS_API_TOKEN", env("CANVAS_API_TOKEN", default=""))
 print("ONTASK_BASE_URL", env("ONTASK_BASE_URL", default=""))
 print("ONTASK_API_TOKEN", env("ONTASK_API_TOKEN", default=""))
-# Load config.json
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_PATH = os.path.join(BASE_DIR, 'config.json')
-
-with open(CONFIG_PATH, 'r') as file:
-    config = json.load(file)
 
 def authenticate_canvas():
     headers = {
