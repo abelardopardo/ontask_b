@@ -29,7 +29,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = '10.4'
+__version__ = '10.5'
 
 LOGGER = logging.getLogger('ontask')
 
