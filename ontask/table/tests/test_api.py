@@ -16,52 +16,46 @@ class TableApiBase(tests.SimpleTableFixture, tests.OnTaskApiTestCase):
     """Basic function and data for testing the API."""
 
     new_table = {
-        "email": ["student04@bogus.com",
-                  "student05@bogus.com",
-                  "student06@bogus.com"
+        'email': ['student04@bogus.com',
+                  'student05@bogus.com',
+                  'student06@bogus.com'
                   ],
-        "sid": [4, 5, 6],
-        "age": [122.0, 122.1, 132.2],
-        "another": ["bbbb", "aaab", "bbbb"],
-        "name": ["Felipe Lotas", "Aitor Tilla", "Carmelo Coton"],
-        "one": ["aaaa", "bbbb", "aaaa"],
-        "registered": [True, False, True],
-        "when": ["2017-10-12T00:33:44+11:00",
-                 "2017-10-12T00:32:44+11:00",
-                 "2017-10-12T00:32:44+11:00"
+        'sid': [4, 5, 6],
+        'age': [122.0, 122.1, 132.2],
+        'another': ['bbbb', 'aaab', 'bbbb'],
+        'name': ['Felipe Lotas', 'Aitor Tilla', 'Carmelo Coton'],
+        'one': ['aaaa', 'bbbb', 'aaaa'],
+        'registered': [True, False, True],
+        'when': ['2017-10-12T00:33:44+11:00',
+                 '2017-10-12T00:32:44+11:00',
+                 '2017-10-12T00:32:44+11:00'
                  ]
     }
 
     incorrect_table_1 = {
-        "email": {
-            "0": "student1@bogus.com",
-            "1": "student2@bogus.com",
-            "2": "student3@bogus.com",
-            "3": "student1@bogus.com"
+        'email': {
+            '0': 'student1@bogus.com',
+            '1': 'student2@bogus.com',
+            '2': 'student3@bogus.com',
+            '3': 'student1@bogus.com'
         },
-        "Another column": {
-            "0": 6.93333333333333,
-            "1": 9.1,
-            "2": 9.1,
-            "3": 5.03333333333333
+        'Another column': {
+            '0': 6.93333333333333,
+            '1': 9.1,
+            '2': 9.1,
+            '3': 5.03333333333333
         },
-        "Quiz": {
-            "0": 1,
-            "1": 0,
-            "2": 3,
-            "3": 0
+        'Quiz': {
+            '0': 1,
+            '1': 0,
+            '2': 3,
+            '3': 0
         }
     }
 
-    src_df = {
-        "sid": [1, 2, 4],
-        "newcol": ['v1', 'v2', 'v3']
-    }
-
-    src_df2 = {
-        "sid": [5],
-        "forcenas": ['value']
-    }
+    src_df = {'sid': [1, 2, 4], 'newcol': ['v1', 'v2', 'v3']}
+    src_df2 = {'sid': [5], 'forcenas': ['value']}
+    src_df3 = {'sid': [1, 2, 4], 'another': ['bbb', 'aaa', 'bbb']}
 
     user_name = 'instructor01@bogus.com'
 
@@ -525,7 +519,7 @@ class TableApiJSONMergeOuter(TableApiBase):
         # Get the new workflow
         workflow = models.Workflow.objects.all()[0]
 
-        # Result should have three rows as the initial DF
+        # Result should have four rows as the initial DF
         self.assertEqual(workflow.nrows, 4)
 
 
@@ -563,7 +557,7 @@ class TableApiPandasMergeOuter(TableApiBase):
         # Get the new workflow
         workflow = models.Workflow.objects.all()[0]
 
-        # Result should have three rows as the initial DF
+        # Result should have four rows as the initial DF
         self.assertEqual(workflow.nrows, 4)
 
 
