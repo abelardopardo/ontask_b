@@ -561,6 +561,44 @@ class TableApiPandasMergeOuter(TableApiBase):
         self.assertEqual(workflow.nrows, 4)
 
 
+class TableApiPandasMergeOuterNoNewColum(TableApiBase):
+
+    def test(self):
+        # Get the only workflow in the fixture
+        workflow = models.Workflow.objects.all()[0]
+
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
+
+        # Transform new table into string
+        r_df = pd.DataFrame(self.src_df3)
+
+        # Get the data through the API
+        response = self.client.put(
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
+            {
+                "src_df": serializers.df_to_string(r_df),
+                "how": "outer",
+                "left_on": "sid",
+                "right_on": "sid"
+            },
+            format='json')
+
+        # No anomaly should be detected
+        self.assertEqual(None, response.data.get('detail'))
+
+        # Get the new workflow
+        workflow = models.Workflow.objects.all()[0]
+
+        # Result should have four rows as the initial DF
+        self.assertEqual(workflow.nrows, 4)
+
+
 class TableApiJSONMergeLeft(TableApiBase):
 
     # Merge with left values
@@ -629,6 +667,85 @@ class TableApiPandasMergeLeft(TableApiBase):
         self.assertEqual(
             dframe[dframe['sid'] == 1]['newcol'].values[0],
             self.src_df['newcol'][0])
+
+
+class TableApiPandasMergeRight(TableApiBase):
+
+    def test(self):
+        # Get the only workflow in the fixture
+        workflow = models.Workflow.objects.all()[0]
+
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
+
+        # Transform new table into string
+        r_df = pd.DataFrame(self.src_df)
+
+        # Get the data through the API
+        self.client.put(
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
+            {
+                "src_df": serializers.df_to_string(r_df),
+                "how": "right",
+                "left_on": "sid",
+                "right_on": "sid"
+            },
+            format='json')
+
+        # Get the new workflow
+        workflow = models.Workflow.objects.all()[0]
+
+        # Result should have three rows as the initial DF
+        self.assertEqual(workflow.nrows, 3)
+
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
+        self.assertEqual(
+            dframe[dframe['sid'] == 1]['newcol'].values[0],
+            self.src_df['newcol'][0])
+
+
+class TableApiPandasMergeRightNoNewColumn(TableApiBase):
+
+    def test(self):
+        # Get the only workflow in the fixture
+        workflow = models.Workflow.objects.all()[0]
+
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
+
+        # Transform new table into string
+        r_df = pd.DataFrame(self.src_df3)
+
+        # Get the data through the API
+        self.client.put(
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
+            {
+                "src_df": serializers.df_to_string(r_df),
+                "how": "right",
+                "left_on": "sid",
+                "right_on": "sid"
+            },
+            format='json')
+
+        # Get the new workflow
+        workflow = models.Workflow.objects.all()[0]
+
+        # Result should have three rows as the initial DF
+        self.assertEqual(workflow.nrows, 3)
+
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
+        # Result should have a row with sid = 4
+        self.assertTrue(4 in list(dframe['sid']))
 
 
 class TableApiJSONMergeOuterNaN(TableApiBase):
