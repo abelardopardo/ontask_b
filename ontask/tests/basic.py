@@ -324,11 +324,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = settings.ONTASK_HEADLESS_TEST
-        fp = webdriver.FirefoxProfile()
-        fp.set_preference('dom.file.createInChild', True)
-        fp.set_preference('font.size.variable.x-western', 14)
-        cls.selenium = webdriver.Firefox(options=options, firefox_profile=fp)
+        if settings.ONTASK_HEADLESS_TEST:
+            options.add_argument('--headless')
+        options.set_preference('dom.file.createInChild', True)
+        options.set_preference('font.size.variable.x-western', 14)
+        cls.selenium = webdriver.Firefox(options=options)
         # cls.selenium = webdriver.Chrome()
 
         # Detect the type of screen being used
