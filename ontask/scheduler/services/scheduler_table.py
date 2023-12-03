@@ -83,7 +83,7 @@ class ScheduleActionTable(tables.Table):
         fields = (
             'name',
             'operation_type',
-            'execute',
+            'execute_start',
             'frequency',
             'execute_until',
             'status')
@@ -92,7 +92,7 @@ class ScheduleActionTable(tables.Table):
             'operations',
             'name',
             'operation_type',
-            'execute',
+            'execute_start',
             'frequency',
             'execute_until',
             'enabled',

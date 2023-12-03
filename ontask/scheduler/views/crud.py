@@ -37,7 +37,7 @@ class SchedulerIndexView(
         context.update({
             's_vals': services.get_item_value_dictionary(self.object),
             'timedelta': services.create_timedelta_string(
-                self.object.execute,
+                self.object.execute_start,
                 self.object.frequency,
                 self.object.execute_until)})
         return context

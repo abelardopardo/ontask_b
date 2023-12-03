@@ -44,8 +44,8 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
             'execute_start',
             'frequency',
             'execute_until'])
-        self.fields['execute'].initial = parse_datetime(
-            self.get_payload_field('execute', ''))
+        self.fields['execute_start'].initial = parse_datetime(
+            self.get_payload_field('execute_start', ''))
         self.fields['execute_until'].initial = parse_datetime(
             self.get_payload_field('execute_until', ''))
         self.fields['frequency'].label = ''
@@ -56,7 +56,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         self.order_fields([
             'name',
             'description_text',
-            'execute',
+            'execute_start',
             'multiple_executions',
             'frequency',
             'execute_until'])
@@ -72,7 +72,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         self.store_fields_in_dict([
             ('name', None),
             ('description_text', None),
-            ('execute', str(form_data['execute'])),
+            ('execute_start', str(form_data['execute_start'])),
             ('frequency', form_data['frequency']),
             ('execute_until', str(form_data['execute_until']))])
 
@@ -84,8 +84,8 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
                 str(_('There is an operation scheduled with this name')))
 
         # The executed times must be correct
-        diagnostic_msg = models.ScheduledOperation.validate_times(
-            self.cleaned_data.get('execute'),
+        diagnostic_msg = validate_crontab(
+            self.cleaned_data.get('execute_start'),
             self.cleaned_data.get('frequency'),
             self.cleaned_data.get('execute_until'))
 
@@ -101,11 +101,11 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         fields = (
             'name',
             'description_text',
-            'execute',
+            'execute_start',
             'frequency',
             'execute_until')
         widgets = {
-            'execute': DateTimePickerInput(
+            'execute_start': DateTimePickerInput(
                 options=ontask_forms.DATE_TIME_WIDGET_OPTIONS),
             'frequency': OnTaskCronWidget(),
             'execute_until': DateTimePickerInput(

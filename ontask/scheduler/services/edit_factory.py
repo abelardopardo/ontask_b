@@ -147,10 +147,10 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         s_item.name = data_dict.pop('name')
         s_item.description_text = data_dict.pop('description_text')
 
-        execute = data_dict.pop('execute', '')
+        execute = data_dict.pop('execute_start', '')
         if isinstance(execute, str):
             execute = parse_datetime(execute)
-        s_item.execute = execute
+        s_item.execute_start = execute
 
         s_item.frequency = data_dict.pop('frequency', '')
 

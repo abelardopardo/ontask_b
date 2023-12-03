@@ -156,7 +156,7 @@ class SchedulerViewCreateSQLUpload(
             method='POST',
             req_params={
                 'name': 'schedule sql upload',
-                'execute': '05/31/2999 14:35',
+                'execute_start': '05/31/2999 14:35',
                 'src_key': 'email',
                 'how_merge': 'outer',
                 'db_password': 'xxx'})
@@ -170,7 +170,7 @@ class SchedulerViewCreateSQLUpload(
             method='POST',
             req_params={
                 'name': 'schedule sql upload',
-                'execute': '05/31/2999 14:35',
+                'execute_start': '05/31/2999 14:35',
                 'dst_key': 'email',
                 'how_merge': 'outer',
                 'db_password': 'xxx'})
@@ -184,7 +184,7 @@ class SchedulerViewCreateSQLUpload(
             method='POST',
             req_params={
                 'name': 'schedule sql upload',
-                'execute': '05/31/2999 14:35',
+                'execute_start': '05/31/2999 14:35',
                 'dst_key': 'INCORRECT NAME',
                 'src_key': 'email',
                 'how_merge': 'outer',
@@ -199,7 +199,7 @@ class SchedulerViewCreateSQLUpload(
             method='POST',
             req_params={
                 'name': 'schedule sql upload',
-                'execute': '05/31/2999 14:35',
+                'execute_start': '05/31/2999 14:35',
                 'dst_key': 'Gender',
                 'src_key': 'email',
                 'how_merge': 'outer',
@@ -214,7 +214,7 @@ class SchedulerViewCreateSQLUpload(
             method='POST',
             req_params={
                 'name': 'schedule sql upload',
-                'execute': '05/31/2999 14:35',
+                'execute_start': '05/31/2999 14:35',
                 'dst_key': 'Gender',
                 'src_key': 'email',
                 'db_password': 'xxx'})
@@ -228,7 +228,7 @@ class SchedulerViewCreateSQLUpload(
             method='POST',
             req_params={
                 'name': 'schedule sql upload',
-                'execute': '05/31/2999 14:35',
+                'execute_start': '05/31/2999 14:35',
                 'dst_key': 'email',
                 'src_key': 'email',
                 'how_merge': 'outer',

@@ -57,7 +57,10 @@ def execute_scheduled_operation(s_item_id: int):
             return
 
         now = datetime.now(ZoneInfo(settings.TIME_ZONE))
-        if s_item.execute and s_item.frequency and now < s_item.execute:
+        if (
+                s_item.execute_start and
+                s_item.frequency and
+                now < s_item.execute_start):
             # Not yet
             if settings.DEBUG:
                 CELERY_LOGGER.info('Too soon to execute operation.')

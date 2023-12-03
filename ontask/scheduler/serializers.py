@@ -50,8 +50,8 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
             raise APIException(_('Incorrect permission to manipulate action.'))
 
         # Execution date/times must be correct
-        diagnostic_msg = models.ScheduledOperation.validate_times(
-            validated_data.get('execute'),
+        diagnostic_msg = validate_crontab(
+            validated_data.get('execute_start'),
             validated_data.get('frequency'),
             validated_data.get('execute_until'))
         if diagnostic_msg:
@@ -122,7 +122,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
             'name',
             'description_text',
             'operation_type',
-            'execute',
+            'execute_start',
             'frequency',
             'execute_until',
             'workflow',

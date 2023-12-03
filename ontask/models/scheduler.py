@@ -58,10 +58,10 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         choices=[(key, value) for key, value in OPERATION_TYPES.items()])
 
     # Time of execution
-    execute = models.DateTimeField(
+    execute_start = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=_('When to execute this action'))
+        verbose_name=_('Start of execution period'))
 
     # Crontab string encoding the frequency of execution (if  needed
     frequency = models.CharField(
@@ -135,7 +135,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         payload = {
             'id': self.id,
             'name': self.name,
-            'execute': simplify_datetime_str(self.execute),
+            'execute_start': simplify_datetime_str(self.execute_start),
             'frequency': self.frequency,
             'execute_until': simplify_datetime_str(self.execute_until),
             'status': self.status,

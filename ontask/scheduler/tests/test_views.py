@@ -45,7 +45,7 @@ class SchedulerForms(SchedulerFormsBasic):
             req_params={
                 'name': 'First scheduling round',
                 'item_column': str(self.workflow.columns.get(name='email').id),
-                'execute': '05/31/2119 14:35',
+                'execute_start': '05/31/2119 14:35',
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
@@ -60,7 +60,7 @@ class SchedulerForms(SchedulerFormsBasic):
             req_params={
                 'name': 'First scheduling round2',
                 'item_column': str(self.workflow.columns.get(name='email').id),
-                'execute': '05/31/2119 14:35',
+                'execute_start': '05/31/2119 14:35',
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
@@ -79,7 +79,7 @@ class SchedulerForms(SchedulerFormsBasic):
                 'name': 'First scheduling round3',
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'confirm_items': True,
-                'execute': '05/31/2119 14:35',
+                'execute_start': '05/31/2119 14:35',
                 'subject': 'Subject text',
             })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
@@ -138,7 +138,7 @@ class SchedulerJSONForms(SchedulerFormsBasic):
             method='POST',
             req_params={
                 'name': 'First scheduling round',
-                'execute': '05/31/2119 14:35',
+                'execute_start': '05/31/2119 14:35',
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'token': 'faketoken',
             })
@@ -154,7 +154,7 @@ class SchedulerJSONForms(SchedulerFormsBasic):
             req_params={
                 'name': 'First scheduling round2',
                 'item_column': str(self.workflow.columns.get(name='email').id),
-                'execute': '05/31/2119 14:35',
+                'execute_start': '05/31/2119 14:35',
                 'token': 'faketoken',
             })
         self.assertTrue(status.is_success(resp.status_code))
@@ -173,7 +173,7 @@ class SchedulerJSONForms(SchedulerFormsBasic):
                 'name': 'First scheduling round3',
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'confirm_items': True,
-                'execute': '05/31/2119 14:35',
+                'execute_start': '05/31/2119 14:35',
                 'token': 'faketoken',
             })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
@@ -227,7 +227,7 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'multiple_executions': True,
                 'frequency': '* * * * *',
-                'execute': '05/31/2119 14:35',
+                'execute_start': '05/31/2119 14:35',
                 'execute_until': '05/31/2119 14:30',
                 'subject': 'Subject text',
             })
@@ -247,7 +247,7 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'multiple_executions': True,
                 'frequency': '* * * * *',
-                'execute': execute.strftime('%m/%d/%Y %H:%M:%S'),
+                'execute_start': execute.strftime('%m/%d/%Y %H:%M:%S'),
                 'execute_until': execute_until.strftime('%m/%d/%Y %H:%M:%S'),
                 'subject': 'Subject text',
             })
@@ -267,7 +267,7 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'multiple_executions': True,
                 'frequency': '* * * * *',
-                'execute': execute.strftime('%m/%d/%Y %H:%m'),
+                'execute_start': execute.strftime('%m/%d/%Y %H:%m'),
                 'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
                 'subject': 'Subject text',
             })
@@ -287,7 +287,7 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'multiple_executions': True,
                 'frequency': '* * * * *',
-                'execute': execute.strftime('%m/%d/%Y %H:%m'),
+                'execute_start': execute.strftime('%m/%d/%Y %H:%m'),
                 'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
                 'subject': 'Subject text',
             })

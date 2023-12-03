@@ -133,7 +133,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
 
         # Successful processing.
         tdelta = create_timedelta_string(
-            scheduled_item.execute,
+            scheduled_item.execute_start,
             scheduled_item.frequency,
             scheduled_item.execute_until)
         return render(
