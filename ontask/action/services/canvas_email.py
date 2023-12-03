@@ -152,7 +152,7 @@ def _send_single_canvas_message(
     :param oauth_info: Authentication info
     :return: response message, response status
     """
-    result_msg = gettext('Message successfuly sent')
+    result_msg = gettext('Message successfully sent')
 
     # Send the email through the API call
     # First attempt

@@ -17,7 +17,7 @@ class Connection(NameAndDescription):
     # Boolean that enables the use of this connection to other users.
     enabled = models.BooleanField(
         default=False,
-        verbose_name=_('Available to users?'),
+        verbose_name=_('Enabled?'),
         null=False,
         blank=False)
 

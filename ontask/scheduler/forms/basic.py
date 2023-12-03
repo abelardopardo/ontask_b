@@ -108,6 +108,153 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
             'execute': DateTimePickerInput(
                 options=ontask_forms.DATE_TIME_WIDGET_OPTIONS),
             'frequency': OnTaskCronWidget(),
-            'execute_until':
-                DateTimePickerInput(
-                    options=ontask_forms.DATE_TIME_WIDGET_OPTIONS)}
+            'execute_until': DateTimePickerInput(
+                options=ontask_forms.DATE_TIME_WIDGET_OPTIONS)}
+
+
+class ScheduleBasicUpdateForm(ScheduleBasicForm):
+    """Form to create/edit objects of the schedule/update action.
+
+    To be used for Update actions.
+    """
+
+    dst_help = dataops_forms.SelectKeysForm.dst_help
+
+    dst_key = forms.CharField(
+        max_length=models.CHAR_FIELD_MID_SIZE,
+        strip=True,
+        required=False,
+        label=_('Key column in the existing table. '
+                'Leave empty if uploading to empty workflow'),
+        help_text=dst_help)
+
+    src_key = forms.CharField(
+        max_length=models.CHAR_FIELD_MID_SIZE,
+        strip=True,
+        required=False,
+        label=_('Key column in new table. '
+                'Leave empty if uploading to empty workflow'))
+
+    def __init__(self, *args, **kwargs):
+        """Initialize all the fields"""
+        super().__init__(*args, **kwargs)
+        self.set_fields_from_dict(['dst_key', 'src_key', 'how_merge'])
+
+        self.fields['how_merge'].required = False
+
+    def clean(self) -> Dict:
+        """Store the fields in the Form Payload"""
+        form_data = super().clean()
+        self.store_fields_in_dict([
+            ('dst_key', None),
+            ('src_key', None),
+            ('how_merge', None)])
+
+        # If the workflow has data, both keys have to be non-empty, the
+        # first one needs to be a unique column, and the merge method cannot
+        # be empty
+        if not form_data['dst_key'] or not form_data['src_key']:
+            self.add_error(
+                None,
+                _('The operation requires the names of two key columns.'))
+        if not form_data['how_merge']:
+            self.add_error(
+                'how_merge',
+                _('The operation requires a merge method.')
+            )
+        return form_data
+
+
+class ScheduleSQLUploadForm(
+    ScheduleBasicUpdateForm,
+    dataops_forms.MergeForm,
+    SQLRequestConnectionParam
+):
+    """Form to request info for the SQL scheduled upload
+
+    Three blocks of information are requested:
+
+    Block 1: Name, description, start -- frequency -- stop times
+
+    Block 2: Parameters for the SQL connection
+
+    Block 3: Parameters for the merge: Left/Right column + merge method
+    """
+
+    pass
+
+
+class ScheduleCanvasUploadForm(
+    ScheduleBasicUpdateForm,
+    dataops_forms.MergeForm
+):
+    """Form to request info for the Canvas scheduled upload
+
+    Two blocks of information are requested:
+
+    Block 1: Name, description, start -- frequency -- stop times
+
+    Block 2: Parameters for the merge: Left/Right column + merge method,
+
+    Canvas Host is required only if more than one is specified.
+    """
+
+    canvas_course_id = forms.IntegerField(
+        label=_('Canvas course id to retrieve the data.'),
+        required=True,
+        help_text=_(
+            'This is an integer used by Canvas to uniquely identify a course'))
+
+    def __init__(self, *args, **kwargs):
+        """Modify certain field data."""
+        super().__init__(*args, **kwargs)
+
+        # Load the values in the payload
+        self.set_fields_from_dict(['canvas_course_id'])
+
+        # Adjustments to fields
+        self.fields['how_merge'].required = True
+        self.fields['execute_start'].required = True
+        self.fields['src_key'].required = True
+        self.fields['src_key'].label = _('Key column in the workflow table')
+        self.fields['dst_key'].required = True
+        self.fields['dst_key'].label = _('Key column in the external table')
+
+        if len(settings.CANVAS_INFO_DICT) > 1:
+            # Add the canvashost_url field if the system has more than one entry
+            # point configured
+            self.fields['canvashost_url'] = forms.ChoiceField(
+                initial=self._FormWithPayload__form_info.get(
+                    'canvashost_url', None),
+                required=True,
+                choices=[('', '---')] + [(key, key) for key in sorted(
+                    settings.CANVAS_INFO_DICT.keys(),
+                )],
+                label=_('Canvas Host'),
+                help_text=_('Name of the Canvas host to send the messages'))
+            self.set_field_from_dict('canvashost_url')
+        else:
+            # Single Canvas config Add the value to the payload (no form field
+            # required)
+            self.store_field_in_dict(
+                'canvashost_url',
+                list(settings.CANVAS_INFO_DICT.keys())[0])
+
+        self.order_fields([
+            'name',
+            'description_text',
+            'canvashost_url',
+            'canvas_course_id',
+            'execute_start',
+            'multiple_executions',
+            'frequency',
+            'execute_until',
+            'dst_key',
+            'src_key',
+            'how_merge'])
+
+    def clean(self) -> Dict:
+        """Store the fields in the Form Payload"""
+        form_data = super().clean()
+        self.store_fields_in_dict([('canvas_course_id', None)])
+        return form_data

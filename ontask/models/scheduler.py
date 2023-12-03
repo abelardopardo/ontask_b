@@ -216,6 +216,6 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         return self.name
 
     class Meta:
-        """Define the criteria of uniqueness with name and action."""
+        """Define the uniqueness criteria with name and workflow."""
 
         unique_together = ('name', 'workflow')

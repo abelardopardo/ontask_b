@@ -24,7 +24,7 @@ urlpatterns = [
         views.create_action_run,
         name='create_action_run'),
 
-    # Create a SQL upload operation
+    # Create a new SQL upload operation
     path('<int:pk>/sqlupload/', views.create_sql_upload, name='sqlupload'),
 
     # Edit scheduled operation

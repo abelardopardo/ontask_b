@@ -16,7 +16,7 @@ class ConnectionForm(forms.ModelForm):
 
 
 class SQLConnectionForm(ConnectionForm):
-    """Form to read data from SQL.
+    """Form to manipulate an SQL connection.
 
     We collect information to create a Database URI to be used by SQLAlchemy:
 
@@ -96,7 +96,7 @@ class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
 
 
 class AthenaConnectionForm(ConnectionForm):
-    """Form to read data from SQL.
+    """Form to manipulate an Athena data connection.
 
     We collect information to open a connection to an Athena instance
     """

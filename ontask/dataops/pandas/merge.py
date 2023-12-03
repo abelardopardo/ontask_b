@@ -257,7 +257,7 @@ def perform_dataframe_upload_merge(
              frame.
            - rename_column_names: Columns that need to be renamed in src data
              frame.
-           - columns_to_uplooad: Columns to be considered for the update
+           - columns_to_upload: Columns to be considered for the update
            - src_selected_key: Key in the source data frame
            - dst_selected_key: key in the destination (existing) data frame
            - how_merge: How to merge: inner, outer, left or right
