@@ -41,7 +41,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         self.set_fields_from_dict([
             'name',
             'description_text',
-            'execute',
+            'execute_start',
             'frequency',
             'execute_until'])
         self.fields['execute'].initial = parse_datetime(
