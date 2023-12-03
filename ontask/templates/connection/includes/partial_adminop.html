@@ -13,6 +13,7 @@
           data-url="{{ clone_url }}" data-bs-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this connection' %}">
     <i class="bi-files"></i></button>
+  {% endif %}
   <button type="button" class="btn btn-primary btn-light js-connection-delete"
           data-url="{{ delete_url }}" data-bs-toggle="tooltip"
           title="{% trans 'Delete the connection' %}">
