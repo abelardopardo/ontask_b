@@ -21,6 +21,9 @@ class SchedulerIndex(UserIsInstructor, WorkflowView, generic.TemplateView):
         context['table'] = services.ScheduleActionTable(
             self.workflow.scheduled_operations.all(),
             orderable=False)
+        context['sqlconnection'] = models.SQLConnection.objects.filter(
+            enabled=True).first()
+        context['canvasconnection'] = len(settings.base.CANVAS_INFO_DICT) > 0
         return context
 
     def get(self, request, *args, **kwargs):
