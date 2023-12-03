@@ -47,45 +47,6 @@ def clean_text(text):
     text = text.replace('####', '')
     return text.strip()
 
-# def fetch_canvas_data_quiz_stats(course_id, quiz_id):
-#     headers = {
-#         "Authorization": f"Bearer {config['canvas_api_token']}",
-#     }
-#     endpoint = f"{config['canvas_base_url']}/api/v1/courses/{course_id}/quizzes/{quiz_id}/statistics"
-#     response = requests.get(endpoint, headers=headers)
-#     if response.status_code == 200:
-#         try:
-#             res = []
-#             quizStat = response.json()
-#             for qstat in quizStat['quiz_statistics']:
-#                 questions = qstat['question_statistics']
-#                 for ques in questions:
-#                     user_answers = {}
-#                     for ans in ques['answers']:
-#                         for user_name in ans['user_names']:
-#                             for user_id in ans['user_ids']:
-#                                 # Initialize user entry if not already present
-#                                 user_answers.setdefault(user_name, {
-#                                     "id": user_id,
-#                                     "name": ans.get('user_names', [])[0] if ans.get('user_names') else 'Unknown',
-#                                     "answers": []
-#                                 })
-#                             # Append current answer
-#                             user_answers[user_name]['answers'].append(ans['text'])
-#                     # Add the compiled answers for each user to the results list
-#                     for user_data in user_answers.values():
-#                         # Join the list of answers into a single string
-#                         user_data['answers'] = ", ".join(user_data['answers'])
-#                         res.append(user_data)
-#             # Return DataFrame with the desired columns
-#             return pd.DataFrame(res, columns=['id','name', 'answers'])
-#         except json.JSONDecodeError:
-#             logging.error(f"Failed to decode JSON: {response.text}")
-#             return pd.DataFrame()
-#     else:
-#         logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
-#         return pd.DataFrame()
-
 def fetch_canvas_data_quiz_stats(course_id, quiz_id):
     headers = {
         "Authorization": f"Bearer {config['canvas_api_token']}",
