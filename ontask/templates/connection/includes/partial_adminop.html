@@ -8,6 +8,7 @@
           data-url="{{ view_url }}" data-bs-toggle="tooltip"
           title="{% trans 'View connection details' %}">
     <i class="bi-eye-fill"></i></button>
+  {% if clone_url %}
   <button type="button" class="btn btn-primary btn-light js-connection-clone"
           data-url="{{ clone_url }}" data-bs-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this connection' %}">
