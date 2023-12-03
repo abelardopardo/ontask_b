@@ -2,6 +2,6 @@
 from ontask.scheduler.forms.basic import ScheduleBasicForm
 from ontask.scheduler.forms.run import (
     ScheduleEmailForm, ScheduleJSONForm, ScheduleJSONReportForm,
-    ScheduleSendListForm,
+    ScheduleSendListForm, ScheduleCanvasEmailForm
 )
 from ontask.scheduler.forms.sql import ScheduleSQLUploadForm

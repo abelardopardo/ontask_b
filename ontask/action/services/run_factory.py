@@ -96,7 +96,7 @@ class ActionRunProducerBase(generic.FormView):
         :result: Nothing. Payload is changed
         """
         exclude_values = payload.get('exclude_values', [])
-        exclude_values.extend(new_items)
+        exclude_values.extend([str(x) for x in new_items])
         payload['exclude_values'] = exclude_values
 
     def setup(self, request, *args, **kwargs):

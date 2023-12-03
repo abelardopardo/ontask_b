@@ -8,5 +8,4 @@ from ontask.action.forms.run import (
     CanvasEmailActionForm, CanvasEmailActionRunForm, EmailActionForm,
     EmailActionRunForm, EnableURLForm, JSONActionForm, JSONActionRunForm,
     JSONReportActionForm, JSONReportActionRunForm, SendListActionForm,
-    SendListActionRunForm, ValueExcludeForm, ZipActionRunForm,
-)
+    SendListActionRunForm, ValueExcludeForm, ZipActionRunForm)
