@@ -473,10 +473,10 @@ class Workflow(NameAndDescription, CreateModifyFields):
     ) -> Log:
         """Log the operation with the object."""
         payload = {
-            'name': self.name,
-            'ncols': self.ncols,
-            'nrows': self.nrows,
-            'star': self.user in self.star.all()}
+            'Workflow Name': self.name,
+            'Workflow # cols': self.ncols,
+            'Workflow # rows': self.nrows,
+            'Workflow starred': self.user in self.star.all()}
 
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, self, payload)

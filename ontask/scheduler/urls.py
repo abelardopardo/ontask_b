@@ -97,9 +97,9 @@ services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Action.JSON_REPORT,
     services.ScheduledOperationJSONReportUpdateView)
 
-# services.SCHEDULE_CRUD_FACTORY.register_producer(
-#     models.Action.PERSONALIZED_CANVAS_EMAIL,
-#     services.ScheduleOperation???)
+services.SCHEDULE_CRUD_FACTORY.register_producer(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    services.ScheduledOperationCanvasEmailUpdateView)
 
 services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,

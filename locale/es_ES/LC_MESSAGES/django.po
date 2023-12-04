@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 08:20+0930\n"
-"PO-Revision-Date: 2023-08-16 08:24+0930\n"
+"POT-Creation-Date: 2023-12-04 09:50+1030\n"
+"PO-Revision-Date: 2023-12-04 09:52+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
 "Language: es\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ontask/__init__.py:148
 msgid "The symbol ' cannot be used in the name."
-msgstr "El símbolo ' no se puede utilizar en el nombre."
+msgstr "El símbolo ' no puede utilizarse en el nombre."
 
 #: ontask/__init__.py:151
 msgid "The symbol \" cannot be used in the name."
@@ -313,29 +313,20 @@ msgstr "La acción no se puede importar en un flujo sin datos en la tabla"
 msgid "Action with name \"{0}\" already exists"
 msgstr "Una acción con nombre “{0}” ya existe"
 
-#: ontask/action/services/canvas_email.py:60
+#: ontask/action/services/canvas_email.py:38
 msgid "OAuth token refreshed"
 msgstr "Autenticador OAuth renovado"
 
-#: ontask/action/services/canvas_email.py:109
-msgid "Unable to obtain Canvas OAuth information"
-msgstr "Incapaz de obtener la información de Canvas OAuth"
+#: ontask/action/services/canvas_email.py:78
+msgid "Message successfully sent"
+msgstr "Mensaje enviado con exito"
 
-#: ontask/action/services/canvas_email.py:134
-#, python-brace-format
-msgid "Error when invoking Canvas API: {0}."
-msgstr "Error al invocar Canvas API: {0}"
-
-#: ontask/action/services/canvas_email.py:155
-msgid "Message successfuly sent"
-msgstr "Mensaje enviado"
-
-#: ontask/action/services/canvas_email.py:177
+#: ontask/action/services/canvas_email.py:101
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "No se puede enviar el mensaje: (código {0})"
 
-#: ontask/action/services/canvas_email.py:203
+#: ontask/action/services/canvas_email.py:130
 #: ontask/action/services/run_factory.py:149
 #: ontask/templates/action/action_zip_step1.html:35
 #: ontask/templates/action/request_email_data.html:36
@@ -345,11 +336,11 @@ msgstr "No se puede enviar el mensaje: (código {0})"
 msgid "Send"
 msgstr "Enviar"
 
-#: ontask/action/services/canvas_email.py:253
+#: ontask/action/services/canvas_email.py:181
 msgid "Unable to find OAuth Information Record"
 msgstr "No se ha encontrado información de OAuth para este elemento"
 
-#: ontask/action/services/canvas_email.py:261
+#: ontask/action/services/canvas_email.py:189
 msgid "Incorrect execution due to absence of token"
 msgstr "Ejecución incorrecta debido a la ausencia de token"
 
@@ -811,6 +802,15 @@ msgstr "Conexiones SQL"
 msgid "Athena Connections"
 msgstr "Conexiones a Athena"
 
+#: ontask/core/canvas_ops.py:62
+msgid "Unable to obtain Canvas OAuth information"
+msgstr "Incapaz de obtener la información de Canvas OAuth"
+
+#: ontask/core/canvas_ops.py:87
+#, python-brace-format
+msgid "Error when invoking Canvas API: {0}."
+msgstr "Error al invocar Canvas API: {0}"
+
 #: ontask/core/checks.py:141
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
@@ -1067,13 +1067,13 @@ msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador BETWEEN"
 
-#: ontask/dataops/pandas/database.py:150 ontask/dataops/pandas/database.py:192
+#: ontask/dataops/pandas/database.py:151 ontask/dataops/pandas/database.py:193
 #: ontask/dataops/sql/column_queries.py:141
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr "El nombre de la columna el más largo de {0} letras"
 
-#: ontask/dataops/pandas/database.py:187
+#: ontask/dataops/pandas/database.py:188
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -2134,7 +2134,7 @@ msgstr "Flujo actualizado"
 msgid "Update list of workflow users"
 msgstr "Actualizar la lista de usuarios del flujo"
 
-#: ontask/models/logs.py:244 ontask/models/scheduler.py:130
+#: ontask/models/logs.py:244 ontask/models/scheduler.py:132
 msgid "payload"
 msgstr "datos adicionales"
 
@@ -2198,36 +2198,36 @@ msgstr "Finalizado"
 msgid "Finished with error"
 msgstr "Terminado con error"
 
-#: ontask/models/scheduler.py:68
+#: ontask/models/scheduler.py:70
 msgid "When to execute this action"
 msgstr "Cuando ejecutar esta acción"
 
-#: ontask/models/scheduler.py:82
+#: ontask/models/scheduler.py:84
 msgid "End of execution period (Optional)"
 msgstr "Final del período de ejecución (Opcional)"
 
-#: ontask/models/scheduler.py:90
+#: ontask/models/scheduler.py:92
 msgid "Execution Status"
 msgstr "Estado de la ejecición"
 
-#: ontask/models/scheduler.py:156
+#: ontask/models/scheduler.py:158
 msgid "Incorrect execution time specification."
 msgstr "Tiempo de ejecución incorrecto."
 
-#: ontask/models/scheduler.py:161
+#: ontask/models/scheduler.py:163
 msgid "Frequency of execution is missing."
 msgstr "No se ha especificado la frecuencia de ejecución."
 
-#: ontask/models/scheduler.py:166
+#: ontask/models/scheduler.py:168
 msgid "Execution times in the past. No execution possible."
 msgstr ""
 "No es posible ejecutar la operación. Los tiempos de ejecución ha pasado."
 
-#: ontask/models/scheduler.py:170
+#: ontask/models/scheduler.py:172
 msgid "Execution time is in the past. No execution possible."
 msgstr "No es posible ejecutar la operación. El tiempo de ejecución ha pasado."
 
-#: ontask/models/scheduler.py:173
+#: ontask/models/scheduler.py:175
 msgid "Incorrect execution dates."
 msgstr "Fechas de ejecución incorrectas."
 
@@ -2328,23 +2328,23 @@ msgstr "número de filas"
 msgid "number of columns"
 msgstr "número de columnas"
 
-#: ontask/oauth/services.py:103
+#: ontask/oauth/services.py:106
 msgid "Unable to refresh OAuth token."
 msgstr "Imposible renovar el token de acceso de OAuth."
 
-#: ontask/oauth/services.py:133
+#: ontask/oauth/services.py:139
 msgid "Inconsistent OAuth response. Unable to authorize"
 msgstr "Respuesta de OAuth inconsistente. No es posible autorizar"
 
-#: ontask/oauth/services.py:137
+#: ontask/oauth/services.py:143
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "Error interno. El nombre de la instancia OAuth está vacío"
 
-#: ontask/oauth/services.py:141
+#: ontask/oauth/services.py:147
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "Error interno. El diccionario OAuth es incorrecto"
 
-#: ontask/oauth/services.py:155
+#: ontask/oauth/services.py:161
 msgid "Unable to obtain access token from OAuth"
 msgstr "No se a podido obtener el token de acceso de OAuth"
 
@@ -2455,22 +2455,23 @@ msgstr "bcc_email debe tener una lista de emails separados por espacios."
 msgid "Personalized JSON needs a token in payload."
 msgstr "El JSON personalizado necesita una ficha en el payload."
 
-#: ontask/scheduler/services/action_producers.py:52
+#: ontask/scheduler/services/action_producers.py:53
 msgid "Schedule Action Execution"
 msgstr "Planificar la ejecución de una acción"
 
-#: ontask/scheduler/services/action_producers.py:63
+#: ontask/scheduler/services/action_producers.py:64
+#: ontask/scheduler/services/action_producers.py:165
 #: ontask/templates/action/includes/partial_action_card.html:96
 #: ontask/templates/scheduler/edit.html:71
 msgid "Schedule"
 msgstr "Planificar"
 
-#: ontask/scheduler/services/action_producers.py:97
+#: ontask/scheduler/services/action_producers.py:98
 #: ontask/scheduler/services/sql_producer.py:82
 msgid "Incorrect request for operation scheduling"
 msgstr "Petición incorrecta de acción planificada"
 
-#: ontask/scheduler/services/action_producers.py:125
+#: ontask/scheduler/services/action_producers.py:126
 #, python-brace-format
 msgid "Unable to create scheduled operation: {0}"
 msgstr "No se puede crear la acción planificada: {0}"

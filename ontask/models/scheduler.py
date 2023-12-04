@@ -33,6 +33,8 @@ SCHEDULED_STATUS = [
 OPERATION_TYPES = {
     Log.ACTION_RUN_PERSONALIZED_EMAIL:
         Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_EMAIL],
+    Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL:
+        Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL],
     Log.ACTION_RUN_PERSONALIZED_JSON:
         Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_JSON],
     Log.ACTION_RUN_JSON_REPORT: Log.LOG_TYPES[Log.ACTION_RUN_JSON_REPORT],
@@ -133,13 +135,14 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
     def log(self, operation_type: str, **kwargs):
         """Log the operation with the object."""
         payload = {
-            'id': self.id,
-            'name': self.name,
-            'execute_start': simplify_datetime_str(self.execute_start),
-            'frequency': self.frequency,
-            'execute_until': simplify_datetime_str(self.execute_until),
-            'status': self.status,
-            'payload': json.dumps(self.payload)}
+            'Scheduled id': self.id,
+            'Scheduled name': self.name,
+            'Scheduled execute': simplify_datetime_str(self.execute_start),
+            'Scheduled frequency': self.frequency,
+            'Scheduled execute until': simplify_datetime_str(self.execute_until),
+            'Scheduled status': self.status,
+            'Scheduled workflow': self.workflow.name,
+            'Scheduled payload': json.dumps(self.payload)}
 
         if self.action:
             payload['action'] = self.action.name
