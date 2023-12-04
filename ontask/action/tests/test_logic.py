@@ -15,32 +15,32 @@ from ontask.dataops import pandas
 class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test Email tracking."""
 
-    trck_tokens = [
-        signing.dumps(item) for item in
-        [{
-            'action': 2,
-            'sender': 'instructor01@bogus.com',
-            'to': 'student01@bogus.com',
-            'column_to': 'email',
-            'column_dst': 'EmailRead_1'},
-            {
+    def test(self):
+        trck_tokens = [
+            signing.dumps(item) for item in
+            [{
                 'action': 2,
                 'sender': 'instructor01@bogus.com',
-                'to': 'student02@bogus.com',
+                'to': 'student01@bogus.com',
                 'column_to': 'email',
                 'column_dst': 'EmailRead_1'},
-            {
-                'action': 2,
-                'sender': 'instructor01@bogus.com',
-                'to': 'student03@bogus.com',
-                'column_to': 'email',
-                'column_dst': 'EmailRead_1'}]]
+                {
+                    'action': 2,
+                    'sender': 'instructor01@bogus.com',
+                    'to': 'student02@bogus.com',
+                    'column_to': 'email',
+                    'column_dst': 'EmailRead_1'},
+                {
+                    'action': 2,
+                    'sender': 'instructor01@bogus.com',
+                    'to': 'student03@bogus.com',
+                    'column_to': 'email',
+                    'column_dst': 'EmailRead_1'}]]
 
-    def test(self):
         # Repeat the checks two times to test if they are accumulating
         for idx in range(1, 3):
             # Iterate over the tracking items
-            for track in self.trck_tokens:
+            for track in trck_tokens:
                 self.client.get(reverse('trck') + '?v=' + track)
 
             # Get the workflow and the data frame
