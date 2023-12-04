@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 08:20+0930\n"
+"POT-Creation-Date: 2023-12-04 09:50+1030\n"
 "PO-Revision-Date: 2019-09-14 19:37+0930\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -331,29 +331,22 @@ msgstr "不能用空数据表导入操作进入工作流"
 msgid "Action with name \"{0}\" already exists"
 msgstr "本名称命名的操作已经存在"
 
-#: ontask/action/services/canvas_email.py:60
+#: ontask/action/services/canvas_email.py:38
 msgid "OAuth token refreshed"
 msgstr "OAuth令牌已刷新"
 
-#: ontask/action/services/canvas_email.py:109
-msgid "Unable to obtain Canvas OAuth information"
-msgstr "无法获取Canvas OAUTH信息"
-
-#: ontask/action/services/canvas_email.py:134
-#, python-brace-format
-msgid "Error when invoking Canvas API: {0}."
-msgstr "调用Canvas API时出错：{0}。"
-
-#: ontask/action/services/canvas_email.py:155
-msgid "Message successfuly sent"
+#: ontask/action/services/canvas_email.py:78
+#, fuzzy
+#| msgid "Message successfuly sent"
+msgid "Message successfully sent"
 msgstr "信息已发送"
 
-#: ontask/action/services/canvas_email.py:177
+#: ontask/action/services/canvas_email.py:101
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "无法传递信息（code{0}）"
 
-#: ontask/action/services/canvas_email.py:203
+#: ontask/action/services/canvas_email.py:130
 #: ontask/action/services/run_factory.py:149
 #: ontask/templates/action/action_zip_step1.html:35
 #: ontask/templates/action/request_email_data.html:36
@@ -363,11 +356,11 @@ msgstr "无法传递信息（code{0}）"
 msgid "Send"
 msgstr "发送"
 
-#: ontask/action/services/canvas_email.py:253
+#: ontask/action/services/canvas_email.py:181
 msgid "Unable to find OAuth Information Record"
 msgstr "找不到OAUTH信息记录"
 
-#: ontask/action/services/canvas_email.py:261
+#: ontask/action/services/canvas_email.py:189
 msgid "Incorrect execution due to absence of token"
 msgstr "因为令牌缺失造成的不正确的执行"
 
@@ -890,6 +883,15 @@ msgstr "SQL连接"
 msgid "Athena Connections"
 msgstr "SQL连接"
 
+#: ontask/core/canvas_ops.py:62
+msgid "Unable to obtain Canvas OAuth information"
+msgstr "无法获取Canvas OAUTH信息"
+
+#: ontask/core/canvas_ops.py:87
+#, python-brace-format
+msgid "Error when invoking Canvas API: {0}."
+msgstr "调用Canvas API时出错：{0}。"
+
 #: ontask/core/checks.py:141
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
@@ -1138,13 +1140,13 @@ msgstr "评估错误：操作为GREATER或EQUAL时，类型{0}无法执行"
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr "评估错误：操作为BETWEEN时，类型{0}无法执行"
 
-#: ontask/dataops/pandas/database.py:150 ontask/dataops/pandas/database.py:192
+#: ontask/dataops/pandas/database.py:151 ontask/dataops/pandas/database.py:193
 #: ontask/dataops/sql/column_queries.py:141
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr ""
 
-#: ontask/dataops/pandas/database.py:187
+#: ontask/dataops/pandas/database.py:188
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -2300,7 +2302,7 @@ msgstr "工作流已更新"
 msgid "Update list of workflow users"
 msgstr "更新工作流用户列表"
 
-#: ontask/models/logs.py:244 ontask/models/scheduler.py:130
+#: ontask/models/logs.py:244 ontask/models/scheduler.py:132
 msgid "payload"
 msgstr "有效载荷"
 
@@ -2364,37 +2366,37 @@ msgstr "已完成"
 msgid "Finished with error"
 msgstr "已完成，错误"
 
-#: ontask/models/scheduler.py:68
+#: ontask/models/scheduler.py:70
 msgid "When to execute this action"
 msgstr "何时执行此操作"
 
-#: ontask/models/scheduler.py:82
+#: ontask/models/scheduler.py:84
 msgid "End of execution period (Optional)"
 msgstr ""
 
-#: ontask/models/scheduler.py:90
+#: ontask/models/scheduler.py:92
 msgid "Execution Status"
 msgstr "执行状态"
 
-#: ontask/models/scheduler.py:156
+#: ontask/models/scheduler.py:158
 #, fuzzy
 #| msgid "Incorrect execution due to absence of token"
 msgid "Incorrect execution time specification."
 msgstr "因为令牌缺失造成的不正确的执行"
 
-#: ontask/models/scheduler.py:161
+#: ontask/models/scheduler.py:163
 msgid "Frequency of execution is missing."
 msgstr ""
 
-#: ontask/models/scheduler.py:166
+#: ontask/models/scheduler.py:168
 msgid "Execution times in the past. No execution possible."
 msgstr ""
 
-#: ontask/models/scheduler.py:170
+#: ontask/models/scheduler.py:172
 msgid "Execution time is in the past. No execution possible."
 msgstr ""
 
-#: ontask/models/scheduler.py:173
+#: ontask/models/scheduler.py:175
 #, fuzzy
 #| msgid "Incorrect execution"
 msgid "Incorrect execution dates."
@@ -2502,23 +2504,23 @@ msgstr "行数"
 msgid "number of columns"
 msgstr "列数"
 
-#: ontask/oauth/services.py:103
+#: ontask/oauth/services.py:106
 msgid "Unable to refresh OAuth token."
 msgstr "无法刷新OAuth令牌。"
 
-#: ontask/oauth/services.py:133
+#: ontask/oauth/services.py:139
 msgid "Inconsistent OAuth response. Unable to authorize"
 msgstr "OAuth响应不一致。无法授权"
 
-#: ontask/oauth/services.py:137
+#: ontask/oauth/services.py:143
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "内部错误。清空OAuth事例名称"
 
-#: ontask/oauth/services.py:141
+#: ontask/oauth/services.py:147
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "内部错误。无效的OAuth Dict元素"
 
-#: ontask/oauth/services.py:155
+#: ontask/oauth/services.py:161
 msgid "Unable to obtain access token from OAuth"
 msgstr "无法从OAuth获取访问令牌"
 
@@ -2656,26 +2658,27 @@ msgstr "bcc_email必须是一个逗号分隔的电子邮件列表。"
 msgid "Personalized JSON needs a token in payload."
 msgstr "个性化JSON需要有效载荷中的令牌。"
 
-#: ontask/scheduler/services/action_producers.py:52
+#: ontask/scheduler/services/action_producers.py:53
 #, fuzzy
 #| msgid "Schedule Action Execution"
 msgid "Schedule Action Execution"
 msgstr "安排操作执行"
 
-#: ontask/scheduler/services/action_producers.py:63
+#: ontask/scheduler/services/action_producers.py:64
+#: ontask/scheduler/services/action_producers.py:165
 #: ontask/templates/action/includes/partial_action_card.html:96
 #: ontask/templates/scheduler/edit.html:71
 msgid "Schedule"
 msgstr "预定"
 
-#: ontask/scheduler/services/action_producers.py:97
+#: ontask/scheduler/services/action_producers.py:98
 #: ontask/scheduler/services/sql_producer.py:82
 #, fuzzy
 #| msgid "Incorrect request in action scheduling"
 msgid "Incorrect request for operation scheduling"
 msgstr "行动调度中的请求不正确"
 
-#: ontask/scheduler/services/action_producers.py:125
+#: ontask/scheduler/services/action_producers.py:126
 #, fuzzy, python-brace-format
 #| msgid "Unable to update scheduled action: {0}"
 msgid "Unable to create scheduled operation: {0}"
