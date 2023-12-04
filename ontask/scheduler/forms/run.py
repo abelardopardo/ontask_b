@@ -33,6 +33,26 @@ class ScheduleEmailForm(ScheduleBasicForm, action_forms.EmailActionForm):
             'track_read'])
 
 
+class ScheduleCanvasEmailForm(
+    ScheduleBasicForm,
+    action_forms.CanvasEmailActionForm
+):
+    """Form to edit ScheduleAction of types Canvas Email."""
+
+    def __init__(self, *args, **kwargs):
+        """Set field order."""
+        super().__init__(*args, **kwargs)
+        self.order_fields([
+            'name',
+            'description_text',
+            'execute',
+            'multiple_executions',
+            'frequency',
+            'execute_until',
+            'item_column',
+            'subject'])
+
+
 class ScheduleSendListForm(ScheduleBasicForm, action_forms.SendListActionForm):
     """Form to create/edit objects of the ScheduleAction of type send list."""
 

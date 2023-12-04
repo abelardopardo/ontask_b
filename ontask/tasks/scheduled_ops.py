@@ -79,7 +79,7 @@ def execute_scheduled_operation(s_item_id: int):
             s_item.refresh_from_db(fields=['status'])
 
             # Create and update the log
-            log_item = s_item.workflow.log(s_item.user, s_item.operation_type)
+            log_item = s_item.log(s_item.operation_type)
             s_item.last_executed_log = log_item
             s_item.save(update_fields=['last_executed_log'])
 

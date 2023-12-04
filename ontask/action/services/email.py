@@ -353,7 +353,7 @@ class ActionRunProducerEmail(ActionRunProducerBase):
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
     ):
-        """Send action content evaluated for each row.
+        """Send emails with the action content evaluated for each row.
 
         Sends the emails for the given action and with the
         given subject. The subject will be evaluated also with respect to the

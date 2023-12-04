@@ -4,7 +4,7 @@ before_script:
   - cp $HOME/local.env settings/local.env
   - dropdb --if-exists ontask
   - createdb ontask
-  - python3 -m pip install --upgrade --user pip
+  - python3 -m pip install --upgrade pip
   - python3 -m pip install coverage
   - python3 -m pip install -r requirements.txt
   - python3 manage.py collectstatic --no-input

@@ -9,9 +9,10 @@ from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
 from ontask.core import SessionPayload
+from ontask.core import canvas_get_or_set_oauth_token
 from ontask.scheduler.forms import (
     ScheduleEmailForm, ScheduleJSONForm, ScheduleJSONReportForm,
-    ScheduleSendListForm)
+    ScheduleSendListForm, ScheduleCanvasEmailForm)
 from ontask.scheduler.services.edit_factory import (
     ScheduledOperationUpdateBaseView)
 from ontask.scheduler.services.items import create_timedelta_string
@@ -147,6 +148,35 @@ class ScheduledOperationEmailUpdateView(ScheduledOperationActionRunUpdateView):
 
     operation_type = models.Log.ACTION_RUN_PERSONALIZED_EMAIL
     form_class = ScheduleEmailForm
+
+
+class ScheduledOperationCanvasEmailUpdateView(
+    ScheduledOperationActionRunUpdateView
+):
+    """Process Canvas Email form."""
+
+    operation_type = models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL
+    form_class = ScheduleCanvasEmailForm
+
+    def form_valid(self, form) -> http.HttpResponse:
+        """Process the VALID POST request and insert Canvas Auth."""
+        if self.op_payload.get('confirm_items'):
+            # Add information to the session object to execute the next pages
+            self.op_payload['button_label'] = gettext('Schedule')
+            self.op_payload['value_range'] = 2
+            self.op_payload['step'] = 2
+            continue_url = 'action:item_filter'
+        else:
+            continue_url = 'scheduler:finish_scheduling'
+
+        self.op_payload.store_in_session(self.request.session)
+
+        # Check for the CANVAS token and proceed to the continue_url
+        return canvas_get_or_set_oauth_token(
+            self.request,
+            self.op_payload['target_url'],
+            continue_url,
+            'action:index')
 
 
 class ScheduledOperationEmailReportUpdateView(

@@ -39,8 +39,6 @@ htmlcov
 # Linux Editors
 *~
 \#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
 .elc
 auto-save-list
 tramp
@@ -72,7 +70,14 @@ Desktop.ini
 .idea
 .git_OLD
 tmp
-
+My_material
+My_scripts
+test_data
+ontask_cert.*
+dumps
+PATCHES
+ontask/tests/initial_workflow/create_fixture.sh
+requirements/freeze.txt
 
 # Documentation
 /html
@@ -104,3 +109,6 @@ ontask/tests/fixtures/*.gz
 .codeql_ontask
 .codeqlrc
 codeql_output.csv
+
+# hide ontask agent config file
+ontask/agent/utils/agent.env

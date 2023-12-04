@@ -936,7 +936,9 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         self.selenium.find_element(By.ID, 'id_subject').send_keys(
             'Your preparation activities for the week'
         )
-        self.selenium.find_element(By.ID, 'id_track_read').click()
+        track_read_element = self.selenium.find_element(By.ID, 'id_track_read')
+        self.scroll_element_into_view(track_read_element)
+        track_read_element.click()
 
         # Take picture of the export page.
         self.body_ss('schedule_action_email.png')
