@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 08:20+0930\n"
+"POT-Creation-Date: 2023-12-04 09:50+1030\n"
 "PO-Revision-Date: 2020-06-01 19:53+0300\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
@@ -330,29 +330,22 @@ msgstr "Toimintoa ei voi tuoda tyhjään datataulukkoon"
 msgid "Action with name \"{0}\" already exists"
 msgstr "Tämänniminen toiminto nimi on jo olemassa"
 
-#: ontask/action/services/canvas_email.py:60
+#: ontask/action/services/canvas_email.py:38
 msgid "OAuth token refreshed"
 msgstr "OAuth token virkistetty"
 
-#: ontask/action/services/canvas_email.py:109
-msgid "Unable to obtain Canvas OAuth information"
-msgstr "Canvas OAuth -tietoja ei löytynyt"
-
-#: ontask/action/services/canvas_email.py:134
-#, python-brace-format
-msgid "Error when invoking Canvas API: {0}."
-msgstr "Virhe kutsuessa Canvas API: {0}."
-
-#: ontask/action/services/canvas_email.py:155
-msgid "Message successfuly sent"
+#: ontask/action/services/canvas_email.py:78
+#, fuzzy
+#| msgid "Message successfuly sent"
+msgid "Message successfully sent"
 msgstr "Viestin lähetys onnistui"
 
-#: ontask/action/services/canvas_email.py:177
+#: ontask/action/services/canvas_email.py:101
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "Viestin toimittaminen epäonnistui (koodi {0})"
 
-#: ontask/action/services/canvas_email.py:203
+#: ontask/action/services/canvas_email.py:130
 #: ontask/action/services/run_factory.py:149
 #: ontask/templates/action/action_zip_step1.html:35
 #: ontask/templates/action/request_email_data.html:36
@@ -362,11 +355,11 @@ msgstr "Viestin toimittaminen epäonnistui (koodi {0})"
 msgid "Send"
 msgstr "Lähetä"
 
-#: ontask/action/services/canvas_email.py:253
+#: ontask/action/services/canvas_email.py:181
 msgid "Unable to find OAuth Information Record"
 msgstr "OAuth Information Record ei löytynyt"
 
-#: ontask/action/services/canvas_email.py:261
+#: ontask/action/services/canvas_email.py:189
 msgid "Incorrect execution due to absence of token"
 msgstr "Virheellinen suoritus, token puuttuu"
 
@@ -853,6 +846,15 @@ msgstr "SQL-yhteydet"
 msgid "Athena Connections"
 msgstr "Athena-yhteydet"
 
+#: ontask/core/canvas_ops.py:62
+msgid "Unable to obtain Canvas OAuth information"
+msgstr "Canvas OAuth -tietoja ei löytynyt"
+
+#: ontask/core/canvas_ops.py:87
+#, python-brace-format
+msgid "Error when invoking Canvas API: {0}."
+msgstr "Virhe kutsuessa Canvas API: {0}."
+
 #: ontask/core/checks.py:141
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
@@ -1111,13 +1113,13 @@ msgstr ""
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin BETWEEN yhteydessä"
 
-#: ontask/dataops/pandas/database.py:150 ontask/dataops/pandas/database.py:192
+#: ontask/dataops/pandas/database.py:151 ontask/dataops/pandas/database.py:193
 #: ontask/dataops/sql/column_queries.py:141
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr "Sarakkeen nimi on pidempi kuin {0} merkkiä"
 
-#: ontask/dataops/pandas/database.py:187
+#: ontask/dataops/pandas/database.py:188
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -2190,7 +2192,7 @@ msgstr "Työnkulku päivitetty"
 msgid "Update list of workflow users"
 msgstr "Päivitä työnkulun käyttäjien lista"
 
-#: ontask/models/logs.py:244 ontask/models/scheduler.py:130
+#: ontask/models/logs.py:244 ontask/models/scheduler.py:132
 msgid "payload"
 msgstr "sisältö"
 
@@ -2254,35 +2256,35 @@ msgstr "Valmis"
 msgid "Finished with error"
 msgstr "Valmis, sisältää virheitä"
 
-#: ontask/models/scheduler.py:68
+#: ontask/models/scheduler.py:70
 msgid "When to execute this action"
 msgstr "Milloin tämä toiminto suoritetaan"
 
-#: ontask/models/scheduler.py:82
+#: ontask/models/scheduler.py:84
 msgid "End of execution period (Optional)"
 msgstr "Suoritusjakson päättyminen (valinnainen)"
 
-#: ontask/models/scheduler.py:90
+#: ontask/models/scheduler.py:92
 msgid "Execution Status"
 msgstr "Suorituksen tila"
 
-#: ontask/models/scheduler.py:156
+#: ontask/models/scheduler.py:158
 msgid "Incorrect execution time specification."
 msgstr "Virheellinen suoritusajan määrittely."
 
-#: ontask/models/scheduler.py:161
+#: ontask/models/scheduler.py:163
 msgid "Frequency of execution is missing."
 msgstr "Suoritusaikataulun frekvenssi puuttuu."
 
-#: ontask/models/scheduler.py:166
+#: ontask/models/scheduler.py:168
 msgid "Execution times in the past. No execution possible."
 msgstr "Suoritusajat menneisyydessä. Suoritus ei onnistu."
 
-#: ontask/models/scheduler.py:170
+#: ontask/models/scheduler.py:172
 msgid "Execution time is in the past. No execution possible."
 msgstr "Suoritusaika on mennyt. Suoritus ei onnistu."
 
-#: ontask/models/scheduler.py:173
+#: ontask/models/scheduler.py:175
 msgid "Incorrect execution dates."
 msgstr "Virheelliset suorituspäivämäärät."
 
@@ -2384,23 +2386,23 @@ msgstr "rivien lukumäärä"
 msgid "number of columns"
 msgstr "sarakkeiden lukumäärä"
 
-#: ontask/oauth/services.py:103
+#: ontask/oauth/services.py:106
 msgid "Unable to refresh OAuth token."
 msgstr "OAuth tokenia ei voitu päivittää."
 
-#: ontask/oauth/services.py:133
+#: ontask/oauth/services.py:139
 msgid "Inconsistent OAuth response. Unable to authorize"
 msgstr "Epäkonsistentti OAuth vastaus. Autorisointi ei onnistu"
 
-#: ontask/oauth/services.py:137
+#: ontask/oauth/services.py:143
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "Sisäinen virhe. OAuth -instanssin nimi on tyhjä"
 
-#: ontask/oauth/services.py:141
+#: ontask/oauth/services.py:147
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "Sisäinen virhe. OAuth Dict -elementti ei ole kelvollinen"
 
-#: ontask/oauth/services.py:155
+#: ontask/oauth/services.py:161
 msgid "Unable to obtain access token from OAuth"
 msgstr "Acces tokenia ei voitu hakea OAuth:sta"
 
@@ -2523,22 +2525,23 @@ msgstr ""
 msgid "Personalized JSON needs a token in payload."
 msgstr "Personoitu JSON tarvitsee tokenin hyötykuormassa."
 
-#: ontask/scheduler/services/action_producers.py:52
+#: ontask/scheduler/services/action_producers.py:53
 msgid "Schedule Action Execution"
 msgstr "Ajasta toimintojen suoritus"
 
-#: ontask/scheduler/services/action_producers.py:63
+#: ontask/scheduler/services/action_producers.py:64
+#: ontask/scheduler/services/action_producers.py:165
 #: ontask/templates/action/includes/partial_action_card.html:96
 #: ontask/templates/scheduler/edit.html:71
 msgid "Schedule"
 msgstr "Ajastus"
 
-#: ontask/scheduler/services/action_producers.py:97
+#: ontask/scheduler/services/action_producers.py:98
 #: ontask/scheduler/services/sql_producer.py:82
 msgid "Incorrect request for operation scheduling"
 msgstr "Virheellinen pyyntö toimenpiteen ajastukseen"
 
-#: ontask/scheduler/services/action_producers.py:125
+#: ontask/scheduler/services/action_producers.py:126
 #, python-brace-format
 msgid "Unable to create scheduled operation: {0}"
 msgstr "Ajastetun toimenpiteen luonti ei onnistu: {0}"
