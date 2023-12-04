@@ -71,7 +71,10 @@ def get_initial_token_step1(
     )
 
 
-def refresh_token(user_token, oauth_info):
+def refresh_token(
+        user_token: models.OAuthUserToken,
+        oauth_info
+) -> models.OAuthUserToken:
     """Obtain OAuth2 token for the user in this request.
 
     :param user_token: User token to be refreshed
@@ -109,9 +112,12 @@ def refresh_token(user_token, oauth_info):
     user_token.access_token = response_data['access_token']
     user_token.valid_until = timezone.now() + timedelta(
         seconds=response_data.get('expires_in', 0))
-    user_token.save(update_fields=['access_token', 'valid_until'])
+    user_token.refresh_token = response_data.get('refresh_token'),
 
-    return user_token.access_token
+    user_token.save(update_fields=[
+        'access_token', 'valid_until', 'refresh_token'])
+
+    return user_token
 
 
 def process_callback(
