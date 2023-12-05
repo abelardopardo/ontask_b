@@ -1,0 +1,2 @@
+<p><strong>Week 3&nbsp; Data inspection and exploration&nbsp;</strong></p>
+<p>In Week 3 we will focus on data inspection and basic summary statistics, such as mean, median, or variance. We will also work with various plots, such as histograms, box plot, or scatter plot. This is something you will be using in your Assignment 1, so please make sure to reach out if you have any questions.</p>

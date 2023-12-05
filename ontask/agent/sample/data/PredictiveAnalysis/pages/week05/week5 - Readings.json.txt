@@ -1,0 +1,10 @@
+<h3>Readings</h3>
+<ul id="yui_3_17_2_1_1691832705207_49" class="section img-text">
+    <li class="activity book modtype_book  hasinfo"><a class="inline_disabled" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207261" target="_blank" rel="noopener noreferrer"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/book/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Textbook: Chapter 4 (Section 4.4). Classification: Basic Concepts, Decision Trees, and Model Evaluation</span></a><br />
+        <p><span lang="EN-AU">In week 5 we will cover a very important concept of Overfitting -<span>&nbsp;</span><strong>Chapter 4, Section 4.4. Model Overfitting</strong>.</span><span>&nbsp;It is really important to understand what does it mean to overfit the model and how we can avoid it.</span></p>
+        <p><iframe id="eres_res_link_19234" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=19234" width="100%" height="100" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe></p>
+        <p><span lang="EN-AU">In case you are reading the other version of the textbook, you would be looking for&nbsp;<strong>Chapter 3, Section 3.4. Model Overfitting</strong>.</span>&nbsp;</p>
+        <p><iframe id="eres_res_link_25362" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=25362" width="100%" height="100" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe></p>
+        <p>&nbsp;</p>
+    </li>
+</ul>

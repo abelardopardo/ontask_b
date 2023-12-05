@@ -1,0 +1,29 @@
+<h3>TO DO</h3>
+<ul>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>Read</strong>&nbsp;Section 5.2 Nearest-Neighbor Classifier&nbsp;and&nbsp;Section&nbsp;5.3 Bayesian Classifier&nbsp;in Chapter 5 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>)&nbsp;any additional resources you might find relevant.</span></p>
+    </li>
+    <li>
+        <p>✔<span>&nbsp;</span><strong>Complete<span>&nbsp;</span></strong>Week 8 Practical.</p>
+    </li>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>Watch&nbsp;</strong>suggested videos. We added several videos on both methods introduced in this week.</span></p>
+    </li>
+    <li><span>✔&nbsp;<strong></strong><strong>Submit&nbsp;</strong>Quiz 3. Please note that this quiz is a part of your continuous assessment.</span></li>
+</ul>
+<h3 id="yui_3_17_2_1_1691832705207_59"><span>What you will learn?</span></h3>
+<ul>
+    <li>
+        <p><span>The basic idea behind Nearest Neighbor Classifiers</span></p>
+    </li>
+    <li>
+        <p><span>Handling missing values in training and test datasets</span></p>
+    </li>
+    <li>
+        <p><span>Handling irrelevant and redundant attributes</span></p>
+    </li>
+    <li>
+        <p><span>Using Bayes Theorem for Classification</span></p>
+    </li>
+    <li><span>Conditional independence and estimating probabilities from data</span></li>
+</ul>

@@ -1,0 +1,39 @@
+<ul>
+    <li>
+        <h3>Videos</h3>
+    </li>
+    <li><a href="https://lo.unisa.edu.au/mod/url/view.php?id=3207212"> <img src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /> So what is data visualisation? (via LinkedIn Learning - 7m 33s)URL </a>
+        <p>The video is a part of the&nbsp;Learning Data Visualization course, by Bill Shander.</p>
+    </li>
+    <li><a href="https://lo.unisa.edu.au/mod/url/view.php?id=3207213"> <img src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /> Visual primacy: The importance of starting with pictures (via LinkedIn Learning - 7m 52s)URL </a>
+        <p>The video is a part of the Data Fluency: Exploring and Describing Data course, by Barton Poulson.</p>
+    </li>
+    <li><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207214"> <img src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /> Box plots (via LinkedIn Learning - 6m 49s)URL </a>
+        <p>The video is a part of the Data Fluency: Exploring and Describing Data course, by Barton Poulson.</p>
+    </li>
+    <li><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207215"> <img src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /> Histograms (via LinkedIn Learning - 4m 37s)URL </a>
+        <p>The video is a part of the Data Fluency: Exploring and Describing Data course, by Barton Poulson.</p>
+    </li>
+    <li>
+        <div><img class="icon " title="Slides and Other resources" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/folder-24" alt="Slides and Other resources" />Slides and Other resources</div>
+        <br /><a href="https://lo.unisa.edu.au/pluginfile.php/3986383/mod_folder/content/0/cars.zip?forcedownload=1"><img class="icon " title="cars.zip" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/archive-24" alt="cars.zip" />cars.zip</a> <br /><a href="https://lo.unisa.edu.au/pluginfile.php/3986383/mod_folder/content/0/heart-disease.zip?forcedownload=1"><img class="icon " title="heart-disease.zip" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/archive-24" alt="heart-disease.zip" />heart-disease.zip</a> <br /><a href="https://lo.unisa.edu.au/pluginfile.php/3986383/mod_folder/content/0/iris%20data.zip?forcedownload=1"><img class="icon " title="iris data.zip" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/archive-24" alt="iris data.zip" />iris data.zip</a> <br /><a href="https://lo.unisa.edu.au/pluginfile.php/3986383/mod_folder/content/0/L3_ch_data_exploration.pdf?forcedownload=1"><img class="icon " title="L3_ch_data_exploration.pdf" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="L3_ch_data_exploration.pdf" />L3_ch_data_exploration.pdf</a> <br /><a href="https://lo.unisa.edu.au/pluginfile.php/3986383/mod_folder/content/0/L3_feature_engineering_data_exploration.pdf?forcedownload=1"><img class="icon " title="L3_feature_engineering_data_exploration.pdf" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="L3_feature_engineering_data_exploration.pdf" />L3_feature_engineering_data_exploration.pdf</a>
+    </li>
+    <li id="module-3207217" class="activity label modtype_label  hasinfo">
+        <h4>Properties of Data</h4>
+    </li>
+    <li id="module-3207218" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207218"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" />Use the normal distribution (via LinkedIn Learning - 6m 1s)URL</a>
+        <p>The video is a part of the&nbsp;Learning Excel: Data Analysis course, by Curtis Frye.</p>
+    </li>
+    <li id="module-3207219" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207219"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" />Use the exponential distribution (via LinkedIn Learning - 5m 24s)URL</a>
+        <p>The video is a part of the&nbsp;Learning Excel: Data Analysis course, by Curtis Frye.</p>
+    </li>
+    <li id="module-3207220" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207220"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" />Use a uniform distribution (via LinkedIn Learning - 6m 4s)URL</a>
+        <p>The video is a part of the&nbsp;Learning Excel: Data Analysis course, by Curtis Frye.</p>
+    </li>
+    <li id="module-3207221" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207221"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" />Use the binomial distribution (via LinkedIn Learning - 4m 50s)URL</a>
+        <p>The video is a part of the&nbsp;Learning Excel: Data Analysis course, by Curtis Frye.</p>
+    </li>
+    <li id="module-3207222" class="activity url modtype_url  hasinfo"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207222"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" />Use the Poisson distribution (via LinkedIn Learning - 4m 22s)URL </a>
+        <p>The video is a part of the Learning Excel: Data Analysis course, by Curtis Frye.</p>
+    </li>
+</ul>

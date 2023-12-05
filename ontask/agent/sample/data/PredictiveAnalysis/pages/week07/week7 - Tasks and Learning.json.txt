@@ -1,0 +1,25 @@
+<h3>TO DO</h3>
+<ul>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>Read</strong>&nbsp;Section 5.1 Rule-Based Classifier&nbsp;in Chapter 5 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>)&nbsp;any additional resources you might find relevant.</span></p>
+    </li>
+    <li>
+        <p>✔<span>&nbsp;</span><strong>Complete<span>&nbsp;</span></strong>Week 7 Practical.</p>
+    </li>
+    <li><span>✔&nbsp;</span><span><strong></strong><strong>Watch&nbsp;</strong>suggested videos. We added several videos on model evaluation. You might find these very useful.</span></li>
+</ul>
+<h3 id="yui_3_17_2_1_1691832705207_59"><span>What you will learn?</span></h3>
+<ul>
+    <li>
+        <p><span>Application of Rule-Based Classifier</span></p>
+    </li>
+    <li>
+        <p><span>Characteristics of Rule Sets; Ordered Rule Set; Rule Ordering Schemes</span></p>
+    </li>
+    <li>
+        <p><span>Building and Evaluating Rules</span></p>
+    </li>
+    <li><span>Advantages of Rule-Based Classifiers</span><br />
+        <p>&nbsp;</p>
+    </li>
+</ul>

@@ -1,0 +1,57 @@
+<h3>Additional Resources</h3>
+<p id="yui_3_17_2_1_1691842771139_113"><span id="yui_3_17_2_1_1691843435698_78">Google Collab document with a potentially useful kNN implementation is available&nbsp;</span><a href="https://colab.research.google.com/drive/11iNzXct8x-IOrL10BRqo1IbAjKZ2xq7-?usp=sharing" target="_blank" rel="noopener">here</a><span>.</span></p>
+<h3>Videos</h3>
+<ul id="yui_3_17_2_1_1691843435698_37" class="section img-text">
+    <li id="module-3207343" class="activity url modtype_url  hasinfo">
+        <div class="mod-indent-outer w-100">
+            <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207343"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">K-Nearest Neighbors (via LinkedIn Learning - 3m 58s)<span class="accesshide ">URL</span></span></a></div>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li id="module-3207344" class="activity url modtype_url  hasinfo">
+        <div class="mod-indent-outer w-100">
+            <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207344"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Bayesian Networks (via LinkedIn Learning - 7m 54s)<span class="accesshide ">URL</span></span></a></div>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li id="module-3207345" class="activity url modtype_url  hasinfo">
+        <div class="mod-indent-outer w-100">
+            <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207345"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">K-nearest neighbor (via LinkedIn Learning - 4m 28s)<span class="accesshide ">URL</span></span></a></div>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p>The video is a part of the Artificial Intelligence Foundations: Machine Learning course, by Doug Rose.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li id="module-3207346" class="activity url modtype_url  hasinfo">
+        <div class="mod-indent-outer w-100">
+            <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207346"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Naive Bayes (via LinkedIn Learning - 4m 40s)<span class="accesshide ">URL</span></span></a></div>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p>The video is a part of the Artificial Intelligence Foundations: Machine Learning course, by Doug Rose.</p>
+                        <p><a class="inline_disabled" href="https://lo.unisa.edu.au/pluginfile.php/3986514/mod_folder/content/0/L8_rule_knn_bayes.pdf?forcedownload=1" target="_blank" rel="noopener noreferrer"><span class="fp-icon"><img class="icon " title="L8_rule_knn_bayes.pdf" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="L8_rule_knn_bayes.pdf" /></span><span class="fp-filename">L8_rule_knn_bayes.pdf</span></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+<h4>Week 8 Lecture Video</h4>
+<p>(Uploaded May 2, 2023)</p>
+<p><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=b7e56af2-d39b-4da4-adae-aff600408613&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen"></iframe></p>

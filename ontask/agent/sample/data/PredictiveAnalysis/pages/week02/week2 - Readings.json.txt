@@ -1,0 +1,14 @@
+<ul id="yui_3_17_2_1_1691754176425_42" class="section img-text">
+    <li><a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207184"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/book/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Textbook: Chapter 2. Data</span></a>
+        <p id="yui_3_17_2_1_1691754176425_34"><span lang="EN-AU">In the second reading,<span>&nbsp;</span><strong>Chapter 2. Data</strong>, we will talk about different types of data, data quality, as well as about pre-processing steps necessary to prepare data for data mining.</span><span>&nbsp;</span>Make sure that you familiarize yourself with Tables 2.2 and 2.3 as these are providing a lot of useful information that you will need throughout the course.</p>
+        <p><iframe id="eres_res_link_19225" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=19225" width="100%" height="100" data-mce-fragment="1"></iframe></p>
+        <p><iframe id="eres_res_link_24989" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=24989" width="100%" height="100" data-mce-fragment="1"></iframe></p>
+    </li>
+    <li><a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3223292"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/book/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Chapter 4. Data Science Applications: Six Examples<span class="accesshide ">Book</span></span></a>
+        <p>For this week, Chapter 4 from "Data Science in Context: Foundations, Challenges, Opportunities" might be interesting. It shows several great examples of data science applications.</p>
+        <ul>
+            <li>Chapter 4. Data Science Applications: Six Examples</li>
+        </ul>
+        <iframe id="eres_res_link_30909" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=30909" width="100%" height="100" data-mce-fragment="1"></iframe>
+    </li>
+</ul>

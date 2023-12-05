@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 1",
+  "question[question_text]": "<p>Imagine you are working on a project which is a binary classification problem. You trained a model on training dataset and get the below confusion matrix on validation dataset.</p><table border=\"0\"><tbody><tr><td>n=165</td><td>Predicted:<br />NO</td><td>Predicted:<br />YES</td></tr><tr><td>Actual:<br />NO</td><td>50</td><td>10</td></tr><tr><td>Actual:<br />YES</td><td>5</td><td>100</td></tr></tbody></table><p>&nbsp;</p><p>Based on the confusion matrix, choose which option(s) below will give you correct predictions?</p><div>Select one or more:</div>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_answers_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Accuracy is ~0.91", 
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "Misclassification rate is ~0.91", 
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "False positive rate is ~0.95", 
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "True positive rate is ~0.95", 
+  "question[answers][3][answer_weight]": 100
+}

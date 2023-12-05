@@ -1,0 +1,6 @@
+<h3>Readings</h3>
+<ul>
+    <li class="activityinstance"><span class="instancename"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/book/1689804770/icon" alt="" aria-hidden="true" /> </span><span class="instancename"><a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207337">Textbook: Chapter 5 (Section 5.2 and Section 5.3). Classification: Alternative Techniques</a></span></li>
+</ul>
+<p style="padding-left: 40px;"><a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207285"></a><span>In week 8, we will discuss two classifiers Nearest-Neighbour and Bayesian. These two classifiers are quite different from the previous ones. These topics are covered in&nbsp;</span><strong>Chapter 5, Sections 5.2 and 5.3</strong><span>.</span></p>
+<p style="padding-left: 40px;"><span><iframe id="eres_res_link_19238" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=19238" width="100%" height="100" data-gtm-yt-inspected-6="true"></iframe></span></p>

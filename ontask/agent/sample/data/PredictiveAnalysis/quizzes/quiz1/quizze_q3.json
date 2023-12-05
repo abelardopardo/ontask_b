@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 3",
+  "question[question_text]": "<p><span>Which statement about outliers is true?</span></p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "The nature of the problem determines how outliers are used.",
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "Outliers should be identified and removed from a dataset.",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "Outliers should be part of the training dataset but should not be present in the test data.",
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "Outliers should be part of the test dataset but should not be present in the training data.",
+  "question[answers][3][answer_weight]": 0
+}

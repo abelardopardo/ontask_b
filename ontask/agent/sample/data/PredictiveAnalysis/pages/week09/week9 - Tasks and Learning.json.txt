@@ -1,0 +1,29 @@
+<h3>TO DO</h3>
+<ul>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>Read</strong>&nbsp;Section 5.4 Artificial Neural Network&nbsp;in Chapter 5 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener"></a><a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128">General discussion (unisa.edu.au)</a>)&nbsp;any additional resources you might find relevant.</span></p>
+    </li>
+    <li>
+        <p>✔<span>&nbsp;</span><strong>Complete<span>&nbsp;</span></strong>Week 9 Practical.</p>
+    </li>
+    <li><span>✔&nbsp;</span><span><strong>Watch&nbsp;</strong>suggested videos. While you can find a lot of videos on neural networks, those few should give you a very good introduction into the topic.</span></li>
+</ul>
+<h3 id="yui_3_17_2_1_1691832705207_59"><span>What you will learn?</span></h3>
+<ul>
+    <li>
+        <p><span>Various types of neural network topology</span></p>
+    </li>
+    <li>
+        <p><span>Perceptron and perceptron learning rule</span></p>
+    </li>
+    <li>
+        <p><span>Multi-layer Neural Network</span></p>
+    </li>
+    <li>
+        <p><span>Gradient descent</span></p>
+    </li>
+    <li>
+        <p><span>Design issues and characteristics of Neural Networks</span></p>
+    </li>
+    <li><span>Deep Neural Networks</span></li>
+</ul>

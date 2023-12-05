@@ -1,0 +1,18 @@
+{
+  "question[question_name]": "Question 3",
+  "question[question_text]": "<p>Consider the dataset shown below.</p><p>&nbsp;</p><table><caption></caption><thead><tr><th>Record</th><th>A</th><th>B</th><th>C</th><th>Class</th></tr></thead><tbody><tr><td>1</td><td>0</td><td>0</td><td>0</td><td>+</td></tr><tr><td>2</td><td>0</td><td>0</td><td>1</td><td>-</td></tr><tr><td>3</td><td>0</td><td>1</td><td>1</td><td>-</td></tr><tr><td>4</td><td>0</td><td>1</td><td>1</td><td>-</td></tr><tr><td>5</td><td>0</td><td>0</td><td>1</td><td>+</td></tr><tr><td>6</td><td>1</td><td>0</td><td>1</td><td>+</td></tr><tr><td>7</td><td>1</td><td>0</td><td>1</td><td>-</td></tr><tr><td>8</td><td>1</td><td>0</td><td>1</td><td>-</td></tr><tr><td>9</td><td>1</td><td>1</td><td>1</td><td>+</td></tr><tr><td>10</td><td>1</td><td>0</td><td>1</td><td>+</td></tr></tbody></table><p><br /><span>Estimate the conditional probabilities for P(A|+), P(B|+), and P(C|+) and choose correct probabilities below.</span></p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "<p>P(A = 1|+)=0.6,&nbsp;P(A = 0|+)=0.4</p><p>P(B = 1|+)=0.2,&nbsp;P(B = 0|+)=0.8</p><p>P(C = 1|+) = 4/5=0.8, P (C = 0|+) = 1/5=0.2</p>",
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "<p>P(A = 1|+)=0.4, P(A = 0|+)=0.6</p><p>P(B = 1|+)=0.2, P(B = 0|+)=0.8</p><p>P(C = 1|+)=0.6, P(C = 0|+)=0.4</p>",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "<p>P(A = 1|+)=0.8, P(A = 0|+)=0.2</p><p>P(B = 1|+)=0.6, P(B = 0|+)=0.4</p><p>P(C = 1|+)=0.4, P(C = 0|+)=0.6</p>",
+  "question[answers][2][answer_weight]": 0
+}

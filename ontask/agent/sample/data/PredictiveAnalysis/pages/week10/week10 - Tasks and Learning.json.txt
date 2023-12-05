@@ -1,0 +1,27 @@
+<h3>TO DO</h3>
+<ul>
+    <li>
+        <p><span>✔&nbsp;</span><span><strong>Read</strong>&nbsp;Section 5.5 Support Vector Machine (SVM)&nbsp;in Chapter 5 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>)&nbsp;any additional resources you might find relevant.</span></p>
+    </li>
+    <li>
+        <p>✔<span>&nbsp;</span><strong>Complete<span>&nbsp;</span></strong>Week 10 Practical.</p>
+    </li>
+    <li><span>✔&nbsp;</span><span><strong>Watch&nbsp;</strong>suggested videos. SVM is one of the most commonly used algorithms and you will find a lot of resources online. Please make sure you understand the topics discussed in the suggested videos before going further.</span></li>
+</ul>
+<h3 id="yui_3_17_2_1_1691832705207_59"><span>What you will learn?</span></h3>
+<ul>
+    <li>
+        <p><span>Linear Support Vector Machine</span></p>
+    </li>
+    <li>
+        <p><span>Nonlinear Support Vector Machine</span></p>
+    </li>
+    <li>
+        <p><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">Characteristics of SVMs</span></p>
+    </li>
+</ul>
+<p><span>Something to keep in mind when using SVM (although we talked about this for other algorithms as well) - never run SVMs without parameter tunning. Here is a great example in Python.&nbsp;</span></p>
+<ul>
+    <li><a href="https://medium.com/@aneesha/svm-parameter-tuning-in-scikit-learn-using-gridsearchcv-2413c02125a0" target="_blank" rel="noopener"><span>https://medium.com/@aneesha/svm-parameter-tuning-in-scikit-learn-using-gridsearchcv-2413c02125a0</span></a></li>
+</ul>
+<p><span>Yes... it's that simple (thank you, Aneesha!)</span></p>

@@ -1,0 +1,11 @@
+<h3>Practical</h3>
+<h4>Overview</h4>
+<p id="yui_3_17_2_1_1691839755294_129"><span>In this Practical we will extend the discussion on model evaluation. Task 1 represents an overview of commonly used evaluation metrics that we need to understand. Through Tasks 2-4, we will show how those metrics can be calculated</span></p>
+<h4>Objectives</h4>
+<ul>
+    <li><span lang="EN-US">Understand model evaluation metrics: accuracy, precision, recall, F1 score, Kappa, ROC, sensitivity, and specificity.</span></li>
+    <li><span lang="EN-US">Calculate accuracy, precision, recall, and F1 score using the confusion matrix.</span></li>
+    <li><span lang="EN-US">Calculate and plot ROC, accuracy and Kappa.</span></li>
+    <li><span lang="EN-US">Run cross validation.</span></li>
+</ul>
+<p><a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207292"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Week 6 Practical<span class="accesshide ">File</span></span></a><span>&nbsp;</span></p>

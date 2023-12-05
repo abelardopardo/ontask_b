@@ -1,0 +1,15 @@
+<p>Before going into details about different models for predictive analytics, we need to understand basic properties of data.</p>
+<p>In this week we will discuss types of data, data attributes, data quality, similarity and distance, as well as briefly discuss data preprocessing.</p>
+<p>This week we will also have our first<span>&nbsp;</span><strong>practical<span>&nbsp;</span></strong>that will focus on getting familiar with R, creating a new project and importing data.</p>
+<h3>TO DO</h3>
+<ul>
+    <li>✔<span>&nbsp;</span><span><strong>Read</strong>&nbsp;Chapter 2 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(in discussion forum)&nbsp;any additional resources you might find relevant.</span></li>
+    <li>✔<span>&nbsp;</span><span><strong>Watch</strong>&nbsp;recommended videos.</span></li>
+    <li>✔<span>&nbsp;</span><span><strong>Complete&nbsp;</strong>Week 2 Practical.</span></li>
+</ul>
+<h3>What you will learn?</h3>
+<ul>
+    <li><span>What is&nbsp;<strong>Data</strong>. What are&nbsp;<strong>data objects</strong>&nbsp;and their&nbsp;<strong>attributes</strong>.</span></li>
+    <li><span>Types of data and issues with data quality.</span></li>
+    <li><span>Similarity and distance measures.</span></li>
+</ul>

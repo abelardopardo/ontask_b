@@ -1,0 +1,38 @@
+<h3>TO DO</h3>
+<ul>
+    <li>
+        <ul>
+            <li>
+                <p>✔<span>&nbsp;</span><span><strong>Read</strong>&nbsp;Sections&nbsp;4.1 and 4.2, from Chapter 4 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>) any additional resources you might find relevant.</span></p>
+            </li>
+            <li>
+                <p>✔<span>&nbsp;</span><span><strong>Read</strong>&nbsp;Section&nbsp;4.3 Decision Tree Induction, from Chapter 4 of the course textbook. Feel free to&nbsp;<strong>Share&nbsp;</strong>(<a href="https://lo.unisa.edu.au/mod/forum/view.php?id=3207128" target="_blank" rel="noopener">in discussion forum</a>)&nbsp;any additional resources you might find relevant.</span></p>
+            </li>
+            <li>
+                <p>✔<span>&nbsp;</span><strong>Complete<span>&nbsp;</span></strong>Week 4 Practical.</p>
+            </li>
+            <li>
+                <p>✔<span>&nbsp;</span><span><strong>Watch&nbsp;</strong>suggested videos.<strong>&nbsp;</strong>This week we provided several videos that focus on basic concepts in classification and decision trees.</span></p>
+            </li>
+        </ul>
+    </li>
+</ul>
+<h3 id="yui_3_17_2_1_1691832705207_59"><span>What you will learn?</span></h3>
+<ul>
+    <li>
+        <ul>
+            <li><p><span>What is classification and basic differences between supervised and unsupervised learning.</span></p></li>
+            <li><p><span>How decision trees work and what are the essential features of decision trees.</span></p></li>
+            <li>
+                <p>How to find the optimal split:</p>
+                <ul>
+                    <li>When is a multiple splits of a node needed?</li>
+                    <li>Which attribute is the one to choose?</li>
+                    <li>How many children should be produced for a split considering categorical variables and interval variables?</li>
+                    <li>When does the split stop?</li>
+                    <li>What are the measurements for assessing whether a split is good or bad?</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>

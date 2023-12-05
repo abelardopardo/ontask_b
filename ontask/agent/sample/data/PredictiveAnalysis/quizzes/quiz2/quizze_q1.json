@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 1",
+  "question[question_text]": "<p>Consider the following example of a test condition for splitting an ordinal attribute (see image below).</p><p>Which grouping(s) violates the rules for splitting ordinal attributes?</p><img src=\"https://lo.unisa.edu.au/pluginfile.php/3986037/question/questiontext/5274251/1/19023110/ordinal_attribute.png\">",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 25.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "a",
+  "question[answers][0][answer_weight]": 0,
+  "question[answers][1][answer_text]": "b) and c)",
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "d)",
+  "question[answers][2][answer_weight]": 100,
+  "question[answers][3][answer_text]": "c) and d)",
+  "question[answers][3][answer_weight]": 0
+}

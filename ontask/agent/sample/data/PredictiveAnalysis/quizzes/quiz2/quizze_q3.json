@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 3",
+  "question[question_text]": "<p>Which of the following statements ARE CORRECT?</p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_answers_question",
+  "question[position]": null,
+  "question[points_possible]": 25.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Node impurity measures (such as Gini or Entropy) tend to prefer splits that result in large number of partitions.",
+  "question[answers][0][answer_weight]": 100, 
+  "question[answers][1][answer_text]": "Information Gain is the expected reduction in entropy caused by partitioning the examples according to a given attribute.",
+  "question[answers][1][answer_weight]": 100,
+  "question[answers][2][answer_text]": "Entropy at a given node t, can have a minimum value of 0.5 - when all records belong to one class - implying most beneficial situation for classification.",
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "Classification error at a node t has a minimum value of 1-1/c when records are equally distributed among all classes.",
+  "question[answers][3][answer_weight]": 0
+}

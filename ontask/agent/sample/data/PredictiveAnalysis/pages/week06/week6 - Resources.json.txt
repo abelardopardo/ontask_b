@@ -1,0 +1,55 @@
+<h3>Additional Resources</h3>
+<p><span>There seem to be quite a lot of interest in additional practical examples. Please take a look at this one</span></p>
+<ul>
+    <li><a href="https://bradleyboehmke.github.io/HOML/DT.html">https://bradleyboehmke.github.io/HOML/DT.html</a></li>
+</ul>
+<p><span>It is a very detailed R example on building a decision tree (includes pruning as well), that could be invaluable resource for your&nbsp;<strong>Assignment 2</strong>.</span></p>
+<p>Also, a very relevant and important talk by<span>&nbsp;</span><a href="https://www.upenn.edu/learninganalytics/ryanbaker/" target="_blank" rel="noopener">Ryan Baker</a><span>&nbsp;</span>and<span>&nbsp;</span><a href="https://scholar.google.com/citations?user=0yzbPoQAAAAJ&amp;hl=en" target="_blank" rel="noopener">Stefan Slater</a>. Ryan is one of the most cited experts in the field of educational data mining, while Stefan is an emerging expert in the field. Amazing colleagues, friends, and collaborators!</p>
+<p><span>The talk/tutorial discusses how to distill and engineer features for data mining, and the advantages and disadvantages compared to automated methods such as auto-encoders. Ryan and Stefan covered the process of feature engineering and distillation, including brainstorming features, deciding what features to create, and iterative feature engineering.&nbsp;</span></p>
+
+<div><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=0336e2d3-ad02-4982-ace8-ac27007890fb&amp;v=1" width="450" height="300" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe></div>
+<div>
+    <p>Although this chapter is rather short (in terms of the content in the textbook), the topic covered is extremely important.&nbsp;</p>
+    <p><a href="https://colab.research.google.com/drive/1JIuN_ObcKRLvie5m2I-X3WflP92Unjp-?usp=sharing" target="_blank" rel="noopener">Here is a sample code</a><span>&nbsp;</span>that covers cross validation. Please go ahead and explore how accuracy changes for different numbers of folds.</p>
+</div>
+
+<h3>Videos</h3>
+<ul>
+    <li>
+        <a href="https://lo.unisa.edu.au/mod/url/view.php?id=3207268"></a>
+        <ul>
+            <li>
+                    <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207294"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon"/><span class="instancename">Model assessment vs. business evaluation (via LinkedIn Learning - 1m 29s)<span class="accesshide ">URL</span></span></a></div>
+                    <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+            </li>
+            <li>
+                <div>
+                    <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207295"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon"/><span class="instancename">Trainig and Test Partitions (via LinkedIn Learning - 3m 4s)<span class="accesshide ">URL</span></span></a>
+                    <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207296"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon"/><span class="instancename">Lift Charts (via LinkedIn Learning - 1m 50s)<span class="accesshide ">URL</span></span></a></div>
+                    <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+                </div>
+            </li>
+            <li id="7">
+                <div>
+                    <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207297"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon"/><span class="instancename">Gains Tables (via LinkedIn Learning - 2m 7s)<span class="accesshide ">URL</span></span></a></div>
+                    <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+                </div>
+            </li>
+            <li id="8">
+                <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207298"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon"/><span class="instancename">Confusion Matrix (via LinkedIn Learning - 3m 19s)<span class="accesshide ">URL</span></span></a>
+                <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <p><a href="https://lo.unisa.edu.au/pluginfile.php/3986466/mod_folder/content/0/L6_model-Eval.pdf?forcedownload=1" target="_blank"><span class="fp-icon"><img class="icon " title="L5_overfitting.pdf" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="L5_overfitting.pdf" /><span>L6_model-Eval.pdf</span></span></a></p>
+    </li>
+</ul>
+<h4 id="yui_3_17_2_1_1691840959599_34">Week 6 - Model Evaluation Lecture</h4>
+<p>(updated April 4, 2023)<a href="https://unisa.au.panopto.com/Panopto/Pages/Viewer.aspx?id=3379e60a-11e2-4320-aa32-afda009fdb43" target="_blank" rel="noopener"></a></p>
+<iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=3379e60a-11e2-4320-aa32-afda009fdb43&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe>

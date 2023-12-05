@@ -1,0 +1,33 @@
+<h3 id="yui_3_17_2_1_1691832705207_76">Videos</h3>
+<ul id="yui_3_17_2_1_1691832705207_49" class="section img-text">
+    <li id="module-3207241">
+        <p>The video is a part of the Introduction to Data Science course, by Lavanya Vijayan.</p>
+    </li>
+    <li id="module-3207242">
+            <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207242"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Supervised learning (via LinkedIn Learning - 4m 19s)<span class="accesshide ">URL</span></span></a>
+            <p>The video is a part of the Azure Machine Learning Development: Basic Concepts course, by Sahil Malik.</p>
+    </li>
+    <li id="module-3207243">
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207243"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Classification (via LinkedIn Learning - 1m 49s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Azure Machine Learning Development: Basic Concepts course, by Sahil Malik.</p>
+    </li>
+    <li id="module-3207244">
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207244"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Classifying (via LinkedIn Learning - 5m 34s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Data Science Foundations: Fundamentals course, by Barton Poulson.</p>
+    </li>
+    <li id="module-3207245">
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207245"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Decision Trees (via LinkedIn Learning - 4m 28s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Artificial Intelligence Foundations: Machine Learning course, by Doug Rose.</p>
+    </li>
+    <li id="module-3207246">
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207246"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Decision Trees (via LinkedIn Learning - 4m 46s)<span class="accesshide ">URL</span></span></a>
+        <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormik.</p>
+        
+        <a href="https://lo.unisa.edu.au/pluginfile.php/3986414/mod_folder/content/0/L4_basic_classification.pdf?forcedownload=1"><span class="fp-icon"><img class="icon " title="L4_basic_classification.pdf" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="L4_basic_classification.pdf" /></span><span class="fp-filename">L4_basic_classification.pdf</span></a></span>
+        <div class="embed-responsive-container"><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=dd82b76f-537a-420f-86f3-afcc00411a2a&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe></div>
+    </li>
+    <li id="module-3207249" class="activity label modtype_label  hasinfo">
+        <h4>Quick overview of R Markdown</h4>
+        <iframe id="id_videojs_64d751853fafd_1_youtube_api" class="vjs-tech" title="Introduction to R Notebooks in RStudio, Part I" src="https://www.youtube.com/embed/TJmNvfhLCoI?controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0&amp;loop=0&amp;fs=0&amp;hl=en&amp;enablejsapi=1&amp;origin=https%3A%2F%2Flo.unisa.edu.au&amp;widgetid=1" width="640" height="360" allowfullscreen="allowfullscreen" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe>
+    </li>
+</ul>

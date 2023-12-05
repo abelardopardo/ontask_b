@@ -1,0 +1,13 @@
+<h3>Practical</h3>
+<h4>Overview</h4>
+<p>In this Practical we will learn how to build and interpret a decision tree in R. However, before fitting a predictive model, we will also go through some of the steps we covered in Practicals 2 and 3.</p>
+<p>There are several packages in R that can be used to fit a decision tree. We will be working with rpart, as it allows us high flexibility and is rather easy to use.</p>
+<h4>Objectives</h4>
+<ul>
+    <li>Load and explore data.</li>
+    <li>Build a decision tree.</li>
+    <li>Create a fully grown tree.</li>
+    <li>Prune the decision tree.</li>
+    <li><span>Make a prediction using the model we built.</span></li>
+</ul>
+<a class="aalink" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207239"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Week 4 Practical<span class="accesshide ">File</span></span></a><span>&nbsp;</span>

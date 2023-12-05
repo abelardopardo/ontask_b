@@ -1,0 +1,7 @@
+<h3>Readings</h3>
+<ul>
+    <li class="activityinstance"><span class="instancename"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/book/1689804770/icon" alt="" aria-hidden="true" /><a class="inline_disabled" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207312" target="_blank" rel="noopener noreferrer">Textbook: Chapter 5 (Section 5.1). Classification: Alternative Techniques</a></span></li>
+</ul>
+<p style="padding-left: 40px;"><a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207285"></a><span>In the previous few weeks, we focused on understanding basic idea of classification and learning about decision trees. From Week 7, we will be talking about alternative techniques, starting with Chapter 5, Section 5.1. Rule-Based Classifier.</span></p>
+<p style="padding-left: 40px;"><span><iframe id="eres_res_link_19238" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=19238" width="100%" height="100" data-gtm-yt-inspected-6="true"></iframe></span><span lang="EN-AU"><span>If you are reading the Global edition of our textbook, Rule-based classifiers are covered in Chapter 6, Section 6.1.</span><br /></span></p>
+<p style="padding-left: 40px;"><iframe id="eres_res_link_25837" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=25837" width="100%" height="100" data-gtm-yt-inspected-6="true"></iframe></p>

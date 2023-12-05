@@ -1,0 +1,22 @@
+{
+  "question[question_name]": "Question 2",
+  "question[question_text]": "<p>Consider the dataset in the table below:</p><img src=\"https://lo.unisa.edu.au/pluginfile.php/3986037/question/questiontext/5274251/2/19023113/table.png\"></img><p>Which of the three attributes - Outlook, Humidity and Windy - gives the highest gain (suggesting the best split)?</p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 25.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Humidity", 
+  "question[answers][0][answer_weight]": 0, 
+  "question[answers][1][answer_text]": "Outlook", 
+  "question[answers][1][answer_weight]": 100,
+  "question[answers][2][answer_text]": "Windy", 
+  "question[answers][2][answer_weight]": 0,
+  "question[answers][3][answer_text]": "Outlook and Windy", 
+  "question[answers][3][answer_weight]": 0,
+  "question[answers][4][answer_text]": "Windy and Humidity", 
+  "question[answers][4][answer_weight]": 0
+}

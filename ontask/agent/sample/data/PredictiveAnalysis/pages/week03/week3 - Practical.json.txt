@@ -1,0 +1,21 @@
+<h3>Practical</h3>
+<ul>
+    <li>
+        <h4>Overview</h4>
+        In this Practical we will introduce a range of useful R packages for data manipulation, feature selection, and correlation analysis.<br />
+    </li>
+    <li>
+        <h4>Objectives</h4>
+        <ul>
+            <li>Impute missing values.</li>
+            <li>Perform feature selection and feature filtering tasks.</li>
+            <li>Perform correlation analysis and plot correlograms.</li>
+        </ul>
+    </li>
+    <li>
+        <a href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207210">
+            <img src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24"/>
+            <span>Week 3 Practical<span>File</span>
+        </a>
+    </li>
+</ul>

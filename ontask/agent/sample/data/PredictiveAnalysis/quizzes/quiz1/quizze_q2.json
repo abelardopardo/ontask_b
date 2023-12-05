@@ -1,0 +1,18 @@
+{
+  "question[question_name]": "Question 2",
+  "question[question_text]": "<p><span>Distinguish between noise and outliers. Is noise ever interesting or desirable?</span></p>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "Yes. Random distortion of data is commonly applied in data science to build more reliable models.", 
+  "question[answers][0][answer_weight]": 0, 
+  "question[answers][1][answer_text]": "No, by definition", 
+  "question[answers][1][answer_weight]": 100,
+  "question[answers][2][answer_text]": "Yes. It can be the case that noise if of a particular importance for the problem under study.", 
+  "question[answers][2][answer_weight]": 0
+}

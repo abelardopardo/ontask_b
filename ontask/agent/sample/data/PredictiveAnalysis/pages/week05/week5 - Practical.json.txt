@@ -1,0 +1,10 @@
+<h3>Practical</h3>
+<h4>Overview</h4>
+<p id="yui_3_17_2_1_1691839755294_129">In this Practical we will extend the discussion on various measures of node impurity. This is an important concept and easiest way to understand it well is to practice it.</p>
+<p>For this practical you can use MS Excel or any other tool you find appropriate. There is no need for RStudio.</p>
+<h4>Objectives</h4>
+<ul>
+    <li>Review node impurity measures.</li>
+    <li><span>Understand decision tree induction.</span></li>
+</ul>
+<p><a class="aalink" style="font-family: inherit; font-size: 1rem;" href="https://lo.unisa.edu.au/mod/resource/view.php?id=3207266"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="" aria-hidden="true" /><span class="instancename">Week 5 Practical<span class="accesshide ">File</span></span></a><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">&nbsp;</span><span class="resourcelinkdetails" style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">139.6KB PDF document</span></p>

@@ -1,0 +1,15 @@
+<ul>
+    <li>
+        <h4>Week 3 Lecture</h4>
+        <p dir="ltr">This time we talked about feature engineering and data exploration. At the end of the lecture, we had a short hands-on session where we introduced an interesting tool for data exploration -&nbsp;<a href="https://www.datawrapper.de/" target="_blank" rel="noopener">https://www.datawrapper.de/</a>.</p>
+        <div>
+            <div><a href="https://unisa.au.panopto.com/Panopto/Pages/Viewer.aspx?id=1fe30103-b690-4f49-bd74-ad8300042ba9" target="_blank" rel="noopener"></a><a href="https://unisa.au.panopto.com/Panopto/Pages/Viewer.aspx?id=4cca0e1b-05f5-409e-a858-aeed004a0a61" target="_blank" rel="noopener"></a></div>
+            <div class="embed-responsive-container"><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=4cca0e1b-05f5-409e-a858-aeed004a0a61&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-mce-fragment="1"></iframe></div>
+        </div>
+    </li>
+    <li>
+        <h4><span>Understanding and Defining the Problem and User Needs</span></h4>
+        <p><span>Our colleagues from Match Studio organised an amazing workshop for us, on the topic of understanding and defining the problem and user needs. It is very relevant to the work you will be doing as data scientists. Although not mandatory, it is highly recommended to watch this video.</span></p>
+        <div class="embed-responsive-container"><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=3a180eb4-8220-4f53-9509-acec00caa93f&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-mce-fragment="1"></iframe></div>
+    </li>
+</ul>

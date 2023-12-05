@@ -1,0 +1,274 @@
+from .AccountCalendars import AccountCalendars
+from .AccountDomainLookups import AccountDomainLookups
+from .AccountNotifications import AccountNotifications
+from .AccountReports import AccountReports
+from .Accounts import Accounts
+from .Subaccounts import Subaccounts
+from .Accounts_LTI import Accounts_LTI
+from .Admins import Admins
+from .Analytics import Analytics
+from .AnnouncementExternalFeeds import AnnouncementExternalFeeds
+from .Announcements import Announcements
+from .APITokenScopes import APITokenScopes
+from .AppointmentGroups import AppointmentGroups
+from .AssignmentExtensions import AssignmentExtensions
+from .AssignmentGroups import AssignmentGroups
+from .Assignments import Assignments
+from .AssignmentOverrides import AssignmentOverrides
+from .AuthenticationProviders import AuthenticationProviders
+from .AuthenticationsLog import AuthenticationsLog
+from .BlackoutDates import BlackoutDates
+from .BlueprintManagement import BlueprintManagement
+from .BlueprintCourseHistory import BlueprintCourseHistory
+from .AssociatedCourseHistory import AssociatedCourseHistory
+from .Bookmarks import Bookmarks
+from .BrandConfigs import BrandConfigs
+from .CalendarEvents import CalendarEvents
+from .Collaborations import Collaborations
+from .CommMessages import CommMessages
+from .CommunicationChannels import CommunicationChannels
+from .Conferences import Conferences
+from .ContentExports import ContentExports
+from .MigrationIssues import MigrationIssues
+from .ContentMigrations import ContentMigrations
+from .ContentSecurityPolicySettings import ContentSecurityPolicySettings
+from .ContentShares import ContentShares
+from .Conversations import Conversations
+from .CourseAuditlog import CourseAuditlog
+from .CoursePace import CoursePace
+from .CourseQuizExtensions import CourseQuizExtensions
+from .Courses import Courses
+from .CustomGradebookColumns import CustomGradebookColumns
+from .CustomGradebookColumnData import CustomGradebookColumnData
+from .DiscussionTopics import DiscussionTopics
+from .EnrollmentTerms import EnrollmentTerms
+from .Enrollments import Enrollments
+from .ePortfolios import ePortfolios
+from .ePubExports import ePubExports
+from .ErrorReports import ErrorReports
+from .ExternalTools import ExternalTools
+from .Favorites import Favorites
+from .FeatureFlags import FeatureFlags
+from .Files import Files
+from .Folders import Folders
+from .UsageRights import UsageRights
+from .GradeChangeLog import GradeChangeLog
+from .GradebookHistory import GradebookHistory
+from .GradingPeriodSets import GradingPeriodSets
+from .GradingPeriods import GradingPeriods
+from .GradingStandards import GradingStandards
+from .GroupCategories import GroupCategories
+from .Groups import Groups
+from .GroupMemberships import GroupMemberships
+from .History import History
+from .InstAccesstokens import InstAccesstokens
+from .JWTs import JWTs
+from .LatePolicy import LatePolicy
+from .LineItems import LineItems
+from .LiveAssessments import LiveAssessments
+from .Logins import Logins
+from .MediaTracks import MediaTracks
+from .MediaObjects import MediaObjects
+from .ModerationSet import ModerationSet
+from .ProvisionalGrades import ProvisionalGrades
+from .AnonymousProvisionalGrades import AnonymousProvisionalGrades
+from .Modules import Modules
+from .ModuleItems import ModuleItems
+from .NamesandRole import NamesandRole
+from .NewQuizItems import NewQuizItems
+from .NewQuizzes import NewQuizzes
+from .NotificationPreferences import NotificationPreferences
+from .OriginalityReports import OriginalityReports
+from .OutcomeGroups import OutcomeGroups
+from .OutcomeImports import OutcomeImports
+from .OutcomeResults import OutcomeResults
+from .Outcomes import Outcomes
+from .Pages import Pages
+from .PeerReviews import PeerReviews
+from .PlagiarismDetectionPlatformAssignments import PlagiarismDetectionPlatformAssignments
+from .PlagiarismDetectionPlatformUsers import PlagiarismDetectionPlatformUsers
+from .PlagiarismDetectionSubmissions import PlagiarismDetectionSubmissions
+from .Planner import Planner
+from .PlannerNotes import PlannerNotes
+from .PlannerOverrides import PlannerOverrides
+from .PollSessions import PollSessions
+from .PollChoices import PollChoices
+from .Polls import Polls
+from .PollSubmissions import PollSubmissions
+from .ProficiencyRatings import ProficiencyRatings
+from .Progress import Progress
+from .PublicJWK import PublicJWK
+from .QuizAssignmentOverrides import QuizAssignmentOverrides
+from .QuizExtensions import QuizExtensions
+from .QuizIPFilters import QuizIPFilters
+from .QuizQuestionGroups import QuizQuestionGroups
+from .QuizQuestions import QuizQuestions
+from .QuizReports import QuizReports
+from .QuizStatistics import QuizStatistics
+from .QuizSubmissionEvents import QuizSubmissionEvents
+from .QuizSubmissionFiles import QuizSubmissionFiles
+from .QuizSubmissionQuestions import QuizSubmissionQuestions
+from .QuizSubmissionUserList import QuizSubmissionUserList
+from .QuizSubmissions import QuizSubmissions
+from .Quizzes import Quizzes
+from .Result import Result
+from .Roles import Roles
+from .Rubrics import Rubrics
+from .RubricAssessments import RubricAssessments
+from .RubricAssociations import RubricAssociations
+from .Score import Score
+from .Search import Search
+from .Sections import Sections
+from .Services import Services
+from .SharedBrandConfigs import SharedBrandConfigs
+from .SISImportErrors import SISImportErrors
+from .SISImports import SISImports
+from .SISIntegration import SISIntegration
+from .SubmissionComments import SubmissionComments
+from .Submissions import Submissions
+from .Tabs import Tabs
+from .UserObservees import UserObservees
+from .Users import Users
+from .CustomData import CustomData
+from .CourseNicknames import CourseNicknames
+from .WebhooksSubscriptionsforPlagiarismPlatform import WebhooksSubscriptionsforPlagiarismPlatform
+
+class C3L:
+    def __init__(self, base_url, token):
+        self.__base_url__ = base_url
+        self.__token__ = token
+
+        self.accountcalendars = AccountCalendars(base_url, token)
+        self.accountdomainlookups = AccountDomainLookups(base_url, token)
+        self.accountnotifications = AccountNotifications(base_url, token)
+        self.accountreports = AccountReports(base_url, token)
+        self.accounts = Accounts(base_url, token)
+        self.subaccounts = Subaccounts(base_url, token)
+        self.accounts_lti = Accounts_LTI(base_url, token)
+        self.admins = Admins(base_url, token)
+        self.analytics = Analytics(base_url, token)
+        self.announcementexternalfeeds = AnnouncementExternalFeeds(base_url, token)
+        self.announcements = Announcements(base_url, token)
+        self.apitokenscopes = APITokenScopes(base_url, token)
+        self.appointmentgroups = AppointmentGroups(base_url, token)
+        self.assignmentextensions = AssignmentExtensions(base_url, token)
+        self.assignmentgroups = AssignmentGroups(base_url, token)
+        self.assignments = Assignments(base_url, token)
+        self.assignmentoverrides = AssignmentOverrides(base_url, token)
+        self.authenticationproviders = AuthenticationProviders(base_url, token)
+        self.authenticationslog = AuthenticationsLog(base_url, token)
+        self.blackoutdates = BlackoutDates(base_url, token)
+        self.blueprintmanagement = BlueprintManagement(base_url, token)
+        self.blueprintcoursehistory = BlueprintCourseHistory(base_url, token)
+        self.associatedcoursehistory = AssociatedCourseHistory(base_url, token)
+        self.bookmarks = Bookmarks(base_url, token)
+        self.brandconfigs = BrandConfigs(base_url, token)
+        self.calendarevents = CalendarEvents(base_url, token)
+        self.collaborations = Collaborations(base_url, token)
+        self.commmessages = CommMessages(base_url, token)
+        self.communicationchannels = CommunicationChannels(base_url, token)
+        self.conferences = Conferences(base_url, token)
+        self.contentexports = ContentExports(base_url, token)
+        self.migrationissues = MigrationIssues(base_url, token)
+        self.contentmigrations = ContentMigrations(base_url, token)
+        self.contentsecuritypolicysettings = ContentSecurityPolicySettings(base_url, token)
+        self.contentshares = ContentShares(base_url, token)
+        self.conversations = Conversations(base_url, token)
+        self.courseauditlog = CourseAuditlog(base_url, token)
+        self.coursepace = CoursePace(base_url, token)
+        self.coursequizextensions = CourseQuizExtensions(base_url, token)
+        self.courses = Courses(base_url, token)
+        self.customgradebookcolumns = CustomGradebookColumns(base_url, token)
+        self.customgradebookcolumndata = CustomGradebookColumnData(base_url, token)
+        self.discussiontopics = DiscussionTopics(base_url, token)
+        self.enrollmentterms = EnrollmentTerms(base_url, token)
+        self.enrollments = Enrollments(base_url, token)
+        self.eportfolios = ePortfolios(base_url, token)
+        self.epubexports = ePubExports(base_url, token)
+        self.errorreports = ErrorReports(base_url, token)
+        self.externaltools = ExternalTools(base_url, token)
+        self.favorites = Favorites(base_url, token)
+        self.featureflags = FeatureFlags(base_url, token)
+        self.files = Files(base_url, token)
+        self.folders = Folders(base_url, token)
+        self.usagerights = UsageRights(base_url, token)
+        self.gradechangelog = GradeChangeLog(base_url, token)
+        self.gradebookhistory = GradebookHistory(base_url, token)
+        self.gradingperiodsets = GradingPeriodSets(base_url, token)
+        self.gradingperiods = GradingPeriods(base_url, token)
+        self.gradingstandards = GradingStandards(base_url, token)
+        self.groupcategories = GroupCategories(base_url, token)
+        self.groups = Groups(base_url, token)
+        self.groupmemberships = GroupMemberships(base_url, token)
+        self.history = History(base_url, token)
+        self.instaccesstokens = InstAccesstokens(base_url, token)
+        self.jwts = JWTs(base_url, token)
+        self.latepolicy = LatePolicy(base_url, token)
+        self.lineitems = LineItems(base_url, token)
+        self.liveassessments = LiveAssessments(base_url, token)
+        self.logins = Logins(base_url, token)
+        self.mediatracks = MediaTracks(base_url, token)
+        self.mediaobjects = MediaObjects(base_url, token)
+        self.moderationset = ModerationSet(base_url, token)
+        self.provisionalgrades = ProvisionalGrades(base_url, token)
+        self.anonymousprovisionalgrades = AnonymousProvisionalGrades(base_url, token)
+        self.modules = Modules(base_url, token)
+        self.moduleitems = ModuleItems(base_url, token)
+        self.namesandrole = NamesandRole(base_url, token)
+        self.newquizitems = NewQuizItems(base_url, token)
+        self.newquizzes = NewQuizzes(base_url, token)
+        self.notificationpreferences = NotificationPreferences(base_url, token)
+        self.originalityreports = OriginalityReports(base_url, token)
+        self.outcomegroups = OutcomeGroups(base_url, token)
+        self.outcomeimports = OutcomeImports(base_url, token)
+        self.outcomeresults = OutcomeResults(base_url, token)
+        self.outcomes = Outcomes(base_url, token)
+        self.pages = Pages(base_url, token)
+        self.peerreviews = PeerReviews(base_url, token)
+        self.plagiarismdetectionplatformassignments = PlagiarismDetectionPlatformAssignments(base_url, token)
+        self.plagiarismdetectionplatformusers = PlagiarismDetectionPlatformUsers(base_url, token)
+        self.plagiarismdetectionsubmissions = PlagiarismDetectionSubmissions(base_url, token)
+        self.planner = Planner(base_url, token)
+        self.plannernotes = PlannerNotes(base_url, token)
+        self.planneroverrides = PlannerOverrides(base_url, token)
+        self.pollsessions = PollSessions(base_url, token)
+        self.pollchoices = PollChoices(base_url, token)
+        self.polls = Polls(base_url, token)
+        self.pollsubmissions = PollSubmissions(base_url, token)
+        self.proficiencyratings = ProficiencyRatings(base_url, token)
+        self.progress = Progress(base_url, token)
+        self.publicjwk = PublicJWK(base_url, token)
+        self.quizassignmentoverrides = QuizAssignmentOverrides(base_url, token)
+        self.quizextensions = QuizExtensions(base_url, token)
+        self.quizipfilters = QuizIPFilters(base_url, token)
+        self.quizquestiongroups = QuizQuestionGroups(base_url, token)
+        self.quizquestions = QuizQuestions(base_url, token)
+        self.quizreports = QuizReports(base_url, token)
+        self.quizstatistics = QuizStatistics(base_url, token)
+        self.quizsubmissionevents = QuizSubmissionEvents(base_url, token)
+        self.quizsubmissionfiles = QuizSubmissionFiles(base_url, token)
+        self.quizsubmissionquestions = QuizSubmissionQuestions(base_url, token)
+        self.quizsubmissionuserlist = QuizSubmissionUserList(base_url, token)
+        self.quizsubmissions = QuizSubmissions(base_url, token)
+        self.quizzes = Quizzes(base_url, token)
+        self.result = Result(base_url, token)
+        self.roles = Roles(base_url, token)
+        self.rubrics = Rubrics(base_url, token)
+        self.rubricassessments = RubricAssessments(base_url, token)
+        self.rubricassociations = RubricAssociations(base_url, token)
+        self.score = Score(base_url, token)
+        self.search = Search(base_url, token)
+        self.sections = Sections(base_url, token)
+        self.services = Services(base_url, token)
+        self.sharedbrandconfigs = SharedBrandConfigs(base_url, token)
+        self.sisimporterrors = SISImportErrors(base_url, token)
+        self.sisimports = SISImports(base_url, token)
+        self.sisintegration = SISIntegration(base_url, token)
+        self.submissioncomments = SubmissionComments(base_url, token)
+        self.submissions = Submissions(base_url, token)
+        self.tabs = Tabs(base_url, token)
+        self.userobservees = UserObservees(base_url, token)
+        self.users = Users(base_url, token)
+        self.customdata = CustomData(base_url, token)
+        self.coursenicknames = CourseNicknames(base_url, token)
+        self.webhookssubscriptionsforplagiarismplatform = WebhooksSubscriptionsforPlagiarismPlatform(base_url, token)

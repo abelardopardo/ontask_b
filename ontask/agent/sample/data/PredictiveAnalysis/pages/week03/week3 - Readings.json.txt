@@ -1,0 +1,11 @@
+<h3>Readings</h3>
+<ul>                            
+    <li>
+        <a class="aalink" href="https://lo.unisa.edu.au/mod/book/view.php?id=3207207">
+            <img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/book/1689804770/icon" alt="" aria-hidden="true" />
+            <span class="instancename">Textbook: Chapter 3. Exploring Data</span>
+        </a>
+        <p><span lang="EN-AU">In week 3 we will cover a very important topic of data exploration &ndash;<span>&nbsp;</span><strong>Chapter 3. Exploring Data</strong>. The topic of this chapter is directly relevant to your first assignment as it introduces various methods to provide insights into your data. Some of the concepts introduced in this chapter are rather straightforward, other might take more time. Make sure you have a good understanding of the topics introduced in this week.</span></p>
+        <iframe id="eres_res_link_19226" class="ereserve_resource_link_frame" src="https://lo.unisa.edu.au/local/ereserve_plus/resource_link/show.php?course_id=28611&amp;id=19226" width="100%" height="100" data-mce-fragment="1"></iframe>
+    </li>
+</ul>

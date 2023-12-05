@@ -1,0 +1,20 @@
+{
+  "question[question_name]": "Question 1",
+  "question[question_text]": "<p>The cost parameter in the SVM means:</p><div>Select one:</div>",
+  "question[quiz_group_id]": null,
+  "question[question_type]": "multiple_choice_question",
+  "question[position]": null,
+  "question[points_possible]": 20.0,
+  "question[correct_comments]": "",
+  "question[incorrect_comments]": "",
+  "question[neutral_comments]": "",
+  "question[text_after_answers]": "",
+  "question[answers][0][answer_text]": "The number of cross-validations to be made", 
+  "question[answers][0][answer_weight]": 0,
+  "question[answers][1][answer_text]": "The kernel to be used", 
+  "question[answers][1][answer_weight]": 0,
+  "question[answers][2][answer_text]": "The tradeoff between misclassification and simplicity of the model", 
+  "question[answers][2][answer_weight]": 100, 
+  "question[answers][3][answer_text]": "None of the above", 
+  "question[answers][3][answer_weight]": 0
+}

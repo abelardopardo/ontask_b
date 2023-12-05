@@ -1,0 +1,64 @@
+<h3 id="yui_3_17_2_1_1691839755294_138">Additional Resources</h3>
+<p><span>A visual introduction to machine learning - amazing and really informative examples.</span></p>
+<p><span>First example covers pretty much everything you might want to use in your Assignment - from data visualisation to building a decision tree:</span></p>
+<ul>
+    <li><span><a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/">http://www.r2d3.us/visual-intro-to-machine-learning-part-1/</a>&nbsp;.</span></li>
+</ul>
+<p><span>The second example discusses overfitting:</span></p>
+<ul>
+    <li><span><a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-2/">http://www.r2d3.us/visual-intro-to-machine-learning-part-2/</a>&nbsp;.</span></li>
+</ul>
+<p>Finally, here is a<span>&nbsp;</span><a href="https://colab.research.google.com/drive/1Y62ovsHHBK_M7hBwXtmPho32rq5aLDUw?usp=sharing" target="_blank" rel="noopener">Python code</a><span>&nbsp;</span>that we will discuss in the lecture.</p>
+<h3 id="yui_3_17_2_1_1691839755294_153">Videos</h3>
+<ul id="yui_3_17_2_1_1691839755294_39" class="section img-text">
+    <li id="module-3207268" class="activity url modtype_url  hasinfo">
+        <div class="mod-indent-outer w-100">
+            <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207268"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">What is overfitting? (via LinkedIn Learning - 2m 47s)<span class="accesshide ">URL</span></span></a></div>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p>The video is a part of the Applied Machine Learning: Foundations course, by Derek Jedamski.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li id="module-3207269" class="activity url modtype_url  hasinfo">
+        <div class="mod-indent-outer w-100">
+            <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207269"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Bias-variance trade-off and overfitting? (via LinkedIn Learning - 5m 54s)<span class="accesshide ">URL</span></span></a></div>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p>The video is a part of the Machine Learning and AI Foundations: Classification Modeling course, by Keith McCormick.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li id="module-3207270" class="activity url modtype_url  hasinfo">
+        <div class="mod-indent-outer w-100">
+            <div class="activityinstance"><a class="aalink" href="https://lo.unisa.edu.au/mod/url/view.php?id=3207270"><img class="iconlarge activityicon" role="presentation" src="https://lo.unisa.edu.au/theme/image.php/unisa/url/1689804770/icon" alt="" aria-hidden="true" /><span class="instancename">Overfitting and underfitting (via LinkedIn Learning - 2m 44s)<span class="accesshide ">URL</span></span></a></div>
+            <div class="contentafterlink">
+                <div class="no-overflow">
+                    <div class="no-overflow">
+                        <p>The video is a part of the Machine Learning and AI Foundations: Value Estimations course, by Adam Geitgey.</p>
+                        <p><span class="fp-icon"><img class="icon " title="L5_overfitting.pdf" src="https://lo.unisa.edu.au/theme/image.php/unisa/core/1689804770/f/pdf-24" alt="L5_overfitting.pdf" /></span><span class="fp-filename">L5_overfitting.pdf</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+<h4 id="yui_3_17_2_1_1691839755294_51"><span>Week 5 Lecture - Model Overfitting</span></h4>
+<div class="embed-responsive-wrap">
+    <div class="embed-responsive-container"><iframe src="https://unisa.au.panopto.com/Panopto/Pages/Embed.aspx?id=8c540759-450e-43b7-af28-afd400c65632&amp;v=1" width="720" height="405" allowfullscreen="allowfullscreen" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe></div>
+</div>
+<h3 id="yui_3_17_2_1_1691839755294_161">Orange Tutorial on Overfitting</h3>
+<p>Here is the link to the tutorial we did in our Practical session (Andrew will talk about this in our Thursday session):</p>
+<ul>
+    <li><a href="https://orangedatamining.com/blog/2016/03/12/overfitting-and-regularization/" target="_blank" rel="noopener">Overfitting and regularization</a></li>
+</ul>
+<p><span>Video is available here:</span></p>
+<div id="yui_3_17_2_1_1691839755294_169" class="mediaplugin mediaplugin_videojs d-block">
+    <div style="text-align: center;"><iframe id="id_videojs_64d76d0ebb8f8_1_youtube_api" class="vjs-tech" title="Polynomial Regression and Over Fitting" src="https://www.youtube.com/embed/1LlBoCG5Q6Q?controls=0&amp;modestbranding=1&amp;rel=0&amp;showinfo=0&amp;loop=0&amp;fs=0&amp;hl=en&amp;enablejsapi=1&amp;origin=https%3A%2F%2Flo.unisa.edu.au&amp;widgetid=1" width="640" height="360" allowfullscreen="allowfullscreen" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" data-gtm-yt-inspected-6="true" data-mce-fragment="1"></iframe>    </div>
+</div>
