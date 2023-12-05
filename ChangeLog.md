@@ -1,9 +1,12 @@
+<<<<<<< HEAD
+=======
 # 10.6 (2023-12-5)
 
 ## Added
 
 - New functionality to schedule Canvas Email action execution repeatedly
 
+>>>>>>> origin/master
 # 10.5 (2023-11-25)
 
 ## Fixed
