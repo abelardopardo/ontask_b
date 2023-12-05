@@ -3,13 +3,11 @@ import os
 import requests
 import logging
 import pandas as pd
-import functools
 import environ
 import re
 import html
 import base64
 from io import BytesIO
-from django.shortcuts import reverse
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
@@ -21,12 +19,6 @@ config = {
     'ontask_base_url': env("ONTASK_BASE_URL"),
     'ontask_api_token': env("ONTASK_API_TOKEN")
 }
-
-def parse_date(date_string):
-    if isinstance(date_string, str):
-        return datetime.fromisoformat(date_string.replace('Z', '+00:00')).strftime('%Y-%m-%d %H:%M:%S')
-    return None
-
 
 def fetch_canvas_data_submissions(course_id, quiz_id):
     headers = {
@@ -52,6 +44,11 @@ def clean_text(text):
     text = text.replace('####', '')
     return text.strip()
 
+def parse_date(date_str):
+    if pd.isnull(date_str):
+        return None
+    return pd.to_datetime(date_str).strftime('%Y-%m-%d %H:%M:%S')
+
 def fetch_canvas_data_quiz_stats(course_id, quiz_id):
     headers = {
         "Authorization": f"Bearer {config['canvas_api_token']}"
@@ -63,7 +60,6 @@ def fetch_canvas_data_quiz_stats(course_id, quiz_id):
         logging.error(f"Error fetching Canvas data: {response.status_code}, {response.text}")
         return pd.DataFrame()
 
-    # Fetch quiz submissions data
     df_submissions = fetch_canvas_data_submissions(course_id, quiz_id)
 
     quizStat = response.json()
@@ -100,11 +96,10 @@ def fetch_canvas_data_quiz_stats(course_id, quiz_id):
 
     df_pivoted['Total Score'] = df_pivoted['id'].map(user_scores).apply(lambda x: round(x, 1))
 
-    # Consider 'multiple_attempts_exist' for attempts count
     if multiple_attempts_exist:
         df_pivoted['Attempts'] = df_pivoted['id'].map(df_submissions.groupby('user_id')['attempt'].max())
     else:
-        df_pivoted['Attempts'] = 1  # Only one attempt allowed
+        df_pivoted['Attempts'] = 1
 
     merged_df = pd.merge(df_pivoted, df_submissions[['user_id', 'started_at', 'finished_at']], 
                          left_on='id', right_on='user_id', how='left')
@@ -114,7 +109,11 @@ def fetch_canvas_data_quiz_stats(course_id, quiz_id):
     merged_df['Start Time'] = merged_df['Start Time'].apply(parse_date)
     merged_df['End Time'] = merged_df['End Time'].apply(parse_date)
 
+    # Add "Quiz Submitted" column based on 'End Time'
+    merged_df['Quiz Submitted'] = merged_df['End Time'].notna()
+
     return merged_df
+
 
 def dataframe_to_base64(df):
     # Use a BytesIO buffer instead of writing to disk
