@@ -15,6 +15,7 @@ from ontask.dataops.services.row import create_row, update_row_values
 from ontask.dataops.services.sql_upload import (
     ExecuteSQLUpload, sql_upload_step_one,
 )
+from ontask.dataops.services.canvas_upload import ExecuteCanvasUpload
 from ontask.dataops.services.upload_steps import (
     upload_prepare_step_four, upload_step_four, upload_step_two,
 )

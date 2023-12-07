@@ -1,20 +1,37 @@
 """Index of scheduled operations."""
 
-from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+import settings.base
 from ontask.connection.services import create_sql_connection_runtable
 from ontask.core import (
-    SessionPayload, UserIsInstructor, WorkflowView)
+    SessionPayload, UserIsInstructor, UserIsAdmin, WorkflowView)
 from ontask.scheduler import services
+from ontask import models
 
 
-class SchedulerIndex(UserIsInstructor, WorkflowView, generic.TemplateView):
+class SchedulerViewAbstract(generic.TemplateView):
+    """Abstract class for all scheduler views."""
+
+    # Title to use in template
+    title = None
+    # Item name to use in the button to create a new item
+    item_name = None
+
+    def get(self, request, *args, **kwargs):
+        # Reset object to carry action info throughout dialogs
+        SessionPayload.flush(request.session)
+
+        return super().get(request, *args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
+class SchedulerIndex(UserIsInstructor, WorkflowView, SchedulerViewAbstract):
     """Render the list of scheduled actions in the workflow."""
 
-    http_method_names = ['get']
-    template_name = 'scheduler/index.html'
-    wf_pf_related = 'scheduled_operations'
+    wf_pf_related = None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -26,32 +43,18 @@ class SchedulerIndex(UserIsInstructor, WorkflowView, generic.TemplateView):
         context['canvasconnection'] = len(settings.base.CANVAS_INFO_DICT) > 0
         return context
 
-    def get(self, request, *args, **kwargs):
-        # Reset object to carry action info throughout dialogs
-        SessionPayload.flush(request.session)
-
-        return super().get(request, *args, **kwargs)
-
 
 class SchedulerConnectionIndex(
     UserIsInstructor,
     WorkflowView,
-    generic.TemplateView
+    SchedulerViewAbstract
 ):
     """Show table of SQL connections for user to choose one."""
-
-    http_method_names = ['get']
-    template_name = 'connection/index.html'
-    title = _('SQL Connections')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['table'] = create_sql_connection_runtable(
             'scheduler:sqlupload')
+        # To show text instructing user to select one connection.
+        context['select_sql_connection'] = True
         return context
-
-    def get(self, request, *args, **kwargs):
-        # Reset object to carry action info throughout dialogs
-        SessionPayload.flush(request.session)
-
-        return super().get(request, *args, **kwargs)

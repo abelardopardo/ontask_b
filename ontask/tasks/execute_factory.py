@@ -6,6 +6,7 @@ from ontask.action import services as action_services
 from ontask.dataops import services as dataops_services
 from ontask.workflow import services as workflow_services
 from ontask.dataops.services.sql_upload import ExecuteSQLUpload
+from ontask.dataops.services.canvas_upload import ExecuteCanvasUpload
 
 
 class TaskExecuteFactory(core.FactoryBase):
@@ -85,6 +86,12 @@ TASK_EXECUTE_FACTORY.register_producer(
 TASK_EXECUTE_FACTORY.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,
     ExecuteSQLUpload)
+
+# EXECUTE A CANVAS UPLOAD
+# ------------------------------------------------------------------------------
+TASK_EXECUTE_FACTORY.register_producer(
+    models.Log.WORKFLOW_DATA_CANVAS_UPLOAD,
+    ExecuteCanvasUpload)
 
 # UPDATE LUSER FIELD IN WORKFLOW
 # ------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 """URLs for the scheduler package."""
 from django.urls import path
+from django.utils.translation import gettext_lazy as _
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask import models
@@ -10,12 +11,24 @@ app_name = 'scheduler'
 urlpatterns = [
 
     # List all schedule actions
-    path('', views.SchedulerIndex.as_view(), name='index'),
+    path(
+        '',
+        views.SchedulerIndex.as_view(
+            http_method_names=['get'],
+            template_name='scheduler/index.html',
+            wf_pf_related='scheduled_operations'),
+        name='index'),
+
+    # Create a new Canvas Update operation
+    path('canvasupload/', views.create_canvas_upload, name='canvasupload'),
 
     # Select a SQL connection
     path(
         'select_sql/',
-        views.SchedulerConnectionIndex.as_view(),
+        views.SchedulerConnectionIndex.as_view(
+            http_method_names=['get'],
+            template_name='connection/index.html',
+            title=_('SQL Connections')),
         name='select_sql'),
 
     # Create scheduled action
@@ -72,7 +85,7 @@ urlpatterns = [
     path(
         '<int:pk>/rud_json/',
         api.ScheduledJSONAPIRetrieveUpdateDestroy.as_view(),
-        name='api_rud_json'),
+        name='api_rud_json')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
@@ -80,6 +93,10 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Action.PERSONALIZED_TEXT,
     services.ScheduledOperationEmailUpdateView)
+
+services.SCHEDULE_CRUD_FACTORY.register_producer(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    services.ScheduledOperationCanvasEmailUpdateView)
 
 services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Action.EMAIL_REPORT,
@@ -98,9 +115,9 @@ services.SCHEDULE_CRUD_FACTORY.register_producer(
     services.ScheduledOperationJSONReportUpdateView)
 
 services.SCHEDULE_CRUD_FACTORY.register_producer(
-    models.Action.PERSONALIZED_CANVAS_EMAIL,
-    services.ScheduledOperationCanvasEmailUpdateView)
-
-services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,
     services.ScheduledOperationUpdateSQLUpload)
+
+services.SCHEDULE_CRUD_FACTORY.register_producer(
+    models.Log.WORKFLOW_DATA_CANVAS_UPLOAD,
+    services.ScheduledOperationUpdateCanvasUpload)

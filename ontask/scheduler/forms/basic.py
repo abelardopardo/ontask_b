@@ -3,11 +3,15 @@ from typing import Dict
 
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
+from django.conf import settings
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
+from ontask.connection.forms import SQLRequestConnectionParam
 from ontask.core import forms as ontask_forms
+from ontask.core.checks import validate_crontab
+from ontask.dataops import forms as dataops_forms
 
 
 class OnTaskCronWidget(forms.TextInput):
@@ -221,29 +225,29 @@ class ScheduleCanvasUploadForm(
         self.fields['dst_key'].label = _('Key column in the external table')
 
         if len(settings.CANVAS_INFO_DICT) > 1:
-            # Add the canvashost_url field if the system has more than one entry
+            # Add the target_url field if the system has more than one entry
             # point configured
-            self.fields['canvashost_url'] = forms.ChoiceField(
+            self.fields['target_url'] = forms.ChoiceField(
                 initial=self._FormWithPayload__form_info.get(
-                    'canvashost_url', None),
+                    'target_url', None),
                 required=True,
                 choices=[('', '---')] + [(key, key) for key in sorted(
                     settings.CANVAS_INFO_DICT.keys(),
                 )],
                 label=_('Canvas Host'),
                 help_text=_('Name of the Canvas host to send the messages'))
-            self.set_field_from_dict('canvashost_url')
+            self.set_field_from_dict('target_url')
         else:
             # Single Canvas config Add the value to the payload (no form field
             # required)
             self.store_field_in_dict(
-                'canvashost_url',
+                'target_url',
                 list(settings.CANVAS_INFO_DICT.keys())[0])
 
         self.order_fields([
             'name',
             'description_text',
-            'canvashost_url',
+            'target_url',
             'canvas_course_id',
             'execute_start',
             'multiple_executions',

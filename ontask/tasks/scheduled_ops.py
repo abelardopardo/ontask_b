@@ -59,7 +59,6 @@ def execute_scheduled_operation(s_item_id: int):
         now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         if (
                 s_item.execute_start and
-                s_item.frequency and
                 now < s_item.execute_start):
             # Not yet
             if settings.DEBUG:
@@ -101,9 +100,11 @@ def execute_scheduled_operation(s_item_id: int):
 
             _update_item_status(s_item)
         except Exception as exc:
-            CELERY_LOGGER.error(
-                'Error processing action %s: %s',
+            msg = 'Error processing action {0}: {1}'.format(
                 s_item.name,
                 str(exc))
+            CELERY_LOGGER.error(msg)
+            log_item.payload['error'] = msg
+            log_item.save()
             models.ScheduledOperation.objects.filter(pk=s_item.id).update(
                 status=models.scheduler.STATUS_DONE_ERROR)

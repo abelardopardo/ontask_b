@@ -45,7 +45,7 @@ class ScheduleCanvasEmailForm(
         self.order_fields([
             'name',
             'description_text',
-            'execute',
+            'execute_start',
             'multiple_executions',
             'frequency',
             'execute_until',

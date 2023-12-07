@@ -15,7 +15,7 @@ from ontask import models
 from ontask.action.evaluate import evaluate_action
 from ontask.action.services.edit_factory import ActionOutEditProducerBase
 from ontask.action.services.run_factory import ActionRunProducerBase
-from ontask.core import canvas_do_burst_pause, canvas_get_or_set_oauth_token
+from ontask.core import canvas_ops
 from ontask.oauth import services
 
 LOGGER = get_task_logger('celery_execution')
@@ -137,7 +137,7 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
         self.payload.store_in_session(self.request.session)
 
         # Check for the CANVAS token and proceed to the continue_url
-        return canvas_get_or_set_oauth_token(
+        return canvas_ops.get_or_set_oauth_token(
             self.request,
             self.payload['target_url'],
             continue_url,
@@ -177,16 +177,9 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
 
         # Get the oauth info
         target_url = payload['target_url']
-        if not (oauth_info := settings.CANVAS_INFO_DICT.get(target_url)):
-            raise Exception(_('Unable to find OAuth Information Record'))
-
-        # Get the token
-        if not (user_token := models.OAuthUserToken.objects.filter(
-            user=user,
-            instance_name=target_url,
-        ).first()):
-            # There is no token, execution cannot proceed
-            raise Exception(_('Incorrect execution due to absence of token'))
+        oauth_info, user_token = canvas_ops.get_oauth_and_user_token(
+            user,
+            target_url)
 
         # Create the headers to use for all requests
         headers = {
@@ -214,7 +207,7 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
                 'force_new': True}
 
             # Manage the bursts
-            canvas_do_burst_pause(burst, burst_pause, idx)
+            canvas_ops.do_burst_pause(burst, burst_pause, idx)
             # Index to detect bursts
             idx += 1
 
