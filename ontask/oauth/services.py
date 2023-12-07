@@ -30,7 +30,7 @@ def get_initial_token_step1(
     :param request: Received request
     :param oauth_info: a dict with the following fields:
         # {
-        #   domain_port: VALUE,
+        #   domain_port: VALUE (format example https://host:port,
         #   client_id: VALUE,
         #   client_secret: VALUE ,
         #   authorize_url: VALUE (format {0} for domain_port),
@@ -64,7 +64,6 @@ def get_initial_token_step1(
                 'client_id': oauth_info['client_id'],
                 'response_type': 'code',
                 'redirect_uri': request.session[callback_url_key],
-                'scopes': 'url:POST|/api/v1/conversations',
                 'state': request.session[oauth_hash_key],
             },
         ).prepare().url,
@@ -80,7 +79,7 @@ def refresh_token(
     :param user_token: User token to be refreshed
     :param oauth_info: a dict with the following fields:
     # {
-    #   domain_port: VALUE,
+    #   domain_port: VALUE (format example https://host:port,
     #   client_id: VALUE,
     #   client_secret: VALUE ,
     #   authorize_url: VALUE (format {0} for domain_port),
