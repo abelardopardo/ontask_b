@@ -36,6 +36,9 @@ def request_refresh_and_retry(
     requires a token refresh, it refreshes the token and issues the request
     again.
 
+    The method also checks if the Rate Limit Exceeded is returned, and if so,
+    it delays the execution of the query.
+
     :param oauth_info: Object with the oauth information
     :param user_token: OAuth user token object
     :param request_method: function to use for the request (get, put, etc.)
@@ -44,6 +47,8 @@ def request_refresh_and_retry(
     :param kwargs: Other arguments passed to the request
     """
     response = request_method(url, headers=headers, **kwargs)
+
+    # Check if hte token needs refreshing
     if (
         response.status_code == status.HTTP_401_UNAUTHORIZED
         and response.headers.get('WWW-Authenticate')
@@ -51,6 +56,15 @@ def request_refresh_and_retry(
         user_token = services.refresh_token(user_token, oauth_info)
         headers['Authorization'] = headers['Authorization'].format(
             user_token.access_token)
+        response = request_method(url, headers, **kwargs)
+
+    # Loop while the Rate Limit Exceeded is reached
+    while (
+                response.status_code == status.HTTP_403_FORBIDDEN and
+                response.data == "403 Forbidden (Rate Limit Exceeded)"
+    ):
+        # Wait a minute
+        sleep(60)
         response = request_method(url, headers, **kwargs)
 
     return response
@@ -74,9 +88,9 @@ def request_and_access(
     :param headers: Dictionary with headers to use
     :param result_key: Dictionary key to accumulate the result. If this is none,
     then it is assumed to be a list.
-    :param **kwargs: Other additional parameters to include in the request.
+    :param kwargs: Other additional parameters to include in the request.
 
-    :return JSON containing the result
+    :return: JSON containing the result
     """
     if result_key:
         # Result is a dictionary with a single key pointing to a list
@@ -123,23 +137,6 @@ def get_authorization_header(token: str) -> dict:
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'Authorization': 'Bearer {0}'.format(token),
     }
-
-
-def do_burst_pause(burst: int, burst_pause: int, idx: int):
-    """Detect end of burst and pause if needed.
-
-    :param burst: Burst length
-    :param burst_pause: Pause after length is reached
-    :param idx: Current index
-    :return:
-    """
-    if burst and (idx % burst) == 0:
-        # Burst exists and the limit has been reached
-        LOGGER.info(
-            'Burst (%s) reached. Waiting for %s secs',
-            str(burst),
-            str(burst_pause))
-        sleep(burst_pause)
 
 
 @user_passes_test(is_instructor)
@@ -294,10 +291,11 @@ def get_quiz_submissions(
 ) -> dict:
     """Get all submissions for a quiz in a course."""
     header = get_authorization_header(user_token.access_token)
-    endpoint = '{0}/api/v1/courses/{1}/quizzes/{2}/submissions?per_page=1'.format(
-        oauth_info['domain_port'],
-        course_id,
-        quiz_id)
+    endpoint = (
+        '{0}/api/v1/courses/{1}/quizzes/{2}/submissions?per_page=1'.format(
+            oauth_info['domain_port'],
+            course_id,
+            quiz_id))
     dict_quiz_submissions = request_and_access(
         oauth_info,
         user_token,
