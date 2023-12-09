@@ -2,21 +2,24 @@
 <div class="dropdown btn-group">
   <button class="btn btn-outline-primary dropdown-toggle" type="button"
           id="addScheduleOperations"
-          data-bs-toggle="dropdown"><i class="bi-plus"></i> {% trans 'Operation' %}
+          data-bs-toggle="dropdown">
+    <i class="bi-plus"></i> {% trans 'Operation' %}
   </button>
   <div class="dropdown-menu" aria-labelledby="addOperation">
-    <a type="button" class="dropdown-item {% if not sqlconnection %}disabled{% endif %}"
+    <a type="button"
+       class="dropdown-item {% if not sqlconnection %}disabled{% endif %}"
        href="{% url 'scheduler:select_sql' %}"
        data-bs-toggle="tooltip"
        title="{% trans 'Schedule a SQL upload/merge operation' %}">
       {% trans 'SQL upload/merge' %}
     </a>
 
-    <a type="button" class="dropdown-item {% if not canvasconnection %}disabled{% endif %}"
+    <a type="button"
+       class="dropdown-item {% if not canvasconnection %}disabled{% endif %}"
        href="{% url 'scheduler:canvasupload' %}"
        data-bs-toggle="tooltip"
-       title="{% trans 'Schedule a Canvas upload/merge operation' %}">
-      {% trans 'Canvas upload/merge' %}
+       title="{% trans 'Schedule a Canvas Course Quiz upload/merge operation' %}">
+      {% trans 'Canvas Course Quiz upload/merge' %}
     </a>
   </div>
 </div>

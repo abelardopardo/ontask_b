@@ -18,10 +18,11 @@ import json
 from typing import Dict, Optional
 
 from django import forms
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
-from ontask import OnTaskDataFrameNoKey, models, settings
+from ontask import OnTaskDataFrameNoKey, models, settings as ontask_settings
 from ontask.core import RestrictedFileField
 from ontask.dataops import pandas, services
 
@@ -72,8 +73,8 @@ class UploadCSVFileForm(UploadBasic):
     """
 
     data_file = RestrictedFileField(
-        max_upload_size=int(settings.MAX_UPLOAD_SIZE),
-        content_types=json.loads(str(settings.CONTENT_TYPES)),
+        max_upload_size=int(ontask_settings.MAX_UPLOAD_SIZE),
+        content_types=json.loads(str(ontask_settings.CONTENT_TYPES)),
         allow_empty_file=False,
         label='',
         help_text=_(
@@ -148,7 +149,7 @@ class UploadExcelFileForm(UploadBasic):
     """Form to read an Excel file."""
 
     data_file = RestrictedFileField(
-        max_upload_size=int(settings.MAX_UPLOAD_SIZE),
+        max_upload_size=int(ontask_settings.MAX_UPLOAD_SIZE),
         content_types=[
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.'
@@ -338,6 +339,81 @@ class UploadS3FileForm(UploadBasic):
                 _('S3 bucket file could not be processed: {0}').format(
                     str(exc)),
             )
+            return resp_data
+
+        # Check the validity of the data frame
+        self.validate_data_frame()
+
+        return resp_data
+
+
+# Step 1 of the S3 CSV upload
+class UploadCanvasCourseStudentForm(UploadBasic):
+    """Form to read a Canvas Course student list.
+
+    It requires access to CANVAS API with an access key.
+    """
+    canvas_course_id = forms.IntegerField(
+        label=_('Canvas course id to retrieve the data.'),
+        required=True,
+        help_text=_(
+            'This is an integer used by Canvas to uniquely identify a course'))
+
+    def __init__(self, *args, **kwargs):
+        """Modify certain field data."""
+        # Needed for authentication purposes
+        self.user = kwargs.pop(str('user'), None)
+        super().__init__(*args, **kwargs)
+
+        if len(settings.CANVAS_INFO_DICT) > 1:
+            # Add the target_url field if the system has more than one entry
+            # point configured
+            self.fields['target_url'] = forms.ChoiceField(
+                required=True,
+                choices=[('', '---')] + [(key, key) for key in sorted(
+                    settings.CANVAS_INFO_DICT.keys(),
+                )],
+                label=_('Canvas Host'),
+                help_text=_('Name of the Canvas host to extract data.'))
+            self.order_fields(['target_url', 'canvas_course_id'])
+
+        if 'CANVAS COURSE ID' in self.workflow.attributes:
+            # There is an attribute with a course ID, use it.
+            self.fields['canvas_course_id'].widget = forms.HiddenInput()
+            self.fields['canvas_course_id'].initial = self.workflow.attributes[
+                'CANVAS COURSE ID']
+            self.fields['canvas_course_id'].disabled = True
+
+    def clean(self) -> Dict:
+        """Check that the integers are positive.
+
+        :return: The cleaned data
+        """
+        resp_data = super().clean()
+
+        if len(settings.CANVAS_INFO_DICT) > 1:
+            target_url = self.cleaned_data['target_url']
+        else:
+            target_url = list(settings.CANVAS_INFO_DICT.keys())[0]
+
+        # Process Canvas API call to get the list of students
+        try:
+            self.data_frame = services.load_df_from_course_canvas_student_list(
+                self.user,
+                target_url,
+                self.cleaned_data['canvas_course_id'])
+        except Exception as exc:
+            self.add_error(
+                None,
+                _('Canvas course upload could not be processed: {0}').format(
+                    str(exc)),
+            )
+            return resp_data
+
+        if self.data_frame.empty:
+            self.add_error(
+                None,
+                _('There are no students enrolled in the Canvas course.'))
             return resp_data
 
         # Check the validity of the data frame

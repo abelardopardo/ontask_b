@@ -2,11 +2,9 @@
 
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext as _
 from django.views import generic
 
 from ontask import models
-from ontask.dataops import forms
 from ontask.dataops.views import common
 
 
@@ -26,12 +24,6 @@ class GoogleSheetUploadStart(common.UploadStart, generic.FormView):
 
     step_1: URL name of the first step
     """
-
-    form_class = forms.UploadGoogleSheetForm
-    template_name = 'dataops/upload1.html'
-
-    data_type = 'Google Sheet'
-    data_type_select = _('Google Sheet URL')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

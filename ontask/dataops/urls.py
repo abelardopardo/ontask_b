@@ -1,7 +1,11 @@
 """Views to manipulate dataframes."""
+from django.utils.translation import gettext as _
 from django.urls import path
 
-from ontask.dataops import views
+from ontask import models
+from ontask.dataops import forms, views
+from ontask.connection.forms import (
+    SQLRequestConnectionParam, AthenaRequestConnectionParam)
 
 app_name = 'dataops'
 urlpatterns = [
@@ -56,38 +60,76 @@ urlpatterns = [
     # CSV Upload/Merge
     path(
         'csvupload_start/',
-        views.CSVUploadStart.as_view(),
+        views.CSVUploadStart.as_view(
+            form_class=forms.UploadCSVFileForm,
+            template_name='dataops/upload1.html',
+            data_type='CSV',
+            data_type_select=_('CSV file')),
         name='csvupload_start'),
 
     # Excel Upload/Merge
     path(
         'excel_upload_start/',
-        views.ExcelUploadStart.as_view(),
+        views.ExcelUploadStart.as_view(
+            form_class=forms.UploadExcelFileForm,
+            template_name='dataops/upload1.html',
+            data_type='Excel',
+            data_type_select=_('Excel file')),
         name='excel_upload_start'),
 
     # Google Sheet Upload/Merge
     path(
         'googlesheetupload_start/',
-        views.GoogleSheetUploadStart.as_view(),
+        views.GoogleSheetUploadStart.as_view(
+            form_class=forms.UploadGoogleSheetForm,
+            template_name='dataops/upload1.html',
+            data_type='Google Sheet',
+            data_type_select=_('Google Sheet URL')),
         name='googlesheetupload_start'),
 
     # S3 Bucket CSV Upload/Merge
     path(
         's3upload_start/',
-        views.S3UploadStart.as_view(),
+        views.S3UploadStart.as_view(
+            form_class=forms.UploadS3FileForm,
+            template_name='dataops/upload1.html',
+            data_type='S3 CSV',
+            data_type_select=_('S3 CSV file')),
         name='s3upload_start'),
 
     # SQL Upload/Merge
     path(
         '<int:pk>/sqlupload_start/',
-        views.SQLUploadStart.as_view(),
+        views.SQLUploadStart.as_view(
+            model=models.SQLConnection,
+            template_name='dataops/sqlupload_start.html',
+            data_type='SQL',
+            form_class=SQLRequestConnectionParam,
+            prev_step_url='connection:sqlconns_index',
+            data_type_select=_('SQL connection')),
         name='sqlupload_start'),
 
     # Athena Upload/Merge
     path(
         '<int:pk>/athenaupload_start/',
-        views.AthenaUploadStart.as_view(),
+        views.AthenaUploadStart.as_view(
+            model=models.AthenaConnection,
+            template_name='dataops/athenaupload_start.html',
+            data_type='Athena',
+            data_type_select=_('Athena connection'),
+            form_class=AthenaRequestConnectionParam,
+            prev_step_url='connection:athenaconns_index'),
         name='athenaupload_start'),
+
+    # Athena Upload/Merge
+    path(
+        'canvas_course_students_upload_start/',
+        views.CanvasCourseStudentUploadStart.as_view(
+            form_class=forms.UploadCanvasCourseStudentForm,
+            template_name='dataops/upload1.html',
+            data_type='Canvas Course Student List',
+            data_type_select=_('Canvas Course')),
+        name='canvas_course_students_upload_start'),
 
     # Upload/Merge
     path('upload_s2/', views.UploadStepTwoView.as_view(), name='upload_s2'),

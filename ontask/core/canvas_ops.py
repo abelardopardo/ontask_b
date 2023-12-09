@@ -1,4 +1,5 @@
 import datetime
+import sys
 from time import sleep
 from typing import Tuple, Dict
 from zoneinfo import ZoneInfo
@@ -21,6 +22,22 @@ from ontask.oauth import services
 from ontask import OnTaskException
 
 LOGGER = get_task_logger('celery_execution')
+
+canvas_api_map = {}
+if settings.CANVAS_INFO_DICT:
+    canvas_api_map = {
+        'get_course_quizzes': (requests.get, '{0}/api/v1/courses/{1}/quizzes'),
+        'get_quiz_statistics': (
+            requests.get,
+            '{0}/api/v1/courses/{1}/quizzes/{2}/statistics'),
+        'get_quiz_submissions': (
+            requests.get,
+            '{0}/api/v1/courses/{1}/quizzes/{2}/submissions'),
+        'get_course_enrolment': (
+            requests.get,
+            '{0}/api/v1/courses/{1}/enrollments'
+            '?type=StudentEnrollment&state={2}')
+    }
 
 
 def request_refresh_and_retry(
@@ -112,7 +129,12 @@ def request_and_access(
         if result_key:
             result[result_key].extend(response.json()[result_key])
         else:
-            result.append(response.json())
+            new_data = response.json()
+            if isinstance(new_data, list):
+                result.extend(new_data)
+            else:
+                result.append(new_data)
+
         links = response.headers.get('link', None)
         if not links:
             # Whole information received
@@ -240,24 +262,38 @@ def verify_course_id(
     return result
 
 
+def get_course_enrolment(
+        oauth_info: dict,
+        user_token: models.OAuthUserToken,
+        course_id: int,
+        student_state: str = 'active'
+) -> dict:
+    """Get list of active students enrolled in a course."""
+    # Get request method and URL for the endpoint from the map in this module
+    request_method, endpoint = canvas_api_map['get_course_enrolment']
+
+    return request_and_access(
+        oauth_info,
+        user_token,
+        request_method,
+        endpoint.format(oauth_info['domain_port'], course_id, student_state),
+        get_authorization_header(user_token.access_token))
+
+
 def get_course_quizzes(
         oauth_info: dict,
         user_token: models.OAuthUserToken,
         course_id: int) -> list:
     """Gets all the quizzes within a course"""
-    header = get_authorization_header(user_token.access_token)
-    endpoint = '{0}/api/v1/courses/{1}/quizzes'.format(
-        oauth_info['domain_port'],
-        course_id)
+    # Get request method and URL for the endpoint from the map in this module
+    request_method, endpoint = canvas_api_map['get_course_quizzes']
 
-    list_of_quizzes = request_and_access(
+    return request_and_access(
         oauth_info,
         user_token,
-        requests.get,
-        endpoint,
-        header)
-
-    return list_of_quizzes
+        request_method,
+        endpoint.format(oauth_info['domain_port'], course_id),
+        get_authorization_header(user_token.access_token))
 
 
 def get_quiz_statistics(
@@ -267,20 +303,15 @@ def get_quiz_statistics(
         quiz_id: int
 ) -> dict:
     """Get all statistics for a quiz in a course."""
-    header = get_authorization_header(user_token.access_token)
-    endpoint = '{0}/api/v1/courses/{1}/quizzes/{2}/statistics'.format(
-        oauth_info['domain_port'],
-        course_id,
-        quiz_id)
-    dict_quiz_stats = request_and_access(
+    request_method, endpoint = canvas_api_map['get_quiz_statistics']
+
+    return request_and_access(
         oauth_info,
         user_token,
-        requests.get,
-        endpoint,
-        header,
+        request_method,
+        endpoint.format(oauth_info['domain_port'], course_id, quiz_id),
+        get_authorization_header(user_token.access_token),
         result_key='quiz_statistics')
-
-    return dict_quiz_stats
 
 
 def get_quiz_submissions(
@@ -290,18 +321,12 @@ def get_quiz_submissions(
         quiz_id: int
 ) -> dict:
     """Get all submissions for a quiz in a course."""
-    header = get_authorization_header(user_token.access_token)
-    endpoint = (
-        '{0}/api/v1/courses/{1}/quizzes/{2}/submissions?per_page=1'.format(
-            oauth_info['domain_port'],
-            course_id,
-            quiz_id))
-    dict_quiz_submissions = request_and_access(
+    request_method, endpoint = canvas_api_map['get_quiz_submissions']
+
+    return request_and_access(
         oauth_info,
         user_token,
         requests.get,
-        endpoint,
-        header,
+        endpoint.format(oauth_info['domain_port'], course_id, quiz_id),
+        get_authorization_header(user_token.access_token),
         result_key='quiz_submissions')
-
-    return dict_quiz_submissions

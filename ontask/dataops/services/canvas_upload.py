@@ -100,7 +100,46 @@ def _extract_quiz_submission_information(
             user_row[submission_finish_column_name] = submission['finished_at']
 
 
-class ExecuteCanvasUpload:
+def load_df_from_course_canvas_student_list(
+        user: models.OnTaskUser,
+        target_url: str,
+        course_id: int
+) -> pd.DataFrame:
+    """Load data frame from a Canvas course student list.
+
+    Given the Canvas target_url and a course ID, obtain the list of students
+    and load a dataframe with that list on the current workflow.
+
+    :param user: User object for authentication purposes.
+    :param target_url: Name of the Canvas instance to use.
+    :param course_id: Canvas Course ID (integer)
+    :return: Data Frame after obtaining it from Canvas.
+    """
+
+    # Verify parameter
+    canvas_course_id = canvas_ops.verify_course_id(course_id)
+
+    # Get the oauth info
+    oauth_info, user_token = canvas_ops.get_oauth_and_user_token(
+        user,
+        target_url)
+
+    students = canvas_ops.get_course_enrolment(
+        oauth_info,
+        user_token,
+        canvas_course_id)
+
+    data_frame_source = []
+    for student in students:
+        data_frame_source.append({
+            'id': student['user']['id'],
+            'name': student['user']['name']})
+
+    # Create the data frame with the collected data
+    return pd.DataFrame(data_frame_source)
+
+
+class ExecuteCanvasUploadQuizzes:
     """Process the Canvas upload operation in a workflow."""
 
     def __init__(self):
@@ -133,9 +172,6 @@ class ExecuteCanvasUpload:
         canvas_course_id = canvas_ops.verify_course_id(
             payload.get('canvas_course_id'),
             log_item)
-        how_merge = common.get_how_merge(payload, log_item)
-        dst_key = common.get_key(payload, 'dst_key', log_item)
-        src_key = common.get_key(payload, 'src_key', log_item)
 
         # Authenticate with Canvas
 
@@ -184,54 +220,10 @@ class ExecuteCanvasUpload:
         # Lock the workflow for processing
         common.access_workflow(user, session, workflow.id, log_item)
 
-        merge_info = {
-            'how_merge': how_merge,
-            'dst_selected_key': dst_key,
-            'src_selected_key': src_key,
-            # 'initial_column_names': list(src_df.columns),
-            # 'rename_column_names': list(src_df.columns),
-            # 'columns_to_upload': [True] * len(list(src_df.columns))
-        }
-
-        # If this is the first upload into an empty workload, just store.
-        if not workflow.has_data_frame:
-            # Empty workflow, so allow for update.
-            pandas.store_dataframe(src_df, workflow)
-
-            log_item.payload.update(merge_info)
-            log_item.save(update_fields=['payload'])
-            return
-
-        # Merge operation
-        dst_df = pandas.load_table(workflow.get_data_frame_table_name())
-        if dst_df is None:
-            raise OnTaskException(
-                _('Empty dataframe in scheduled canvas update operation.'))
-            # Anomaly detected report error
-            pass
-
-        error = pandas.validate_merge_parameters(
-            dst_df,
+        pandas.perform_dataframe_set_or_update(
+            workflow,
             src_df,
-            how_merge,
-            src_key,
-            dst_key)
-
-        if error:
-            raise OnTaskException(error)
-
-        try:
-            pandas.perform_dataframe_upload_merge(
-                workflow,
-                dst_df,
-                src_df,
-                {
-                    'how_merge': how_merge,
-                    'dst_selected_key': dst_key,
-                    'src_selected_key': src_key,
-                    'initial_column_names': list(src_df.columns),
-                    'rename_column_names': list(src_df.columns),
-                    'columns_to_upload': [True] * len(list(src_df.columns))})
-        except Exception as exc:
-            msg = _('Unable to perform merge operation')
-            raise OnTaskException(msg + ': ' + str(exc))
+            common.get_how_merge(payload, log_item),
+            common.get_key(payload, 'src_key', log_item),
+            common.get_key(payload, 'dst_key', log_item),
+            log_item)

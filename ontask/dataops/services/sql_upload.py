@@ -140,43 +140,10 @@ class ExecuteSQLUpload:
         # IDEA: How to deal with failure to acquire access?
         #       Include a setting with the time to wait and number of retries?
 
-        if not workflow.has_data_frame:
-            # Simple upload
-            pandas.store_dataframe(src_df, workflow)
-            return
-
-        # At this point the operation is a merge
-        dst_df = pandas.load_table(workflow.get_data_frame_table_name())
-
-        dst_key = common.get_key(payload, 'dst_key', log_item)
-        src_key = common.get_key(payload, 'src_key', log_item)
-        how_merge = common.get_how_merge(payload, log_item)
-
-        # Check additional correctness properties in the parameters
-        error = pandas.validate_merge_parameters(
-            dst_df,
-            src_df,
-            how_merge,
-            dst_key,
-            src_key)
-        if error:
-            log_item.payload['error'] = error
-            log_item.save(update_fields=['payload'])
-            raise ontask.OnTaskException(error)
-
-        merge_info = {
-            'how_merge': how_merge,
-            'dst_selected_key': dst_key,
-            'src_selected_key': src_key,
-            'initial_column_names': list(src_df.columns),
-            'rename_column_names': list(src_df.columns),
-            'columns_to_upload': [True] * len(list(src_df.columns))}
-        # Perform the merge
-        pandas.perform_dataframe_upload_merge(
+        pandas.perform_dataframe_set_or_update(
             workflow,
-            dst_df,
             src_df,
-            merge_info)
-
-        log_item.payload = merge_info
-        log_item.save(update_fields=['payload'])
+            common.get_how_merge(payload, log_item),
+            common.get_key(payload, 'src_key', log_item),
+            common.get_key(payload, 'dst_key', log_item),
+            log_item)

@@ -14,3 +14,5 @@ from ontask.dataops.views.transform import (
 from ontask.dataops.views.upload_steps import (
     UploadStepTwoView, UploadStepThreeView, UploadStepFourView,
     UploadShowSourcesView)
+from ontask.dataops.views.canvas_student_upload import (
+    CanvasCourseStudentUploadStart)

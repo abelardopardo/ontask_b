@@ -2,11 +2,9 @@
 
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext as _
 from django.views import generic
 
 from ontask import models
-from ontask.dataops import forms
 from ontask.dataops.views import common
 
 
@@ -26,12 +24,6 @@ class CSVUploadStart(common.UploadStart, generic.FormView):
 
     step_1: URL name of the first step
     """
-
-    form_class = forms.UploadCSVFileForm
-    template_name = 'dataops/upload1.html'
-
-    data_type = 'CSV'
-    data_type_select = _('CSV file')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

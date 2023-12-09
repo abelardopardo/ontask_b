@@ -257,10 +257,8 @@ class TableBasicMerge(APIView):
     ) -> http.HttpResponse:
         """Process the put request."""
         del wid, format
-        # Get the dst_df
-        dst_df = pandas.load_table(workflow.get_data_frame_table_name())
 
-        if dst_df is None:
+        if not workflow.has_data_frame:
             return Response(
                 _('Merge request requires a workflow with a non-empty table'),
                 status=status.HTTP_400_BAD_REQUEST)
@@ -271,37 +269,12 @@ class TableBasicMerge(APIView):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
 
-        src_df = serializer.validated_data['src_df']
-        how = serializer.validated_data['how']
-        left_on = serializer.validated_data['left_on']
-        right_on = serializer.validated_data['right_on']
-        error = pandas.validate_merge_parameters(
-            dst_df,
-            src_df,
-            how,
-            left_on,
-            right_on)
-
-        if error:
-            raise APIException(error)
-
-        # Ready to perform the MERGE
-        try:
-            pandas.perform_dataframe_upload_merge(
-                workflow,
-                dst_df,
-                src_df,
-                {
-                    'how_merge': how,
-                    'dst_selected_key': left_on,
-                    'src_selected_key': right_on,
-                    'initial_column_names': list(src_df.columns),
-                    'rename_column_names': list(src_df.columns),
-                    'columns_to_upload': [True] * len(list(src_df.columns))})
-        except Exception as exc:
-            msg = _('Unable to perform merge operation')
-            LOGGER.error(msg + ': ' + str(exc))
-            raise APIException(msg)
+        pandas.perform_dataframe_set_or_update(
+            workflow,
+            serializer.validated_data['src_df'],
+            serializer.validated_data['how'],
+            serializer.validated_data['left_on'],
+            serializer.validated_data['right_on'])
 
         # Merge went through.
         return Response(serializer.data, status=status.HTTP_201_CREATED)

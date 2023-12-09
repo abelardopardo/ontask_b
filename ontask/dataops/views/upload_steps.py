@@ -3,6 +3,7 @@ from builtins import range, zip
 from typing import Optional
 
 from django import http
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -31,7 +32,8 @@ class UploadShowSourcesView(
             'sql_enabled': models.SQLConnection.objects.filter(
                 enabled=True).exists(),
             'athena_enabled': models.AthenaConnection.objects.filter(
-                enabled=True).exists()})
+                enabled=True).exists(),
+            'canvas_enabled': settings.CANVAS_INFO_DICT})
         return context
 
 
