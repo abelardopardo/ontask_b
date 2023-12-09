@@ -422,6 +422,15 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.go_to_excel_upload_merge_step_1()
         self.body_ss('dataops_upload_excel.png')
         self.go_to_table()
+
+        #
+        # Dataops/Merge Canvas Course Enrollment List
+        #
+        # Go to Canvas Course Enrollment List
+        self.go_to_canvas_upload_merge_step_1()
+        self.body_ss('dataops_upload_canvas_course_enrollment.png')
+        self.go_to_table()
+
         #
         # Google doc merge
         #

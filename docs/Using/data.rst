@@ -7,7 +7,11 @@ Data
     -- Brené Brown
 
 
-This section describes the operations to either upload the first set of data into the table, or merge additional data with the one already stored. This step may be done automatically before you work with a workflow. If this is the case, you may skip this section or revisit it when you need to manipulate the existing data.
+This section describes the operations to either upload the first set of data
+into the table, or merge additional data with the one already stored. This
+step may be done automatically before you work with a workflow. If this is
+the case, you may skip this section or revisit it when you need to manipulate
+the existing data.
 
 The data operations are divided into the following categories:
 
@@ -57,6 +61,29 @@ OnTask is also capable of uploading the data from one sheet of a Excel file. The
 
 In this case the file is assumed to have multiple *Sheets* and one of them
 has to be selected to upload the data.
+
+Upload Canvas Course Enrollment List
+------------------------------------
+
+This option connects with a previously configured instance of
+`Canvas Learning Management System <https://www.canvaslms.com/>`_ and given a
+Course ID, it uploads/merges the list of students enrolled in that course to
+the current workflow.
+
+.. figure:: /scaptures/dataops_upload_canvas_course_enrollment.png
+   :align: center
+
+For convenience, if there is an :ref:`attribute <details_attributes>`
+defined for the workflow with name``CANVAS COURSE ID`` and with an
+integer value it will be used directly by this operation. This is useful when
+an OnTask Workflow corresponds with a course in Canvas throughout a long
+period of time.
+
+This operation is particularly useful to populate the table with an initial set
+of rows (one per student) directly extracted from the remote platform.
+Additionally, it can be used at various points throughout a learning
+experience to update the list of students (include new ones, drop those no
+longer enrolled).
 
 .. _google_spreadsheet_file:
 

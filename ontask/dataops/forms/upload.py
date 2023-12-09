@@ -348,8 +348,8 @@ class UploadS3FileForm(UploadBasic):
 
 
 # Step 1 of the S3 CSV upload
-class UploadCanvasCourseStudentForm(UploadBasic):
-    """Form to read a Canvas Course student list.
+class UploadCanvasCourseEnrollmentForm(UploadBasic):
+    """Form to read data to upload a Canvas Course enrolment list.
 
     It requires access to CANVAS API with an access key.
     """
@@ -398,7 +398,7 @@ class UploadCanvasCourseStudentForm(UploadBasic):
 
         # Process Canvas API call to get the list of students
         try:
-            self.data_frame = services.load_df_from_course_canvas_student_list(
+            self.data_frame = services.load_df_from_course_canvas_enrollment_list(
                 self.user,
                 target_url,
                 self.cleaned_data['canvas_course_id'])

@@ -1,15 +1,14 @@
-"""First step for Canvas Course Student upload."""
+"""First step for Canvas Course Enrollment upload."""
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext as _
 from django.views import generic
 
 from ontask import models
 from ontask.dataops.views import common
 
 
-class CanvasCourseStudentUploadStart(common.UploadStart, generic.FormView):
-    """Start the upload of student listing in a Canvas course.
+class CanvasCourseEnrollmentUploadStart(common.UploadStart, generic.FormView):
+    """Start the upload of enrollment listing in a Canvas course.
 
     The four-step process will populate the dictionary with name upload_data.
 
@@ -46,8 +45,8 @@ class CanvasCourseStudentUploadStart(common.UploadStart, generic.FormView):
             'initial_column_names': form.frame_info[0],
             'column_types': form.frame_info[1],
             'src_is_key_column': form.frame_info[2],
-            'step_1': reverse('dataops:canvas_course_students_upload_start'),
+            'step_1': reverse('dataops:canvas_course_enrollments_upload_start'),
             'log_upload':
-                models.Log.WORKFLOW_DATA_CANVAS_COURSE_STUDENT_UPLOAD}
+                models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD}
 
         return redirect('dataops:upload_s2')

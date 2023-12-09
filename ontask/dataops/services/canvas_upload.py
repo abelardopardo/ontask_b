@@ -100,14 +100,14 @@ def _extract_quiz_submission_information(
             user_row[submission_finish_column_name] = submission['finished_at']
 
 
-def load_df_from_course_canvas_student_list(
+def load_df_from_course_canvas_enrollment_list(
         user: models.OnTaskUser,
         target_url: str,
         course_id: int
 ) -> pd.DataFrame:
-    """Load data frame from a Canvas course student list.
+    """Load data frame from a Canvas course enrollment list.
 
-    Given the Canvas target_url and a course ID, obtain the list of students
+    Given the Canvas target_url and a course ID, obtain the enrollmen list
     and load a dataframe with that list on the current workflow.
 
     :param user: User object for authentication purposes.

@@ -123,13 +123,13 @@ urlpatterns = [
 
     # Athena Upload/Merge
     path(
-        'canvas_course_students_upload_start/',
-        views.CanvasCourseStudentUploadStart.as_view(
-            form_class=forms.UploadCanvasCourseStudentForm,
+        'canvas_course_enrollments_upload_start/',
+        views.CanvasCourseEnrollmentUploadStart.as_view(
+            form_class=forms.UploadCanvasCourseEnrollmentForm,
             template_name='dataops/upload1.html',
-            data_type='Canvas Course Student List',
+            data_type='Canvas Course Enrollment List',
             data_type_select=_('Canvas Course')),
-        name='canvas_course_students_upload_start'),
+        name='canvas_course_enrollments_upload_start'),
 
     # Upload/Merge
     path('upload_s2/', views.UploadStepTwoView.as_view(), name='upload_s2'),

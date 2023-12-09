@@ -722,6 +722,17 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.XPATH, '//form')))
 
+    def go_to_canvas_upload_merge_step_1(self):
+        self.go_to_upload_merge()
+
+        # Go to Canvas Upload/Merge
+        self.click_on_element(
+            By.XPATH,
+            '//table[@id="dataops-table"]'
+            '//a[normalize-space()="Canvas Course Enrollment List"]')
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//form')))
+
     def go_to_google_sheet_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
