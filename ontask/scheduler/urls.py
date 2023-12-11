@@ -19,8 +19,17 @@ urlpatterns = [
             wf_pf_related='scheduled_operations'),
         name='index'),
 
-    # Create a new Canvas Update operation
-    path('canvasupload/', views.create_canvas_upload, name='canvasupload'),
+    # Create a new Canvas Course Enrollment Upload operation
+    path(
+        'canvas_course_enrollment_upload/',
+        views.create_canvas_course_enrollment_upload,
+        name='canvas_course_enrollment_upload'),
+
+    # Create a new Canvas Course Quizzes Upload operation
+    path(
+        'canvas_course_quizzes_upload/',
+        views.create_canvas_course_quizzes_upload,
+        name='canvas_course_quizzes_upload'),
 
     # Select a SQL connection
     path(
@@ -119,5 +128,10 @@ services.SCHEDULE_CRUD_FACTORY.register_producer(
     services.ScheduledOperationUpdateSQLUpload)
 
 services.SCHEDULE_CRUD_FACTORY.register_producer(
-    models.Log.WORKFLOW_DATA_CANVAS_UPLOAD,
-    services.ScheduledOperationUpdateCanvasUpload)
+    models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
+    services.ScheduledOperationUpdateCanvasCourseEnrollmentUpload)
+
+services.SCHEDULE_CRUD_FACTORY.register_producer(
+    models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
+    services.ScheduledOperationUpdateCanvasCourseQuizzesUpload)
+

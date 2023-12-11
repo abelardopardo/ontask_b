@@ -1,6 +1,6 @@
 """Views to manipulate dataframes."""
 from django.utils.translation import gettext as _
-from django.urls import path
+from django.urls import path, reverse
 
 from ontask import models
 from ontask.dataops import forms, views
@@ -121,15 +121,27 @@ urlpatterns = [
             prev_step_url='connection:athenaconns_index'),
         name='athenaupload_start'),
 
-    # Athena Upload/Merge
+    # Canvas Course Enrollment Upload/Merge
     path(
         'canvas_course_enrollments_upload_start/',
-        views.CanvasCourseEnrollmentUploadStart.as_view(
+        views.CanvasUploadStart.as_view(
             form_class=forms.UploadCanvasCourseEnrollmentForm,
             template_name='dataops/upload1.html',
             data_type='Canvas Course Enrollment List',
-            data_type_select=_('Canvas Course')),
+            data_type_select=_('Canvas Course'),
+            log_type=models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD),
         name='canvas_course_enrollments_upload_start'),
+
+    # Canvas Course Quizzes Upload/Merge
+    path(
+        'canvas_course_quizzess_upload_start/',
+        views.CanvasUploadStart.as_view(
+            form_class=forms.UploadCanvasQuizzesForm,
+            template_name='dataops/upload1.html',
+            data_type='Canvas Course Quizzes',
+            data_type_select=_('Canvas Course'),
+            log_type=models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD),
+        name='canvas_course_quizzes_upload_start'),
 
     # Upload/Merge
     path('upload_s2/', views.UploadStepTwoView.as_view(), name='upload_s2'),

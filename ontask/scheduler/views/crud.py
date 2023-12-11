@@ -99,11 +99,11 @@ def create_sql_upload(
 
 @user_passes_test(is_instructor)
 @get_workflow()
-def create_canvas_upload(
+def create_canvas_course_enrollment_upload(
         request: http.HttpRequest,
         workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
-    """Create a new Canvas Update operation.
+    """Create a new Canvas Course Enrollment Update operation.
 
     :param request: HTTP request
     :param workflow: Workflow of the current context.
@@ -111,7 +111,25 @@ def create_canvas_upload(
     """
     return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
-        models.Log.WORKFLOW_DATA_CANVAS_UPLOAD,
+        models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
+        workflow=workflow)
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def create_canvas_course_quizzes_upload(
+        request: http.HttpRequest,
+        workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Create a new Canvas Course Quizzes Update operation.
+
+    :param request: HTTP request
+    :param workflow: Workflow of the current context.
+    :return: HTTP response
+    """
+    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+        request,
+        models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
         workflow=workflow)
 
 

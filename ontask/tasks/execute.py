@@ -91,13 +91,9 @@ def execute_operation(
             log_item.payload['status'] = 'Executing'
             log_item.save(update_fields=['payload', 'workflow'])
 
-        TASK_EXECUTE_FACTORY.execute_operation(
-            operation_type=operation_type,
-            user=user,
-            workflow=workflow,
-            action=action,
-            payload=payload,
-            log_item=log_item)
+        TASK_EXECUTE_FACTORY.execute_operation(user=user, workflow=workflow,
+                                               action=action, payload=payload,
+                                               log_item=log_item)
 
     except Exception as exc:
         if log_item is not None:

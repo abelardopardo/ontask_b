@@ -117,9 +117,10 @@ class Log(Owner):
     WORKFLOW_DATA_ROW_UPDATE = 'tablerow_update'
     WORKFLOW_DATA_ROW_CREATE = 'tablerow_create'
     WORKFLOW_DATA_ATHENA_UPLOAD = 'workflow_athena_data_upload'
-    WORKFLOW_DATA_CANVAS_UPLOAD = 'workflow_canvas_data_upload'
     WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD = \
         'workflow_canvas_course_enrollment_data_upload'
+    WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD = \
+        'workflow_canvas_course_quizzes_data_upload'
     WORKFLOW_DATA_CSV_UPLOAD = 'workflow_csv_data_upload'
     WORKFLOW_DATA_EXCEL_UPLOAD = 'workflow_excel_data_upload'
     WORKFLOW_DATA_GSHEET_UPLOAD = 'workflow_gsheet_data_upload'
@@ -219,7 +220,10 @@ class Log(Owner):
         WORKFLOW_DATA_ATHENA_UPLOAD: _('Athena data uploaded to workflow'),
         WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD: _(
             'Canvas course enrollment data uploaded to workflow'),
-        WORKFLOW_DATA_CANVAS_UPLOAD: _('Canvas data uploaded to workflow'),
+        WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD: _(
+            'Canvas course quizzes data uploaded to workflow'),
+        WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD: _(
+            'Canvas course quizzes data uploaded to workflow'),
         WORKFLOW_DATA_CSV_UPLOAD: _('Upload Data from CSV File'),
         WORKFLOW_DATA_EXCEL_UPLOAD: _('Upload Data from Excel Sheet'),
         WORKFLOW_DATA_GSHEET_UPLOAD: _('Upload Data from Google Sheet'),

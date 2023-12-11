@@ -6,4 +6,5 @@ from ontask.dataops.forms.select import (
 )
 from ontask.dataops.forms.upload import (
     UploadCSVFileForm, UploadExcelFileForm, UploadGoogleSheetForm,
-    UploadS3FileForm, UploadCanvasCourseEnrollmentForm)
+    UploadS3FileForm, UploadCanvasCourseEnrollmentForm,
+    UploadCanvasQuizzesForm, UploadCanvasForm)

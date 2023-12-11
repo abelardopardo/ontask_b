@@ -14,8 +14,9 @@ from ontask.scheduler.services.edit_factory import (
 class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
     """Class to create a Canvas Upload operation."""
 
-    operation_type = models.Log.WORKFLOW_DATA_CANVAS_UPLOAD
-    form_class = forms.ScheduleCanvasUploadForm
+    operation_type = None
+    form_page_title = None
+    form_class = forms.ScheduleUploadCanvasForm
 
     def _create_payload(
         self,
@@ -34,7 +35,7 @@ class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
                 'workflow_id': self.workflow.id,
                 'operation_type': self.operation_type,
                 'value_range': [],
-                'page_title': gettext('Canvas Course Data Upload')})
+                'page_title': self.form_page_title})
 
         if self.scheduled_item:
             payload.update(self.scheduled_item.payload)
@@ -55,3 +56,17 @@ class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
             self.op_payload['target_url'],
             'scheduler:finish_scheduling',
             'scheduler:index')
+
+
+class ScheduledOperationUpdateCanvasCourseEnrollmentUpload(
+        ScheduledOperationUpdateCanvasUpload):
+    """Class to CRUD a Canvas Course Enrollment Upload operation."""
+    operation_type = models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD
+    form_page_title = gettext('Canvas Course Enrollment Data Upload')
+
+
+class ScheduledOperationUpdateCanvasCourseQuizzesUpload(
+        ScheduledOperationUpdateCanvasUpload):
+    """Class to CRUD a Canvas Course Quizzes Upload operation."""
+    operation_type = models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD
+    form_page_title = gettext('Canvas Course Quizzes Data Upload')

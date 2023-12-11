@@ -12,5 +12,6 @@ from ontask.scheduler.services.sql_producer import (
     ScheduledOperationUpdateSQLUpload,
 )
 from ontask.scheduler.services.canvas_update_producer import (
-    ScheduledOperationUpdateCanvasUpload)
+    ScheduledOperationUpdateCanvasCourseQuizzesUpload,
+    ScheduledOperationUpdateCanvasCourseEnrollmentUpload)
 from ontask.scheduler.services.tasks_ops import schedule_task

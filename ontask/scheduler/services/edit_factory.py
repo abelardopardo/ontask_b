@@ -109,7 +109,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
     connection = None  # For SQL Upload operations
     scheduled_item = None  # When editing a previously scheduled op
 
-    # Dictionary stored in the session for multi-page form filling
+    # Dictionary stored in the session for multipage form filling
     op_payload = None
 
     is_finish_request = None  # Flagging if the request is the last step.

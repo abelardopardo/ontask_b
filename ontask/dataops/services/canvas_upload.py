@@ -2,9 +2,7 @@
 from typing import Dict, Optional
 import pandas as pd
 
-from django.utils.translation import gettext_lazy as _
-
-from ontask import models, OnTaskException
+from ontask import models
 from ontask.core import canvas_ops
 from ontask.dataops.services import common
 from ontask.dataops import pandas
@@ -100,14 +98,14 @@ def _extract_quiz_submission_information(
             user_row[submission_finish_column_name] = submission['finished_at']
 
 
-def load_df_from_course_canvas_enrollment_list(
+def create_df_from_canvas_course_enrollment(
         user: models.OnTaskUser,
         target_url: str,
         course_id: int
 ) -> pd.DataFrame:
     """Load data frame from a Canvas course enrollment list.
 
-    Given the Canvas target_url and a course ID, obtain the enrollmen list
+    Given the Canvas target_url and a course ID, obtain the enrollment list
     and load a dataframe with that list on the current workflow.
 
     :param user: User object for authentication purposes.
@@ -139,16 +137,142 @@ def load_df_from_course_canvas_enrollment_list(
     return pd.DataFrame(data_frame_source)
 
 
-class ExecuteCanvasUploadQuizzes:
-    """Process the Canvas upload operation in a workflow."""
+def create_df_from_canvas_course_quizzes(
+        user: models.OnTaskUser,
+        target_url: str,
+        course_id: int
+) -> pd.DataFrame:
+    """Load data frame from a Canvas with information about quizzes in a course.
+
+    Given the Canvas target_url and a course ID, obtain all the information
+    related to quizzes in the course and create a pandas Data Frame.
+
+    :param user: User object for authentication purposes.
+    :param target_url: Name of the Canvas instance to use.
+    :param course_id: Canvas Course ID (integer)
+    :return: Data Frame after obtaining it from Canvas.
+    """
+    # Verify parameter
+    canvas_course_id = canvas_ops.verify_course_id(course_id)
+
+    # Get the oauth info
+    oauth_info, user_token = canvas_ops.get_oauth_and_user_token(
+        user,
+        target_url)
+
+    # Fetch all quizzes for the course
+    quizzes = canvas_ops.get_course_quizzes(
+        oauth_info,
+        user_token,
+        canvas_course_id)
+
+    # Build the data frame source with the information from quizzes
+    data_frame_source = {}
+    for quiz in quizzes:
+        quiz_id = quiz['id']
+
+        # Get the answer information
+        _extract_quiz_answer_information(
+            oauth_info,
+            user_token,
+            canvas_course_id,
+            quiz_id,
+            data_frame_source)
+
+        # Get the submission information
+        _extract_quiz_submission_information(
+            oauth_info,
+            user_token,
+            canvas_course_id,
+            quiz_id,
+            data_frame_source)
+
+    # Create the data frame with the collected data
+    return pd.DataFrame(data_frame_source.values())
+
+
+class ExecuteCanvasUploadBasic:
+    @staticmethod
+    def execute_dataframe_update(
+            user: models.OnTaskUser,
+            workflow: models.Workflow,
+            data_frame: pd.DataFrame,
+            payload: dict,
+            log_item: models.Log
+    ):
+        # Create session
+        session = common.create_session()
+
+        # Lock the workflow for processing
+        common.access_workflow(user, session, workflow.id, log_item)
+
+        # Merge or upload the data frame
+        pandas.perform_dataframe_set_or_update(
+            workflow,
+            data_frame,
+            common.get_how_merge(payload, log_item),
+            common.get_key(payload, 'src_key', log_item),
+            common.get_key(payload, 'dst_key', log_item),
+            log_item)
+
+
+class ExecuteCanvasCourseEnrollmentsUpload(ExecuteCanvasUploadBasic):
+    """Process the Canvas Course Enrollment Upload operation in a workflow."""
+    def __init__(self):
+        """Assign default fields."""
+        super().__init__()
+        self.log_event = (
+            models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD)
+
+    @staticmethod
+    def execute_operation(
+        user,
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ):
+        """Perform a Canvas Course Enrollment upload asynchronously.
+
+        :param user: User object
+        :param workflow: Workflow object
+        :param action: Empty
+        :param payload: has fields:
+          - dst_key: Key column in the existing dataframe (if any) for merge
+          - src_key: Key column in the external dataframe (for merge)
+          - how_merge: Merge method: inner, outer, left, right
+          - canvas_course_id: Unique course id in canvas
+          - target_url: URL for the remote canvas instance
+        :param log_item: Optional log item object.
+        """
+        # Create the data frame with the collected data
+        src_df = create_df_from_canvas_course_enrollment(
+            user,
+            payload.get('target_url'),
+            payload.get('canvas_course_id'))
+
+        # Update the dataframe
+        super(
+            ExecuteCanvasCourseEnrollmentsUpload,
+            ExecuteCanvasCourseEnrollmentsUpload
+        ).execute_dataframe_update(
+            user,
+            workflow,
+            src_df,
+            payload,
+            log_item)
+
+
+class ExecuteCanvasCourseQuizzesUpload(ExecuteCanvasUploadBasic):
+    """Process the Canvas Course Quizzes upload operation in a workflow."""
 
     def __init__(self):
         """Assign default fields."""
         super().__init__()
-        self.log_event = models.Log.WORKFLOW_DATA_SQL_UPLOAD
+        self.log_event = models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD
 
+    @staticmethod
     def execute_operation(
-        self,
         user,
         workflow: Optional[models.Workflow] = None,
         action: Optional[models.Action] = None,
@@ -166,64 +290,21 @@ class ExecuteCanvasUploadQuizzes:
           - how_merge: Merge method: inner, outer, left, right
           - canvas_course_id: Unique course id in canvas
           - target_url: URL for the remote canvas instance
-        :param log_item: Optional logitem object.
+        :param log_item: Optional log item object.
         """
-        # Get relevant data from the payload
-        canvas_course_id = canvas_ops.verify_course_id(
-            payload.get('canvas_course_id'),
-            log_item)
-
-        # Authenticate with Canvas
-
-        # Get the oauth info
-        oauth_info, user_token = canvas_ops.get_oauth_and_user_token(
-            user,
-            payload.get('target_url'))
-
-        # Fetch data from canvas and create the src_df
-
-        # Fetch all quizzes for the course
-        quizzes = canvas_ops.get_course_quizzes(
-            oauth_info,
-            user_token,
-            canvas_course_id)
-
-        # Build the data frame source with the information from quizzes
-        data_frame_source = {}
-        for quiz in quizzes:
-            quiz_id = quiz['id']
-
-            # Get the answer information
-            _extract_quiz_answer_information(
-                oauth_info,
-                user_token,
-                canvas_course_id,
-                quiz_id,
-                data_frame_source)
-
-            # Get the submission information
-            _extract_quiz_submission_information(
-                oauth_info,
-                user_token,
-                canvas_course_id,
-                quiz_id,
-                data_frame_source)
-
         # Create the data frame with the collected data
-        src_df = pd.DataFrame(data_frame_source.values())
+        src_df = create_df_from_canvas_course_quizzes(
+            user,
+            payload.get('target_url'),
+            payload.get('canvas_course_id'))
 
-        # Merge or upload the data frame
-
-        # Create session
-        session = common.create_session()
-
-        # Lock the workflow for processing
-        common.access_workflow(user, session, workflow.id, log_item)
-
-        pandas.perform_dataframe_set_or_update(
+        # Update the dataframe
+        super(
+            ExecuteCanvasCourseQuizzesUpload,
+            ExecuteCanvasCourseQuizzesUpload
+        ).execute_dataframe_update(
+            user,
             workflow,
             src_df,
-            common.get_how_merge(payload, log_item),
-            common.get_key(payload, 'src_key', log_item),
-            common.get_key(payload, 'dst_key', log_item),
+            payload,
             log_item)

@@ -3,24 +3,19 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import generic
 
-from ontask import models
 from ontask.dataops.views import common
 
 
-class CanvasCourseEnrollmentUploadStart(common.UploadStart, generic.FormView):
-    """Start the upload of enrollment listing in a Canvas course.
+class CanvasUploadStart(common.UploadStart, generic.FormView):
+    """Start the upload of information from Canvas.
 
-    The four-step process will populate the dictionary with name upload_data.
+    The different operations are defined by parameters used when invoking
+    this as a view. See url.py in this module.
+    """
 
-    STEP 1:
-
-    initial_column_names: id, student name
-
-    column_types: int (student id), str (student name)
-
-    src_is_key_column: [True, False],
-
-    step 1: URL name of the first step."""
+    # To be defined in subclasses
+    log_type = None
+    step_1_url = None
 
     def get_context_data(self, **kwargs):
         """Store the attribute with a canvas course id if it exists"""
@@ -45,8 +40,22 @@ class CanvasCourseEnrollmentUploadStart(common.UploadStart, generic.FormView):
             'initial_column_names': form.frame_info[0],
             'column_types': form.frame_info[1],
             'src_is_key_column': form.frame_info[2],
-            'step_1': reverse('dataops:canvas_course_enrollments_upload_start'),
-            'log_upload':
-                models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD}
+            'step_1': self.step_1_url,
+            'log_upload': self.log_type}
 
         return redirect('dataops:upload_s2')
+
+
+class CanvasCourseEnrollmentsUploadStart(CanvasUploadStart):
+    """Step 1 URL needs to be defined at instantiation time."""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.step_1_url = reverse(
+            'dataops:canvas_course_enrollments_upload_start')
+
+
+class CanvasCourseQuizzesUploadStart(CanvasUploadStart):
+    """Step 1 URL needs to be defined at instantiation time."""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.step_1_url = reverse('dataops:canvas_course_quizzes_upload_start')

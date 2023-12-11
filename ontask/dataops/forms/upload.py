@@ -22,7 +22,9 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
-from ontask import OnTaskDataFrameNoKey, models, settings as ontask_settings
+from ontask import (
+    OnTaskDataFrameNoKey, models, settings as ontask_settings,
+    OnTaskException)
 from ontask.core import RestrictedFileField
 from ontask.dataops import pandas, services
 
@@ -32,11 +34,33 @@ URL_FIELD_SIZE = 1024
 class UploadBasic(forms.Form):
     """Basic class to use for inheritance."""
 
+    workflow = None
+
+    def verify_skip_lines_fields(self, form_data):
+        """Verify if the skip lines parameters in a form are valid
+
+        :return: True if they are valid, False otherwise.
+        """
+        if form_data['skip_lines_at_top'] < 0:
+            self.add_error(
+                'skip_lines_at_top',
+                _('This number has to be zero or positive'),
+            )
+            return False
+
+        if form_data['skip_lines_at_bottom'] < 0:
+            self.add_error(
+                'skip_lines_at_bottom',
+                _('This number has to be zero or positive'),
+            )
+            return False
+        return True
+
     def __init__(self, *args, **kwargs):
         """Store the workflow for further processing."""
         self.data_frame: Optional[pd.DataFrame] = None
         self.frame_info = None
-        self.workflow = kwargs.pop(str('workflow'), None)
+        self.workflow = kwargs.pop('workflow', self.workflow)
         super().__init__(*args, **kwargs)
 
     def validate_data_frame(self):
@@ -110,18 +134,7 @@ class UploadCSVFileForm(UploadBasic):
 
         form_data = super().clean()
 
-        if form_data['skip_lines_at_top'] < 0:
-            self.add_error(
-                'skip_lines_at_top',
-                _('This number has to be zero or positive'),
-            )
-            return form_data
-
-        if form_data['skip_lines_at_bottom'] < 0:
-            self.add_error(
-                'skip_lines_at_bottom',
-                _('This number has to be zero or positive'),
-            )
+        if not self.verify_skip_lines_fields(form_data):
             return form_data
 
         # Process CSV file using pandas read_csv
@@ -194,7 +207,7 @@ class UploadGoogleSheetForm(UploadBasic):
     """Form to read a Google Sheet file through a URL.
 
     It also allows to specify the number of lines to skip at the top and the
-    bottom of the file. This functionality is offered by the underlyng
+    bottom of the file. This functionality is offered by the underlying
     function read_csv in Pandas
     """
 
@@ -226,16 +239,7 @@ class UploadGoogleSheetForm(UploadBasic):
         """
         form_data = super().clean()
 
-        if form_data['skip_lines_at_top'] < 0:
-            self.add_error(
-                'skip_lines_at_top',
-                _('This number has to be zero or positive'))
-            return form_data
-
-        if form_data['skip_lines_at_bottom'] < 0:
-            self.add_error(
-                'skip_lines_at_bottom',
-                _('This number has to be zero or positive'))
+        if not self.verify_skip_lines_fields(form_data):
             return form_data
 
         try:
@@ -261,7 +265,7 @@ class UploadS3FileForm(UploadBasic):
 
     It requires entering the access key as well as the secret access key. It
     also allows to specify the number of lines to skip at the top and the
-    bottom of the file. This functionality is offered by the underlyng
+    bottom of the file. This functionality is offered by the underlying
     function read_csv in Pandas
     """
 
@@ -347,17 +351,20 @@ class UploadS3FileForm(UploadBasic):
         return resp_data
 
 
-# Step 1 of the S3 CSV upload
-class UploadCanvasCourseEnrollmentForm(UploadBasic):
-    """Form to read data to upload a Canvas Course enrolment list.
+class UploadCanvasForm(UploadBasic):
+    """Common code for Canvas Upload operations."""
 
-    It requires access to CANVAS API with an access key.
-    """
     canvas_course_id = forms.IntegerField(
         label=_('Canvas course id to retrieve the data.'),
         required=True,
         help_text=_(
             'This is an integer used by Canvas to uniquely identify a course'))
+
+    target_url = forms.ChoiceField(
+        label=_('Canvas Host'),
+        required=True,
+        help_text=_('Name of the Canvas host to extract data.'),
+        choices=[])
 
     def __init__(self, *args, **kwargs):
         """Modify certain field data."""
@@ -366,54 +373,99 @@ class UploadCanvasCourseEnrollmentForm(UploadBasic):
         super().__init__(*args, **kwargs)
 
         if len(settings.CANVAS_INFO_DICT) > 1:
-            # Add the target_url field if the system has more than one entry
-            # point configured
-            self.fields['target_url'] = forms.ChoiceField(
-                required=True,
-                choices=[('', '---')] + [(key, key) for key in sorted(
-                    settings.CANVAS_INFO_DICT.keys(),
-                )],
-                label=_('Canvas Host'),
-                help_text=_('Name of the Canvas host to extract data.'))
-            self.order_fields(['target_url', 'canvas_course_id'])
+            # There is more than one Canvas host, set the choices.
+            self.fields['target_url'].choices = (
+                [('', '---')] + [(key, key) for key in sorted(
+                    settings.CANVAS_INFO_DICT.keys())])
+        elif len(settings.CANVAS_INFO_DICT) == 1:
+            # There is a single Canvas host, set the field to that value
+            self.fields['target_url'].widget = forms.HiddenInput()
+            key = list(settings.CANVAS_INFO_DICT.keys())[0]
+            self.fields['target_url'].choices = [(key, key)]
+            self.fields['target_url'].initial = key
+            self.fields['target_url'].disabled = True
+        else:
+            raise OnTaskException(
+                _('Incorrect invocation of upload Canvas Form'))
 
         if 'CANVAS COURSE ID' in self.workflow.attributes:
-            # There is an attribute with a course ID, use it.
+            # There is an attribute with a course ID, use it and hide the
+            # field in the form with a fixed value and disable it.
             self.fields['canvas_course_id'].widget = forms.HiddenInput()
             self.fields['canvas_course_id'].initial = self.workflow.attributes[
                 'CANVAS COURSE ID']
             self.fields['canvas_course_id'].disabled = True
 
-    def clean(self) -> Dict:
-        """Check that the integers are positive.
+        self.order_fields(['target_url', 'canvas_course_id'])
 
-        :return: The cleaned data
+
+class UploadCanvasCourseEnrollmentForm(UploadCanvasForm):
+    """Form to read data to upload a Canvas Course enrolment list.
+
+    It requires access to CANVAS API with an access key.
+    """
+
+    def clean(self) -> Dict:
+        """Extract the data from Canvas.
+
+        :return: Data frame with the data in the object.
         """
         resp_data = super().clean()
 
-        if len(settings.CANVAS_INFO_DICT) > 1:
-            target_url = self.cleaned_data['target_url']
-        else:
-            target_url = list(settings.CANVAS_INFO_DICT.keys())[0]
-
         # Process Canvas API call to get the list of students
         try:
-            self.data_frame = services.load_df_from_course_canvas_enrollment_list(
-                self.user,
-                target_url,
-                self.cleaned_data['canvas_course_id'])
+            self.data_frame = (
+                services.create_df_from_canvas_course_enrollment(
+                    self.user,
+                    resp_data['target_url'],
+                    resp_data['canvas_course_id']))
         except Exception as exc:
             self.add_error(
                 None,
                 _('Canvas course upload could not be processed: {0}').format(
-                    str(exc)),
-            )
+                    str(exc)))
             return resp_data
 
         if self.data_frame.empty:
             self.add_error(
                 None,
                 _('There are no students enrolled in the Canvas course.'))
+            return resp_data
+
+        # Check the validity of the data frame
+        self.validate_data_frame()
+
+        return resp_data
+
+
+class UploadCanvasQuizzesForm(UploadCanvasForm):
+    """Form to read data to upload Canvas Quizzes in a Course."""
+
+    def clean(self) -> Dict:
+        """Extract the data from Canvas.
+
+        :return: Data frame with the data in the object.
+        """
+        resp_data = super().clean()
+
+        # Process Canvas API call to get the list of students
+        try:
+            self.data_frame = (
+                services.create_df_from_canvas_course_quizzes(
+                    self.user,
+                    resp_data['target_url'],
+                    resp_data['canvas_course_id']))
+        except Exception as exc:
+            self.add_error(
+                None,
+                _('Canvas course upload could not be processed: {0}').format(
+                    str(exc)))
+            return resp_data
+
+        if self.data_frame.empty:
+            self.add_error(
+                None,
+                _('There is no quiz information available in the course.'))
             return resp_data
 
         # Check the validity of the data frame

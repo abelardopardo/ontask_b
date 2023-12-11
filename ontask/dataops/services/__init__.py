@@ -16,7 +16,8 @@ from ontask.dataops.services.sql_upload import (
     ExecuteSQLUpload, sql_upload_step_one,
 )
 from ontask.dataops.services.canvas_upload import (
-    ExecuteCanvasUploadQuizzes, load_df_from_course_canvas_enrollment_list)
+    ExecuteCanvasCourseQuizzesUpload, create_df_from_canvas_course_enrollment,
+    create_df_from_canvas_course_quizzes, ExecuteCanvasCourseEnrollmentsUpload)
 from ontask.dataops.services.upload_steps import (
     upload_prepare_step_four, upload_step_four, upload_step_two,
 )

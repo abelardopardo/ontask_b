@@ -188,9 +188,10 @@ class ScheduleSQLUploadForm(
     pass
 
 
-class ScheduleCanvasUploadForm(
+class ScheduleUploadCanvasForm(
     ScheduleBasicUpdateForm,
-    dataops_forms.MergeForm
+    dataops_forms.MergeForm,
+    dataops_forms.UploadCanvasForm
 ):
     """Form to request info for the Canvas scheduled upload
 
@@ -202,12 +203,6 @@ class ScheduleCanvasUploadForm(
 
     Canvas Host is required only if more than one is specified.
     """
-
-    canvas_course_id = forms.IntegerField(
-        label=_('Canvas course id to retrieve the data.'),
-        required=True,
-        help_text=_(
-            'This is an integer used by Canvas to uniquely identify a course'))
 
     def __init__(self, *args, **kwargs):
         """Modify certain field data."""
@@ -225,17 +220,6 @@ class ScheduleCanvasUploadForm(
         self.fields['dst_key'].label = _('Key column in the external table')
 
         if len(settings.CANVAS_INFO_DICT) > 1:
-            # Add the target_url field if the system has more than one entry
-            # point configured
-            self.fields['target_url'] = forms.ChoiceField(
-                initial=self._FormWithPayload__form_info.get(
-                    'target_url', None),
-                required=True,
-                choices=[('', '---')] + [(key, key) for key in sorted(
-                    settings.CANVAS_INFO_DICT.keys(),
-                )],
-                label=_('Canvas Host'),
-                help_text=_('Name of the Canvas host to send the messages'))
             self.set_field_from_dict('target_url')
         else:
             # Single Canvas config Add the value to the payload (no form field
