@@ -12,7 +12,7 @@ def change_scheduled_op_type(apps, schema_editor):
             sitem.operation_type = 'workflow_canvas_course_quizzes_data_upload'
             sitem.save()
 
-    Log = apps.get_model('ontask', 'Logs')
+    Log = apps.get_model('ontask', 'Log')
     for litem in Log.objects.all():
         if litem.name == 'workflow_canvas_data_upload':
             litem.name = 'workflow_canvas_course_quizzes_data_upload'
