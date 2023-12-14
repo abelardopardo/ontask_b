@@ -16,7 +16,9 @@ OnTask allows to connect to a `Canvas Learning Management System <https://www.ca
 
    - ``authorize_url``: URL template to access the first step of the authorization. This is usually ``https://{0}/login/oauth2/auth``. The string ``{0}`` is replaced internally with the value of ``domain_port``.
 
-   - ``access_token_url``: URL template to access the token. This is usually ``https://{0}/login/oauth2/token``. The string ``{0}`` is replaced internally with the value of ``domain_port``.
+   - ``access_token_url``: URL template to access the token. This is usually
+     ``https://{0}/login/oauth2/token``. The string ``{0}`` is replaced
+     internally with the value of ``domain_port``::
 
       CANVAS_INFO_DICT = {
           "Server one":
@@ -38,5 +40,7 @@ OnTask allows to connect to a `Canvas Learning Management System <https://www.ca
 
   Default: 600
 
-After defining these variables, restart the application for the values to be considered. To test the configuration open a workflow, create an action of type ``Personalized canvas email`` and email those messages.
+After defining these variables, restart the application for the values to be
+considered. To test the configuration open a workflow, create an action of type ``Personalized canvas email`` and email those messages.
+
 
