@@ -135,9 +135,8 @@ class ScheduleBasicUpdateForm(ScheduleBasicForm):
     src_key = forms.CharField(
         max_length=models.CHAR_FIELD_MID_SIZE,
         strip=True,
-        required=False,
-        label=_('Key column in new table. '
-                'Leave empty if uploading to empty workflow'))
+        required=True,
+        label=_('Key column in new table.'))
 
     def __init__(self, *args, **kwargs):
         """Initialize all the fields"""
