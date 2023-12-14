@@ -156,10 +156,17 @@ class ScheduleBasicUpdateForm(ScheduleBasicForm):
         # If the workflow has data, both keys have to be non-empty, the
         # first one needs to be a unique column, and the merge method cannot
         # be empty
-        if not form_data['dst_key'] or not form_data['src_key']:
+        if not form_data.get('dst_key') or not form_data.get('src_key'):
             self.add_error(
                 None,
                 _('The operation requires the names of two key columns.'))
+        column = self.workflow.columns.filter(
+            name=form_data['dst_key']).filter(is_key=True).first()
+        if form_data['dst_key'] and not column:
+            self.add_error(
+                'dst_key',
+                _('The column selected is not a key column.')
+            )
         if not form_data['how_merge']:
             self.add_error(
                 'how_merge',

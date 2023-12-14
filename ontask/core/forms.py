@@ -113,7 +113,9 @@ class FormWithPayload(forms.Form):
         if field_value is not None:
             self.__form_info[field_name] = field_value
         else:
-            self.__form_info[field_name] = self.cleaned_data[field_name]
+            self.__form_info[field_name] = self.cleaned_data.get(
+                field_name,
+                field_value)
 
     def store_fields_in_dict(self, field_pairs):
         """Store the list of (field_name, field_value=None) in the dict.
