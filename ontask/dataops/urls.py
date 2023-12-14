@@ -124,8 +124,8 @@ urlpatterns = [
     # Canvas Course Enrollment Upload/Merge
     path(
         'canvas_course_enrollments_upload_start/',
-        views.CanvasUploadStart.as_view(
-            form_class=forms.UploadCanvasCourseEnrollmentForm,
+        views.CanvasCourseEnrollmentsUploadStart.as_view(
+            form_class=forms.UploadCanvasForm,
             template_name='dataops/upload1.html',
             data_type='Canvas Course Enrollment List',
             data_type_select=_('Canvas Course'),
@@ -136,12 +136,17 @@ urlpatterns = [
     path(
         'canvas_course_quizzess_upload_start/',
         views.CanvasUploadStart.as_view(
-            form_class=forms.UploadCanvasQuizzesForm,
+            form_class=forms.UploadCanvasForm,
             template_name='dataops/upload1.html',
             data_type='Canvas Course Quizzes',
             data_type_select=_('Canvas Course'),
             log_type=models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD),
         name='canvas_course_quizzes_upload_start'),
+
+    path(
+        'canvas_upload_start_finish/',
+        views.canvas_upload_start_finish,
+        name='canvas_upload_start_finish'),
 
     # Upload/Merge
     path('upload_s2/', views.UploadStepTwoView.as_view(), name='upload_s2'),

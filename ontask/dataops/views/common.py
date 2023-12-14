@@ -1,7 +1,27 @@
 """Common classes to upload data."""
+import pandas as pd
+
 from django.urls import reverse
 
+from ontask import models
 from ontask.core import UserIsInstructor, WorkflowView
+from ontask.dataops import pandas
+
+
+def validate_and_store_temporary_data_frame(
+        workflow: models.Workflow,
+        data_frame: pd.DataFrame
+) -> dict:
+    """Check that the dataframe can be properly stored and store it.
+
+    :return: Dict with information, and frame in the database or Exception
+    with anomaly
+    """
+    # Verify the data frame
+    pandas.verify_data_frame(data_frame)
+
+    # Get frame info with three lists: names, types and is_key
+    return pandas.store_temporary_dataframe(data_frame, workflow)
 
 
 class UploadStart(UserIsInstructor, WorkflowView):
