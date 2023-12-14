@@ -269,12 +269,15 @@ class TableBasicMerge(APIView):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
 
-        pandas.perform_dataframe_set_or_update(
-            workflow,
-            serializer.validated_data['src_df'],
-            serializer.validated_data['how'],
-            serializer.validated_data['left_on'],
-            serializer.validated_data['right_on'])
+        try:
+            pandas.perform_dataframe_set_or_update(
+                workflow,
+                serializer.validated_data['src_df'],
+                serializer.validated_data['how'],
+                serializer.validated_data['left_on'],
+                serializer.validated_data['right_on'])
+        except Exception as exc:
+            raise APIException(str(exc))
 
         # Merge went through.
         return Response(serializer.data, status=status.HTTP_201_CREATED)

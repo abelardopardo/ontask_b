@@ -53,7 +53,7 @@ class ScheduledOperationTaskEmailAction(ScheduledOperationTaskBasic):
             name='send email action',
             workflow=action.workflow,
             action=action,
-            execute=now + self.tdelta,
+            execute_start=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
             payload={
                 'item_column': action.workflow.columns.get(name='email').id,
@@ -98,7 +98,7 @@ class ScheduledOperationTaskJSONAction(ScheduledOperationTaskBasic):
             name='JSON scheduled action',
             workflow=action.workflow,
             action=action,
-            execute=now + self.tdelta,
+            execute_start=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
             payload={
                 'item_column': action.workflow.columns.get(name='email').id,
@@ -135,7 +135,7 @@ class ScheduledOperationTaskEmailReport(ScheduledOperationTaskBasic):
             name='send list scheduled action',
             workflow=action.workflow,
             action=action,
-            execute=now + self.tdelta,
+            execute_start=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
             payload={
                 'email_to': 'recipient@bogus.com',
@@ -177,7 +177,7 @@ class ScheduledOperationTaskJSONReport(ScheduledOperationTaskBasic):
             name='JSON Report scheduled action',
             workflow=action.workflow,
             action=action,
-            execute=now + timedelta(minutes=2),
+            execute_start=now + timedelta(minutes=2),
             status=models.scheduler.STATUS_PENDING,
             payload={'token': token})
         scheduled_item.save()
@@ -219,7 +219,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
             name='send email action incrementally',
             workflow=action.workflow,
             action=action,
-            execute=now,
+            execute_start=now,
             frequency='* * * * *',
             execute_until=now + timedelta(hours=1),
             status=models.scheduler.STATUS_PENDING,

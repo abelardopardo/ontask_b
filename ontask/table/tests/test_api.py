@@ -396,12 +396,12 @@ class TableApiJSONMergeToEmpty(TableApiBase):
                 },
                 format='json')
 
-            self.assertEqual(
-                response.data['detail'],
-                'Unable to perform merge operation')
+            self.assertIn(
+                'Unable to perform merge operation',
+                response.data['detail'])
             self.assertIn(
                 "ERROR:ontask:Unable to perform merge operation: "
-                "Merge operation produced a result with no rows",
+                "'Merge operation produced a result with no rows'",
                 log_context.output)
 
 
@@ -426,12 +426,12 @@ class TableApiPandasMergeToEmpty(TableApiBase):
                 },
                 format='json')
 
-            self.assertEqual(
-                response.data['detail'],
-                'Unable to perform merge operation')
+            self.assertIn(
+                'Unable to perform merge operation',
+                response.data['detail'])
             self.assertIn(
                 "ERROR:ontask:Unable to perform merge operation: "
-                "Merge operation produced a result with no rows",
+                "'Merge operation produced a result with no rows'",
                 log_context.output)
 
 
