@@ -128,8 +128,7 @@ class ScheduleBasicUpdateForm(ScheduleBasicForm):
         max_length=models.CHAR_FIELD_MID_SIZE,
         strip=True,
         required=False,
-        label=_('Key column in the existing table. '
-                'Leave empty if uploading to empty workflow'),
+        label=_('Key column in the existing table.'),
         help_text=dst_help)
 
     src_key = forms.CharField(
