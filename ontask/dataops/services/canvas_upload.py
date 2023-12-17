@@ -7,6 +7,89 @@ from ontask.core import canvas_ops
 from ontask.dataops.services import common
 from ontask.dataops import pandas
 
+question_prefix = '{0}_{1}_{2} Quiz Question'
+
+
+def _process_question_answers(
+        answers: list,
+        question_name: str,
+        data_frame_source: dict
+):
+    """Traverse the "answers" structure and collect student-> text info."""
+    to_concat = set()
+    for answer in answers:
+        if answer.get('responses', 0) == 0:
+            # Skip answers with no responses
+            continue
+        # Loop over each user answer
+        for user_id, user_name in zip(
+                answer['user_ids'],
+                answer['user_names']):
+            # Fetch the corresponding row
+            user_row = data_frame_source.get(user_id)
+            if not user_row:
+                # It is a new row, create row structure
+                user_row = {
+                    'id': user_id,
+                    'name': user_name}
+                data_frame_source[user_id] = user_row
+
+            # Update value in the row
+            response = user_row.get(question_name, [])
+            response.append(answer['text'])
+            user_row[question_name] = response
+            to_concat.add(user_id)
+
+    # concat the answers for the given set of users
+    for user_id in to_concat:
+        user_row = data_frame_source[user_id]
+        user_row[question_name] = ' |&&| '.join(user_row[question_name])
+
+
+def _process_question_statistic(
+        canvas_course_id: int,
+        quiz_id: int,
+        question_stat: dict,
+        data_frame_source: dict
+):
+    """Process the answers in a question.
+
+    The process contemplates four type of questions as stated in 'question_type'
+    - multiple_answers_question,
+    - true_false_question,
+    - multiple_choice_question,
+    - fill_in_multiple_blanks_question
+
+    The result is reflected in the data_frame_source.
+    """
+    question_type = question_stat['question_type']
+
+    if question_type == 'fill_in_multiple_blanks_question':
+        for answer_set in question_stat['answer_sets']:
+            _process_question_answers(
+                answer_set['answers'],
+                question_prefix.format(
+                    canvas_course_id,
+                    quiz_id,
+                    answer_set['id']),
+                data_frame_source)
+
+            return
+
+    question_name = question_prefix.format(
+        canvas_course_id,
+        quiz_id,
+        question_stat['id'])
+    # These are the remaining cases:
+    # - multiple_answers_question
+    # - true_false_question
+    # - multiple_choice_question
+    # This question has a list of answers
+    _process_question_answers(
+        question_stat['answers'],
+        question_name,
+        data_frame_source)
+
 
 def _extract_quiz_answer_information(
         oauth_info: dict,
@@ -14,7 +97,7 @@ def _extract_quiz_answer_information(
         canvas_course_id: int,
         quiz_id: int,
         data_frame_source: dict):
-    question_prefix = '{0}_{1} Canvas Question'
+    # Question prefix is: {quiz_id}_{question_id}
 
     quiz_stats = canvas_ops.get_quiz_statistics(
         oauth_info,
@@ -26,29 +109,11 @@ def _extract_quiz_answer_information(
     for qstat in quiz_stats['quiz_statistics']:
         # Loop over all questions
         for question_stat in qstat['question_statistics']:
-            question_name = question_prefix.format(
+            _process_question_statistic(
+                canvas_course_id,
                 quiz_id,
-                question_stat['id'])
-            # Loop over all answers
-            for answer in question_stat['answers']:
-                if answer['responses'] == 0:
-                    # Skip answers with no responses
-                    continue
-                # Loop over each user answer
-                for user_id, user_name in zip(
-                        answer['user_ids'],
-                        answer['user_names']):
-                    # Fetch the corresponding row
-                    user_row = data_frame_source.get(user_id)
-                    if not user_row:
-                        # It is a new row, create row structure
-                        user_row = {
-                            'id': user_id,
-                            'name': user_name}
-                        data_frame_source[user_id] = user_row
-
-                    # Update value in the row
-                    user_row[question_name] = answer['text']
+                question_stat,
+                data_frame_source)
 
 
 def _extract_quiz_submission_information(
@@ -57,10 +122,10 @@ def _extract_quiz_submission_information(
         canvas_course_id: int,
         quiz_id: int,
         data_frame_source: dict):
-    submission_start_prefix = '{0}_{1} Canvas Last Submission Start'
-    submission_finish_prefix = '{0}_{1} Canvas Last Submission Finished'
-    attempt_prefix = '{0}_{1} Canvas Attempts'
-    score_prefix = '{0}_{1} Canvas Score'
+    submission_start_prefix = '{0}_{1} Quiz Last Submission Start'
+    submission_finish_prefix = '{0}_{1} Quiz Last Submission Finished'
+    attempt_prefix = '{0}_{1} Quiz Attempts'
+    score_prefix = '{0}_{1} Quiz Score'
 
     quiz_submission = canvas_ops.get_quiz_submissions(
         oauth_info,
@@ -80,7 +145,7 @@ def _extract_quiz_submission_information(
         attempt_column_name = attempt_prefix.format(
             canvas_course_id,
             quiz_id)
-        score_prefix = score_prefix.format(canvas_course_id, quiz_id)
+        score_column = score_prefix.format(canvas_course_id, quiz_id)
         user_id = submission['user_id']
 
         # Get or create the user row
@@ -93,9 +158,56 @@ def _extract_quiz_submission_information(
         if submission['attempt'] > user_row.get(attempt_column_name, 0):
             # This is a more recent, refresh data
             user_row[attempt_column_name] = submission['attempt']
-            user_row[score_prefix] = submission['kept_score']
+            user_row[score_column] = submission['kept_score']
             user_row[submission_start_column_name] = submission['started_at']
             user_row[submission_finish_column_name] = submission['finished_at']
+
+
+def _extract_assignment_submission_information(
+        oauth_info: dict,
+        user_token: models.OAuthUserToken,
+        canvas_course_id: int,
+        assignment_id: int,
+        data_frame_source: dict):
+    submission_at_prefix = '{0}_{1} Assignment Submission At'
+    attempt_prefix = '{0}_{1} Assignment Submission Attempts'
+    score_prefix = '{0}_{1} Assignment Score'
+    submission_type_prefix = '{0}_{1} Assignment Submission Type'
+
+    assignment_submissions = canvas_ops.get_assignment_submissions(
+        oauth_info,
+        user_token,
+        canvas_course_id,
+        assignment_id)
+
+    for submission in assignment_submissions:
+        submission_at_column_name = submission_at_prefix.format(
+            canvas_course_id,
+            assignment_id)
+        attempt_column_name = attempt_prefix.format(
+            canvas_course_id,
+            assignment_id)
+        score_column = score_prefix.format(canvas_course_id, assignment_id)
+        submission_type = submission_type_prefix.format(
+            canvas_course_id,
+            assignment_id)
+        user_id = submission['user_id']
+
+        # Get or create the user row
+        user_row = data_frame_source.get(user_id)
+        if not user_row:
+            user_row = {'id': user_id}
+            data_frame_source[user_id] = user_row
+
+        # Check if this is a more recent attempt
+        if (
+                submission['attempt'] and
+                submission['attempt']> user_row.get(attempt_column_name, 0)):
+            # This is a more recent, refresh data
+            user_row[attempt_column_name] = submission['attempt']
+            user_row[score_column] = submission['entered_score']
+            user_row[submission_at_column_name] = submission['submitted_at']
+            user_row[submission_type] = submission['submission_type']
 
 
 def create_df_from_canvas_course_enrollment(
@@ -179,12 +291,27 @@ def create_df_from_canvas_course_quizzes(
             quiz_id,
             data_frame_source)
 
-        # Get the submission information
+        # Get the quiz submission information
         _extract_quiz_submission_information(
             oauth_info,
             user_token,
             canvas_course_id,
             quiz_id,
+            data_frame_source)
+
+    # Process the assignment submissions now
+    assignments = canvas_ops.get_course_assignments(
+        oauth_info,
+        user_token,
+        canvas_course_id)
+
+    for assignment in assignments:
+        # Get the assignment submission information
+        _extract_assignment_submission_information(
+            oauth_info,
+            user_token,
+            canvas_course_id,
+            assignment['id'],
             data_frame_source)
 
     # Create the data frame with the collected data
