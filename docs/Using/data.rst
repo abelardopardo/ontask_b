@@ -76,7 +76,7 @@ the current workflow.
 For convenience, if there is an :ref:`attribute <details_attributes>`
 defined for the workflow with name``CANVAS COURSE ID`` and with an
 integer value it will be used directly by this operation. This is useful when
-an OnTask Workflow corresponds with a course in Canvas throughout a long
+an OnTask Workflow corresponds to a course in Canvas throughout a long
 period of time.
 
 This operation is particularly useful to populate the table with an initial set
@@ -84,6 +84,26 @@ of rows (one per student) directly extracted from the remote platform.
 Additionally, it can be used at various points throughout a learning
 experience to update the list of students (include new ones, drop those no
 longer enrolled).
+
+Upload Canvas Course Quizzes
+----------------------------
+
+This option connects with a previously configured instance of
+`Canvas Learning Management System <https://www.canvaslms.com/>`_ and given a
+Course ID, it uploads/merges all the results collected for all the quiz
+submissions in a course.
+
+For convenience, if there is an :ref:`attribute <details_attributes>`
+defined for the workflow with name``CANVAS COURSE ID`` and with an
+integer value it will be used directly by this operation. This is useful when
+an OnTask Workflow corresponds to a course in Canvas throughout a long
+period of time.
+
+The operation first obtains the list of quizzes for the given course, then
+invokes the API call to obtain quiz statistics, and from there, a table with
+one student per row and the results to all the questions of all quizzes is
+created. The operation also downloads information about the number of
+attempts in a quiz and the last time a learner started and finished each quiz.
 
 .. _google_spreadsheet_file:
 
