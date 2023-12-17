@@ -1,5 +1,5 @@
 """Upload/Merge dataframe from a CANVAS connection."""
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 import pandas as pd
 
 from ontask import models
@@ -8,6 +8,40 @@ from ontask.dataops.services import common
 from ontask.dataops import pandas
 
 question_prefix = '{0}_{1}_{2} Quiz Question'
+submission_at_prefix = '{0}_{1} Assignment Submission At'
+submission_start_prefix = '{0}_{1} Quiz Last Submission Start'
+submission_finish_prefix = '{0}_{1} Quiz Last Submission Finished'
+attempt_prefix = '{0}_{1} Quiz Attempts'
+score_prefix = '{0}_{1} Quiz Score'
+submission_type_prefix = '{0}_{1} Assignment Submission Type'
+
+
+def _create_submission_names(
+        canvas_course_id: int,
+        assignment_quiz_id: int,
+) -> Tuple[str, str, str, str, str]:
+    """Create column names given the course, assignment and quiz IDs
+
+    :param canvas_course_id: Integer with the course id
+    :param assignment_quiz_id: Integer with the assignment id
+    :return submission_at, submission_start, submission_finish, attempt, score
+    """
+
+    return (
+        submission_at_prefix.format(
+            canvas_course_id,
+            assignment_quiz_id),
+        submission_start_prefix.format(
+            canvas_course_id,
+            assignment_quiz_id),
+        submission_finish_prefix.format(
+            canvas_course_id,
+            assignment_quiz_id),
+        attempt_prefix.format(
+            canvas_course_id,
+            assignment_quiz_id),
+        score_prefix.format(canvas_course_id, assignment_quiz_id)
+    )
 
 
 def _process_question_answers(
@@ -80,6 +114,7 @@ def _process_question_statistic(
         canvas_course_id,
         quiz_id,
         question_stat['id'])
+
     # These are the remaining cases:
     # - multiple_answers_question
     # - true_false_question
@@ -122,10 +157,6 @@ def _extract_quiz_submission_information(
         canvas_course_id: int,
         quiz_id: int,
         data_frame_source: dict):
-    submission_start_prefix = '{0}_{1} Quiz Last Submission Start'
-    submission_finish_prefix = '{0}_{1} Quiz Last Submission Finished'
-    attempt_prefix = '{0}_{1} Quiz Attempts'
-    score_prefix = '{0}_{1} Quiz Score'
 
     quiz_submission = canvas_ops.get_quiz_submissions(
         oauth_info,
@@ -136,16 +167,14 @@ def _extract_quiz_submission_information(
     # Loop over all submissions in a quiz
     for submission in quiz_submission['quiz_submissions']:
         # Create the required column names
-        submission_start_column_name = submission_start_prefix.format(
-            canvas_course_id,
-            quiz_id)
-        submission_finish_column_name = submission_finish_prefix.format(
-            canvas_course_id,
-            quiz_id)
-        attempt_column_name = attempt_prefix.format(
-            canvas_course_id,
-            quiz_id)
-        score_column = score_prefix.format(canvas_course_id, quiz_id)
+        (
+            _,
+            submission_start_column_name,
+            submission_finish_column_name,
+            attempt_column_name,
+            score_column_name
+        ) = _create_submission_names(canvas_course_id, quiz_id)
+
         user_id = submission['user_id']
 
         # Get or create the user row
@@ -155,12 +184,15 @@ def _extract_quiz_submission_information(
             data_frame_source[user_id] = user_row
 
         # Check if this is a more recent attempt
-        if submission['attempt'] > user_row.get(attempt_column_name, 0):
-            # This is a more recent, refresh data
-            user_row[attempt_column_name] = submission['attempt']
-            user_row[score_column] = submission['kept_score']
+        if (
+                submission['attempt'] and
+                submission['attempt'] > user_row.get(attempt_column_name, 0)
+        ):
+            # This is a more recent submission, refresh data
             user_row[submission_start_column_name] = submission['started_at']
             user_row[submission_finish_column_name] = submission['finished_at']
+            user_row[attempt_column_name] = submission['attempt']
+            user_row[score_column_name] = submission['kept_score']
 
 
 def _extract_assignment_submission_information(
@@ -169,10 +201,6 @@ def _extract_assignment_submission_information(
         canvas_course_id: int,
         assignment_id: int,
         data_frame_source: dict):
-    submission_at_prefix = '{0}_{1} Assignment Submission At'
-    attempt_prefix = '{0}_{1} Assignment Submission Attempts'
-    score_prefix = '{0}_{1} Assignment Score'
-    submission_type_prefix = '{0}_{1} Assignment Submission Type'
 
     assignment_submissions = canvas_ops.get_assignment_submissions(
         oauth_info,
@@ -191,6 +219,14 @@ def _extract_assignment_submission_information(
         submission_type = submission_type_prefix.format(
             canvas_course_id,
             assignment_id)
+        (
+            submission_at_column_name,
+            _,
+            _,
+            attempt_column_name,
+            score_column
+        ) = _create_submission_names(canvas_course_id, assignment_id)
+
         user_id = submission['user_id']
 
         # Get or create the user row
@@ -202,12 +238,13 @@ def _extract_assignment_submission_information(
         # Check if this is a more recent attempt
         if (
                 submission['attempt'] and
-                submission['attempt']> user_row.get(attempt_column_name, 0)):
-            # This is a more recent, refresh data
-            user_row[attempt_column_name] = submission['attempt']
-            user_row[score_column] = submission['entered_score']
+                submission['attempt'] > user_row.get(attempt_column_name, 0)
+        ):
+            # This is a more recent submission, refresh data
             user_row[submission_at_column_name] = submission['submitted_at']
             user_row[submission_type] = submission['submission_type']
+            user_row[attempt_column_name] = submission['attempt']
+            user_row[score_column] = submission['entered_score']
 
 
 def create_df_from_canvas_course_enrollment(
