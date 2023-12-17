@@ -124,7 +124,7 @@ def canvas_upload_start_finish(
             request,
             _('Canvas course upload could not be processed: {0}').format(
                 str(exc)))
-        return redirect('canvas_course_enrollments_upload_start')
+        return redirect('dataops:canvas_course_enrollments_upload_start')
 
     # Dictionary to populate gradually throughout the sequence of steps.
     # It is stored in the session.
