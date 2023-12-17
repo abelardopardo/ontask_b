@@ -36,7 +36,13 @@ if settings.CANVAS_INFO_DICT:
         'get_course_enrolment': (
             requests.get,
             '{0}/api/v1/courses/{1}/enrollments'
-            '?type=StudentEnrollment&state={2}')
+            '?type=StudentEnrollment&state={2}'),
+        'get_course_assignments': (
+            requests.get,
+            '{0}/api/v1/courses/{1}/assignments'),
+        'get_assignment_submissions': (
+            requests.get,
+            '{0}/api/v1/courses/{1}/assignments/{2}/submissions')
     }
 
 
@@ -296,6 +302,22 @@ def get_course_quizzes(
         get_authorization_header(user_token.access_token))
 
 
+def get_course_assignments(
+        oauth_info: dict,
+        user_token: models.OAuthUserToken,
+        course_id: int) -> list:
+    """Gets all the assignments within a course"""
+    # Get request method and URL for the endpoint from the map in this module
+    request_method, endpoint = canvas_api_map['get_course_assignments']
+
+    return request_and_access(
+        oauth_info,
+        user_token,
+        request_method,
+        endpoint.format(oauth_info['domain_port'], course_id),
+        get_authorization_header(user_token.access_token))
+
+
 def get_quiz_statistics(
         oauth_info: dict,
         user_token: models.OAuthUserToken,
@@ -330,3 +352,20 @@ def get_quiz_submissions(
         endpoint.format(oauth_info['domain_port'], course_id, quiz_id),
         get_authorization_header(user_token.access_token),
         result_key='quiz_submissions')
+
+
+def get_assignment_submissions(
+        oauth_info: dict,
+        user_token: models.OAuthUserToken,
+        course_id: int,
+        assignment_id: int
+) -> dict:
+    """Get all assignment submissions in a course"""
+    request_method, endpoint = canvas_api_map['get_assignment_submissions']
+
+    return request_and_access(
+        oauth_info,
+        user_token,
+        requests.get,
+        endpoint.format(oauth_info['domain_port'], course_id, assignment_id),
+        get_authorization_header(user_token.access_token))
