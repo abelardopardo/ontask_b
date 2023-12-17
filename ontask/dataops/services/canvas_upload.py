@@ -209,16 +209,6 @@ def _extract_assignment_submission_information(
         assignment_id)
 
     for submission in assignment_submissions:
-        submission_at_column_name = submission_at_prefix.format(
-            canvas_course_id,
-            assignment_id)
-        attempt_column_name = attempt_prefix.format(
-            canvas_course_id,
-            assignment_id)
-        score_column = score_prefix.format(canvas_course_id, assignment_id)
-        submission_type = submission_type_prefix.format(
-            canvas_course_id,
-            assignment_id)
         (
             submission_at_column_name,
             _,
@@ -227,6 +217,9 @@ def _extract_assignment_submission_information(
             score_column
         ) = _create_submission_names(canvas_course_id, assignment_id)
 
+        submission_type = submission_type_prefix.format(
+            canvas_course_id,
+            assignment_id)
         user_id = submission['user_id']
 
         # Get or create the user row
