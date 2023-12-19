@@ -45,5 +45,8 @@ $(document).ready(function() {
   handle_multiple_executions($('#id_multiple_executions'), 'fast');
 });
 window.onload = function(){
+  if (document.getElementById("id_columns_to_upload") != null) {
+    set_element_select("#id_columns_to_upload");
+  }
   setDateTimePickers();
 };

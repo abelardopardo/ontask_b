@@ -68,5 +68,9 @@ class ScheduledOperationUpdateCanvasCourseEnrollmentUpload(
 class ScheduledOperationUpdateCanvasCourseQuizzesUpload(
         ScheduledOperationUpdateCanvasUpload):
     """Class to CRUD a Canvas Course Quizzes Upload operation."""
+
+    # Override form_class because it requires the column selection widget
+    form_class = forms.ScheduleUploadCanvasQuizForm
+
     operation_type = models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD
     form_page_title = gettext('Canvas Course Quizzes Data Upload')

@@ -6,12 +6,14 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Scheduled Execution' %}{% endblock %}
 {% block extrahead %}
+  <link href="{% static 'css/sol.css' %}" rel="stylesheet">
   {% ontask_datetimepicker_css %}
   {% ontask_jqcron_css %}
 {% endblock extrahead %}
 {% block scripts %}
   {% ontask_datetimepicker_js %}
   {% ontask_jqcron_js %}
+  <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}"></script>
   <script src="{% static 'scheduler/js/scheduler.js' %}"></script>

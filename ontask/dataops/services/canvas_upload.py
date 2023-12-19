@@ -287,7 +287,8 @@ def create_df_from_canvas_course_enrollment(
 def create_df_from_canvas_course_quizzes(
         user: models.OnTaskUser,
         target_url: str,
-        course_id: int
+        course_id: int,
+        columns_to_upload: list = None
 ) -> pd.DataFrame:
     """Load data frame from a Canvas with information about quizzes in a course.
 
@@ -297,9 +298,12 @@ def create_df_from_canvas_course_quizzes(
     :param user: User object for authentication purposes.
     :param target_url: Name of the Canvas instance to use.
     :param course_id: Canvas Course ID (integer)
+    :param columns_to_upload: List of columns to upload. Empty means upload all
     :return: Data Frame after obtaining it from Canvas.
     """
     # Verify parameter
+    if columns_to_upload is None:
+        columns_to_upload = []
     canvas_course_id = canvas_ops.verify_course_id(course_id)
 
     # Get the oauth info
@@ -356,6 +360,11 @@ def create_df_from_canvas_course_quizzes(
     column_names = [
         cname for cname in result.columns.to_list()
         if cname != 'id' and cname != 'name']
+
+    if columns_to_upload:
+        # Drop the ones that are not in the columns to upload
+        column_names = [
+            cname for cname in column_names if cname in columns_to_upload]
 
     # Sort the columns leaving ID as the first one
     result = result[['id', 'name'] + sorted(column_names)]
@@ -468,7 +477,8 @@ class ExecuteCanvasCourseQuizzesUpload(ExecuteCanvasUploadBasic):
         src_df = create_df_from_canvas_course_quizzes(
             user,
             payload.get('target_url'),
-            payload.get('canvas_course_id'))
+            payload.get('canvas_course_id'),
+            payload.get('columns_to_upload'))
 
         # Update the dataframe
         super(

@@ -251,3 +251,42 @@ class ScheduleUploadCanvasForm(
         form_data = super().clean()
         self.store_fields_in_dict([('canvas_course_id', None)])
         return form_data
+
+
+class ScheduleUploadCanvasQuizForm(ScheduleUploadCanvasForm):
+
+    # Columns to combine
+    columns_to_upload = forms.MultipleChoiceField(
+        choices=[],
+        required=False,
+        label=_('Columns to upload. Leave blank to use all of them.'))
+
+    def __init__(self, *args, **kwargs):
+        """Modify certain field data."""
+        super().__init__(*args, **kwargs)
+
+        # Load the values in the payload
+        self.set_fields_from_dict(['columns_to_upload'])
+        self.fields['columns_to_upload'].choices = [
+            (v, v) for v in self.workflow.get_column_names()]
+        self.set_field_from_dict('columns_to_upload')
+
+        self.order_fields([
+            'name',
+            'description_text',
+            'target_url',
+            'canvas_course_id',
+            'execute_start',
+            'multiple_executions',
+            'frequency',
+            'execute_until',
+            'columns_to_upload',
+            'dst_key',
+            'src_key',
+            'how_merge'])
+
+    def clean(self) -> Dict:
+        """Store the fields in the Form Payload"""
+        form_data = super().clean()
+        self.store_fields_in_dict([('columns_to_upload', None)])
+        return form_data
