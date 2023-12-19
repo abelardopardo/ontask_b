@@ -1,5 +1,4 @@
 import datetime
-import sys
 from time import sleep
 from typing import Tuple, Dict
 from zoneinfo import ZoneInfo
@@ -27,6 +26,9 @@ canvas_api_map = {}
 if settings.CANVAS_INFO_DICT:
     canvas_api_map = {
         'get_course_quizzes': (requests.get, '{0}/api/v1/courses/{1}/quizzes'),
+        'get_quiz_questions': (
+            requests.get,
+            '{0}/api/v1/courses/{1}/quizzes/{2}/questions'),
         'get_quiz_statistics': (
             requests.get,
             '{0}/api/v1/courses/{1}/quizzes/{2}/statistics'),
@@ -299,6 +301,23 @@ def get_course_quizzes(
         user_token,
         request_method,
         endpoint.format(oauth_info['domain_port'], course_id),
+        get_authorization_header(user_token.access_token))
+
+
+def get_quiz_questions(
+        oauth_info: dict,
+        user_token: models.OAuthUserToken,
+        course_id: int,
+        quiz_id) -> list:
+    """Gets all the questions in a quiz"""
+    # Get request method and URL for the endpoint from the map in this module
+    request_method, endpoint = canvas_api_map['get_quiz_questions']
+
+    return request_and_access(
+        oauth_info,
+        user_token,
+        request_method,
+        endpoint.format(oauth_info['domain_port'], course_id, quiz_id),
         get_authorization_header(user_token.access_token))
 
 

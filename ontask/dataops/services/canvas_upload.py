@@ -1,19 +1,20 @@
 """Upload/Merge dataframe from a CANVAS connection."""
 from typing import Dict, Optional, Tuple
 import pandas as pd
+from bs4 import BeautifulSoup
 
 from ontask import models
 from ontask.core import canvas_ops
 from ontask.dataops.services import common
 from ontask.dataops import pandas
 
-question_prefix = '{0}_{1}_{2} Quiz Question'
-submission_at_prefix = '{0}_{1} Assignment Submission At'
-submission_start_prefix = '{0}_{1} Quiz Last Submission Start'
-submission_finish_prefix = '{0}_{1} Quiz Last Submission Finished'
-attempt_prefix = '{0}_{1} Quiz Attempts'
-score_prefix = '{0}_{1} Quiz Score'
-submission_type_prefix = '{0}_{1} Assignment Submission Type'
+question_prefix = '{0}_{1}_{2} {3}'
+submission_at_prefix = '{0}_{1} Submission At'
+submission_start_prefix = '{0}_{1} Last Submission Start'
+submission_finish_prefix = '{0}_{1} Last Submission Finished'
+attempt_prefix = '{0}_{1} Attempts'
+score_prefix = '{0}_{1} Score'
+submission_type_prefix = '{0}_{1} Submission Type'
 
 
 def _create_submission_names(
@@ -84,6 +85,7 @@ def _process_question_statistic(
         canvas_course_id: int,
         quiz_id: int,
         question_stat: dict,
+        question_names: dict,
         data_frame_source: dict
 ):
     """Process the answers in a question.
@@ -97,33 +99,25 @@ def _process_question_statistic(
     The result is reflected in the data_frame_source.
     """
     question_type = question_stat['question_type']
-
-    if question_type == 'fill_in_multiple_blanks_question':
-        for answer_set in question_stat['answer_sets']:
-            _process_question_answers(
-                answer_set['answers'],
-                question_prefix.format(
-                    canvas_course_id,
-                    quiz_id,
-                    answer_set['id']),
-                data_frame_source)
-
-            return
-
     question_name = question_prefix.format(
         canvas_course_id,
         quiz_id,
-        question_stat['id'])
+        question_stat['id'],
+        question_names[question_stat['id']])
 
-    # These are the remaining cases:
-    # - multiple_answers_question
-    # - true_false_question
-    # - multiple_choice_question
-    # This question has a list of answers
-    _process_question_answers(
-        question_stat['answers'],
-        question_name,
-        data_frame_source)
+    if question_type == 'fill_in_multiple_blanks_question':
+        answers = []
+        for answer_set in question_stat['answer_sets']:
+            # Concatenate answers in all answer sets
+            answers.extend(answer_set['answers'])
+    else:
+        # These are the remaining cases:
+        # - multiple_answers_question
+        # - true_false_question
+        # - multiple_choice_question
+        answers = question_stat['answers']
+
+    _process_question_answers(answers, question_name, data_frame_source)
 
 
 def _extract_quiz_answer_information(
@@ -132,7 +126,17 @@ def _extract_quiz_answer_information(
         canvas_course_id: int,
         quiz_id: int,
         data_frame_source: dict):
-    # Question prefix is: {quiz_id}_{question_id}
+
+    question_names = canvas_ops.get_quiz_questions(
+        oauth_info,
+        user_token,
+        canvas_course_id,
+        quiz_id)
+    question_names = dict([
+        (
+            str(qinfo['id']),
+            BeautifulSoup(qinfo['question_name'], 'lxml').text)
+        for qinfo in question_names])
 
     quiz_stats = canvas_ops.get_quiz_statistics(
         oauth_info,
@@ -148,6 +152,7 @@ def _extract_quiz_answer_information(
                 canvas_course_id,
                 quiz_id,
                 question_stat,
+                question_names,
                 data_frame_source)
 
 
@@ -345,7 +350,17 @@ def create_df_from_canvas_course_quizzes(
             data_frame_source)
 
     # Create the data frame with the collected data
-    return pd.DataFrame(data_frame_source.values())
+    result = pd.DataFrame(data_frame_source.values())
+
+    # Reorder the columns
+    column_names = [
+        cname for cname in result.columns.to_list()
+        if cname != 'id' and cname != 'name']
+
+    # Sort the columns leaving ID as the first one
+    result = result[['id', 'name'] + sorted(column_names)]
+
+    return result
 
 
 class ExecuteCanvasUploadBasic:
