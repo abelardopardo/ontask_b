@@ -1,9 +1,10 @@
 """Functions to do data frame merging."""
 from typing import Dict, Optional
 
-from django.utils.translation import gettext
+from django.utils.translation import gettext as _
 import pandas as pd
 
+from ontask import OnTaskException, LOGGER
 from ontask.dataops import pandas
 
 
@@ -187,25 +188,94 @@ def validate_merge_parameters(
     """
     # Check that the parameters are correct
     if not how_merge or how_merge not in ['left', 'right', 'outer', 'inner']:
-        return gettext('Merge method must be one of '
-                       'left, right, outer or inner')
+        return _('Merge method must be one of left, right, outer or inner')
 
     if left_on not in list(dst_df.columns):
-        return gettext(
+        return _(
             'Column {0} not found in current data frame').format(left_on)
 
     if not pandas.is_unique_series(dst_df[left_on]):
-        return gettext('Column {0} is not a unique key.').format(left_on)
+        return _('Column {0} is not a unique key.').format(left_on)
 
     if right_on not in list(src_df.columns):
-        return gettext(
+        return _(
             'Column {0} not found in new data frame').format(right_on)
 
     if not pandas.is_unique_series(src_df[right_on]):
-        return gettext(
+        return _(
             'Column {0} is not a unique key.').format(right_on)
 
     return None
+
+
+def perform_dataframe_set_or_update(
+        workflow,
+        src_df: pd.DataFrame,
+        how_merge: str,
+        src_selected_key: str,
+        dst_selected_key: str,
+        log_item=None
+):
+    """Either sets the given dataframe as table in the workflow, or updates
+    it.
+
+    :param workflow: Workflow being processed.
+    :param src_df: Pandas dataframe to set or update.
+    :param how_merge: Method use for the merge operation (if needed)
+    :param src_selected_key: Key column in the given Data Frame
+    :param dst_selected_key: Corresponding key column in existing table
+    :param log_item: Optional log object to leave messages and status.
+    :returns: Nothing. Effect reflected in workflow table
+    """
+    # If the given DF has no unique column, there is nothing to do.
+    if not pandas.has_unique_column(src_df):
+        raise OnTaskException(_('Missing key column in table to upload/merge.'))
+
+    # If this is the first upload into an empty workload, just store.
+    if not workflow.has_data_frame:
+        # Empty workflow, so allow for update.
+        pandas.store_dataframe(src_df, workflow)
+
+        if log_item:
+            log_item.payload.update({
+                'how to merge': how_merge,
+                'Source Key': src_selected_key,
+                'Current Key': dst_selected_key})
+            log_item.save(update_fields=['payload'])
+        return
+
+    # At this point, the operation is a Merge operation
+    dst_df = pandas.load_table(workflow.get_data_frame_table_name())
+    if dst_df is None:
+        raise OnTaskException(
+            _('Unexpected empty dataframe in update operation.'))
+
+    if error := validate_merge_parameters(
+            dst_df,
+            src_df,
+            how_merge,
+            src_selected_key,
+            dst_selected_key):
+        raise OnTaskException(error)
+
+    merge_info = {
+        'how_merge': how_merge,
+        'src_selected_key': src_selected_key,
+        'dst_selected_key': dst_selected_key,
+        'initial_column_names': list(src_df.columns),
+        'rename_column_names': list(src_df.columns),
+        'columns_to_upload': [True] * len(list(src_df.columns))}
+    try:
+        perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info)
+    except Exception as exc:
+        msg = _('Unable to perform merge operation')
+        LOGGER.error(msg + ': ' + str(exc))
+        raise OnTaskException(msg + ': ' + str(exc))
+
+    if log_item:
+        log_item.payload.update(merge_info)
+        log_item.save(update_fields=['payload'])
+    return
 
 
 def perform_dataframe_upload_merge(
@@ -257,7 +327,7 @@ def perform_dataframe_upload_merge(
              frame.
            - rename_column_names: Columns that need to be renamed in src data
              frame.
-           - columns_to_uplooad: Columns to be considered for the update
+           - columns_to_upload: Columns to be considered for the update
            - src_selected_key: Key in the source data frame
            - dst_selected_key: key in the destination (existing) data frame
            - how_merge: How to merge: inner, outer, left or right
@@ -317,16 +387,15 @@ def perform_dataframe_upload_merge(
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
     if new_df.shape[0] == 0:
-        raise Exception(gettext(
+        raise OnTaskException(_(
             'Merge operation produced a result with no rows'))
 
     # If the merge produced a data frame with no unique columns, flag it as an
     # error to prevent the data frame from propagating without a key column
     if not pandas.has_unique_column(new_df):
-        raise Exception(gettext(
+        raise OnTaskException(_(
             'Merge operation produced a result without any key columns. '
-            + 'Review the key columns in the data to upload.',
-        ))
+            + 'Review the key columns in the data to upload.'))
 
     # Store the result back in the DB
     pandas.store_dataframe(new_df, workflow)

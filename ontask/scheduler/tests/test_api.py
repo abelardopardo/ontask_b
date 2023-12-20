@@ -51,7 +51,7 @@ class ScheduleApiCreate(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email',
                         'subject': 'subject',
@@ -100,7 +100,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                 'operation_type': 'action_run_personalized_email',
                 'workflow': action.workflow_id,
                 'action': action.id,
-                'execute': self.s_execute,
+                'execute_start': self.s_execute,
                 'payload': {
                     'item_column': 'email',
                     'field1': 'value1',
@@ -122,7 +122,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': '2000-11-12 12:05:07+10:30',
+                    'execute_start': '2000-11-12 12:05:07+10:30',
                     'payload': {
                         'item_column': 'email',
                         'subject': s_subject,
@@ -150,7 +150,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email2',
                         'subject': s_subject,
@@ -178,7 +178,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'action': action.id,
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email',
                         'exclude_values': {},
@@ -208,7 +208,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                 },
                 format='json')
 
@@ -228,7 +228,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email',
                         'cc_email': '',
@@ -255,7 +255,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'subject': s_subject,
                         'cc_email': '',
@@ -284,7 +284,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'sid',
                         'subject': s_subject,
@@ -312,7 +312,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email',
                         'subject': s_subject,
@@ -341,7 +341,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email',
                         'subject': s_subject,
@@ -370,7 +370,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email',
                         'subject': s_subject,
@@ -399,7 +399,7 @@ class ScheduleApiAnomalies(ScheduleApiBasic):
                     'operation_type': 'action_run_personalized_email',
                     'workflow': action.workflow_id,
                     'action': action.id,
-                    'execute': self.s_execute,
+                    'execute_start': self.s_execute,
                     'payload': {
                         'item_column': 'email',
                         'subject': s_subject,
@@ -447,7 +447,7 @@ class ScheduleApiEmail(ScheduleApiBasic):
                 'operation_type': 'action_run_personalized_email',
                 'workflow': action.workflow_id,
                 'action': action.id,
-                'execute': self.s_execute,
+                'execute_start': self.s_execute,
                 'payload': {
                     'item_column': 'email',
                     'subject': s_subject,
@@ -477,7 +477,7 @@ class ScheduleApiEmail(ScheduleApiBasic):
                 'operation_type': 'action_run_personalized_email',
                 'workflow': action.workflow_id,
                 'action': action.id,
-                'execute': self.s_execute,
+                'execute_start': self.s_execute,
                 'payload': {
                     'item_column': 'email',
                     'subject': s_subject,
@@ -527,7 +527,7 @@ class ScheduleApiJSON(ScheduleApiBasic):
                 'operation_type': 'action_run_personalized_json',
                 'workflow': action.workflow_id,
                 'action': action.id,
-                'execute': self.s_execute,
+                'execute_start': self.s_execute,
                 'payload': {
                     'item_column': 'email',
                     'token': 'whatever',
@@ -554,7 +554,7 @@ class ScheduleApiJSON(ScheduleApiBasic):
                 'operation_type': 'action_run_personalized_json',
                 'workflow': action.workflow_id,
                 'action': action.id,
-                'execute': self.s_execute,
+                'execute_start': self.s_execute,
                 'payload': {
                     'item_column': 'email',
                     'token': 'whatever',
@@ -586,7 +586,7 @@ class ScheduleApiJSON(ScheduleApiBasic):
                 'operation_type': 'action_run_personalized_json',
                 'workflow': action.workflow_id,
                 'action': action.id,
-                'execute': self.s_execute,
+                'execute_start': self.s_execute,
                 'payload': {
                     'item_column': 'email',
                     'token': 'whatever',

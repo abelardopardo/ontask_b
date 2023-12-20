@@ -1,11 +1,9 @@
 """Function to upload a data frame from an Athena connection object."""
 
 from django.shortcuts import redirect
-from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import models
-from ontask.connection import forms
 from ontask.dataops.views import common
 
 
@@ -16,13 +14,6 @@ class AthenaUploadStart(common.UploadStart, generic.UpdateView):
     execution.
     """
 
-    model = models.AthenaConnection
-    form_class = forms.AthenaRequestConnectionParam
-    template_name = 'dataops/athenaupload_start.html'
-
-    data_type = 'Athena'
-    data_type_select = _('Athena connection')
-    prev_step_url = 'connection:athenaconns_index'
 
     def get_queryset(self):
         """This view should only consider enabled connections."""

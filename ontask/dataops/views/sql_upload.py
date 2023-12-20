@@ -5,7 +5,6 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from ontask import models
 from ontask.connection import forms
 from ontask.dataops import services
 from ontask.dataops.views import common
@@ -27,13 +26,6 @@ class SQLUploadStart(common.UploadStart, generic.UpdateView):
 
     step_1: URL name of the first step
     """
-    model = models.SQLConnection
-    form_class = forms.SQLRequestConnectionParam
-    template_name = 'dataops/sqlupload_start.html'
-
-    data_type = 'SQL'
-    data_type_select = _('SQL connection')
-    prev_step_url = 'connection:sqlconns_index'
 
     def get_queryset(self):
         """This view should only consider enabled connections."""

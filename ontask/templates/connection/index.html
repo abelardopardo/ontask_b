@@ -49,6 +49,9 @@
 {% block container %}
   <div class="container" id="connection-instructor">
     <h1 class="text-center">{{ view.title }}</h1>
+    {% if select_sql_connection %}
+      <p class="text-center">{% blocktrans %}Select the SQL connection to use by clicking on its name.{% endblocktrans %}</p>
+    {% endif %}
     {% if table.data|length %}
       <div class="justify-content-center">
         {% render_table table %}
@@ -64,6 +67,11 @@
       access data stored in external relational databases. The connections can only
         be created by the system administrator.{% endblocktrans %}</p>
       {% endif %}
+    {% endif %}
+    {% if select_sql_connection %}
+    <div class="text-center">
+      <a class="btn btn-outline-dark spin" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
+    </div>
     {% endif %}
   </div>
   {% include 'modal.html' %}

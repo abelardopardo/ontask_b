@@ -28,12 +28,6 @@ class AthenaConnectionIndexView(common.ConnectionIndexView):
         return context
 
 
-class AthenaConnectionShowView(common.ConnectionShowView):
-    """Show the Athena connection in a modal."""
-
-    model = models.SQLConnection
-
-
 class AthenaConnectionCreateView(
     common.ConnectionBaseCreateEditView,
     generic.CreateView
@@ -68,22 +62,3 @@ class AthenaConnectionEditView(
         self.action_url = reverse(
             'connection:athenaconn_edit',
             kwargs={'pk': kwargs['pk']})
-
-
-class AthenaConnectionDeleteView(common.ConnectionDeleteView):
-    """Delete an Athena connection."""
-
-    model = models.AthenaConnection
-
-
-class AthenaConnectionCloneView(common.ConnectionCloneView):
-    """Process the Clone Athena Connection view."""
-
-    model = models.AthenaConnection
-    mgr = models.AthenaConnection.objects
-
-
-class AthenaConnectionToggleView(common.ConnectionToggleView):
-    """Process the Athena Toggle Connection view."""
-
-    model = models.AthenaConnection

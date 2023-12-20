@@ -9,7 +9,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
 from ontask.core import SessionPayload
-from ontask.core import canvas_get_or_set_oauth_token
+from ontask.core import canvas_ops
 from ontask.scheduler.forms import (
     ScheduleEmailForm, ScheduleJSONForm, ScheduleJSONReportForm,
     ScheduleSendListForm, ScheduleCanvasEmailForm)
@@ -134,7 +134,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
 
         # Successful processing.
         tdelta = create_timedelta_string(
-            scheduled_item.execute,
+            scheduled_item.execute_start,
             scheduled_item.frequency,
             scheduled_item.execute_until)
         return render(
@@ -172,7 +172,7 @@ class ScheduledOperationCanvasEmailUpdateView(
         self.op_payload.store_in_session(self.request.session)
 
         # Check for the CANVAS token and proceed to the continue_url
-        return canvas_get_or_set_oauth_token(
+        return canvas_ops.get_or_set_oauth_token(
             self.request,
             self.op_payload['target_url'],
             continue_url,

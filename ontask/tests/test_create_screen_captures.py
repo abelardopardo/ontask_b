@@ -422,6 +422,15 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.go_to_excel_upload_merge_step_1()
         self.body_ss('dataops_upload_excel.png')
         self.go_to_table()
+
+        #
+        # Dataops/Merge Canvas Course Enrollment List
+        #
+        # Go to Canvas Course Enrollment List
+        self.go_to_canvas_upload_merge_step_1()
+        self.body_ss('dataops_upload_canvas_course_enrollment.png')
+        self.go_to_table()
+
         #
         # Google doc merge
         #
@@ -929,7 +938,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         ).select_by_visible_text('email')
         dt_widget = self.selenium.find_element(
             By.XPATH,
-            "//input[@id='id_execute']"
+            "//input[@id='id_execute_start']"
         )
         dt_widget.clear()
         dt_widget.send_keys('2110-07-05 17:30:51')
@@ -973,7 +982,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         ).select_by_visible_text('email')
         dt_widget = self.selenium.find_element(
             By.XPATH,
-            "//input[@id='id_execute']"
+            "//input[@id='id_execute_start']"
         )
         dt_widget.clear()
         dt_widget.send_keys('2110-07-25 17:00:00')

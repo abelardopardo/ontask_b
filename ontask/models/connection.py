@@ -17,7 +17,7 @@ class Connection(NameAndDescription):
     # Boolean that enables the use of this connection to other users.
     enabled = models.BooleanField(
         default=False,
-        verbose_name=_('Available to users?'),
+        verbose_name=_('Enabled?'),
         null=False,
         blank=False)
 
@@ -51,9 +51,9 @@ class Connection(NameAndDescription):
         """Create dictionary with (verbose_name, value)"""
         return {
             self._meta.get_field(key.name).verbose_name.title():
-                self.__dict__[key.name]
+                str(self.__dict__[key.name])
             for key in self._meta.get_fields()
-            if key.name != 'id'}
+            if key.name != 'id' and not isinstance(key, models.ForeignKey)}
 
     def log(self, user, operation_type: str, **kwargs) -> int:
         """Function to register an event."""

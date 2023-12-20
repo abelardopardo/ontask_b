@@ -1,9 +1,9 @@
 """URLs to manipulate connections."""
 from django.urls import path
-
-from ontask.connection import views
-
 from django.utils.translation import gettext_lazy as _
+
+from ontask import models
+from ontask.connection import views
 
 app_name = 'connection'
 urlpatterns = [
@@ -35,23 +35,27 @@ urlpatterns = [
 
     path(
         '<int:pk>/sqlconn_view/',
-        views.SQLConnectionShowView.as_view(
-            template_name='connection/includes/partial_show.html'),
+        views.ConnectionShowView.as_view(
+            template_name='connection/includes/partial_show.html',
+            model=models.SQLConnection),
         name='sqlconn_view'),
 
     path(
         '<int:pk>/sqlconn_clone/',
-        views.SQLConnectionCloneView.as_view(),
+        views.ConnectionCloneView.as_view(
+            model=models.SQLConnection),
         name='sqlconn_clone'),
 
     path(
         '<int:pk>/sqlconn_delete/',
-        views.SQLConnectionDeleteView.as_view(),
+        views.ConnectionDeleteView.as_view(
+            model=models.SQLConnection),
         name='sqlconn_delete'),
 
     path(
         '<int:pk>/sqlconn_toggle/',
-        views.SQLConnectionToggleView.as_view(),
+        views.ConnectionToggleView.as_view(
+            model=models.SQLConnection),
         name='sqlconn_toggle'),
 
     # Athena Connections
@@ -71,32 +75,36 @@ urlpatterns = [
 
     path(
         'athenaconn_create/',
-        views.athena.AthenaConnectionCreateView.as_view(),
+        views.AthenaConnectionCreateView.as_view(),
         name='athenaconn_create'),
 
     path(
         '<int:pk>/athenaconn_edit/',
-        views.athena.AthenaConnectionEditView.as_view(),
+        views.AthenaConnectionEditView.as_view(),
         name='athenaconn_edit'),
 
     path(
         '<int:pk>/athenaconn_view/',
-        views.athena.AthenaConnectionShowView.as_view(
-            template_name='connection/includes/partial_show.html'),
+        views.ConnectionShowView.as_view(
+            template_name='connection/includes/partial_show.html',
+            model=models.AthenaConnection),
         name='athenaconn_view'),
 
     path(
         '<int:pk>/athenaconn_clone/',
-        views.athena.AthenaConnectionCloneView.as_view(),
+        views.ConnectionCloneView.as_view(
+            model=models.AthenaConnection),
         name='athenaconn_clone'),
 
     path(
         '<int:pk>/athenaconn_delete/',
-        views.athena.AthenaConnectionDeleteView.as_view(),
+        views.ConnectionDeleteView.as_view(
+            model=models.AthenaConnection),
         name='athenaconn_delete'),
 
     path(
         '<int:pk>/athenaconn_toggle/',
-        views.athena.AthenaConnectionToggleView.as_view(),
+        views.ConnectionToggleView.as_view(
+            model=models.AthenaConnection),
         name='athenaconn_toggle'),
 ]

@@ -1,19 +1,15 @@
 """Upload/Merge dataframe from an SQL connection."""
-from importlib import import_module
 from typing import Dict, Optional
 
 from django import http
-from django.conf import settings
 from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 import ontask
 from ontask import models
-from ontask.core.session_ops import acquire_workflow_access
 from ontask.dataops import pandas
-
-SESSION_STORE = import_module(settings.SESSION_ENGINE).SessionStore
+from ontask.dataops.services import common
 
 
 def _load_df_from_sqlconnection(
@@ -137,73 +133,17 @@ class ExecuteSQLUpload:
         src_df = _load_df_from_sqlconnection(conn, payload)
 
         # Create session
-        session = SESSION_STORE()
-        session.create()
+        session = common.create_session()
 
-        workflow = acquire_workflow_access(user, session, workflow.id)
-        if not workflow:
-            msg = _('Unable to acquire access to workflow.')
-            log_item.payload['error'] = msg
-            log_item.save(update_fields=['payload'])
-            raise ontask.OnTaskException(msg)
+        common.access_workflow(user, session, workflow.id, log_item)
 
         # IDEA: How to deal with failure to acquire access?
         #       Include a setting with the time to wait and number of retries?
 
-        if not workflow.has_data_frame:
-            # Simple upload
-            pandas.store_dataframe(src_df, workflow)
-            return
-
-        # At this point the operation is a merge
-        dst_df = pandas.load_table(workflow.get_data_frame_table_name())
-
-        dst_key = payload.get('dst_key')
-        if not dst_key:
-            msg = _('Missing key column name of existing table.')
-            log_item.payload['error'] = msg
-            log_item.save(update_fields=['payload'])
-            raise ontask.OnTaskException(msg)
-
-        src_key = payload.get('src_key')
-        if not src_key:
-            msg = _('Missing key column name of new table.')
-            log_item.payload['error'] = msg
-            log_item.save(update_fields=['payload'])
-            raise ontask.OnTaskException(msg)
-
-        how_merge = payload.get('how_merge')
-        if not how_merge:
-            msg = _('Missing merge method.')
-            log_item.payload['error'] = msg
-            log_item.save(update_fields=['payload'])
-            raise ontask.OnTaskException(msg)
-
-        # Check additional correctness properties in the parameters
-        error = pandas.validate_merge_parameters(
-            dst_df,
-            src_df,
-            how_merge,
-            dst_key,
-            src_key)
-        if error:
-            log_item.payload['error'] = error
-            log_item.save(update_fields=['payload'])
-            raise ontask.OnTaskException(error)
-
-        merge_info = {
-            'how_merge': how_merge,
-            'dst_selected_key': dst_key,
-            'src_selected_key': src_key,
-            'initial_column_names': list(src_df.columns),
-            'rename_column_names': list(src_df.columns),
-            'columns_to_upload': [True] * len(list(src_df.columns))}
-        # Perform the merge
-        pandas.perform_dataframe_upload_merge(
+        pandas.perform_dataframe_set_or_update(
             workflow,
-            dst_df,
             src_df,
-            merge_info)
-
-        log_item.payload = merge_info
-        log_item.save(update_fields=['payload'])
+            common.get_how_merge(payload, log_item),
+            common.get_key(payload, 'src_key', log_item),
+            common.get_key(payload, 'dst_key', log_item),
+            log_item)

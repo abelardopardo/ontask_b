@@ -5,11 +5,15 @@ from zoneinfo import ZoneInfo
 
 from django import http
 from django.conf import settings
-from django.shortcuts import redirect
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import core, models
+from ontask.core import SessionPayload
+from ontask.scheduler.services.items import create_timedelta_string
 
 
 class SchedulerCRUDFactory(core.FactoryBase):
@@ -105,7 +109,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
     connection = None  # For SQL Upload operations
     scheduled_item = None  # When editing a previously scheduled op
 
-    # Dictionary stored in the session for multi-page form filling
+    # Dictionary stored in the session for multipage form filling
     op_payload = None
 
     is_finish_request = None  # Flagging if the request is the last step.
@@ -147,10 +151,10 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         s_item.name = data_dict.pop('name')
         s_item.description_text = data_dict.pop('description_text')
 
-        execute = data_dict.pop('execute', '')
+        execute = data_dict.pop('execute_start', '')
         if isinstance(execute, str):
             execute = parse_datetime(execute)
-        s_item.execute = execute
+        s_item.execute_start = execute
 
         s_item.frequency = data_dict.pop('frequency', '')
 
@@ -232,20 +236,23 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        columns = None
+        if self.workflow:
+            columns = self.workflow.columns.filter(is_key=True)
         kwargs.update({
             'workflow': self.workflow,
             'action': self.action,
             'connection': self.connection,
-            'columns': self.workflow.columns.filter(is_key=True),
+            'columns': columns,
             'form_info': self.op_payload})
         return kwargs
 
     def finish(
         self,
         request: http.HttpRequest,
-        payload: core.SessionPayload,
+        payload: SessionPayload,
     ) -> Optional[http.HttpResponse]:
-        """Finalize the creation of a scheduled operation.
+        """Finalize the creation of an operation update.
 
         All required data is passed through the payload.
 
@@ -255,5 +262,48 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         previous requests.
         :return: Http Response
         """
-        del request
-        return None
+        s_item_id = payload.pop('schedule_id', None)
+        if s_item_id:
+            # Get the item being processed
+            if not self.scheduled_item:
+                self.scheduled_item = models.ScheduledOperation.objects.filter(
+                    id=s_item_id).first()
+            if not self.scheduled_item:
+                messages.error(
+                    request,
+                    _('Incorrect request for operation scheduling'))
+                return redirect('scheduler:index')
+        else:
+            payload['workflow'] = models.Workflow.objects.get(
+                pk=payload.pop('workflow_id'))
+
+        # Remove some parameters from the payload
+        for key in ['value_range', 'page_title']:
+            payload.pop(key, None)
+
+        try:
+            schedule_item = self.create_or_update(
+                request.user,
+                payload.get_store(),
+                self.scheduled_item)
+        except Exception as exc:
+            messages.error(
+                request,
+                str(_('Unable to create scheduled operation ({0})')).format(
+                    str(exc)))
+            return redirect('scheduler:index')
+
+        schedule_item.log(models.Log.SCHEDULE_EDIT)
+
+        # Reset object to carry action info throughout dialogs
+        SessionPayload.flush(request.session)
+
+        # Successful processing.
+        tdelta = create_timedelta_string(
+            schedule_item.execute_start,
+            schedule_item.frequency,
+            schedule_item.execute_until)
+        return render(
+            request,
+            'scheduler/schedule_done.html',
+            {'tdelta': tdelta, 's_item': schedule_item})

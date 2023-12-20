@@ -29,12 +29,6 @@ class SQLConnectionIndexView(common.ConnectionIndexView):
         return context
 
 
-class SQLConnectionShowView(common.ConnectionShowView):
-    """Show the SQL connection in a modal."""
-
-    model = models.SQLConnection
-
-
 class SQLConnectionCreateView(
     common.ConnectionBaseCreateEditView,
     generic.CreateView
@@ -69,21 +63,3 @@ class SQLConnectionEditView(
         self.action_url = reverse(
             'connection:sqlconn_edit',
             kwargs={'pk': kwargs['pk']})
-
-
-class SQLConnectionDeleteView(common.ConnectionDeleteView):
-    """Delete an SQL connection."""
-
-    model = models.SQLConnection
-
-
-class SQLConnectionCloneView(common.ConnectionCloneView):
-    """Process the Clone SQL Connection view."""
-
-    model = models.SQLConnection
-
-
-class SQLConnectionToggleView(common.ConnectionToggleView):
-    """Process the SQL Toggle Connection view."""
-
-    model = models.SQLConnection

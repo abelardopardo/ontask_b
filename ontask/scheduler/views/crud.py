@@ -37,7 +37,7 @@ class SchedulerIndexView(
         context.update({
             's_vals': services.get_item_value_dictionary(self.object),
             'timedelta': services.create_timedelta_string(
-                self.object.execute,
+                self.object.execute_start,
                 self.object.frequency,
                 self.object.execute_until)})
         return context
@@ -99,6 +99,42 @@ def create_sql_upload(
 
 @user_passes_test(is_instructor)
 @get_workflow()
+def create_canvas_course_enrollment_upload(
+        request: http.HttpRequest,
+        workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Create a new Canvas Course Enrollment Update operation.
+
+    :param request: HTTP request
+    :param workflow: Workflow of the current context.
+    :return: HTTP response
+    """
+    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+        request,
+        models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
+        workflow=workflow)
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def create_canvas_course_quizzes_upload(
+        request: http.HttpRequest,
+        workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Create a new Canvas Course Quizzes Update operation.
+
+    :param request: HTTP request
+    :param workflow: Workflow of the current context.
+    :return: HTTP response
+    """
+    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+        request,
+        models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
+        workflow=workflow)
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
 def edit_scheduled_operation(
         request: http.HttpRequest,
         pk: int,
@@ -132,7 +168,6 @@ def finish_scheduling(
         workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
     """Finish the create/edit operation of a scheduled operation."""
-    del workflow
     payload = SessionPayload(request.session)
     if payload is None or 'operation_type' not in payload:
         # Something is wrong with this execution. Return to action table.
@@ -144,6 +179,7 @@ def finish_scheduling(
     return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         payload.get('operation_type'),
+        workflow=workflow,
         payload=payload,
         is_finish_request=True)
 

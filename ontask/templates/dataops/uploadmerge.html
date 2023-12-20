@@ -27,18 +27,21 @@
           </td>
           <td style="vertical-align:middle">
             {% blocktrans %}Upload data contained in a CSV file (typically
-            saved using a spreadsheet or other data manipulation package).{% endblocktrans %}<br/>
+            saved using a spreadsheet or other data manipulation
+            package).{% endblocktrans %}<br/>
             {% blocktrans %}If the table is empty, the data will be simply
             loaded detecting those columns that have unique values for every
             row.{% endblocktrans %}<br/>
             {% blocktrans %}If the workflow table has data, the operation will
             ask you to match a key column in your table with a key column in
-            the file to upload so that the rows can be matched.{% endblocktrans %}
+            the file to upload so that the rows can be
+            matched.{% endblocktrans %}
           </td>
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:excel_upload_start' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:excel_upload_start' %}"
+               class="btn btn-outline-primary">
               <i class="bi-plus"></i>
               {% trans 'Excel' %}
             </a>
@@ -54,6 +57,52 @@
             If the workflow table has data, the operation will ask you
             to match a key column in your table with a key column in the file
             to upload so that the rows can be matched.
+            {% endblocktrans %}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:canvas_course_enrollments_upload_start' %}"
+               class="btn btn-outline-primary {% if not canvas_enabled %}disabled{% endif %}">
+              <i class="bi-plus"></i>
+              {% trans 'Canvas Course Enrollment List' %}
+            </a>
+          </td>
+          <td style="vertical-align:middle">
+            {% trans 'Upload the list of stuents from a Canvas Course.' %}<br/>
+            {% blocktrans %}
+            Given a Canvas course ID, upload and merge the enrolment list in
+            the course. If the workflow parameter with name "CANVAS COURSE ID"
+            is defined, it is used as the course ID.
+            {% endblocktrans %}
+            <br/>
+            {% blocktrans %}
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with the student ID
+            so that the rows can be matched.
+            {% endblocktrans %}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:canvas_course_quizzes_upload_start' %}"
+               class="btn btn-outline-primary {% if not canvas_enabled %}disabled{% endif %}">
+              <i class="bi-plus"></i>
+              {% trans 'Canvas Course Assignments and Quiz Results ' %}
+            </a>
+          </td>
+          <td style="vertical-align:middle">
+            {% trans 'Upload the quiz results from a Canvas Course.' %}<br/>
+            {% blocktrans %}
+            Given a Canvas course ID, upload and merge the results of all
+            quizzes in the course. If the workflow parameter with name
+            "CANVAS COURSE ID" is defined, it is used as the course ID.
+            {% endblocktrans %}
+            <br/>
+            {% blocktrans %}
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with the student ID
+            so that the rows can be matched.
             {% endblocktrans %}
           </td>
         </tr>
@@ -101,7 +150,8 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'connection:sqlconns_index' %}" class="btn btn-outline-primary {% if not sql_enabled %}disabled{% endif %}">
+            <a href="{% url 'connection:sqlconns_index' %}"
+               class="btn btn-outline-primary {% if not sql_enabled %}disabled{% endif %}">
               <i class="bi-plus"></i>
               {% trans 'SQL Connection' %}
             </a>

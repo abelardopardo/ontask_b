@@ -1,107 +1,23 @@
 """Views to run the personalized canvas email action."""
 import datetime
 import json
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
 from zoneinfo import ZoneInfo
 
 import requests
 from celery.utils.log import get_task_logger
 from django import http
 from django.conf import settings
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext
 from rest_framework import status
 
 from ontask import models
 from ontask.action.evaluate import evaluate_action
 from ontask.action.services.edit_factory import ActionOutEditProducerBase
 from ontask.action.services.run_factory import ActionRunProducerBase
-from ontask.core import canvas_do_burst_pause, canvas_get_or_set_oauth_token
-from ontask.oauth import services
+from ontask.core import canvas_ops
 
 LOGGER = get_task_logger('celery_execution')
-
-
-def _refresh_and_retry_send(
-    oauth_info,
-    conversation_url: str,
-    canvas_email_payload: Dict,
-    user_token: models.OAuthUserToken
-):
-    """Refresh OAuth token and retry send.
-
-    :param oauth_info: Object with the oauth information
-    :param conversation_url: URL to send the conversation
-    :param canvas_email_payload: Dictionary with additional information
-    :return:
-    """
-    # Request rejected due to token expiration. Refresh the token
-    result_msg = gettext('OAuth token refreshed')
-    response_status = None
-    try:
-        if user_token := services.refresh_token(user_token, oauth_info):
-            # Update the header with the new token
-            headers = {
-                'content-type':
-                    'application/x-www-form-urlencoded; charset=UTF-8',
-                'Authorization': 'Bearer {0}'.format(
-                    user_token.access_token,
-                ),
-            }
-
-            # Second attempt at executing the API call
-            response = requests.post(
-                url=conversation_url,
-                data=canvas_email_payload,
-                headers=headers)
-            response_status = response.status_code
-    except Exception as exc:
-        result_msg = str(exc)
-
-    return result_msg, response_status
-
-
-def _send_single_canvas_message(
-    conversation_url: str,
-    canvas_email_payload,
-    headers: Dict,
-    oauth_info,
-    user_token
-) -> Tuple[str, int]:
-    """Send a single email to Canvas using the API.
-
-    :param conversation_url: URL pointing to the conversation object
-    :param canvas_email_payload: Email message
-    :param headers: HTTP headers for the request
-    :param oauth_info: Authentication info
-    :return: response message, response status
-    """
-    result_msg = gettext('Message successfully sent')
-
-    # Send the email through the API call
-    # First attempt
-    response = requests.post(
-        url=conversation_url,
-        data=canvas_email_payload,
-        headers=headers,
-        verify=True)
-
-    response_status = response.status_code
-    if (
-        response.status_code == status.HTTP_401_UNAUTHORIZED
-        and response.headers.get('WWW-Authenticate')
-    ):
-        result_msg, response_status = _refresh_and_retry_send(
-            oauth_info,
-            conversation_url,
-            canvas_email_payload,
-            user_token
-        )
-    elif response_status != status.HTTP_201_CREATED:
-        result_msg = gettext(
-            'Unable to deliver message (code {0})').format(
-            response_status)
-
-    return result_msg, response_status
 
 
 class ActionEditProducerCanvasEmail(ActionOutEditProducerBase):
@@ -137,7 +53,7 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
         self.payload.store_in_session(self.request.session)
 
         # Check for the CANVAS token and proceed to the continue_url
-        return canvas_get_or_set_oauth_token(
+        return canvas_ops.get_or_set_oauth_token(
             self.request,
             self.payload['target_url'],
             continue_url,
@@ -177,16 +93,9 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
 
         # Get the oauth info
         target_url = payload['target_url']
-        if not (oauth_info := settings.CANVAS_INFO_DICT.get(target_url)):
-            raise Exception(_('Unable to find OAuth Information Record'))
-
-        # Get the token
-        if not (user_token := models.OAuthUserToken.objects.filter(
-            user=user,
-            instance_name=target_url,
-        ).first()):
-            # There is no token, execution cannot proceed
-            raise Exception(_('Incorrect execution due to absence of token'))
+        oauth_info, user_token = canvas_ops.get_oauth_and_user_token(
+            user,
+            target_url)
 
         # Create the headers to use for all requests
         headers = {
@@ -198,9 +107,6 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
         context = {'action': action.id}
 
         # Send the objects to the given URL
-        idx = 1
-        burst = oauth_info['aux_params'].get('burst')
-        burst_pause = oauth_info['aux_params'].get('pause', 0)
         domain = oauth_info['domain_port']
         conversation_url = oauth_info['conversation_url'].format(domain)
         to_emails = []
@@ -213,19 +119,23 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
                 'body': msg_body,
                 'force_new': True}
 
-            # Manage the bursts
-            canvas_do_burst_pause(burst, burst_pause, idx)
-            # Index to detect bursts
-            idx += 1
-
             # Send the email
-            result_msg, response_status = _send_single_canvas_message(
-                conversation_url,
-                canvas_email_payload,
-                headers,
+            response = canvas_ops.request_refresh_and_retry(
                 oauth_info,
-                user_token
-            )
+                user_token,
+                requests.post,
+                conversation_url,
+                headers,
+                data=canvas_email_payload,
+                verify=True)
+
+            if response.status_code != status.HTTP_201_CREATED:
+                result_msg = gettext(
+                    'Unable to deliver message (code {0})').format(
+                    response.status_code)
+            else:
+                result_msg = gettext('Message successfully sent')
+
             if settings.ONTASK_TESTING:
                 # Print the JSON object sent to the server
                 LOGGER.info(
@@ -234,6 +144,8 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
                     json.dumps(canvas_email_payload))
                 result_msg = 'SENT TO LOGGER'
                 response_status = 200
+            else:
+                response_status = response.status_code
 
             # Log message sent
             context['subject'] = canvas_email_payload['subject']

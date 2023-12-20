@@ -1,7 +1,10 @@
 """Functions to perform various checks."""
-from typing import List, Set
+from datetime import datetime
+from typing import List, Set, Optional
+from zoneinfo import ZoneInfo
 
 from django import db
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
@@ -161,3 +164,51 @@ def fix_non_unique_object_names(
             obj.name = obj.name + '_' + str(suffix)
             obj.save()
             suffix += 1
+
+
+def validate_crontab(time_from, frequency, time_until) -> Optional[str]:
+    """Verify that fields time_from, frequency and time_until are correct.
+
+    This method is intended to verify the consistency of a definition of a
+    time interval (from time_from until time_until) with an optional
+    "crontab" style string stipulating the frequency.
+
+    There are eight possible combinations when specifying the time_from,
+    frequency and time_until parameters depending on their values:
+
+    1) None, None, None: ERROR. Something is needed
+    2) None, None, True: ERROR. Only time_until is given.
+    3) None, True, None: Never ending frequency starting immediately.
+    4) None, True, True: Frequency and an expiry date.
+    5) True, None, None: SINGLE time instance at a given date/time.
+    6) True, None, True: ERROR: Missing frequency.
+    7) True, True, None: Frequency starts in the future, never stops.
+    8) True, True, True: Frequency starting and stopping at a given time.
+
+    :param time_from: Datetime when time starts
+    :param frequency: String with a crontab format
+    :param time_until: Datetime to when time stops
+    :return: Error message string, or Nothing if everything is fine.
+    """
+    if not time_from and not frequency:
+        # Cases 1 and 2
+        return _('Incorrect execution time specification.')
+
+    # From and Until are given, but there is no frequency.
+    if time_from and not frequency and time_until:
+        # Case 6
+        return _('Frequency of execution is missing.')
+
+    now = datetime.now(ZoneInfo(settings.TIME_ZONE))
+    if time_until and time_until < now:
+        # Case 4 and 8 when current date/time is later
+        return _('Execution times in the past. No execution possible.')
+
+    if time_from and not frequency and not time_until and time_from < now:
+        # Case 5 when the start time is in the past
+        return _('Execution time is in the past. No execution possible.')
+
+    if time_from and time_until and time_until < time_from:
+        return _('Incorrect execution dates.')
+
+    return None

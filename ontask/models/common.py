@@ -1,4 +1,4 @@
-"""Abstract model classes for common fields in mvarious objects."""
+"""Abstract model classes for common fields in various objects."""
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _

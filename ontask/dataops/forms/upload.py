@@ -18,10 +18,13 @@ import json
 from typing import Dict, Optional
 
 from django import forms
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
-from ontask import OnTaskDataFrameNoKey, models, settings
+from ontask import (
+    OnTaskDataFrameNoKey, models, settings as ontask_settings,
+    OnTaskException)
 from ontask.core import RestrictedFileField
 from ontask.dataops import pandas, services
 
@@ -31,11 +34,33 @@ URL_FIELD_SIZE = 1024
 class UploadBasic(forms.Form):
     """Basic class to use for inheritance."""
 
+    workflow = None
+
+    def verify_skip_lines_fields(self, form_data):
+        """Verify if the skip lines parameters in a form are valid
+
+        :return: True if they are valid, False otherwise.
+        """
+        if form_data['skip_lines_at_top'] < 0:
+            self.add_error(
+                'skip_lines_at_top',
+                _('This number has to be zero or positive'),
+            )
+            return False
+
+        if form_data['skip_lines_at_bottom'] < 0:
+            self.add_error(
+                'skip_lines_at_bottom',
+                _('This number has to be zero or positive'),
+            )
+            return False
+        return True
+
     def __init__(self, *args, **kwargs):
         """Store the workflow for further processing."""
         self.data_frame: Optional[pd.DataFrame] = None
         self.frame_info = None
-        self.workflow = kwargs.pop(str('workflow'), None)
+        self.workflow = kwargs.pop('workflow', self.workflow)
         super().__init__(*args, **kwargs)
 
     def validate_data_frame(self):
@@ -72,8 +97,8 @@ class UploadCSVFileForm(UploadBasic):
     """
 
     data_file = RestrictedFileField(
-        max_upload_size=int(settings.MAX_UPLOAD_SIZE),
-        content_types=json.loads(str(settings.CONTENT_TYPES)),
+        max_upload_size=int(ontask_settings.MAX_UPLOAD_SIZE),
+        content_types=json.loads(str(ontask_settings.CONTENT_TYPES)),
         allow_empty_file=False,
         label='',
         help_text=_(
@@ -109,18 +134,7 @@ class UploadCSVFileForm(UploadBasic):
 
         form_data = super().clean()
 
-        if form_data['skip_lines_at_top'] < 0:
-            self.add_error(
-                'skip_lines_at_top',
-                _('This number has to be zero or positive'),
-            )
-            return form_data
-
-        if form_data['skip_lines_at_bottom'] < 0:
-            self.add_error(
-                'skip_lines_at_bottom',
-                _('This number has to be zero or positive'),
-            )
+        if not self.verify_skip_lines_fields(form_data):
             return form_data
 
         # Process CSV file using pandas read_csv
@@ -148,7 +162,7 @@ class UploadExcelFileForm(UploadBasic):
     """Form to read an Excel file."""
 
     data_file = RestrictedFileField(
-        max_upload_size=int(settings.MAX_UPLOAD_SIZE),
+        max_upload_size=int(ontask_settings.MAX_UPLOAD_SIZE),
         content_types=[
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.'
@@ -193,7 +207,7 @@ class UploadGoogleSheetForm(UploadBasic):
     """Form to read a Google Sheet file through a URL.
 
     It also allows to specify the number of lines to skip at the top and the
-    bottom of the file. This functionality is offered by the underlyng
+    bottom of the file. This functionality is offered by the underlying
     function read_csv in Pandas
     """
 
@@ -225,16 +239,7 @@ class UploadGoogleSheetForm(UploadBasic):
         """
         form_data = super().clean()
 
-        if form_data['skip_lines_at_top'] < 0:
-            self.add_error(
-                'skip_lines_at_top',
-                _('This number has to be zero or positive'))
-            return form_data
-
-        if form_data['skip_lines_at_bottom'] < 0:
-            self.add_error(
-                'skip_lines_at_bottom',
-                _('This number has to be zero or positive'))
+        if not self.verify_skip_lines_fields(form_data):
             return form_data
 
         try:
@@ -260,7 +265,7 @@ class UploadS3FileForm(UploadBasic):
 
     It requires entering the access key as well as the secret access key. It
     also allows to specify the number of lines to skip at the top and the
-    bottom of the file. This functionality is offered by the underlyng
+    bottom of the file. This functionality is offered by the underlying
     function read_csv in Pandas
     """
 
@@ -344,3 +349,51 @@ class UploadS3FileForm(UploadBasic):
         self.validate_data_frame()
 
         return resp_data
+
+
+class UploadCanvasForm(UploadBasic):
+    """Common code for Canvas Upload operations."""
+
+    canvas_course_id = forms.IntegerField(
+        label=_('Canvas course id to retrieve the data.'),
+        required=True,
+        help_text=_(
+            'This is an integer used by Canvas to uniquely identify a course'))
+
+    target_url = forms.ChoiceField(
+        label=_('Canvas Host'),
+        required=True,
+        help_text=_('Name of the Canvas host to extract data.'),
+        choices=[])
+
+    def __init__(self, *args, **kwargs):
+        """Modify certain field data."""
+        # Needed for authentication purposes
+        self.user = kwargs.pop(str('user'), None)
+        super().__init__(*args, **kwargs)
+
+        if len(settings.CANVAS_INFO_DICT) > 1:
+            # There is more than one Canvas host, set the choices.
+            self.fields['target_url'].choices = (
+                [('', '---')] + [(key, key) for key in sorted(
+                    settings.CANVAS_INFO_DICT.keys())])
+        elif len(settings.CANVAS_INFO_DICT) == 1:
+            # There is a single Canvas host, set the field to that value
+            self.fields['target_url'].widget = forms.HiddenInput()
+            key = list(settings.CANVAS_INFO_DICT.keys())[0]
+            self.fields['target_url'].choices = [(key, key)]
+            self.fields['target_url'].initial = key
+            self.fields['target_url'].disabled = True
+        else:
+            raise OnTaskException(
+                _('Incorrect invocation of upload Canvas Form'))
+
+        if 'CANVAS COURSE ID' in self.workflow.attributes:
+            # There is an attribute with a course ID, use it and hide the
+            # field in the form with a fixed value and disable it.
+            self.fields['canvas_course_id'].widget = forms.HiddenInput()
+            self.fields['canvas_course_id'].initial = self.workflow.attributes[
+                'CANVAS COURSE ID']
+            self.fields['canvas_course_id'].disabled = True
+
+        self.order_fields(['target_url', 'canvas_course_id'])
