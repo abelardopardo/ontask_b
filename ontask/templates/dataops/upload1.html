@@ -13,16 +13,16 @@
     {% include 'step_by_step.html' with value_range=value_range step=2 %}
     <h1 class="text-center">{% trans 'Select' %} {{ data_type_select }}</h1>
     <div class="row justify-content-center">
+      {% if confirm_canvas_course_id %}
+        <p class="text-center">
+          {% blocktrans with n=confirm_canvas_course_id %}
+            The operation will use Canvas Course ID {{ n }}.
+          {% endblocktrans %}
+        </p>
+      {% endif %}
       <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
-        {% if confirm_canvas_course_id %}
-          <p class="text-center">
-            {% blocktrans with n=confirm_canvas_course_id %}
-              The operation will use Canvas Course ID {{ n }}.
-            {% endblocktrans %}
-          </p>
-        {% endif %}
         {% include 'dataops/includes/upload_buttons.html' %}
       </form>
     </div>
