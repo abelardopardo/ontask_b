@@ -278,6 +278,7 @@ def create_df_from_canvas_course_enrollment(
     for student in students:
         data_frame_source.append({
             'id': student['user']['id'],
+            'canvas course id': course_id,
             'name': student['user']['name']})
 
     # Create the data frame with the collected data
@@ -366,8 +367,11 @@ def create_df_from_canvas_course_quizzes(
         column_names = [
             cname for cname in column_names if cname in columns_to_upload]
 
+    # Insert canvas course id field
+    result.loc[:, 'canvas course id'] = canvas_course_id
+
     # Sort the columns leaving ID as the first one
-    result = result[['id', 'name'] + sorted(column_names)]
+    result = result[['id', 'canvas course id', 'name'] + sorted(column_names)]
 
     return result
 
