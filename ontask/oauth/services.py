@@ -117,14 +117,10 @@ def refresh_token(
     return user_token
 
 
-def process_callback(
-    request: http.HttpRequest,
-    payload: SessionPayload,
-) -> Optional[str]:
+def process_callback(request: http.HttpRequest) -> Optional[str]:
     """Extract the token and store for future calls.
 
     :param request: Http Request received
-    :param payload: Session payload with dictionary with additional info.
     :return: Error message or None if everything has gone correctly.
     """
     # Correct response from a previous request. Obtain the access token,
@@ -135,7 +131,7 @@ def process_callback(
         # went wrong.
         return _('Inconsistent OAuth response. Unable to authorize')
 
-    oauth_instance = payload.get('target_url')
+    oauth_instance = request.session.get('target_url')
     if not oauth_instance:
         return _('Internal error. Empty OAuth Instance name')
 

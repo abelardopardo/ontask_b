@@ -10,8 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import models, OnTaskException
-from ontask.core import (
-    SessionPayload, canvas_ops, get_workflow, is_instructor)
+from ontask.core import canvas_ops, get_workflow, is_instructor
 from ontask.dataops import services
 from ontask.dataops.views import common
 
@@ -50,10 +49,6 @@ class CanvasUploadStart(common.UploadStart, generic.FormView):
             'log_upload': self.log_type,
             'target_url': form.cleaned_data['target_url'],
             'canvas_course_id': form.cleaned_data['canvas_course_id']}
-
-        SessionPayload(
-            self.request.session,
-            initial_values={'target_url': form.cleaned_data['target_url']})
 
         return canvas_ops.get_or_set_oauth_token(
             self.request,

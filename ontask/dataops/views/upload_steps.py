@@ -57,6 +57,9 @@ class UploadStepBasicView(UserIsInstructor, WorkflowView):
             # direct jump to this step, get back to the home page
             return redirect('home')
 
+        # Everything is in order, no redirect required
+        return None
+
     def dispatch(self, request, *args, **kwargs):
         error_response = self.request_is_valid()
         if error_response:

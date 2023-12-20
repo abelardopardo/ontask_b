@@ -21,10 +21,8 @@ def callback(request: WSGIRequest) -> http.HttpResponse:
     :param request: Request object
     :return: Redirection to the stored page
     """
-    payload = SessionPayload(request.session)
-
-    # If there is no payload, something went wrong.
-    if payload is None:
+    # If there is no information in the session, something went wrong.
+    if not request.session:
         # Something is wrong with this execution. Return to action table.
         messages.error(
             request,
@@ -39,7 +37,7 @@ def callback(request: WSGIRequest) -> http.HttpResponse:
             gettext('Error in OAuth2 step 1 ({0})').format(error_string))
         return redirect('action:index')
 
-    status = services.process_callback(request, payload)
+    status = services.process_callback(request)
     if status:
         messages.error(request, status)
         return redirect('action:index')
