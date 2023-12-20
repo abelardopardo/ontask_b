@@ -40,6 +40,9 @@ class UploadShowSourcesView(
 class UploadStepBasicView(UserIsInstructor, WorkflowView):
     """Base class for the Upload Step Views."""
 
+    upload_data = None
+    column_types = None
+
     def request_is_valid(self) -> Optional[http.HttpResponse]:
         """Verify some requirements for the incoming request.
 
@@ -70,7 +73,7 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
 
     ASSUMES:
 
-    initial_column_names: List of column names in the initial file.
+    initial_columns: List of columns in the initial file.
 
     column_types: List of column types as detected by pandas
 
@@ -92,9 +95,7 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
     form_class = forms.SelectColumnUploadForm
     template_name = 'dataops/upload_s2.html'
 
-    upload_data = None
     initial_columns = None
-    column_types = None
     src_is_key_column = None
 
     def request_is_valid(self) -> Optional[http.HttpResponse]:
@@ -233,7 +234,7 @@ class UploadStepThreeView(UploadStepBasicView, generic.FormView):
 
     src_selected_key: Key column name selected in SRC
 
-    how_merge: How to merge. One of {left, right, outter, inner}
+    how_merge: How to merge. One of {left, right, outer, inner}
     """
 
     form_class = forms.SelectKeysForm
@@ -323,7 +324,7 @@ class UploadStepFourView(UploadStepBasicView, generic.TemplateView):
 
     src_selected_key: Key column name selected in SRC
 
-    how_merge: How to merge. One of {left, right, outter, inner}
+    how_merge: How to merge. One of {left, right, outer, inner}
     """
 
     template_name = 'dataops/upload_s4.html'
