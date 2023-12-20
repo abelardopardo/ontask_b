@@ -373,6 +373,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         :return: Element
         """
         element = self.selenium.find_element(by_string, string_value)
+        self.scroll_element_into_view(element)
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(element))
         element.click()
