@@ -312,6 +312,19 @@ def create_df_from_canvas_course_quizzes(
         user,
         target_url)
 
+    students = canvas_ops.get_course_enrolment(
+        oauth_info,
+        user_token,
+        canvas_course_id)
+
+    data_frame_source = {}
+    for student in students:
+        student_id = student['user']['id']
+        data_frame_source[student_id] = {
+            'id': student_id,
+            'canvas course id': course_id,
+            'name': student['user']['name']}
+
     # Fetch all quizzes for the course
     quizzes = canvas_ops.get_course_quizzes(
         oauth_info,
@@ -319,7 +332,6 @@ def create_df_from_canvas_course_quizzes(
         canvas_course_id)
 
     # Build the data frame source with the information from quizzes
-    data_frame_source = {}
     for quiz in quizzes:
         quiz_id = quiz['id']
 
@@ -360,16 +372,16 @@ def create_df_from_canvas_course_quizzes(
     # Reorder the columns
     column_names = [
         cname for cname in result.columns.to_list()
-        if cname != 'id' and cname != 'name']
+        if cname != 'id' and cname != 'name' and cname != 'canvas course id']
 
     if columns_to_upload:
         # Drop the ones that are not in the columns to upload
         column_names = [
             cname for cname in column_names if cname in columns_to_upload]
 
-    # Insert canvas course id field
-    result.loc[:, 'canvas course id'] = canvas_course_id
-
+    # # Insert canvas course id field
+    # result.loc[:, 'canvas course id'] = canvas_course_id
+    #
     # Sort the columns leaving ID as the first one
     result = result[['id', 'canvas course id', 'name'] + sorted(column_names)]
 
