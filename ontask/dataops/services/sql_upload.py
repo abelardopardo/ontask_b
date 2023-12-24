@@ -8,13 +8,14 @@ import pandas as pd
 
 import ontask
 from ontask import models
+from ontask.core import session_ops
 from ontask.dataops import pandas
 from ontask.dataops.services import common
 
 
 def _load_df_from_sqlconnection(
-    conn_item: models.SQLConnection,
-    run_params: Dict,
+        conn_item: models.SQLConnection,
+        run_params: Dict,
 ) -> pd.DataFrame:
     """Load a DF from a SQL connection.
 
@@ -52,10 +53,10 @@ def _load_df_from_sqlconnection(
 
 
 def sql_upload_step_one(
-    request: http.HttpRequest,
-    workflow: models.Workflow,
-    conn: models.SQLConnection,
-    run_params: Dict,
+        request: http.HttpRequest,
+        workflow: models.Workflow,
+        conn: models.SQLConnection,
+        run_params: Dict,
 ):
     """Perform the first step to load a data frame from a SQL connection.
 
@@ -76,14 +77,16 @@ def sql_upload_step_one(
 
     # Dictionary to populate gradually throughout the sequence of steps. It
     # is stored in the session.
-    request.session['upload_data'] = {
-        'initial_column_names': frame_info[0],
-        'column_types': frame_info[1],
-        'src_is_key_column': frame_info[2],
-        'step_1': reverse(
-            'dataops:sqlupload_start',
-            kwargs={'pk': conn.id}),
-        'log_upload': models.Log.WORKFLOW_DATA_SQL_UPLOAD}
+    session_ops.set_payload(
+        request,
+        {
+            'initial_column_names': frame_info[0],
+            'column_types': frame_info[1],
+            'src_is_key_column': frame_info[2],
+            'step_1': reverse(
+                'dataops:sqlupload_start',
+                kwargs={'pk': conn.id}),
+            'log_upload': models.Log.WORKFLOW_DATA_SQL_UPLOAD})
 
 
 class ExecuteSQLUpload:
@@ -95,12 +98,12 @@ class ExecuteSQLUpload:
         self.log_event = models.Log.WORKFLOW_DATA_SQL_UPLOAD
 
     def execute_operation(
-        self,
-        user,
-        workflow: Optional[models.Workflow] = None,
-        action: Optional[models.Action] = None,
-        payload: Optional[Dict] = None,
-        log_item: Optional[models.Log] = None,
+            self,
+            user,
+            workflow: Optional[models.Workflow] = None,
+            action: Optional[models.Action] = None,
+            payload: Optional[Dict] = None,
+            log_item: Optional[models.Log] = None,
     ):
         """Perform a SQL upload asynchronously.
 

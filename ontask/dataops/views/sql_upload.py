@@ -5,16 +5,14 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from ontask.connection import forms
 from ontask.dataops import services
-from ontask.dataops.views import common
+from ontask.dataops.views import upload_steps
 
 
-class SQLUploadStart(common.UploadStart, generic.UpdateView):
+class SQLUploadStart(upload_steps.UploadStepOneView, generic.UpdateView):
     """Load a data frame using a SQL connection.
 
-    The four-step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set)
+    The process will populate the payload dictionary with the fields:
 
     STEP 1:
 

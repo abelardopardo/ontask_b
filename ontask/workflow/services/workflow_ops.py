@@ -4,6 +4,7 @@ from django import http
 from django.utils.translation import gettext_lazy as _
 
 from ontask import core, get_incorrect_email, models, tasks
+from ontask.core import session_ops
 from ontask.dataops import sql
 from ontask.workflow import services
 
@@ -147,5 +148,5 @@ def do_flush(request: http.HttpRequest, workflow: models.Workflow):
     workflow.flush()
     workflow.refresh_from_db()
     # update the request object with the new number of rows
-    core.store_workflow_in_session(request.session, workflow)
+    session_ops.store_workflow_in_session(request, workflow)
     workflow.log(request.user, models.Log.WORKFLOW_DATA_FLUSH)

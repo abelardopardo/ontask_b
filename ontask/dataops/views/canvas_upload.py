@@ -1,6 +1,7 @@
 """First step for Canvas Course Enrollment upload."""
 from typing import Optional
 
+import pandas as pd
 from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -9,13 +10,29 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+from ontask.dataops.views import upload_steps
 from ontask import models, OnTaskException
-from ontask.core import canvas_ops, get_workflow, is_instructor
-from ontask.dataops import services
-from ontask.dataops.views import common
+from ontask.core import canvas_ops, get_workflow, is_instructor, session_ops
+from ontask.dataops import services, pandas
 
 
-class CanvasUploadStart(common.UploadStart, generic.FormView):
+def _validate_and_store_temporary_data_frame(
+        workflow: models.Workflow,
+        data_frame: pd.DataFrame
+) -> dict:
+    """Check that the dataframe can be properly stored and store it.
+
+    :return: Dict with information, and frame in the database or Exception
+    with anomaly
+    """
+    # Verify the data frame
+    pandas.verify_data_frame(data_frame)
+
+    # Get frame info with three lists: names, types and is_key
+    return pandas.store_temporary_dataframe(data_frame, workflow)
+
+
+class CanvasUploadStart(upload_steps.UploadStepOneView, generic.FormView):
     """Start the upload of information from Canvas.
 
     The different operations are defined by parameters used when invoking
@@ -37,20 +54,21 @@ class CanvasUploadStart(common.UploadStart, generic.FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['workflow'] = self.workflow
         # Needed for authentication purposes
         kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
         # Check for the CANVAS token and proceed to the continue_url
-        self.request.session['upload_data'] = {
-            'step_1': self.step_1_url,
-            'log_upload': self.log_type,
-            'target_url': form.cleaned_data['target_url'],
-            'canvas_course_id': form.cleaned_data['canvas_course_id']}
+        session_ops.set_payload(
+            self.request,
+            {
+                'step_1': reverse(self.step_1_url),
+                'log_upload': self.log_type,
+                'target_url': form.cleaned_data['target_url'],
+                'canvas_course_id': form.cleaned_data['canvas_course_id']})
 
-        return canvas_ops.get_or_set_oauth_token(
+        return canvas_ops.set_oauth_token(
             self.request,
             form.cleaned_data['target_url'],
             'dataops:canvas_upload_start_finish',
@@ -59,17 +77,12 @@ class CanvasUploadStart(common.UploadStart, generic.FormView):
 
 class CanvasCourseEnrollmentsUploadStart(CanvasUploadStart):
     """Step 1 URL needs to be defined at instantiation time."""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.step_1_url = reverse(
-            'dataops:canvas_course_enrollments_upload_start')
+    step_1_url = 'dataops:canvas_course_enrollments_upload_start'
 
 
 class CanvasCourseQuizzesUploadStart(CanvasUploadStart):
     """Step 1 URL needs to be defined at instantiation time."""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.step_1_url = reverse('dataops:canvas_course_quizzes_upload_start')
+    step_1_url = 'dataops:canvas_course_quizzes_upload_start'
 
 
 @user_passes_test(is_instructor)
@@ -85,10 +98,11 @@ def canvas_upload_start_finish(
     :return: Load the data from Canvas and store it in the temporary DB
     """
     # Process Canvas API call to get the list of students
+    payload = session_ops.get_payload(request)
     try:
-        op_type = request.session['upload_data'].get('log_upload')
-        target_url = request.session['upload_data'].pop('target_url')
-        course_id = request.session['upload_data'].pop('canvas_course_id')
+        op_type = payload.get('log_upload')
+        target_url = payload.pop('target_url')
+        course_id = payload.pop('canvas_course_id')
         if (op_type ==
                 models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD):
             data_frame = services.create_df_from_canvas_course_enrollment(
@@ -110,7 +124,7 @@ def canvas_upload_start_finish(
                 _('There are no students enrolled in the Canvas course.'))
 
         # Check validity of the data frame and store in temporary table in DB
-        frame_info = common.validate_and_store_temporary_data_frame(
+        frame_info = _validate_and_store_temporary_data_frame(
             workflow,
             data_frame)
 
@@ -123,9 +137,11 @@ def canvas_upload_start_finish(
 
     # Dictionary to populate gradually throughout the sequence of steps.
     # It is stored in the session.
-    request.session['upload_data'].update({
-        'initial_column_names': frame_info[0],
-        'column_types': frame_info[1],
-        'src_is_key_column': frame_info[2]})
+    session_ops.update_payload(
+        request,
+        {
+            'initial_column_names': frame_info[0],
+            'column_types': frame_info[1],
+            'src_is_key_column': frame_info[2]})
 
     return redirect('dataops:upload_s2')

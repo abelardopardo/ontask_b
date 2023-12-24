@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 from django.views import generic
 
 from ontask import models
-from ontask.core import UserIsInstructor, WorkflowView
+from ontask.core import UserIsInstructor, WorkflowView, session_ops
 from ontask.dataops import forms, services
 
 
@@ -36,12 +36,75 @@ class UploadShowSourcesView(
             'canvas_enabled': settings.CANVAS_INFO_DICT})
         return context
 
+    def get(self, request, *args, **kwargs):
+        # Remove the upload_data payload from the session
+        session_ops.flush_payload(request)
+        return super().get(request, *args, **kwargs)
+
+
+class UploadStepOneView(UserIsInstructor, WorkflowView):
+    """Start the upload of a data frame from a CSV file.
+
+    The four-step process will populate the following dictionary with name
+    upload_data (divided by steps in which they are set)
+
+    STEP 1:
+
+    initial_column_names: List of column names in the initial file.
+
+    column_types: List of column types as detected by pandas
+
+    src_is_key_column: Boolean list with src columns that are unique
+
+    step_1: URL name of the first step
+    """
+    data_type = None
+    data_type_select = None
+    prev_step_url = 'dataops:uploadmerge'
+
+    # To be overwritten by the subclasses
+    step_1_url = None
+    log_upload = None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'data_type': self.data_type,
+            'data_type_select': self.data_type_select,
+            'value_range': (
+                range(5) if self.workflow.has_data_frame else range(3)),
+            'prev_step': reverse(self.prev_step_url)})
+        return context
+
+    def get(self, request, *args, **kwargs):
+        """Remove payload  from session dictionary and get the page."""
+        session_ops.flush_payload(request)
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        # Dictionary to populate gradually throughout the sequence of steps.
+        # It is stored in the session.
+        session_ops.set_payload(
+            self.request,
+            {
+                'initial_column_names': form.frame_info[0],
+                'column_types': form.frame_info[1],
+                'src_is_key_column': form.frame_info[2],
+                'step_1': reverse(self.step_1_url),
+                'log_upload': self.log_upload})
+
+        return redirect('dataops:upload_s2')
+
 
 class UploadStepBasicView(UserIsInstructor, WorkflowView):
     """Base class for the Upload Step Views."""
 
     upload_data = None
-    column_types = None
 
     def request_is_valid(self) -> Optional[http.HttpResponse]:
         """Verify some requirements for the incoming request.
@@ -51,7 +114,7 @@ class UploadStepBasicView(UserIsInstructor, WorkflowView):
         """
         # Get the dictionary to store information about the upload
         # is stored in the session.
-        self.upload_data = self.request.session.get('upload_data')
+        self.upload_data = session_ops.get_payload(self.request)
         if not self.upload_data:
             # If there is no object, or it is an empty dict, it denotes a
             # direct jump to this step, get back to the home page
@@ -61,8 +124,7 @@ class UploadStepBasicView(UserIsInstructor, WorkflowView):
         return None
 
     def dispatch(self, request, *args, **kwargs):
-        error_response = self.request_is_valid()
-        if error_response:
+        if error_response := self.request_is_valid():
             return error_response
 
         return super().dispatch(request, *args, **kwargs)
@@ -100,6 +162,7 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
 
     initial_columns = None
     src_is_key_column = None
+    column_types = None
 
     def request_is_valid(self) -> Optional[http.HttpResponse]:
         """Verify some requirements for the incoming request.
@@ -107,8 +170,7 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
         If the expected data is not there, return an HTTP response. If
         everything is correct, return None.
         """
-        error_response = super().request_is_valid()
-        if error_response:
+        if error_response := super().request_is_valid():
             return error_response
 
         # Get the column names, types, and those that are unique from the data
@@ -153,7 +215,7 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
                 range(5) if self.workflow.has_data_frame else range(3)),
             'df_info': df_info,
             'next_name':
-                _('Finish') if self.workflow.has_data_frame else None})
+                _('Finish') if not self.workflow.has_data_frame else None})
 
         return context
 

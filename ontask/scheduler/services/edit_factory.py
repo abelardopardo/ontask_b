@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import core, models
-from ontask.core import SessionPayload
+from ontask.core import session_ops
 from ontask.scheduler.services.items import create_timedelta_string
 
 
@@ -118,7 +118,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
     def _create_payload(
         request: http.HttpRequest,
         **kwargs
-    ) -> core.SessionPayload:
+    ) -> dict:
         """Create the session payload to carry through the operation.
 
         :param kwargs: key/value pairs for the call
@@ -250,7 +250,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
     def finish(
         self,
         request: http.HttpRequest,
-        payload: SessionPayload,
+        payload: dict,
     ) -> Optional[http.HttpResponse]:
         """Finalize the creation of an operation update.
 
@@ -284,7 +284,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         try:
             schedule_item = self.create_or_update(
                 request.user,
-                payload.get_store(),
+                payload,
                 self.scheduled_item)
         except Exception as exc:
             messages.error(
@@ -296,7 +296,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         schedule_item.log(models.Log.SCHEDULE_EDIT)
 
         # Reset object to carry action info throughout dialogs
-        SessionPayload.flush(request.session)
+        session_ops.flush_payload(request)
 
         # Successful processing.
         tdelta = create_timedelta_string(

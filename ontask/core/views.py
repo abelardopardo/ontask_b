@@ -12,6 +12,7 @@ from ontask import models, tasks
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import UserIsInstructor, is_admin, is_instructor
 from ontask.core.services import ontask_handler404
+from ontask.core import session_ops
 from ontask.django_auth_lti.decorators import lti_role_required
 from ontask.workflow.views import WorkflowIndexView
 
@@ -28,6 +29,8 @@ class HomeView(generic.View):
     http_method_names = ['get']
 
     def get(self, request, *args, **kwargs) -> http.HttpResponse:
+        # Remove the payload dictionary from the session
+        session_ops.flush_payload(request)
         if not request.user.is_authenticated:
             return redirect(reverse('accounts:login'))
 
@@ -79,7 +82,7 @@ class KeepAliveView(generic.View):
         return http.JsonResponse({})
 
 
-class Custon404View(generic.TemplateView):
+class Custom404View(generic.TemplateView):
     """Render the home page."""
 
     def get(self, request, *args, **kwargs):

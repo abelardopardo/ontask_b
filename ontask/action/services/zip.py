@@ -5,13 +5,12 @@ from typing import List, Optional, Tuple
 import zipfile
 
 from django import http
-from django.contrib.sessions.backends.base import SessionBase
 from django.shortcuts import redirect, render
 
 from ontask import models
+from ontask.core import session_ops
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.services.run_factory import ActionRunProducerBase
-from ontask.core import SessionPayload
 from ontask.dataops import sql
 
 _HTML_BODY = """<!DOCTYPE html>
@@ -27,7 +26,7 @@ _HTML_BODY = """<!DOCTYPE html>
 
 
 def _create_filename_template(
-    payload: SessionPayload,
+    payload: dict,
     user_fname_column: Optional[models.Column],
 ) -> str:
     """Create the filename template based on given parameters."""
@@ -98,15 +97,15 @@ def _create_eval_data_tuple(
 
 
 def create_and_send_zip(
-    session: SessionBase,
+    request: http.HttpRequest,
     action: models.Action,
     item_column: models.Column,
     user_fname_column: Optional[models.Column],
-    payload: SessionPayload,
+    payload: dict,
 ) -> http.HttpResponse:
     """Process the list of tuples in files and create the ZIP BytesIO object.
 
-    :param session: Session object while creating a zip (need it to flush it)
+    :param request: request object while creating a zip (need it to flush it)
     :param action: Action being used for ZIP
     :param item_column: Column used to itemize the zip
     :param user_fname_column: Optional column to create file name
@@ -135,7 +134,8 @@ def create_and_send_zip(
         )
     zip_file_obj.close()
 
-    SessionPayload.flush(session)
+    # Remove payload from session
+    session_ops.flush_payload(request)
 
     suffix = datetime.now().strftime('%y%m%d_%H%M%S')
     # Attach the compressed value to the response and send
@@ -160,7 +160,7 @@ class ActionRunProducerZip(ActionRunProducerBase):
         self,
         request: http.HttpRequest,
         workflow: models.Action,
-        payload: SessionPayload,
+        payload: dict,
         action: Optional[models.Action] = None,
     ) -> http.HttpResponse:
         """Finish processing the valid POST request.
@@ -175,10 +175,7 @@ class ActionRunProducerZip(ActionRunProducerBase):
             if not self.action:
                 return redirect('home')
 
-        self._create_log_event(
-            request.user,
-            self.action,
-            payload.get_store())
+        self._create_log_event(request.user, self.action, payload)
 
         # Successful processing.
         return render(request, 'action/action_zip_done.html', {})

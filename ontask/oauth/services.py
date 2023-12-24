@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
 from ontask import models
-from ontask.core import SessionPayload
+from ontask.core import session_ops
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'
@@ -30,7 +30,7 @@ def get_initial_token_step1(
     :param request: Received request
     :param oauth_info: a dict with the following fields:
         # {
-        #   domain_port: VALUE (format example https://host:port,
+        #   domain_port: VALUE (format example https://host:port),
         #   client_id: VALUE,
         #   client_secret: VALUE ,
         #   authorize_url: VALUE (format {0} for domain_port),
@@ -131,8 +131,10 @@ def process_callback(request: http.HttpRequest) -> Optional[str]:
         # went wrong.
         return _('Inconsistent OAuth response. Unable to authorize')
 
-    oauth_instance = request.session.get('target_url')
-    if not oauth_instance:
+    if not (payload := session_ops.get_payload(request)):
+        return _('Internal error. Empty payload in callback')
+
+    if not (oauth_instance := payload.get('target_url')):
         return _('Internal error. Empty OAuth Instance name')
 
     oauth_info = settings.CANVAS_INFO_DICT.get(oauth_instance)

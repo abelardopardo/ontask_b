@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.action.services.clone import do_clone_action
 from ontask.column.services import do_clone_column_only
-from ontask.core import store_workflow_in_session
+from ontask.core import session_ops
 from ontask.dataops import sql
 from ontask.table.services import do_clone_view
 
@@ -35,7 +35,7 @@ def log_workflow_createupdate(
         redirect_url = reverse('dataops:uploadmerge')
 
         # Store in session
-        store_workflow_in_session(request.session, workflow)
+        session_ops.store_workflow_in_session(request, workflow)
 
     workflow.log(request.user, log_type)
     return http.JsonResponse({'html_redirect': redirect_url})

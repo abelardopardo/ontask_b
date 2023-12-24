@@ -4,8 +4,7 @@ from django.views import generic
 
 import settings.base
 from ontask.connection.services import create_sql_connection_runtable
-from ontask.core import (
-    SessionPayload, UserIsInstructor, UserIsAdmin, WorkflowView)
+from ontask.core import UserIsInstructor, WorkflowView, session_ops
 from ontask.scheduler import services
 from ontask import models
 
@@ -20,8 +19,7 @@ class SchedulerViewAbstract(generic.TemplateView):
 
     def get(self, request, *args, **kwargs):
         # Reset object to carry action info throughout dialogs
-        SessionPayload.flush(request.session)
-
+        session_ops.flush_payload(request)
         return super().get(request, *args, **kwargs)
 
     class Meta:

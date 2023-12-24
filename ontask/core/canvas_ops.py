@@ -1,6 +1,6 @@
 import datetime
 from time import sleep
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Optional
 from zoneinfo import ZoneInfo
 import requests
 
@@ -22,33 +22,47 @@ from ontask import OnTaskException
 
 LOGGER = get_task_logger('celery_execution')
 
-canvas_api_map = {}
+# Map for canvas API operations
+#
+# Dictionary with:
+#   - key: name to identify one API operation
+#   - (method, URL, correct status code)
+_canvas_api_map = {}
 if settings.CANVAS_INFO_DICT:
-    canvas_api_map = {
+    _canvas_api_map = {
         'get_course_quizzes': (requests.get, '{0}/api/v1/courses/{1}/quizzes'),
         'get_quiz_questions': (
             requests.get,
-            '{0}/api/v1/courses/{1}/quizzes/{2}/questions'),
+            '{0}/api/v1/courses/{1}/quizzes/{2}/questions',
+            status.HTTP_200_OK),
         'get_quiz_statistics': (
             requests.get,
-            '{0}/api/v1/courses/{1}/quizzes/{2}/statistics'),
+            '{0}/api/v1/courses/{1}/quizzes/{2}/statistics',
+            status.HTTP_200_OK),
         'get_quiz_submissions': (
             requests.get,
-            '{0}/api/v1/courses/{1}/quizzes/{2}/submissions'),
+            '{0}/api/v1/courses/{1}/quizzes/{2}/submissions',
+            status.HTTP_200_OK),
         'get_course_enrolment': (
             requests.get,
             '{0}/api/v1/courses/{1}/enrollments'
-            '?type=StudentEnrollment&state={2}'),
+            '?type=StudentEnrollment&state={2}',
+            status.HTTP_200_OK),
         'get_course_assignments': (
             requests.get,
-            '{0}/api/v1/courses/{1}/assignments'),
+            '{0}/api/v1/courses/{1}/assignments',
+            status.HTTP_200_OK),
         'get_assignment_submissions': (
             requests.get,
-            '{0}/api/v1/courses/{1}/assignments/{2}/submissions')
-    }
+            '{0}/api/v1/courses/{1}/assignments/{2}/submissions',
+            status.HTTP_200_OK),
+        'send_email': (
+            requests.post,
+            '{0}/api/v1/conversations',
+            status.HTTP_201_CREATED)}
 
 
-def request_refresh_and_retry(
+def _request_refresh_and_retry(
         oauth_info: dict,
         user_token: models.OAuthUserToken,
         request_method,
@@ -95,73 +109,7 @@ def request_refresh_and_retry(
     return response
 
 
-def request_and_access(
-        oauth_info: dict,
-        user_token: models.OAuthUserToken,
-        request_method,
-        url: str,
-        headers: dict,
-        result_key: str = None,
-        **kwargs):
-    """Method to execute an API call and accumulate the
-    result for multiple pages.
-
-    :param oauth_info: Dictionary with the required oauth information
-    :param user_token: Current token for authentication
-    :param request_method: Request to execute
-    :param url: URL to access
-    :param headers: Dictionary with headers to use
-    :param result_key: Dictionary key to accumulate the result. If this is none,
-    then it is assumed to be a list.
-    :param kwargs: Other additional parameters to include in the request.
-
-    :return: JSON containing the result
-    """
-    if result_key:
-        # Result is a dictionary with a single key pointing to a list
-        result = {result_key: []}
-    else:
-        # Result is a list
-        result = []
-
-    # Execute multiple requests if there are pages of results
-    while True:
-        response = request_refresh_and_retry(
-                oauth_info,
-                user_token,
-                request_method,
-                url,
-                headers,
-                **kwargs)
-
-        if result_key:
-            result[result_key].extend(response.json()[result_key])
-        else:
-            new_data = response.json()
-            if isinstance(new_data, list):
-                result.extend(new_data)
-            else:
-                result.append(new_data)
-
-        links = response.headers.get('link', None)
-        if not links:
-            # Whole information received
-            break
-
-        links = dict(
-            [(c, b[1:-1]) for b, c in
-             [a.split('; ') for a in links.split(',')]])
-
-        # Check the links headers to see if there are additional pages
-        if not (url := links.get('rel="next"', None)):
-            # There is no link to access the next page. Terminate loop
-            break
-
-    # Return the accumulated result
-    return result
-
-
-def get_authorization_header(token: str) -> dict:
+def _get_authorization_header(token: str) -> dict:
     """Returns header with the given token as Authorization element."""
     return {
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -170,7 +118,7 @@ def get_authorization_header(token: str) -> dict:
 
 
 @user_passes_test(is_instructor)
-def get_or_set_oauth_token(
+def set_oauth_token(
     request: HttpRequest,
     oauth_instance_name: str,
     continue_url: str,
@@ -270,121 +218,69 @@ def verify_course_id(
     return result
 
 
-def get_course_enrolment(
+def request_and_access(
+        canvas_operation_name: str,
         oauth_info: dict,
         user_token: models.OAuthUserToken,
-        course_id: int,
-        student_state: str = 'active'
-) -> dict:
-    """Get list of active students enrolled in a course."""
-    # Get request method and URL for the endpoint from the map in this module
-    request_method, endpoint = canvas_api_map['get_course_enrolment']
+        endpoint_format: Optional[list] = None,
+        result_key: str = None,
+        **kwargs):
+    """Method to execute an API call and accumulate the
+    result for multiple pages.
 
-    return request_and_access(
-        oauth_info,
-        user_token,
-        request_method,
-        endpoint.format(oauth_info['domain_port'], course_id, student_state),
-        get_authorization_header(user_token.access_token))
+    :param canvas_operation_name: String with the API operation to execute
+    :param oauth_info: Dictionary with the required oauth information
+    :param user_token: Current token for authentication
+    :param endpoint_format: List of strings to format the endpoint URL
+    :param result_key: Dictionary key to accumulate the result. If this is none,
+    then it is assumed to be a list.
+    :param kwargs: Other additional parameters to include in the request.
 
+    :return: Accumulated JSON in the responses
+    """
+    if endpoint_format is None:
+        endpoint_format = []
+    request_method, endpoint, ok_status = _canvas_api_map[canvas_operation_name]
 
-def get_course_quizzes(
-        oauth_info: dict,
-        user_token: models.OAuthUserToken,
-        course_id: int) -> list:
-    """Gets all the quizzes within a course"""
-    # Get request method and URL for the endpoint from the map in this module
-    request_method, endpoint = canvas_api_map['get_course_quizzes']
+    # Result is a list or a dictionary if a result key is given
+    result = {result_key: []} if result_key else []
 
-    return request_and_access(
-        oauth_info,
-        user_token,
-        request_method,
-        endpoint.format(oauth_info['domain_port'], course_id),
-        get_authorization_header(user_token.access_token))
+    # Execute multiple requests if there are pages of results
+    while True:
+        response = _request_refresh_and_retry(
+                oauth_info,
+                user_token,
+                request_method,
+                endpoint.format(oauth_info['domain_port'], *endpoint_format),
+                _get_authorization_header(user_token.access_token),
+                **kwargs)
 
+        if response.status_code != ok_status:
+            raise OnTaskException(
+                _('Incorrect response from API call {0}').format())
 
-def get_quiz_questions(
-        oauth_info: dict,
-        user_token: models.OAuthUserToken,
-        course_id: int,
-        quiz_id) -> list:
-    """Gets all the questions in a quiz"""
-    # Get request method and URL for the endpoint from the map in this module
-    request_method, endpoint = canvas_api_map['get_quiz_questions']
+        if result_key:
+            result[result_key].extend(response.json()[result_key])
+        else:
+            new_data = response.json()
+            if isinstance(new_data, list):
+                result.extend(new_data)
+            else:
+                result.append(new_data)
 
-    return request_and_access(
-        oauth_info,
-        user_token,
-        request_method,
-        endpoint.format(oauth_info['domain_port'], course_id, quiz_id),
-        get_authorization_header(user_token.access_token))
+        links = response.headers.get('link', None)
+        if not links:
+            # Whole information received
+            break
 
+        links = dict(
+            [(c, b[1:-1]) for b, c in
+             [a.split('; ') for a in links.split(',')]])
 
-def get_course_assignments(
-        oauth_info: dict,
-        user_token: models.OAuthUserToken,
-        course_id: int) -> list:
-    """Gets all the assignments within a course"""
-    # Get request method and URL for the endpoint from the map in this module
-    request_method, endpoint = canvas_api_map['get_course_assignments']
+        # Check the links headers to see if there are additional pages
+        if not (url := links.get('rel="next"', None)):
+            # There is no link to access the next page. Terminate loop
+            break
 
-    return request_and_access(
-        oauth_info,
-        user_token,
-        request_method,
-        endpoint.format(oauth_info['domain_port'], course_id),
-        get_authorization_header(user_token.access_token))
-
-
-def get_quiz_statistics(
-        oauth_info: dict,
-        user_token: models.OAuthUserToken,
-        course_id: int,
-        quiz_id: int
-) -> dict:
-    """Get all statistics for a quiz in a course."""
-    request_method, endpoint = canvas_api_map['get_quiz_statistics']
-
-    return request_and_access(
-        oauth_info,
-        user_token,
-        request_method,
-        endpoint.format(oauth_info['domain_port'], course_id, quiz_id),
-        get_authorization_header(user_token.access_token),
-        result_key='quiz_statistics')
-
-
-def get_quiz_submissions(
-        oauth_info: dict,
-        user_token: models.OAuthUserToken,
-        course_id: int,
-        quiz_id: int
-) -> dict:
-    """Get all submissions for a quiz in a course."""
-    request_method, endpoint = canvas_api_map['get_quiz_submissions']
-
-    return request_and_access(
-        oauth_info,
-        user_token,
-        requests.get,
-        endpoint.format(oauth_info['domain_port'], course_id, quiz_id),
-        get_authorization_header(user_token.access_token),
-        result_key='quiz_submissions')
-
-
-def get_assignment_submissions(
-        oauth_info: dict,
-        user_token: models.OAuthUserToken,
-        course_id: int,
-        assignment_id: int
-) -> dict:
-    """Get all assignment submissions in a course"""
-    request_method, endpoint = canvas_api_map['get_assignment_submissions']
-
-    return request_and_access(
-        oauth_info,
-        user_token,
-        requests.get,
-        endpoint.format(oauth_info['domain_port'], course_id, assignment_id),
-        get_authorization_header(user_token.access_token))
+    # Return the accumulated result
+    return result

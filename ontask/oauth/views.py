@@ -6,7 +6,6 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import redirect, reverse
 from django.utils.translation import gettext, gettext_lazy as _
 
-from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
 from ontask.oauth import services
 

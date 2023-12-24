@@ -8,7 +8,7 @@ from django.utils.translation import gettext
 from django.views import generic
 
 from ontask import core, models, tasks
-from ontask.core import SessionPayload
+from ontask.core import session_ops
 
 
 class ActionRunFactory(core.FactoryBase):
@@ -66,7 +66,7 @@ class ActionRunProducerBase(generic.FormView):
     # Type of event to log when running the action
     log_event = None
 
-    # Dictionary stored in the session for multi-page form filling
+    # Dictionary stored in the session for multipage form filling
     payload = None
 
     is_finish_request = None  # Flagging if the request is the last step.
@@ -105,13 +105,13 @@ class ActionRunProducerBase(generic.FormView):
         self.workflow = kwargs.get('workflow', None)
         self.action = kwargs.get('action', None)
 
-        self.payload = SessionPayload(
-            request.session,
-            initial_values={
+        self.payload = {
                 'action_id': self.action.id,
                 'operation_type': kwargs['operation_type'],
                 'prev_url': kwargs.get('prev_url', None),
-                'post_url': reverse('action:run_done')})
+                'post_url': reverse('action:run_done')}
+        # Store in session
+        session_ops.set_payload(self.request, self.payload)
 
         self.is_finish_request = self.kwargs.get('is_finish_request', False)
         return
@@ -149,7 +149,6 @@ class ActionRunProducerBase(generic.FormView):
             self.payload['button_label'] = gettext('Send')
             self.payload['value_range'] = 2
             self.payload['step'] = 2
-            self.payload.store_in_session(self.request.session)
 
             return redirect('action:item_filter')
 
@@ -160,7 +159,7 @@ class ActionRunProducerBase(generic.FormView):
             self,
             request: http.HttpRequest,
             workflow: models.Workflow,
-            payload: SessionPayload,
+            payload: dict,
     ) -> http.HttpResponse:
         """Finish processing the request after item selection."""
         # Get the information from the payload
@@ -175,10 +174,7 @@ class ActionRunProducerBase(generic.FormView):
         for payload_key in ['prev_url', 'post_url', 'confirm_items']:
             payload.pop(payload_key, None)
 
-        log_item = self._create_log_event(
-            request.user,
-            self.action,
-            payload.get_store())
+        log_item = self._create_log_event(request.user, self.action, payload)
 
         tasks.execute_operation.delay(
             self.log_event,
@@ -186,10 +182,10 @@ class ActionRunProducerBase(generic.FormView):
             log_id=log_item.id,
             workflow_id=workflow.id,
             action_id=self.action.id if self.action else None,
-            payload=payload.get_store())
+            payload=payload)
 
         # Reset object to carry action info throughout dialogs
-        SessionPayload.flush(request.session)
+        session_ops.flush_payload(request)
 
         # Successful processing.
         return render(

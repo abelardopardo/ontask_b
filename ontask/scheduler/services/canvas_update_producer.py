@@ -4,8 +4,7 @@ from django import http
 from django.utils.translation import gettext
 
 from ontask import models
-from ontask.core import SessionPayload
-from ontask.core import canvas_ops
+from ontask.core import canvas_ops, session_ops
 from ontask.scheduler import forms
 from ontask.scheduler.services.edit_factory import (
     ScheduledOperationUpdateBaseView)
@@ -22,20 +21,19 @@ class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
         self,
         request: http.HttpRequest,
         **kwargs
-    ) -> SessionPayload:
+    ) -> dict:
         """Create a payload dictionary to store in the session.
 
         :param request: HTTP request
         :param kwargs: Dictionary with extra parameters
         :return: Dictionary with pairs name/value
         """
-        payload = SessionPayload(
-            request.session,
-            initial_values={
-                'workflow_id': self.workflow.id,
-                'operation_type': self.operation_type,
-                'value_range': [],
-                'page_title': self.form_page_title})
+        payload = {
+            'workflow_id': self.workflow.id,
+            'operation_type': self.operation_type,
+            'value_range': [],
+            'page_title': self.form_page_title}
+        session_ops.set_payload(request, payload)
 
         if self.scheduled_item:
             payload.update(self.scheduled_item.payload)
@@ -49,9 +47,9 @@ class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
     def form_valid(self, form) -> http.HttpResponse:
         """Process the valid POST request and insert Canvas Auth."""
         # Check for the CANVAS token and proceed to the continue_url
-        self.op_payload.store_in_session(self.request.session)
+        session_ops.set_payload(self.request, self.op_payload)
 
-        return canvas_ops.get_or_set_oauth_token(
+        return canvas_ops.set_oauth_token(
             self.request,
             self.op_payload['target_url'],
             'scheduler:finish_scheduling',

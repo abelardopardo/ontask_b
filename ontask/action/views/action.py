@@ -12,7 +12,7 @@ from django.views import generic
 from ontask import create_new_name, models
 from ontask.action import forms, services
 from ontask.core import (
-    ActionView, JSONFormResponseMixin, SessionPayload, UserIsInstructor,
+    ActionView, JSONFormResponseMixin, UserIsInstructor, session_ops,
     WorkflowView, ajax_required, get_action, is_instructor)
 
 
@@ -34,7 +34,7 @@ class ActionIndexView(UserIsInstructor, WorkflowView, generic.ListView):
         return context
 
     def get(self, request, *args, **kwargs):
-        SessionPayload.flush(request.session)
+        session_ops.flush_payload(request)
         return super().get(request, *args, **kwargs)
 
 

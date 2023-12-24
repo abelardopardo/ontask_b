@@ -6,7 +6,7 @@ from django.utils.translation import gettext
 
 import ontask.scheduler.forms.basic
 from ontask import models
-from ontask.core import SessionPayload
+from ontask.core import session_ops
 from ontask.scheduler.services.edit_factory import (
     ScheduledOperationUpdateBaseView)
 
@@ -21,7 +21,7 @@ class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBaseView):
         self,
         request: http.HttpRequest,
         **kwargs
-    ) -> SessionPayload:
+    ) -> dict:
         """Create a payload dictionary to store in the session.
 
         :param request: HTTP request
@@ -29,13 +29,12 @@ class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBaseView):
         :return: Dictionary with pairs name/value
         """
         # Get the payload from the session, and if not, use the given one
-        payload = SessionPayload(
-            request.session,
-            initial_values={
-                'workflow_id': self.workflow.id,
-                'operation_type': self.operation_type,
-                'value_range': [],
-                'page_title': gettext('Schedule SQL Upload')})
+        payload = {
+            'workflow_id': self.workflow.id,
+            'operation_type': self.operation_type,
+            'value_range': [],
+            'page_title': gettext('Schedule SQL Upload')}
+        session_ops.set_payload(request, payload)
 
         if self.scheduled_item:
             payload.update(self.scheduled_item.payload)

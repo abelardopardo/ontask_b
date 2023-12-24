@@ -4,18 +4,16 @@ import json
 from typing import Dict, Optional
 from zoneinfo import ZoneInfo
 
-import requests
 from celery.utils.log import get_task_logger
 from django import http
 from django.conf import settings
 from django.utils.translation import gettext
-from rest_framework import status
 
 from ontask import models
 from ontask.action.evaluate import evaluate_action
 from ontask.action.services.edit_factory import ActionOutEditProducerBase
 from ontask.action.services.run_factory import ActionRunProducerBase
-from ontask.core import canvas_ops
+from ontask.core import canvas_ops, session_ops
 
 LOGGER = get_task_logger('celery_execution')
 
@@ -50,10 +48,10 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
         else:
             continue_url = 'action:run_done'
 
-        self.payload.store_in_session(self.request.session)
+        session_ops.set_payload(self.request, self.payload)
 
         # Check for the CANVAS token and proceed to the continue_url
-        return canvas_ops.get_or_set_oauth_token(
+        return canvas_ops.set_oauth_token(
             self.request,
             self.payload['target_url'],
             continue_url,
@@ -106,9 +104,7 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
         # Create the context for the log events
         context = {'action': action.id}
 
-        # Send the objects to the given URL
-        domain = oauth_info['domain_port']
-        conversation_url = oauth_info['conversation_url'].format(domain)
+        # Send the emails using Canvas API
         to_emails = []
         for msg_body, msg_subject, msg_to in action_evals:
             # JSON object to send. Taken from method.conversations.create in
@@ -119,20 +115,20 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
                 'body': msg_body,
                 'force_new': True}
 
-            # Send the email
-            response = canvas_ops.request_refresh_and_retry(
-                oauth_info,
-                user_token,
-                requests.post,
-                conversation_url,
-                headers,
-                data=canvas_email_payload,
-                verify=True)
-
-            if response.status_code != status.HTTP_201_CREATED:
+            try:
+                # Send the email
+                canvas_ops.request_and_access(
+                    'send_email',
+                    oauth_info,
+                    user_token,
+                    endpoint_format=None,
+                    result_key=None,
+                    data=canvas_email_payload,
+                    verify=True)
+            except Exception as exc:
                 result_msg = gettext(
                     'Unable to deliver message (code {0})').format(
-                    response.status_code)
+                    str(exc))
             else:
                 result_msg = gettext('Message successfully sent')
 
@@ -143,9 +139,9 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
                     target_url,
                     json.dumps(canvas_email_payload))
                 result_msg = 'SENT TO LOGGER'
-                response_status = 200
+                response_status = 'OK'
             else:
-                response_status = response.status_code
+                response_status = 'ERROR'
 
             # Log message sent
             context['subject'] = canvas_email_payload['subject']

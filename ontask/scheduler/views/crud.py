@@ -13,8 +13,8 @@ from django.views import generic
 from ontask import models
 from ontask.core import (
     JSONFormResponseMixin, JSONResponseMixin, ScheduledOperationView,
-    SessionPayload, UserIsInstructor, WorkflowView, ajax_required, get_action,
-    get_workflow, is_instructor)
+    UserIsInstructor, WorkflowView, ajax_required, get_action,
+    get_workflow, is_instructor, session_ops)
 from ontask.scheduler import services
 
 
@@ -42,6 +42,11 @@ class SchedulerIndexView(
                 self.object.execute_until)})
         return context
 
+    def get(self, request, *args, **kwargs):
+        # Reset object to carry action info throughout dialogs
+        session_ops.flush_payload(request)
+        return super().get(request, *args, **kwargs)
+
 
 @user_passes_test(is_instructor)
 @get_action()
@@ -59,6 +64,9 @@ def create_action_run(
     :param action: Action being used
     :return: HTTP response
     """
+    # Remove the payload dictionary from the session
+    session_ops.flush_payload(request)
+
     return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         action.action_type,
@@ -154,6 +162,9 @@ def edit_scheduled_operation(
     if not s_item:
         return redirect('home')
 
+    # Remove the payload dictionary from the session
+    session_ops.flush_payload(request)
+
     return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         s_item.operation_type,
@@ -168,7 +179,7 @@ def finish_scheduling(
         workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
     """Finish the create/edit operation of a scheduled operation."""
-    payload = SessionPayload(request.session)
+    payload = session_ops.get_payload(request)
     if payload is None or 'operation_type' not in payload:
         # Something is wrong with this execution. Return to action table.
         messages.error(

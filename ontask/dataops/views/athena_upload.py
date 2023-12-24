@@ -3,17 +3,16 @@
 from django.shortcuts import redirect
 from django.views import generic
 
+from ontask.dataops.views import upload_steps
 from ontask import models
-from ontask.dataops.views import common
 
 
-class AthenaUploadStart(common.UploadStart, generic.UpdateView):
+class AthenaUploadStart(upload_steps.UploadStepOneView, generic.UpdateView):
     """Start the upload of a data frame through an Athena connection.
 
     The parameters are obtained and if valid, an operation is scheduled for
     execution.
     """
-
 
     def get_queryset(self):
         """This view should only consider enabled connections."""
@@ -22,7 +21,6 @@ class AthenaUploadStart(common.UploadStart, generic.UpdateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = self.object
-        kwargs['workflow'] = self.workflow
         return kwargs
 
     def form_valid(self, form):

@@ -127,22 +127,23 @@ def _extract_quiz_answer_information(
         quiz_id: int,
         data_frame_source: dict):
 
-    question_names = canvas_ops.get_quiz_questions(
+    question_names = canvas_ops.request_and_access(
+        'get_quiz_questions',
         oauth_info,
         user_token,
-        canvas_course_id,
-        quiz_id)
+        [canvas_course_id, quiz_id])
     question_names = dict([
         (
             str(qinfo['id']),
             BeautifulSoup(qinfo['question_name'], 'lxml').text)
         for qinfo in question_names])
 
-    quiz_stats = canvas_ops.get_quiz_statistics(
+    quiz_stats = canvas_ops.request_and_access(
+        'get_quiz_statistics',
         oauth_info,
         user_token,
-        canvas_course_id,
-        quiz_id)
+        [canvas_course_id, quiz_id],
+        result_key='quiz_statistics')
 
     # Loop over all elements with quiz statistics
     for qstat in quiz_stats['quiz_statistics']:
@@ -163,11 +164,12 @@ def _extract_quiz_submission_information(
         quiz_id: int,
         data_frame_source: dict):
 
-    quiz_submission = canvas_ops.get_quiz_submissions(
+    quiz_submission = canvas_ops.request_and_access(
+        'get_quiz_submissions',
         oauth_info,
         user_token,
-        canvas_course_id,
-        quiz_id)
+        [canvas_course_id, quiz_id],
+        result_key='quiz_submissions')
 
     # Loop over all submissions in a quiz
     for submission in quiz_submission['quiz_submissions']:
@@ -207,11 +209,11 @@ def _extract_assignment_submission_information(
         assignment_id: int,
         data_frame_source: dict):
 
-    assignment_submissions = canvas_ops.get_assignment_submissions(
+    assignment_submissions = canvas_ops.request_and_access(
+        'get_assignment_submissions',
         oauth_info,
         user_token,
-        canvas_course_id,
-        assignment_id)
+        [canvas_course_id, assignment_id])
 
     for submission in assignment_submissions:
         (
@@ -269,10 +271,11 @@ def create_df_from_canvas_course_enrollment(
         user,
         target_url)
 
-    students = canvas_ops.get_course_enrolment(
+    students = canvas_ops.request_and_access(
+        'get_course_enrolment',
         oauth_info,
         user_token,
-        canvas_course_id)
+        [canvas_course_id, 'active'])
 
     data_frame_source = []
     for student in students:
@@ -312,10 +315,12 @@ def create_df_from_canvas_course_quizzes(
         user,
         target_url)
 
-    students = canvas_ops.get_course_enrolment(
+    # Get list of active students enrolled in the course
+    students = canvas_ops.request_and_access(
+        'get_course_enrolment',
         oauth_info,
         user_token,
-        canvas_course_id)
+        [course_id, 'active'])
 
     data_frame_source = {}
     for student in students:
@@ -326,10 +331,11 @@ def create_df_from_canvas_course_quizzes(
             'name': student['user']['name']}
 
     # Fetch all quizzes for the course
-    quizzes = canvas_ops.get_course_quizzes(
+    quizzes = canvas_ops.request_and_access(
+        'get_course_quizzes',
         oauth_info,
         user_token,
-        canvas_course_id)
+        [course_id])
 
     # Build the data frame source with the information from quizzes
     for quiz in quizzes:
@@ -351,11 +357,12 @@ def create_df_from_canvas_course_quizzes(
             quiz_id,
             data_frame_source)
 
-    # Process the assignment submissions now
-    assignments = canvas_ops.get_course_assignments(
+    # Get all the assignments in a course
+    assignments = canvas_ops.request_and_access(
+        'get_course_assignments',
         oauth_info,
         user_token,
-        canvas_course_id)
+        [canvas_course_id])
 
     for assignment in assignments:
         # Get the assignment submission information
@@ -379,9 +386,6 @@ def create_df_from_canvas_course_quizzes(
         column_names = [
             cname for cname in column_names if cname in columns_to_upload]
 
-    # # Insert canvas course id field
-    # result.loc[:, 'canvas course id'] = canvas_course_id
-    #
     # Sort the columns leaving ID as the first one
     result = result[['id', 'canvas course id', 'name'] + sorted(column_names)]
 

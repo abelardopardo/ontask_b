@@ -11,20 +11,19 @@ from ontask.core.decorators import (
 from ontask.core.factory import FactoryBase
 from ontask.core.forms import (
     DATE_TIME_WIDGET_OPTIONS, RestrictedFileField, column_to_field)
-from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
     ActionView, ColumnConditionView, ColumnView, ConditionView,
     GROUP_NAMES, JSONFormResponseMixin, JSONResponseMixin,
     LogView, ScheduledOperationView,
     UserIsAdmin, UserIsInstructor, ViewView, WorkflowView, error_redirect,
-    has_access, is_admin, is_instructor, store_workflow_in_session)
+    has_access, is_admin, is_instructor)
 from ontask.core.serializers import OnTaskObjectIdField, OnTaskVersionField
 from ontask.core.session_ops import (
-    _store_workflow_nrows_in_session, remove_workflow_from_session)
+    remove_workflow_from_session, flush_payload, get_payload, set_payload,
+    update_payload)
 from ontask.core.tables import DataTablesServerSidePaging, OperationsColumn
 from ontask.core.canvas_ops import (
-    get_or_set_oauth_token, get_oauth_and_user_token,
-    verify_course_id, get_course_quizzes)
+    set_oauth_token, get_oauth_and_user_token, verify_course_id)
 
 ONTASK_UPLOAD_FIELD_PREFIX = '___ontask___upload_'
 

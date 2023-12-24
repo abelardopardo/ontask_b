@@ -1,4 +1,5 @@
-"""Functions to manipulate the workflow in the session."""
+"""Functions to manipulate data attached to the session such as workflow or
+a payload dictionary."""
 from importlib import import_module
 from typing import List, Optional, Union
 
@@ -17,18 +18,23 @@ from ontask import models
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
-def _store_workflow_nrows_in_session(
+_SESSION_PAYLOAD_DICTIONARY = 'ontask_session_payload'
+_SESSION_WORKFLOW_ID = 'ontask_workflow_id'
+_SESSION_WORKFLOW_NAME = 'ontask_workflow_name'
+_SESSION_WORKFLOW_NUM_ROWS = 'ontask_workflow_rows'
+
+
+def _store_workflow_number_of_rows_in_session(
     session: SessionStore,
     wflow: models.Workflow
 ):
-    """Store the workflow id and name in the 'request.session' dictionary.
+    """Store the workflow id and name in the session's dictionary.
 
     :param session: Session object to store the workflow.
     :param wflow: Workflow object.
     :return: Nothing. Store the id and the name in the session.
     """
-    session['ontask_workflow_rows'] = wflow.nrows
-    session.save()
+    session[_SESSION_WORKFLOW_NUM_ROWS] = wflow.nrows
 
 
 def _wf_lock_and_update(
@@ -46,8 +52,8 @@ def _wf_lock_and_update(
     :param workflow: Object to store
     """
     workflow.lock(session, user, create_session)
-    # Update nrows in case it was asynchronously modified
-    _store_workflow_nrows_in_session(session, workflow)
+    # Update number of rows in case it was asynchronously modified
+    _store_workflow_number_of_rows_in_session(session, workflow)
 
     return workflow
 
@@ -72,15 +78,28 @@ def expand_query_with_related(
     return qs
 
 
+def store_workflow_in_session(
+        request: http.HttpRequest,
+        wflow: models.Workflow):
+    """Store the workflow id, name, and number of rows in the session.
+
+    :param request: object of SessionStore
+    :param wflow: Workflow object
+    :return: Nothing. Store the id, name and nrows in the session
+    """
+    request.session[_SESSION_WORKFLOW_ID] = wflow.id
+    request.session[_SESSION_WORKFLOW_NAME] = wflow.name
+    request.session[_SESSION_WORKFLOW_NUM_ROWS] = wflow.nrows
+
+
 def remove_workflow_from_session(request: http.HttpRequest):
-    """Remove the workflowid, name and number of fows from the session."""
-    wid = request.session.pop('ontask_workflow_id', None)
+    """Remove the workflow id, name and number of rows from the session."""
+    wid = request.session.pop(_SESSION_WORKFLOW_ID, None)
     # If removing workflow from session, mark it as available for sharing
     if wid:
         models.Workflow.unlock_workflow_by_id(wid)
-    request.session.pop('ontask_workflow_name', None)
-    request.session.pop('ontask_workflow_rows', None)
-    request.session.save()
+    request.session.pop(_SESSION_WORKFLOW_NAME, None)
+    request.session.pop(_SESSION_WORKFLOW_NUM_ROWS, None)
 
 
 def acquire_workflow_access(
@@ -101,7 +120,7 @@ def acquire_workflow_access(
     """
     # Lock the workflow object while deciding if it is accessible or not to
     # avoid race conditions.
-    sid = session.get('ontask_workflow_id')
+    sid = session.get(_SESSION_WORKFLOW_ID)
     if wid is None and sid is None:
         # No key was given and none was found in the session (anomaly)
         raise http.Http404(_('Select a workflow'))
@@ -131,7 +150,7 @@ def acquire_workflow_access(
         # correct result (the session_key may be None if using the API)
         if session.session_key == workflow.session_key:
             # Update nrows. Asynch execution of plugin may have modified it
-            _store_workflow_nrows_in_session(session, workflow)
+            _store_workflow_number_of_rows_in_session(session, workflow)
             return workflow
 
         # Step 3: If the workflow is unlocked, LOCK and return
@@ -184,3 +203,23 @@ def acquire_workflow_access(
         # The workflow is locked by a session that has expired. Take the
         # workflow and lock it with the current session.
         return _wf_lock_and_update(session, user, workflow)
+
+
+def flush_payload(request: http.HttpRequest) -> dict:
+    """Remove the dictionary from session and return it"""
+    return request.session.pop(_SESSION_PAYLOAD_DICTIONARY, None)
+
+
+def get_payload(request: http.HttpRequest) -> dict:
+    """Retrieve the payload from the session"""
+    return request.session.get(_SESSION_PAYLOAD_DICTIONARY, None)
+
+
+def set_payload(request: http.HttpRequest, payload: dict) -> None:
+    """Set the payload from the session"""
+    request.session[_SESSION_PAYLOAD_DICTIONARY] = payload
+
+
+def update_payload(request: http.HttpRequest, new_data: dict) -> None:
+    """Update the payload with the given new_data dictionary"""
+    request.session[_SESSION_PAYLOAD_DICTIONARY].update(new_data)

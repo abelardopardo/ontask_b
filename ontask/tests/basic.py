@@ -29,7 +29,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import OnTaskSharedState, models
-from ontask.core import GROUP_NAMES, SessionPayload
+from ontask.core import GROUP_NAMES, session_ops
 from ontask.core.checks import sanity_checks
 from ontask.dataops import pandas
 
@@ -159,18 +159,6 @@ class OnTaskTestCase(OnTaskBasicTestCase):
 
     last_request = None
 
-    @classmethod
-    def _store_workflow_in_session(cls, session, wflow: models.Workflow):
-        """Store the workflow id, name, and number of rows in the session.
-
-        :param session: Current session used to store the information
-        :param wflow: Workflow object
-        :return: Nothing. Store the id, name and nrows in the session
-        """
-        session['ontask_workflow_rows'] = wflow.nrows
-        session['ontask_workflow_id'] = wflow.id
-        session['ontask_workflow_name'] = wflow.name
-
     def setUp(self):
         super().setUp()
         # Every test needs access to the request factory.
@@ -195,8 +183,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         # adding messages
         setattr(request, '_messages', FallbackStorage(request))
         if self.workflow:
-            self._store_workflow_in_session(request.session, self.workflow)
-        request.session.save()
+            session_ops.store_workflow_in_session(request, self.workflow)
 
         return request
 
@@ -208,7 +195,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         req_params: Optional[Mapping] = None,
         meta=None,
         is_ajax: Optional[bool] = False,
-        session_payload: Optional[Dict] = None,
+        payload: Optional[Dict] = None,
         **kwargs
     ) -> http.HttpResponse:
         """Create a request and send it to a processing function.
@@ -220,7 +207,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         POST requests)
         :param meta: Dictionary of name, value for META
         :param is_ajax: Generate an ajax request or not
-        :param session_payload: Dictionary to add to the request session
+        :param payload: Dictionary to add to the request session
         :param kwargs: Additional arguments to attach to the URL
         :return:
         """
@@ -245,15 +232,14 @@ class OnTaskTestCase(OnTaskBasicTestCase):
 
         old_payload = {}
         if self.last_request:
-            old_payload = SessionPayload.get_session_payload(
-                self.last_request)
+            old_payload = session_ops.get_payload(self.last_request)
 
-        if session_payload:
-            old_payload.update(session_payload)
+        if payload:
+            old_payload.update(payload)
 
         self.last_request = self.add_middleware(request)
 
-        SessionPayload(self.last_request.session, old_payload)
+        session_ops.set_payload(self.last_request, old_payload)
 
         response = resolve(url_str).func(self.last_request, **url_params)
 
@@ -335,9 +321,6 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         cls.device_pixel_ratio = cls.selenium.execute_script(
             'return window.devicePixelRatio'
         )
-        # print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
-        # print('Viewport width: {0}'.format(cls.viewport_width))
-        # print('viewport height: {0}'.format(cls.viewport_height))
 
         cls.selenium.set_window_size(
             cls.viewport_width * cls.device_pixel_ratio,
