@@ -245,13 +245,14 @@ def request_and_access(
     # Result is a list or a dictionary if a result key is given
     result = {result_key: []} if result_key else []
 
+    url = endpoint.format(oauth_info['domain_port'], *endpoint_format)
     # Execute multiple requests if there are pages of results
     while True:
         response = _request_refresh_and_retry(
                 oauth_info,
                 user_token,
                 request_method,
-                endpoint.format(oauth_info['domain_port'], *endpoint_format),
+                url,
                 _get_authorization_header(user_token.access_token),
                 **kwargs)
 
