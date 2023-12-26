@@ -44,7 +44,8 @@ class OnTaskDBIdentifier(sql.Identifier):
         if not strings:
             raise TypeError('Identifier cannot be empty')
 
-        super().__init__(*[str_val.replace('%', '%%') for str_val in strings])
+        super().__init__(
+            *[str_val.replace('%', '%%') for str_val in strings])
 
 
 class OnTaskSharedState:

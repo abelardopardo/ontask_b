@@ -21,7 +21,7 @@ from django.utils.translation import gettext_lazy as _
 # Variables required to process configuration
 BASE_DIR = environ.Path(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-ONTASK_TESTING = 'test' in sys.argv
+ONTASK_TESTING = 'test' in sys.argv or 'shell_plus' in sys.argv
 
 # Use 12factor inspired environment variables.
 env = environ.Env()

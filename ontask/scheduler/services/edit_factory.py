@@ -295,7 +295,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
 
         schedule_item.log(models.Log.SCHEDULE_EDIT)
 
-        # Reset object to carry action info throughout dialogs
+        # Reset session payload as we are done with the CRUD
         session_ops.flush_payload(request)
 
         # Successful processing.
