@@ -121,6 +121,8 @@ class Log(Owner):
         'workflow_canvas_course_enrollment_data_upload'
     WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD = \
         'workflow_canvas_course_quizzes_data_upload'
+    WORKFLOW_DATA_CANVAS_COURSE_ASSIGNMENTS_UPLOAD = \
+        'workflow_canvas_course_assignments_data_upload'
     WORKFLOW_DATA_CSV_UPLOAD = 'workflow_csv_data_upload'
     WORKFLOW_DATA_EXCEL_UPLOAD = 'workflow_excel_data_upload'
     WORKFLOW_DATA_GSHEET_UPLOAD = 'workflow_gsheet_data_upload'
@@ -222,8 +224,8 @@ class Log(Owner):
             'Canvas course enrollment data uploaded to workflow'),
         WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD: _(
             'Canvas course quizzes data uploaded to workflow'),
-        WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD: _(
-            'Canvas course quizzes data uploaded to workflow'),
+        WORKFLOW_DATA_CANVAS_COURSE_ASSIGNMENTS_UPLOAD: _(
+            'Canvas course assignments data uploaded to workflow'),
         WORKFLOW_DATA_CSV_UPLOAD: _('Upload Data from CSV File'),
         WORKFLOW_DATA_EXCEL_UPLOAD: _('Upload Data from Excel Sheet'),
         WORKFLOW_DATA_GSHEET_UPLOAD: _('Upload Data from Google Sheet'),
