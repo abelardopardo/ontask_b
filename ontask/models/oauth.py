@@ -1,8 +1,9 @@
 """Table storing oauth tokens."""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from fernet_fields import EncryptedCharField
 
-from ontask.models.common import Owner
+from ontask.models.common import Owner, CHAR_FIELD_LONG_SIZE
 
 
 class OAuthUserToken(Owner):
@@ -19,9 +20,13 @@ class OAuthUserToken(Owner):
         max_length=2048,
         blank=False)
 
-    access_token = models.CharField(max_length=2048, blank=False)
+    access_token = EncryptedCharField(
+        max_length=CHAR_FIELD_LONG_SIZE,
+        blank=False)
 
-    refresh_token = models.CharField(max_length=2048, blank=True)
+    refresh_token = EncryptedCharField(
+        max_length=CHAR_FIELD_LONG_SIZE,
+        blank=True)
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 

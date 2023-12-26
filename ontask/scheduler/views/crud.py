@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+import ontask.scheduler
 from ontask import models
 from ontask.core import (
     JSONFormResponseMixin, JSONResponseMixin, ScheduledOperationView,
@@ -59,7 +60,7 @@ def create_action_run(
     """Create a new scheduled action run operation.
 
     :param request: HTTP request
-    :param pk: primary key of the action
+    :param pk: primary key of the action (used by the method decorator)
     :param workflow: Workflow of the current context.
     :param action: Action being used
     :return: HTTP response
@@ -67,7 +68,7 @@ def create_action_run(
     # Remove the payload dictionary from the session
     session_ops.flush_payload(request)
 
-    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+    return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         action.action_type,
         workflow=workflow,
@@ -78,31 +79,21 @@ def create_action_run(
 @get_workflow()
 def create_sql_upload(
         request: http.HttpRequest,
-        pk: int,
         workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
     """Create a new scheduled SQL upload operation.
 
     :param request: HTTP request
-    :param pk: primary key of the action
     :param workflow: Workflow of the current context.
     :return: HTTP response
     """
-    conn = False
-    try:
-        conn = models.SQLConnection.objects.filter(
-            pk=pk).filter(enabled=True).first()
-    except Exception:
-        messages.error(request, 'Unable to retrieve connection.')
+    # Remove the payload dictionary from the session
+    session_ops.flush_payload(request)
 
-    if not conn:
-        return redirect('scheduler:index')
-
-    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+    return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         models.Log.WORKFLOW_DATA_SQL_UPLOAD,
-        workflow=workflow,
-        connection=conn)
+        workflow=workflow)
 
 
 @user_passes_test(is_instructor)
@@ -117,7 +108,10 @@ def create_canvas_course_enrollment_upload(
     :param workflow: Workflow of the current context.
     :return: HTTP response
     """
-    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+    # Remove the payload dictionary from the session
+    session_ops.flush_payload(request)
+
+    return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
         workflow=workflow)
@@ -135,7 +129,10 @@ def create_canvas_course_quizzes_upload(
     :param workflow: Workflow of the current context.
     :return: HTTP response
     """
-    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+    # Remove the payload dictionary from the session
+    session_ops.flush_payload(request)
+
+    return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
         workflow=workflow)
@@ -155,17 +152,17 @@ def edit_scheduled_operation(
     :param workflow: Workflow being manipulated.
     :return: HTTP response
     """
-    s_item = workflow.scheduled_operations.filter(
+    if not (s_item := workflow.scheduled_operations.filter(
         pk=pk).filter(
         Q(workflow__user=request.user)
         | Q(workflow__shared=request.user)).first()
-    if not s_item:
+    ):
         return redirect('home')
 
     # Remove the payload dictionary from the session
     session_ops.flush_payload(request)
 
-    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+    return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         s_item.operation_type,
         workflow=s_item.workflow,
@@ -187,7 +184,7 @@ def finish_scheduling(
             _('Incorrect action scheduling invocation.'))
         return redirect('action:index')
 
-    return services.SCHEDULE_CRUD_FACTORY.crud_view(
+    return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         payload.get('operation_type'),
         workflow=workflow,
@@ -217,7 +214,7 @@ class ScheduledItemDelete(
 
 
 @method_decorator(ajax_required, name='dispatch')
-class ActionToggleQuestionChangeView(
+class ScheduledItemToggleEnabledView(
     UserIsInstructor,
     JSONResponseMixin,
     ScheduledOperationView

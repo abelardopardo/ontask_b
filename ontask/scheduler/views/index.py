@@ -37,22 +37,22 @@ class SchedulerIndex(UserIsInstructor, WorkflowView, SchedulerViewAbstract):
             self.workflow.scheduled_operations.all(),
             orderable=False)
         context['sqlconnection'] = models.SQLConnection.objects.filter(
-            enabled=True).first()
+            enabled=True).exists()
         context['canvasconnection'] = len(settings.base.CANVAS_INFO_DICT) > 0
         return context
-
-
-class SchedulerConnectionIndex(
-    UserIsInstructor,
-    WorkflowView,
-    SchedulerViewAbstract
-):
-    """Show table of SQL connections for user to choose one."""
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['table'] = create_sql_connection_runtable(
-            'scheduler:sqlupload')
-        # To show text instructing user to select one connection.
-        context['select_sql_connection'] = True
-        return context
+#
+#
+# class SchedulerConnectionIndex(
+#     UserIsInstructor,
+#     WorkflowView,
+#     SchedulerViewAbstract
+# ):
+#     """Show table of SQL connections for user to choose one."""
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['table'] = create_sql_connection_runtable(
+#             'scheduler:sqlupload')
+#         # To show text instructing user to select one connection.
+#         context['select_sql_connection'] = True
+#         return context

@@ -20,6 +20,35 @@ from ontask.scheduler.services.items import create_timedelta_string
 class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
     """Base class for those saving Action Run operations."""
 
+    action = None  # Action being considered (only used when executing)
+
+    def setup(self, request, *args, **kwargs):
+        """Store action field in view."""
+        super().setup(request, *args, **kwargs)
+
+        if self.object:
+            # Editing an existing scheduled op
+            self.action = self.object.action
+        else:
+            # Creating a new op. Action is given to the view through URL field
+            self.action = kwargs.get('action', None)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_false_conditions = False
+        if self.action:
+            all_false_conditions = any(
+                cond.selected_count == 0
+                for cond in self.action.conditions.all())
+
+        context['all_false_conditions'] = all_false_conditions
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['action'] = self.action
+        return kwargs
+
     def _create_payload(
         self,
         request: http.HttpRequest,
@@ -29,30 +58,24 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
 
         :param request: HTTP request
         :param action: Corresponding action for the schedule operation type, or
-        if empty, it is contained in the scheduled_item (Optional)
+        if empty, it is contained in the object (Optional)
         :return: Dictionary with pairs name: value
         """
-        if self.scheduled_item:
-            exclude_values = self.scheduled_item.payload.get(
-                'exclude_values',
-                [])
-        else:
-            exclude_values = []
+        payload = super()._create_payload(request, **kwargs)
 
-        # Get the payload from the session, and if not, use the given one
-        payload = {
+        # Update payload
+        payload.update({
                 'action_id': self.action.id if self.action else None,
-                'exclude_values': exclude_values,
-                'operation_type': self.operation_type,
                 'value_range': list(range(2)),
                 'prev_url': request.path_info,
                 'post_url': reverse('scheduler:finish_scheduling'),
-                'page_title': gettext('Schedule Action Execution')}
-        session_ops.set_payload(request, payload)
+                'page_title': gettext('Schedule Action Execution')})
 
-        if self.scheduled_item:
-            payload.update(self.scheduled_item.payload)
-            payload['schedule_id'] = self.scheduled_item.id
+        if self.object:
+            payload['exclude_values'] = self.object.payload.get(
+                'exclude_values', [])
+        else:
+            payload['exclude_values'] = []
 
         return payload
 
@@ -87,10 +110,10 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
         s_item_id = payload.pop('schedule_id', None)
         if s_item_id:
             # Get the item being processed
-            if not self.scheduled_item:
-                self.scheduled_item = models.ScheduledOperation.objects.filter(
+            if not self.object:
+                self.object = models.ScheduledOperation.objects.filter(
                     id=s_item_id).first()
-                if not self.scheduled_item:
+                if not self.object:
                     messages.error(
                         request,
                         _('Incorrect request for operation scheduling'))
@@ -117,7 +140,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
             scheduled_item = self.create_or_update(
                 request.user,
                 payload,
-                self.scheduled_item)
+                self.object)
         except Exception as exc:
             messages.error(
                 request,

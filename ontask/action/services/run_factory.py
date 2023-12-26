@@ -7,7 +7,8 @@ from django.urls import reverse
 from django.utils.translation import gettext
 from django.views import generic
 
-from ontask import core, models, tasks
+from ontask import core, models
+from ontask.tasks.execute import execute_operation
 from ontask.core import session_ops
 
 
@@ -52,9 +53,6 @@ class ActionRunFactory(core.FactoryBase):
             return redirect('home')
 
         return runner_cls().finish(**kwargs)
-
-
-ACTION_RUN_FACTORY = ActionRunFactory()
 
 
 class ActionRunProducerBase(generic.FormView):
@@ -176,7 +174,7 @@ class ActionRunProducerBase(generic.FormView):
 
         log_item = self._create_log_event(request.user, self.action, payload)
 
-        tasks.execute_operation.delay(
+        execute_operation.delay(
             self.log_event,
             user_id=request.user.id,
             log_id=log_item.id,

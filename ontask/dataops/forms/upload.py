@@ -6,14 +6,17 @@ The currently supported formats are:
 
 - Excel file (with sheet name)
 
+- Canvas Course (with a course ID)
+
 - GoogleSheet file (with a URL)
 
 - AWS S3 Bucket file
 
 - SQL connection to a remote DB
+
+- Athena connection (not implemented)
 """
 from builtins import str
-from io import TextIOWrapper
 import json
 from typing import Dict, Optional
 
@@ -26,7 +29,7 @@ from ontask import (
     OnTaskDataFrameNoKey, models, settings as ontask_settings,
     OnTaskException)
 from ontask.core import RestrictedFileField
-from ontask.dataops import pandas, services
+from ontask.dataops import pandas
 
 URL_FIELD_SIZE = 1024
 
@@ -46,15 +49,12 @@ class UploadBasic(forms.Form):
                 'skip_lines_at_top',
                 _('This number has to be zero or positive'),
             )
-            return False
 
         if form_data['skip_lines_at_bottom'] < 0:
             self.add_error(
                 'skip_lines_at_bottom',
                 _('This number has to be zero or positive'),
             )
-            return False
-        return True
 
     def __init__(self, *args, **kwargs):
         """Store the workflow for further processing."""
@@ -120,44 +120,24 @@ class UploadCSVFileForm(UploadBasic):
         required=False)
 
     def clean(self) -> Dict:
-        """Check that the integers are positive.
+        """Check that a file is given and the integers are positive.
 
         :return: The cleaned data
         """
+        form_data = super().clean()
+
         # The form must be multipart
         if not self.is_multipart():
             self.add_error(
                 None,
                 _('CSV upload form is not multiform'),
             )
-            return {}
 
-        form_data = super().clean()
-
-        if not self.verify_skip_lines_fields(form_data):
-            return form_data
-
-        # Process CSV file using pandas read_csv
-        try:
-            self.data_frame = services.load_df_from_csvfile(
-                TextIOWrapper(
-                    self.files['data_file'].file,
-                    encoding=self.data.encoding),
-                self.cleaned_data['skip_lines_at_top'],
-                self.cleaned_data['skip_lines_at_bottom'])
-        except Exception as exc:
-            self.add_error(
-                None,
-                _('File could not be processed ({0})').format(str(exc)))
-            return form_data
-
-        # Check the validity of the data frame
-        self.validate_data_frame()
+        self.verify_skip_lines_fields(form_data)
 
         return form_data
 
 
-# Step 1 of the Excel upload
 class UploadExcelFileForm(UploadBasic):
     """Form to read an Excel file."""
 
@@ -178,31 +158,55 @@ class UploadExcelFileForm(UploadBasic):
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
 
-    def clean(self) -> Dict:
-        """Check that the data can be loaded from the file.
 
-        :return: The cleaned data
-        """
-        form_data = super().clean()
+class UploadCanvasForm(UploadBasic):
+    """Common code for Canvas Upload operations."""
 
-        # # Process Excel file using pandas read_excel
-        try:
-            self.data_frame = services.load_df_from_excelfile(
-                self.files['data_file'],
-                form_data['sheet'])
-        except Exception as exc:
-            self.add_error(
-                None,
-                _('File could not be processed: {0}').format(str(exc)))
-            return form_data
+    canvas_course_id = forms.IntegerField(
+        label=_('Canvas course id to retrieve the data.'),
+        required=True,
+        help_text=_(
+            'This is an integer used by Canvas to uniquely identify a course'))
 
-        # Check the validity of the data frame
-        self.validate_data_frame()
+    target_url = forms.ChoiceField(
+        label=_('Canvas Host'),
+        required=True,
+        help_text=_('Name of the Canvas host to extract data.'),
+        choices=[])
 
-        return form_data
+    def __init__(self, *args, **kwargs):
+        """Modify certain field data."""
+        # Needed for authentication purposes
+        self.user = kwargs.pop(str('user'), None)
+        super().__init__(*args, **kwargs)
+
+        if len(settings.CANVAS_INFO_DICT) > 1:
+            # There is more than one Canvas host, set the choices.
+            self.fields['target_url'].choices = (
+                [('', '---')] + [(key, key) for key in sorted(
+                    settings.CANVAS_INFO_DICT.keys())])
+        elif len(settings.CANVAS_INFO_DICT) == 1:
+            # There is a single Canvas host, set the field to that value
+            self.fields['target_url'].widget = forms.HiddenInput()
+            key = list(settings.CANVAS_INFO_DICT.keys())[0]
+            self.fields['target_url'].choices = [(key, key)]
+            self.fields['target_url'].initial = key
+            self.fields['target_url'].disabled = True
+        else:
+            raise OnTaskException(
+                _('Incorrect invocation of upload Canvas Form'))
+
+        if 'CANVAS COURSE ID' in self.workflow.attributes:
+            # There is an attribute with a course ID, use it and hide the
+            # field in the form with a fixed value and disable it.
+            self.fields['canvas_course_id'].widget = forms.HiddenInput()
+            self.fields['canvas_course_id'].initial = self.workflow.attributes[
+                'CANVAS COURSE ID']
+            self.fields['canvas_course_id'].disabled = True
+
+        self.order_fields(['target_url', 'canvas_course_id'])
 
 
-# Step 1 of the GoogleSheet upload
 class UploadGoogleSheetForm(UploadBasic):
     """Form to read a Google Sheet file through a URL.
 
@@ -239,27 +243,11 @@ class UploadGoogleSheetForm(UploadBasic):
         """
         form_data = super().clean()
 
-        if not self.verify_skip_lines_fields(form_data):
-            return form_data
-
-        try:
-            self.data_frame = services.load_df_from_googlesheet(
-                form_data['google_url'],
-                self.cleaned_data['skip_lines_at_top'],
-                self.cleaned_data['skip_lines_at_bottom'])
-        except Exception as exc:
-            self.add_error(
-                None,
-                _('File could not be processed: {0}').format(str(exc)))
-            return form_data
-
-        # Check the validity of the data frame
-        self.validate_data_frame()
+        self.verify_skip_lines_fields(form_data)
 
         return form_data
 
 
-# Step 1 of the S3 CSV upload
 class UploadS3FileForm(UploadBasic):
     """Form to read a csv file from a S3 bucket.
 
@@ -319,81 +307,61 @@ class UploadS3FileForm(UploadBasic):
                 'skip_lines_at_top',
                 _('This number has to be zero or positive'),
             )
-            return resp_data
 
         if resp_data['skip_lines_at_bottom'] < 0:
             self.add_error(
                 'skip_lines_at_bottom',
                 _('This number has to be zero or positive'),
             )
-            return resp_data
-
-        # Process S3 file using pandas read_excel
-        try:
-            self.data_frame = services.load_df_from_s3(
-                self.cleaned_data['aws_access_key'],
-                self.cleaned_data['aws_secret_access_key'],
-                self.cleaned_data['aws_bucket_name'],
-                self.cleaned_data['aws_file_key'],
-                self.cleaned_data['skip_lines_at_top'],
-                self.cleaned_data['skip_lines_at_bottom'])
-        except Exception as exc:
-            self.add_error(
-                None,
-                _('S3 bucket file could not be processed: {0}').format(
-                    str(exc)),
-            )
-            return resp_data
-
-        # Check the validity of the data frame
-        self.validate_data_frame()
 
         return resp_data
 
 
-class UploadCanvasForm(UploadBasic):
-    """Common code for Canvas Upload operations."""
+class UploadSQLForm(UploadBasic):
+    """Form for SQL Upload operation."""
 
-    canvas_course_id = forms.IntegerField(
-        label=_('Canvas course id to retrieve the data.'),
+    sql_connection = forms.ChoiceField(
+        label=_('SQL Connection'),
         required=True,
-        help_text=_(
-            'This is an integer used by Canvas to uniquely identify a course'))
-
-    target_url = forms.ChoiceField(
-        label=_('Canvas Host'),
-        required=True,
-        help_text=_('Name of the Canvas host to extract data.'),
+        help_text=_('Select the SQL connection to use.'),
         choices=[])
 
     def __init__(self, *args, **kwargs):
-        """Modify certain field data."""
-        # Needed for authentication purposes
-        self.user = kwargs.pop(str('user'), None)
+        """Modify the sql_connection field with the available connections."""
+        initial = kwargs.pop('connection', '')
+        sql_connections = kwargs.pop('sql_connections')
+
         super().__init__(*args, **kwargs)
 
-        if len(settings.CANVAS_INFO_DICT) > 1:
-            # There is more than one Canvas host, set the choices.
-            self.fields['target_url'].choices = (
-                [('', '---')] + [(key, key) for key in sorted(
-                    settings.CANVAS_INFO_DICT.keys())])
-        elif len(settings.CANVAS_INFO_DICT) == 1:
-            # There is a single Canvas host, set the field to that value
-            self.fields['target_url'].widget = forms.HiddenInput()
-            key = list(settings.CANVAS_INFO_DICT.keys())[0]
-            self.fields['target_url'].choices = [(key, key)]
-            self.fields['target_url'].initial = key
-            self.fields['target_url'].disabled = True
+        if len(sql_connections) > 1:
+            # There is more than one connection, set the choices.
+            self.fields['sql_connection'].choices = (
+                [('', '---')] + [(sc.id, sc.name) for sc in sql_connections])
         else:
-            raise OnTaskException(
-                _('Incorrect invocation of upload Canvas Form'))
+            # There is a single SQL connection, set the field to that value
+            self.fields['sql_connection'].widget = forms.HiddenInput()
+            sc = sql_connections.first()
+            self.fields['sql_connection'].choices = [(sc.id, sc.name)]
+            self.fields['sql_connection'].disabled = True
 
-        if 'CANVAS COURSE ID' in self.workflow.attributes:
-            # There is an attribute with a course ID, use it and hide the
-            # field in the form with a fixed value and disable it.
-            self.fields['canvas_course_id'].widget = forms.HiddenInput()
-            self.fields['canvas_course_id'].initial = self.workflow.attributes[
-                'CANVAS COURSE ID']
-            self.fields['canvas_course_id'].disabled = True
+        self.fields['sql_connection'].initial = initial.id if initial else ''
 
-        self.order_fields(['target_url', 'canvas_course_id'])
+
+    def clean(self):
+        """Validate the connection name"""
+        cleaned_data = super().clean()
+
+        if not (conn_id := cleaned_data.get('sql_connection')):
+            self.add_error(
+                'sql_connection',
+                _('SQL connection information not present'))
+
+        try:
+            # Make sure the connection id is an integer
+            int(conn_id)
+        except ValueError:
+            self.add_error(
+                'sql_connection',
+                _('Incorrect SQL connection information'))
+
+        return cleaned_data

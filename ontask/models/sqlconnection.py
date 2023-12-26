@@ -51,12 +51,10 @@ class SQLConnection(Connection):
 
     # db_password is optional (will be asked in run time, if not stored here)
     db_password = EncryptedCharField(
-        default='',
-        max_length=CHAR_FIELD_LONG_SIZE,
         verbose_name=_('Password'),
-        null=True,
-        blank=True,
-        help_text=_('Leave empty to enter at execution'))
+        max_length=CHAR_FIELD_LONG_SIZE,
+        default='',
+        blank=True)
 
     # DB host
     db_host = models.CharField(
@@ -82,10 +80,8 @@ class SQLConnection(Connection):
     db_table = models.CharField(
         max_length=CHAR_FIELD_LONG_SIZE,
         verbose_name=_('Database table'),
-        default='',
-        null=False,
-        blank=True,
-        help_text=_('Leave empty to enter at execution'))
+        blank=False,
+        help_text=_('Table name'))
 
     clone_event = Log.SQL_CONNECTION_CLONE
     create_event = Log.SQL_CONNECTION_CREATE

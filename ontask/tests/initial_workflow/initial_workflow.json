@@ -5176,11 +5176,11 @@
         "conn_type": "postgresql",
         "conn_driver": "",
         "db_user": "",
-        "db_password": null,
+        "db_password": "",
         "db_host": "localhost",
         "db_port": 5432,
         "db_name": "ontask_b",
-        "db_table": ""
+        "db_table": "INCORRECT_TABLE_DEFAULT_NAME"
     }
 },
 {
@@ -5193,7 +5193,7 @@
         "conn_type": "postgresql",
         "conn_driver": "",
         "db_user": "",
-        "db_password": null,
+        "db_password": "",
         "db_host": "localhost",
         "db_port": 5432,
         "db_name": "ontask_b",

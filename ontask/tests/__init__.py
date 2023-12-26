@@ -2,8 +2,8 @@ from future import standard_library
 
 from ontask.tests.basic import (
     ElementHasFullOpacity, OnTaskBasicTestCase, OnTaskTestCase,
-    OnTaskApiTestCase, OnTaskLiveTestCase, ScreenTests, user_info
-)
+    OnTaskApiTestCase, OnTaskLiveTestCase, ScreenTests, user_info,
+    create_mock_sql_table)
 from ontask.tests.fixture_classes import (
     AllKeyColumnsFixture, DerivedColumnFixture, EmptyWorkflowFixture,
     InitialDBFixture, InitialWorkflowFixture, LongSurveyFixture,

@@ -8,7 +8,7 @@ from django.core.cache import cache
 
 from ontask import CELERY_LOGGER, models
 from ontask.core import ONTASK_SCHEDULED_LOCKED_ITEM
-from ontask.tasks.execute_factory import TASK_EXECUTE_FACTORY
+from ontask.tasks import TASK_EXECUTE_FACTORY
 
 
 def _update_item_status(s_item: models.ScheduledOperation):

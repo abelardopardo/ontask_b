@@ -76,7 +76,6 @@ class FormWithPayload(forms.Form):
         self.__form_info = kwargs.pop('form_info', {})
         self.action = kwargs.pop('action', None)
         kwargs.pop('columns', None)
-        kwargs.pop('connection', None)
         super().__init__(*args, **kwargs)
 
     def get_payload_field(

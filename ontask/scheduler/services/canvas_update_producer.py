@@ -28,17 +28,14 @@ class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
         :param kwargs: Dictionary with extra parameters
         :return: Dictionary with pairs name/value
         """
-        payload = {
-            'workflow_id': self.workflow.id,
-            'operation_type': self.operation_type,
-            'value_range': [],
-            'page_title': self.form_page_title}
-        session_ops.set_payload(request, payload)
+        payload = super()._create_payload(request, **kwargs)
 
-        if self.scheduled_item:
-            payload.update(self.scheduled_item.payload)
-            payload['schedule_id'] = self.scheduled_item.id
-            payload['target_url'] = self.scheduled_item.payload['target_url']
+        payload.update({
+            'workflow_id': self.workflow.id,
+            'page_title': self.form_page_title})
+
+        if self.object:
+            payload['target_url'] = self.object.payload['target_url']
         else:
             payload['target_url'] = None
 

@@ -449,19 +449,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         #
         # Dataops/Merge SQL Connection
         #
-        self.go_to_sql_upload_merge()
+        self.go_to_sql_upload_merge_step_1()
         self.body_ss('dataops_SQL_available.png')
-
-        # Click on the link RUN
-        element = self.search_table_row_by_string(
-            'conn-instructor-table',
-            1,
-            'remote server')
-        element.find_element(By.XPATH, 'td[1]/a').click()
-        self.wait_for_page(None, 'sql-load-step1')
-
-        # Picture of the RUN menu in SQL
-        self.body_ss('dataops_SQL_run.png')
         self.go_to_table()
 
         #

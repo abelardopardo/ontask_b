@@ -17,6 +17,7 @@ from django.db import connection
 from django.template.response import SimpleTemplateResponse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve, reverse
+from psycopg2 import sql
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
@@ -41,7 +42,75 @@ user_info = [
     ('Instructor Two', 'instructor02@bogus.com', [GROUP_NAMES[1]], False),
     ('Instructor Three', 'instructor03@bogus.com', [GROUP_NAMES[1]], False),
     ('Super User', 'superuser@bogus.com', GROUP_NAMES, True)]
-boguspwd = 'boguspwd'
+
+boguspwd: str = 'boguspwd'
+
+SQL_QUERIES = [
+    (
+        sql.SQL("DROP TABLE IF EXISTS {0}").format(
+            sql.Identifier('__ONTASK_TEST_TABLE')),
+        []),
+    (
+        sql.SQL(
+            """SELECT {2}, {3}, {4} INTO {0} FROM {1}
+               WHERE {4} = {5} ORDER BY {3} LIMIT 3""").format(
+                sql.Identifier('__ONTASK_TEST_TABLE'),
+                sql.Identifier('__ONTASK_WORKFLOW_TABLE_1'),
+                sql.Identifier('SID'),
+                sql.Identifier('email'),
+                sql.Identifier('Enrolment Type'),
+                sql.Placeholder()),
+        ['HECS']),
+    (
+        sql.SQL("ALTER TABLE {0} ADD COLUMN {1} bigint").format(
+                sql.Identifier('__ONTASK_TEST_TABLE'),
+                sql.Identifier('NEW COLUMN')),
+        []),
+    (
+        sql.SQL("INSERT INTO {0} VALUES ({1}, {2}, {3})").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Placeholder(),
+            sql.Placeholder(),
+            sql.Placeholder()),
+        ['111111111', 'newuser1@bogus.com', 'HECS']),
+    (
+        sql.SQL("INSERT INTO {0} VALUES ({1}, {2}, {3})").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Placeholder(),
+            sql.Placeholder(),
+            sql.Placeholder()),
+        ['222222222', 'newuser2@bogus.com', 'HECS']),
+    (
+        sql.SQL("INSERT INTO {0} VALUES ({1}, {2}, {3})").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Placeholder(),
+            sql.Placeholder(),
+            sql.Placeholder()),
+        ['333333333', 'newuser3@bogus.com', 'HECS']),
+    (
+        sql.SQL("UPDATE {0} SET {1} = {2}").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Identifier('Enrolment Type'),
+            sql.Placeholder()),
+        ['Local']),
+    (
+        sql.SQL(
+            """WITH rnq AS (
+               SELECT {2}, row_number() OVER (ORDER BY {2}) AS rn FROM {0})
+               UPDATE {0} tt SET {1} =
+               (SELECT rn FROM rnq WHERE tt.email = rnq.email)""").format(
+                sql.Identifier('__ONTASK_TEST_TABLE'),
+                sql.Identifier('NEW COLUMN'),
+                sql.Identifier('email')),
+        [])]
+
+
+def create_mock_sql_table():
+    # Create the new table in the DB for testing purposes
+    with connection.connection.cursor() as cursor:
+        # Add the extra table to the database
+        for query, fields in SQL_QUERIES:
+            cursor.execute(query, fields)
 
 
 class ElementHasFullOpacity:
@@ -739,7 +808,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.XPATH, '//form')))
 
-    def go_to_sql_upload_merge(self):
+    def go_to_sql_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
         # Goto SQL option
@@ -748,8 +817,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             '//table[@id="dataops-table"]//a[normalize-space()="SQL '
             'Connection"]')
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//div[@id = "connection-instructor"]')))
+            EC.visibility_of_element_located((By.XPATH, '//form')))
 
     def go_to_athena_upload_merge(self):
         self.go_to_upload_merge()

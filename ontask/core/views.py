@@ -8,7 +8,8 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from ontask import models, tasks
+from ontask import models
+from ontask.tasks.execute import execute_operation
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import UserIsInstructor, is_admin, is_instructor
 from ontask.core.services import ontask_handler404
@@ -64,7 +65,7 @@ class TrackView(generic.View):
 
     def get(self, request, *args, **kwargs) -> http.HttpResponse:
         # Push the tracking to the asynchronous queue
-        tasks.execute_operation.delay(
+        execute_operation.delay(
             operation_type=models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
             payload={'method': request.method, 'get_dict': request.GET})
 

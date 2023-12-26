@@ -1,48 +1,33 @@
 """Upload/Merge dataframe from an SQL connection."""
 from typing import Dict, Optional
 
-from django import http
-from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 import ontask
 from ontask import models
-from ontask.core import session_ops
 from ontask.dataops import pandas
 from ontask.dataops.services import common
 
 
-def _load_df_from_sqlconnection(
-        conn_item: models.SQLConnection,
-        run_params: Dict,
+def load_df_from_sqlconnection(
+        conn_item: models.SQLConnection
 ) -> pd.DataFrame:
     """Load a DF from a SQL connection.
 
     :param conn_item: SQLConnection object with the connection parameters.
-    :param run_params: Dictionary with the execution parameters.
     :return: Data frame or raise an exception.
     """
-    if conn_item.db_password:
-        password = conn_item.db_password
-    else:
-        password = run_params['db_password']
-
-    if conn_item.db_table:
-        table_name = conn_item.db_table
-    else:
-        table_name = run_params['db_table']
-
     db_engine = pandas.create_db_engine(
         dialect=conn_item.conn_type,
         driver=conn_item.conn_driver,
         username=conn_item.db_user,
-        password=password,
+        password=conn_item.db_password,
         host=conn_item.db_host,
         dbname=conn_item.db_name)
 
     # Try to fetch the data
-    data_frame = pd.read_sql_table(table_name, db_engine)
+    data_frame = pd.read_sql_table(conn_item.db_table, db_engine)
 
     # Remove the engine
     db_engine.dispose()
@@ -50,43 +35,6 @@ def _load_df_from_sqlconnection(
     # Strip white space from all string columns and try to convert to
     # datetime just in case
     return pandas.detect_datetime_columns(data_frame)
-
-
-def sql_upload_step_one(
-        request: http.HttpRequest,
-        workflow: models.Workflow,
-        conn: models.SQLConnection,
-        run_params: Dict,
-):
-    """Perform the first step to load a data frame from a SQL connection.
-
-    :param request: Request received.
-    :param workflow: Workflow being processed.
-    :param conn: Database connection object.
-    :param run_params: Dictionary with the additional run parameters.
-    :return: Nothing, it creates the new dataframe in the database
-    """
-    # Process SQL connection using pandas
-    data_frame = _load_df_from_sqlconnection(conn, run_params)
-    # Verify the data frame
-    pandas.verify_data_frame(data_frame)
-
-    # Store the data frame in the DB.
-    # Get frame info with three lists: names, types and is_key
-    frame_info = pandas.store_temporary_dataframe(data_frame, workflow)
-
-    # Dictionary to populate gradually throughout the sequence of steps. It
-    # is stored in the session.
-    session_ops.set_payload(
-        request,
-        {
-            'initial_column_names': frame_info[0],
-            'column_types': frame_info[1],
-            'src_is_key_column': frame_info[2],
-            'step_1': reverse(
-                'dataops:sqlupload_start',
-                kwargs={'pk': conn.id}),
-            'log_upload': models.Log.WORKFLOW_DATA_SQL_UPLOAD})
 
 
 class ExecuteSQLUpload:
@@ -133,7 +81,7 @@ class ExecuteSQLUpload:
             raise ontask.OnTaskException(msg)
 
         # Get the dataframe from the connection
-        src_df = _load_df_from_sqlconnection(conn, payload)
+        src_df = load_df_from_sqlconnection(conn)
 
         # Create session
         session = common.create_session()

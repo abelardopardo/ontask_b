@@ -10,9 +10,10 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import generic
 
-from ontask import models
-from ontask.core import UserIsInstructor, WorkflowView, session_ops
-from ontask.dataops import forms, services
+from ontask import models, OnTaskException
+from ontask.core import (
+    UserIsInstructor, WorkflowView, session_ops)
+from ontask.dataops import forms, services, pandas
 
 
 class UploadShowSourcesView(
@@ -42,7 +43,7 @@ class UploadShowSourcesView(
         return super().get(request, *args, **kwargs)
 
 
-class UploadStepOneView(UserIsInstructor, WorkflowView):
+class UploadStepOneView(UserIsInstructor, WorkflowView, generic.FormView):
     """Start the upload of a data frame from a CSV file.
 
     The four-step process will populate the following dictionary with name
@@ -66,6 +67,25 @@ class UploadStepOneView(UserIsInstructor, WorkflowView):
     step_1_url = None
     log_upload = None
 
+    # Store data frame and its information after uploading it
+    data_frame = None
+    frame_info = None
+
+    def validate_data_frame(self) -> dict:
+        """Check that the dataframe can be properly stored.
+
+        :return: Dictionary with frame information for further processing
+        """
+
+        # Verify the data frame
+        pandas.verify_data_frame(self.data_frame)
+
+        # Store the data frame in the DB and return
+        # frame info with three lists: names, types and is_key
+        return pandas.store_temporary_dataframe(
+            self.data_frame,
+            self.workflow)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['workflow'] = self.workflow
@@ -87,14 +107,23 @@ class UploadStepOneView(UserIsInstructor, WorkflowView):
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
+        # Check that the data frame is ready for further processing.
+        try:
+            frame_info = self.validate_data_frame()
+        except Exception as exc:
+            messages.error(
+                self.request,
+                _('Unable to obtain data: {0}').format(str(exc)))
+            return redirect('dataops:uploadmerge')
+
         # Dictionary to populate gradually throughout the sequence of steps.
         # It is stored in the session.
         session_ops.set_payload(
             self.request,
             {
-                'initial_column_names': form.frame_info[0],
-                'column_types': form.frame_info[1],
-                'src_is_key_column': form.frame_info[2],
+                'initial_column_names': frame_info[0],
+                'column_types': frame_info[1],
+                'src_is_key_column': frame_info[2],
                 'step_1': reverse(self.step_1_url),
                 'log_upload': self.log_upload})
 

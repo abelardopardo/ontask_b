@@ -8,7 +8,7 @@ from rest_framework.exceptions import APIException
 from ontask import get_incorrect_email, models, LOGGER
 from ontask.core.checks import validate_crontab
 from ontask.dataops import sql
-from ontask.scheduler.services import SCHEDULE_CRUD_FACTORY
+from ontask.scheduler import SCHEDULE_CRUD_FACTORY
 
 
 class ScheduledOperationSerializer(serializers.ModelSerializer):

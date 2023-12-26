@@ -8,7 +8,7 @@
   <div class="dropdown-menu" aria-labelledby="addOperation">
     <a type="button"
        class="dropdown-item {% if not sqlconnection %}disabled{% endif %}"
-       href="{% url 'scheduler:select_sql' %}"
+       href="{% url 'scheduler:sqlupload' %}"
        data-bs-toggle="tooltip"
        title="{% trans 'Schedule a SQL upload/merge operation' %}">
       {% trans 'SQL upload/merge' %}

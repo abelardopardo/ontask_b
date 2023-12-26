@@ -4,8 +4,7 @@ from django.urls import path, reverse
 
 from ontask import models
 from ontask.dataops import forms, views
-from ontask.connection.forms import (
-    SQLRequestConnectionParam, AthenaRequestConnectionParam)
+from ontask.connection.forms import AthenaRequestConnectionParam
 
 app_name = 'dataops'
 urlpatterns = [
@@ -63,6 +62,8 @@ urlpatterns = [
         views.CSVUploadStart.as_view(
             form_class=forms.UploadCSVFileForm,
             template_name='dataops/upload1.html',
+            step_1_url='dataops:csvupload_start',
+            log_upload=models.Log.WORKFLOW_DATA_CSV_UPLOAD,
             data_type='CSV',
             data_type_select=_('CSV file')),
         name='csvupload_start'),
@@ -73,9 +74,35 @@ urlpatterns = [
         views.ExcelUploadStart.as_view(
             form_class=forms.UploadExcelFileForm,
             template_name='dataops/upload1.html',
+            step_1_url='dataops:excel_upload_start',
+            log_upload=models.Log.WORKFLOW_DATA_EXCEL_UPLOAD,
             data_type='Excel',
             data_type_select=_('Excel file')),
         name='excel_upload_start'),
+
+    # Canvas Course Enrollment Upload/Merge
+    path(
+        'canvas_course_enrollments_upload_start/',
+        views.CanvasUploadStart.as_view(
+            form_class=forms.UploadCanvasForm,
+            template_name='dataops/upload1.html',
+            step_1_url='dataops:canvas_course_enrollments_upload_start',
+            log_upload=models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
+            data_type='Canvas Course Enrollment List',
+            data_type_select=_('Canvas Course')),
+        name='canvas_course_enrollments_upload_start'),
+
+    # Canvas Course Quizzes Upload/Merge
+    path(
+        'canvas_course_quizzess_upload_start/',
+        views.CanvasUploadStart.as_view(
+            form_class=forms.UploadCanvasForm,
+            template_name='dataops/upload1.html',
+            step_1_url='dataops:canvas_course_quizzes_upload_start',
+            log_upload=models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
+            data_type='Canvas Course Quizzes',
+            data_type_select=_('Canvas Course')),
+        name='canvas_course_quizzes_upload_start'),
 
     # Google Sheet Upload/Merge
     path(
@@ -83,6 +110,8 @@ urlpatterns = [
         views.GoogleSheetUploadStart.as_view(
             form_class=forms.UploadGoogleSheetForm,
             template_name='dataops/upload1.html',
+            step_1_url='dataops:googlesheetupload_start',
+            log_upload=models.Log.WORKFLOW_DATA_GSHEET_UPLOAD,
             data_type='Google Sheet',
             data_type_select=_('Google Sheet URL')),
         name='googlesheetupload_start'),
@@ -93,55 +122,35 @@ urlpatterns = [
         views.S3UploadStart.as_view(
             form_class=forms.UploadS3FileForm,
             template_name='dataops/upload1.html',
+            step_1_url='dataops:s3upload_start',
+            log_upload=models.Log.WORKFLOW_DATA_S3_UPLOAD,
             data_type='S3 CSV',
             data_type_select=_('S3 CSV file')),
         name='s3upload_start'),
 
     # SQL Upload/Merge
     path(
-        '<int:pk>/sqlupload_start/',
+        'sqlupload_start/',
         views.SQLUploadStart.as_view(
-            model=models.SQLConnection,
-            template_name='dataops/sqlupload_start.html',
+            form_class=forms.UploadSQLForm,
+            template_name='dataops/upload1.html',
+            step_1_url='dataops:sqlupload_start',
+            log_upload=models.Log.WORKFLOW_DATA_SQL_UPLOAD,
             data_type='SQL',
-            form_class=SQLRequestConnectionParam,
-            prev_step_url='connection:sqlconns_index',
             data_type_select=_('SQL connection')),
         name='sqlupload_start'),
 
     # Athena Upload/Merge
     path(
-        '<int:pk>/athenaupload_start/',
+        'athenaupload_start/',
         views.AthenaUploadStart.as_view(
-            model=models.AthenaConnection,
-            template_name='dataops/athenaupload_start.html',
+            template_name='dataops/upload1.html',
             data_type='Athena',
             data_type_select=_('Athena connection'),
+            step_1_url='dataops:athenaupload_start',
             form_class=AthenaRequestConnectionParam,
             prev_step_url='connection:athenaconns_index'),
         name='athenaupload_start'),
-
-    # Canvas Course Enrollment Upload/Merge
-    path(
-        'canvas_course_enrollments_upload_start/',
-        views.CanvasCourseEnrollmentsUploadStart.as_view(
-            form_class=forms.UploadCanvasForm,
-            template_name='dataops/upload1.html',
-            data_type='Canvas Course Enrollment List',
-            data_type_select=_('Canvas Course'),
-            log_type=models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD),
-        name='canvas_course_enrollments_upload_start'),
-
-    # Canvas Course Quizzes Upload/Merge
-    path(
-        'canvas_course_quizzess_upload_start/',
-        views.CanvasCourseQuizzesUploadStart.as_view(
-            form_class=forms.UploadCanvasForm,
-            template_name='dataops/upload1.html',
-            data_type='Canvas Course Quizzes',
-            data_type_select=_('Canvas Course'),
-            log_type=models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD),
-        name='canvas_course_quizzes_upload_start'),
 
     path(
         'canvas_upload_start_finish/',

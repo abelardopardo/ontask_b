@@ -88,9 +88,6 @@ class SchedulerCRUDFactory(core.FactoryBase):
         return api_producer.create_or_update(user, data_dict, s_item)
 
 
-SCHEDULE_CRUD_FACTORY = SchedulerCRUDFactory()
-
-
 class ScheduledOperationUpdateBaseView(generic.UpdateView):
     """Base class for all the scheduled operation CRUD producers.
 
@@ -105,8 +102,6 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
     object = None  # Placeholder for the schedule operation item
 
     workflow = None  # Fetched from the preliminary step.
-    action = None  # Only valid for action execution (not uploads)
-    connection = None  # For SQL Upload operations
     scheduled_item = None  # When editing a previously scheduled op
 
     # Dictionary stored in the session for multipage form filling
@@ -114,17 +109,27 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
 
     is_finish_request = None  # Flagging if the request is the last step.
 
-    @staticmethod
     def _create_payload(
-        request: http.HttpRequest,
-        **kwargs
+            self,
+            request: http.HttpRequest,
+            **kwargs
     ) -> dict:
         """Create the session payload to carry through the operation.
 
         :param kwargs: key/value pairs for the call
         :return: Session payload object
         """
-        raise NotImplementedError
+        payload = {
+            'operation_type': self.operation_type,
+            'value_range': [],
+        }
+
+        if self.object:
+            payload.update(self.object.payload)
+            payload['schedule_id'] = self.object.id
+
+        session_ops.set_payload(request, payload)
+        return payload
 
     @staticmethod
     def create_or_update(
@@ -185,25 +190,14 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         """Store various fields in view, not kwargs."""
         super().setup(request, *args, **kwargs)
         self.workflow = kwargs.get('workflow', None)
-        self.action = kwargs.get('action', None)
-        self.scheduled_item = kwargs.get('scheduled_item', None)
-        if self.scheduled_item:
-            self.object = self.scheduled_item
-            self.action = self.scheduled_item.action
-        self.connection = kwargs.pop('connection', None)
-        if (
-            not self.connection
-                and self.scheduled_item
-                and 'connection_id' in self.scheduled_item.payload
-        ):
-            self.connection = models.SQLConnection.objects.get(
-                pk=self.scheduled_item.payload['connection_id'])
-        self.op_payload = kwargs.get('payload', self._create_payload(request))
+        self.object = kwargs.get('scheduled_item', None)
         self.is_finish_request = self.kwargs.get('is_finish_request', False)
         return
 
     def dispatch(self, request, *args, **kwargs):
         """If this is "finish" request, invoke the finish method."""
+        self.op_payload = kwargs.get('payload', self._create_payload(request))
+
         if self.is_finish_request:
             return self.finish(request, self.op_payload)
 
@@ -211,7 +205,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
 
     def get_object(self, queryset=None) -> Optional[models.ScheduledOperation]:
         """Modify to use the view for Create and Update."""
-        return self.scheduled_item
+        return self.object
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -220,18 +214,11 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         if not frequency:
             frequency = '0 5 * * 0'
 
-        all_false_conditions = False
-        if self.action:
-            all_false_conditions = any(
-                cond.selected_count == 0
-                for cond in self.action.conditions.all())
-
         context.update({
             'now': datetime.now(ZoneInfo(settings.TIME_ZONE)),
             'payload': self.op_payload,
             'frequency': frequency,
-            'value_range': range(2),
-            'all_false_conditions': all_false_conditions})
+            'value_range': range(2)})
         return context
 
     def get_form_kwargs(self):
@@ -241,8 +228,6 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
             columns = self.workflow.columns.filter(is_key=True)
         kwargs.update({
             'workflow': self.workflow,
-            'action': self.action,
-            'connection': self.connection,
             'columns': columns,
             'form_info': self.op_payload})
         return kwargs
@@ -265,10 +250,10 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         s_item_id = payload.pop('schedule_id', None)
         if s_item_id:
             # Get the item being processed
-            if not self.scheduled_item:
-                self.scheduled_item = models.ScheduledOperation.objects.filter(
+            if not self.object:
+                self.object = models.ScheduledOperation.objects.filter(
                     id=s_item_id).first()
-            if not self.scheduled_item:
+            if not self.object:
                 messages.error(
                     request,
                     _('Incorrect request for operation scheduling'))
@@ -285,7 +270,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
             schedule_item = self.create_or_update(
                 request.user,
                 payload,
-                self.scheduled_item)
+                self.object)
         except Exception as exc:
             messages.error(
                 request,

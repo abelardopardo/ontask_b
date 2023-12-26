@@ -9,7 +9,8 @@ from django.core import mail
 from django.db import connection
 from psycopg2 import sql
 
-from ontask import OnTaskSharedState, models, tasks, tests
+from ontask import OnTaskSharedState, models, tests
+from ontask.tasks.scheduled_ops import execute_scheduled_operation
 from ontask.celery import app
 
 
@@ -66,7 +67,7 @@ class ScheduledOperationTaskEmailAction(ScheduledOperationTaskBasic):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
@@ -106,7 +107,7 @@ class ScheduledOperationTaskJSONAction(ScheduledOperationTaskBasic):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         scheduled_item.refresh_from_db()
         json_outbox = OnTaskSharedState.json_outbox
@@ -145,7 +146,7 @@ class ScheduledOperationTaskEmailReport(ScheduledOperationTaskBasic):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
@@ -183,7 +184,7 @@ class ScheduledOperationTaskJSONReport(ScheduledOperationTaskBasic):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         json_outbox = OnTaskSharedState.json_outbox
         scheduled_item.refresh_from_db()
@@ -234,7 +235,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
         scheduled_item.save()
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         # Event still pending, with no values in exclude values
         scheduled_item.refresh_from_db()
@@ -252,7 +253,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
             cursor.execute(query, ['student01@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         # Event still pending, with one values in exclude values
         scheduled_item.refresh_from_db()
@@ -271,7 +272,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
             cursor.execute(query, ['student02@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         # Event still pending, with two values in exclude values
         scheduled_item.refresh_from_db()
@@ -291,7 +292,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
             cursor.execute(query, ['student03@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         # Event still pending, with three values in exclude values
         scheduled_item.refresh_from_db()
@@ -302,7 +303,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
             'student03@bogus.com']
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(scheduled_item.id)
+        execute_scheduled_operation(scheduled_item.id)
 
         # Event still pending, with no values in exclude values
         scheduled_item.refresh_from_db()

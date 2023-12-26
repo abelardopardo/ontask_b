@@ -8,7 +8,6 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
-from ontask.connection.forms import SQLRequestConnectionParam
 from ontask.core import forms as ontask_forms
 from ontask.core.checks import validate_crontab
 from ontask.dataops import forms as dataops_forms
@@ -177,7 +176,7 @@ class ScheduleBasicUpdateForm(ScheduleBasicForm):
 class ScheduleSQLUploadForm(
     ScheduleBasicUpdateForm,
     dataops_forms.MergeForm,
-    SQLRequestConnectionParam
+    dataops_forms.UploadSQLForm
 ):
     """Form to request info for the SQL scheduled upload
 

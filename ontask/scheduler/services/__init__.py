@@ -3,7 +3,6 @@ from ontask.scheduler.services.action_producers import (
     ScheduledOperationEmailUpdateView, ScheduledOperationEmailReportUpdateView,
     ScheduledOperationJSONUpdateView, ScheduledOperationJSONReportUpdateView,
     ScheduledOperationCanvasEmailUpdateView)
-from ontask.scheduler.services.edit_factory import SCHEDULE_CRUD_FACTORY
 from ontask.scheduler.services.errors import OnTaskScheduleIncorrectTimes
 from ontask.scheduler.services.items import (
     create_timedelta_string, get_item_value_dictionary)

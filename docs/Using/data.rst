@@ -130,14 +130,14 @@ Amazon Simple Storage Service (S3) offers the possibility of storing files in *b
 SQL connection
 --------------
 
-This operation uploads the data into the current workflow table using a SQL connection to a remote database. These connections have to be previously defined and configured by the system administrator. Instructors can use them to access the content of a previously defined table in a remote database. Once selected, the platform shows the SQL connections available and the possibility to view the connection parameters (click on the connection name), or *Run* the connection to upload the data as shown in the following figure.
+This operation uploads the data into the current workflow table using a SQL
+connection to a remote database. These connections have to be previously
+defined and configured by the system administrator. Instructors can use them
+to access the content of a previously defined table in a remote database.
+Once selected, the platform shows the SQL connections available and a drop
+down menu to select the one to use.
 
 .. figure:: /scaptures/dataops_SQL_available.png
-   :align: center
-
-When *running* a SQL connection the platform shows the configuration parameters and requests the password to access the remote database (if required).
-
-.. figure:: /scaptures/dataops_SQL_run.png
    :align: center
 
 Confirmation step to upload data

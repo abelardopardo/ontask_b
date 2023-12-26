@@ -10,8 +10,9 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+import ontask.action
 from ontask import models
-from ontask.action import forms, services
+from ontask.action import forms, services, ACTION_RUN_FACTORY
 from ontask.celery import celery_is_up
 from ontask.core import (
     ActionView, DataTablesServerSidePaging, session_ops,
@@ -51,7 +52,7 @@ def action_run_initiate(
         messages.error(request, error_reason)
         return redirect(reverse('action:index'))
 
-    return services.ACTION_RUN_FACTORY.process_request(
+    return ACTION_RUN_FACTORY.process_request(
         request,
         action.action_type,
         workflow=workflow,
@@ -79,7 +80,7 @@ def action_run_finish(
             _('Incorrect action run invocation.'))
         return redirect('action:index')
 
-    return services.ACTION_RUN_FACTORY.finish(
+    return ACTION_RUN_FACTORY.finish(
         payload.get('operation_type'),
         request=request,
         workflow=workflow,
@@ -94,7 +95,7 @@ def action_run_zip(
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None
 ) -> http.HttpResponse:
-    return services.ACTION_RUN_FACTORY.process_request(
+    return ACTION_RUN_FACTORY.process_request(
         request,
         models.action.ZIP_OPERATION,
         workflow=workflow,

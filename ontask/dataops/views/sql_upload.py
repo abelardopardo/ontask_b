@@ -3,13 +3,13 @@
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-from django.views import generic
 
+from ontask import models, OnTaskException
 from ontask.dataops import services
 from ontask.dataops.views import upload_steps
 
 
-class SQLUploadStart(upload_steps.UploadStepOneView, generic.UpdateView):
+class SQLUploadStart(upload_steps.UploadStepOneView):
     """Load a data frame using a SQL connection.
 
     The process will populate the payload dictionary with the fields:
@@ -24,31 +24,42 @@ class SQLUploadStart(upload_steps.UploadStepOneView, generic.UpdateView):
 
     step_1: URL name of the first step
     """
+    # Store the SQL connections Queryset needed in various places
+    sql_connections = None
 
-    def get_queryset(self):
-        """This view should only consider enabled connections."""
-        return self.model.objects.filter(enabled=True)
+    def __init__(self, **kwargs):
+        """Store available connections"""
+        super().__init__(**kwargs)
+        if not (connections := models.SQLConnection.objects.filter(
+            enabled=True)
+        ):
+            raise OnTaskException(
+                _('Incorrect invocation of SQL Upload (zero connections)'))
+        self.sql_connections = connections
 
     def get_form_kwargs(self):
+        """Include sql_connections"""
         kwargs = super().get_form_kwargs()
-        kwargs['connection'] = kwargs.pop('instance')
+        kwargs['sql_connections'] = self.sql_connections
         return kwargs
 
-    def form_valid(self, form):
-        conn = self.get_object()
-        run_params = self.object.get_missing_fields(form.cleaned_data)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if len(self.sql_connections) == 1:
+            context['only_sql_connection_name'] = (
+                self.sql_connections.first().name)
+        return context
 
+    def form_valid(self, form):
         # Process SQL connection using pandas
         try:
-            services.sql_upload_step_one(
-                self.request,
-                self.workflow,
-                conn,
-                run_params)
+            connection = self.sql_connections.get(
+                id=int(form.cleaned_data['sql_connection']))
+            self.data_frame = services.load_df_from_sqlconnection(connection)
         except Exception as exc:
             messages.error(
                 self.request,
                 _('Unable to obtain data: {0}').format(str(exc)))
             return redirect('dataops:uploadmerge')
 
-        return redirect('dataops:upload_s2')
+        return super().form_valid(form)

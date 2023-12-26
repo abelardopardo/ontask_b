@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext
 
 from ontask import models
-from ontask.tasks.execute_factory import TASK_EXECUTE_FACTORY
+from ontask.tasks import TASK_EXECUTE_FACTORY
 
 CELERY_LOGGER = get_task_logger('celery_execution')
 
@@ -101,7 +101,7 @@ def execute_operation(
 
     except Exception as exc:
         if log_item is not None:
-            log_item.payload['status'] = 'Error'
+            log_item.payload['status'] = 'Error: {0}'.format(exc)
             log_item.save(update_fields=['payload'])
 
         CELERY_LOGGER.error(
