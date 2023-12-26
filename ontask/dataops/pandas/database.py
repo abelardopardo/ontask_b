@@ -43,7 +43,7 @@ def create_db_engine(**kwargs):
     Function that creates the engine object to connect to the database. The
     object is required by the pandas functions to_sql and from_sql
     :param kwargs: Dictionary with the following driver parameters:
-      - dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
+      - dialect: Dialect for the engine (oracle, mysql, postgresql, etc.)
       - driver: DB API driver (psycopg2, ...)
       - username: Username to connect with the database
       - password: Password to connect with the database

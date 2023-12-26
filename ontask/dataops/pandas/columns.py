@@ -15,13 +15,13 @@ def get_column_statistics(df_column) -> Optional[Dict]:
 
     :param df_column: data frame with a single column
     :return: A dictionary with keys depending on the type of column
-      {'min': minimum value (integer, double an datetime),
+      {'min': minimum value (integer, double and datetime),
        'q1': Q1 value (0.25) (integer, double),
        'mean': mean value (integer, double),
        'median': median value (integer, double),
        'mean': mean value (integer, double),
        'q3': Q3 value (0.75) (integer, double),
-       'max': maximum value (integer, double an datetime),
+       'max': maximum value (integer, double and datetime),
        'std': standard deviation (integer, double),
        'counts': (integer, double, string, datetime, Boolean',
        'mode': (integer, double, string, datetime, Boolean,

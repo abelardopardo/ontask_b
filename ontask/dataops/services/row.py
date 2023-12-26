@@ -1,4 +1,4 @@
-"""Service functions to handle row creation/edition.."""
+"""Service functions to handle row creation/edition."""
 from typing import Any, List
 
 from django.db import transaction

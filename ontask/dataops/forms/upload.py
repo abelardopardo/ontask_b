@@ -346,7 +346,6 @@ class UploadSQLForm(UploadBasic):
 
         self.fields['sql_connection'].initial = initial.id if initial else ''
 
-
     def clean(self):
         """Validate the connection name"""
         cleaned_data = super().clean()

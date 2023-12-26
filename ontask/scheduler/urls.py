@@ -1,6 +1,5 @@
 """URLs for the scheduler package."""
 from django.urls import path
-from django.utils.translation import gettext_lazy as _
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask.scheduler import api, views
@@ -24,7 +23,7 @@ urlpatterns = [
         views.create_sql_upload,
         name='sqlupload'),
 
-# Edit scheduled operation
+    # Edit scheduled operation
     path(
         '<int:pk>/edit_scheduled_operation/',
         views.edit_scheduled_operation,
@@ -100,4 +99,3 @@ urlpatterns = [
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
-

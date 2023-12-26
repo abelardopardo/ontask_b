@@ -160,7 +160,7 @@ Q15. **After a course finishes, there seems to be quite a lot of information
      and intelligence captured in OnTask. How do I reuse it?** Easy. OnTask
      offers you the possibility of exporting and importing your data, so you 
      can either archive it for future reference or share your actions, rules,
-     views, etc with other user.
+     views, etc. with other user.
   
 Q16. **Can I use OnTask with my institutional authentication?** Yes. OnTask 
      comes with the basic functionality to be compatible with the most common 
@@ -173,7 +173,7 @@ Q17. **How are these emails sent?** OnTask offers the functionality to connect
   
 Q18. **This seems like a complex tool to install** OnTask is a web platform and 
      as such, it needs some basic infrastructure to execute (a machine to keep 
-     the server running, proper authentication, connection with a SMTP server, 
+     the server running, proper authentication, connection with an SMTP server, 
      etc.) You can deploy the tool in your own personal computer, but it will 
      have restricted functionality.
   

@@ -53,7 +53,8 @@ class EmailActionTracking(SimpleEmailActionFixture, OnTaskTestCase):
 
             # Check that the results have been updated in the DB (to 1)
             for user_email in [
-                x[1] for x in user_info if x[1].startswith('student')]:
+                x[1] for x in user_info if x[1].startswith('student')
+            ]:
                 self.assertEqual(
                     int(
                         data_frame.loc[

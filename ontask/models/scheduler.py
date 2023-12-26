@@ -141,7 +141,8 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
             'Scheduled name': self.name,
             'Scheduled execute': simplify_datetime_str(self.execute_start),
             'Scheduled frequency': self.frequency,
-            'Scheduled execute until': simplify_datetime_str(self.execute_until),
+            'Scheduled execute until': simplify_datetime_str(
+                self.execute_until),
             'Scheduled status': self.status,
             'Scheduled workflow': self.workflow.name,
             'Scheduled payload': json.dumps(self.payload)}

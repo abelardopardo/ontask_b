@@ -119,7 +119,7 @@ def store_temporary_dataframe(
     """
     table_name = workflow.get_upload_table_name()
 
-    # Get the if the columns have unique values per row
+    # List with booleans encoding if the columns have unique values per row
     column_unique = pandas.are_unique_columns(data_frame)
 
     # Store the table in the DB

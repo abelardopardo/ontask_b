@@ -36,5 +36,4 @@ class LinearRegressionModel(OnTaskModel):
         result = parameters['A'] * data_frame[self.input_column_names[0]] + \
             parameters['B']
 
-        result.col
         return result

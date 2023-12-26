@@ -136,7 +136,7 @@ def is_legal_name(str_val: str) -> Optional[str]:
       to handle all possible cases and translations.
 
     In principle, arbitrary combinations of the following symbols should be
-    handle by OnTask::
+    handled by OnTask::
 
       !#$%&()*+,-./:;<=>?@[\\]^_`{|}~
 

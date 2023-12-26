@@ -1,4 +1,4 @@
-"""Function to manage celery tasks associated with the scheduled items.."""
+"""Function to manage celery tasks associated with the scheduled items."""
 import json
 
 from django_celery_beat.models import (
@@ -36,7 +36,11 @@ def schedule_task(s_item: models.ScheduledOperation):
         raise errors.OnTaskScheduleIncorrectTimes(msg)
 
     # Case of a single execution in the future
-    if s_item.execute_start and not s_item.frequency and not s_item.execute_until:
+    if (
+            s_item.execute_start and
+            not s_item.frequency and
+            not s_item.execute_until
+    ):
         # Case 5
         clocked_item, __ = ClockedSchedule.objects.get_or_create(
             clocked_time=s_item.execute_start)
