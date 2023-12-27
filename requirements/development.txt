@@ -1,10 +1,10 @@
 -r base.txt
 Werkzeug==3.0.1
-coverage==7.3.2
+coverage==7.3.4
 django-cprofile-middleware==1.0.5
 django-debug-toolbar==4.2.0
 django-silk==5.0.4
 mypy-extensions==1.0.0
-mypy==1.7.1
-selenium==4.15.2
+mypy==1.8.0
+selenium==4.16.0
 snakeviz==2.2.0
