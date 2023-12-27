@@ -34,11 +34,8 @@ def initialize_schedule_factory():
             Log.WORKFLOW_DATA_SQL_UPLOAD,
             services.ScheduledOperationUpdateSQLUpload),
         (
-            Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
-            services.ScheduledOperationUpdateCanvasCourseEnrollmentUpload),
-        (
-            Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
-            services.ScheduledOperationUpdateCanvasCourseQuizzesUpload)]
+            Log.WORKFLOW_DATA_CANVAS_COURSE_UPLOAD,
+            services.ScheduledOperationUpdateCanvasUpload)]
 
     for op_type, class_name in schedule_catalogue:
         SCHEDULE_CRUD_FACTORY.register_producer(op_type, class_name)

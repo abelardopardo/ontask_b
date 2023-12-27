@@ -29,17 +29,11 @@ urlpatterns = [
         views.edit_scheduled_operation,
         name='edit_scheduled_operation'),
 
-    # Create a new Canvas Course Enrollment Upload operation
+    # Create a new Canvas Course Upload operation
     path(
-        'canvas_course_enrollment_upload/',
-        views.create_canvas_course_enrollment_upload,
-        name='canvas_course_enrollment_upload'),
-
-    # Create a new Canvas Course Quizzes Upload operation
-    path(
-        'canvas_course_quizzes_upload/',
-        views.create_canvas_course_quizzes_upload,
-        name='canvas_course_quizzes_upload'),
+        'canvas_course_upload/',
+        views.create_canvas_course_upload,
+        name='canvas_course_upload'),
 
     # # Select a SQL connection
     # path(

@@ -62,47 +62,25 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:canvas_course_enrollments_upload_start' %}"
+            <a href="{% url 'dataops:canvas_course_upload_start' %}"
                class="btn btn-outline-primary {% if not canvas_enabled %}disabled{% endif %}">
               <i class="bi-plus"></i>
-              {% trans 'Canvas Course Enrollment List' %}
+              {% trans 'Canvas Course' %}
             </a>
           </td>
           <td style="vertical-align:middle">
-            {% trans 'Upload the list of stuents from a Canvas Course.' %}<br/>
+            {% trans 'Upload information from a Canvas Course.' %}<br/>
             {% blocktrans %}
-            Given a Canvas course ID, upload and merge the enrolment list in
-            the course. If the workflow parameter with name "CANVAS COURSE ID"
-            is defined, it is used as the course ID.
+            Given a Canvas course ID, upload and merge course information
+            such as enrollment, quizzes or assignments. If the workflow
+            parameter with name "CANVAS COURSE ID" is defined, it is used as
+            the course ID.
             {% endblocktrans %}
             <br/>
             {% blocktrans %}
             If the workflow table has data, the operation will ask you
-            to match a key column in your table with the student ID
-            so that the rows can be matched.
-            {% endblocktrans %}
-          </td>
-        </tr>
-        <tr>
-          <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:canvas_course_quizzes_upload_start' %}"
-               class="btn btn-outline-primary {% if not canvas_enabled %}disabled{% endif %}">
-              <i class="bi-plus"></i>
-              {% trans 'Canvas Course Assignments and Quiz Results ' %}
-            </a>
-          </td>
-          <td style="vertical-align:middle">
-            {% trans 'Upload the quiz results from a Canvas Course.' %}<br/>
-            {% blocktrans %}
-            Given a Canvas course ID, upload and merge the results of all
-            quizzes in the course. If the workflow parameter with name
-            "CANVAS COURSE ID" is defined, it is used as the course ID.
-            {% endblocktrans %}
-            <br/>
-            {% blocktrans %}
-            If the workflow table has data, the operation will ask you
-            to match a key column in your table with the student ID
-            so that the rows can be matched.
+            to match a key column in your table with the "id" column of canvas
+            data containing the student id so that the rows can be matched.
             {% endblocktrans %}
           </td>
         </tr>

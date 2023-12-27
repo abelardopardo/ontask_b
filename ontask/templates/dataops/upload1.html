@@ -20,13 +20,6 @@
           {% endblocktrans %}
         </p>
       {% endif %}
-      {% if confirm_canvas_course_id %}
-        <p class="text-center">
-          {% blocktrans with n=confirm_canvas_course_id %}
-            The operation will use Canvas Course ID {{ n }}.
-          {% endblocktrans %}
-        </p>
-      {% endif %}
       <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}

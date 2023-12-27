@@ -237,6 +237,9 @@ class ScheduleUploadCanvasForm(
             'description_text',
             'target_url',
             'canvas_course_id',
+            'upload_enrollment',
+            'upload_quizzes',
+            'upload_assignments',
             'execute_start',
             'multiple_executions',
             'frequency',
@@ -252,7 +255,7 @@ class ScheduleUploadCanvasForm(
         return form_data
 
 
-class ScheduleUploadCanvasQuizForm(ScheduleUploadCanvasForm):
+class ScheduleUploadCanvasForm(ScheduleUploadCanvasForm):
 
     # Columns to combine
     columns_to_upload = forms.MultipleChoiceField(
@@ -275,6 +278,9 @@ class ScheduleUploadCanvasQuizForm(ScheduleUploadCanvasForm):
             'description_text',
             'target_url',
             'canvas_course_id',
+            'upload_enrollment',
+            'upload_quizzes',
+            'upload_assignments',
             'execute_start',
             'multiple_executions',
             'frequency',

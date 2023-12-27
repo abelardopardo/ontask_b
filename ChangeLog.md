@@ -2,7 +2,7 @@
 
 ## Added
 
-- New functionality to load Canvas Course Enrollment information into a workflow
+- New functionality to load Canvas Course information into a workflow
 
 # 10.6 (2023-12-5)
 

@@ -80,29 +80,17 @@ urlpatterns = [
             data_type_select=_('Excel file')),
         name='excel_upload_start'),
 
-    # Canvas Course Enrollment Upload/Merge
+    # Canvas Course Upload/Merge
     path(
-        'canvas_course_enrollments_upload_start/',
+        'canvas_course_upload_start/',
         views.CanvasUploadStart.as_view(
             form_class=forms.UploadCanvasForm,
             template_name='dataops/upload1.html',
-            step_1_url='dataops:canvas_course_enrollments_upload_start',
-            log_upload=models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
-            data_type='Canvas Course Enrollment List',
+            step_1_url='dataops:canvas_course_upload_start',
+            log_upload=models.Log.WORKFLOW_DATA_CANVAS_COURSE_UPLOAD,
+            data_type='Canvas Course Upload',
             data_type_select=_('Canvas Course')),
-        name='canvas_course_enrollments_upload_start'),
-
-    # Canvas Course Quizzes Upload/Merge
-    path(
-        'canvas_course_quizzess_upload_start/',
-        views.CanvasUploadStart.as_view(
-            form_class=forms.UploadCanvasForm,
-            template_name='dataops/upload1.html',
-            step_1_url='dataops:canvas_course_quizzes_upload_start',
-            log_upload=models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
-            data_type='Canvas Course Quizzes',
-            data_type_select=_('Canvas Course')),
-        name='canvas_course_quizzes_upload_start'),
+        name='canvas_course_upload_start'),
 
     # Google Sheet Upload/Merge
     path(

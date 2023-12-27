@@ -62,48 +62,31 @@ OnTask is also capable of uploading the data from one sheet of a Excel file. The
 In this case the file is assumed to have multiple *Sheets* and one of them
 has to be selected to upload the data.
 
-Upload Canvas Course Enrollment List
-------------------------------------
+Upload Canvas Course Data
+-------------------------
 
 This option connects with a previously configured instance of
 `Canvas Learning Management System <https://www.canvaslms.com/>`_ and given a
-Course ID, it uploads/merges the list of students enrolled in that course to
-the current workflow.
+Course ID, it offers the possibility to uploads/merges several data sets
+such as the list of students enrolled in the course, the results from all the
+quizzes in the course, or the results from all assignments.
 
-.. figure:: /scaptures/dataops_upload_canvas_course_enrollment.png
+.. figure:: /scaptures/dataops_upload_canvas_course.png
    :align: center
 
 For convenience, if there is an :ref:`attribute <details_attributes>`
 defined for the workflow with name``CANVAS COURSE ID`` and with an
-integer value it will be used directly by this operation. This is useful when
-an OnTask Workflow corresponds to a course in Canvas throughout a long
+integer value it will be used by this operation as course id. This is useful
+when an OnTask Workflow corresponds to a course in Canvas throughout a long
 period of time.
 
 This operation is particularly useful to populate the table with an initial set
-of rows (one per student) directly extracted from the remote platform.
+of rows (one per student enrolled) directly extracted from the remote platform.
 Additionally, it can be used at various points throughout a learning
-experience to update the list of students (include new ones, drop those no
-longer enrolled).
-
-Upload Canvas Course Quizzes
-----------------------------
-
-This option connects with a previously configured instance of
-`Canvas Learning Management System <https://www.canvaslms.com/>`_ and given a
-Course ID, it uploads/merges all the results collected for all the quiz
-submissions in a course.
-
-For convenience, if there is an :ref:`attribute <details_attributes>`
-defined for the workflow with name``CANVAS COURSE ID`` and with an
-integer value it will be used directly by this operation. This is useful when
-an OnTask Workflow corresponds to a course in Canvas throughout a long
-period of time.
-
-The operation first obtains the list of quizzes for the given course, then
-invokes the API call to obtain quiz statistics, and from there, a table with
-one student per row and the results to all the questions of all quizzes is
-created. The operation also downloads information about the number of
-attempts in a quiz and the last time a learner started and finished each quiz.
+experience to update the list of students, upload quizz results, or upload
+assignment results. Combining these uploads with the right options when
+mering the new data sets provides a wide variety of possibilities to handle
+changes during a course delivery.
 
 .. _google_spreadsheet_file:
 
@@ -143,7 +126,7 @@ down menu to select the one to use.
 Confirmation step to upload data
 --------------------------------
 
-When uploading data for the first time, the values are prepared to be assigned as the initial content of the workflow table. But before this assignment is done, the platform needs you to verify some information. Upon reading the new data, OnTask will automatically detect the data type in each column and those columns that have unique values (no repetitions) and mark them as **keys**. Key columns are very important because their values (as they are different for every row) are required for several operations. The workflow table **must have at least one key column**. If here are several columns with this property, OnTask :ref:`allows you to *unmark* some of them as non-key <details>` as long as there is always one of them wih such mark. Additionally, you may :ref:`mark any column as a key column <details>` if the values are all different. The operations to manipulate column information is described in the section :ref:`details`.
+When uploading data for the first time, the values are prepared to be assigned as the initial content of the workflow table. But before this assignment is done, the platform needs you to verify some information. Upon reading the new data, OnTask will automatically detect the data type in each column and those columns that have unique values (no repetitions) and mark them as **keys**. Key columns are very important because their values (as they are different for every row) are required for several operations. The workflow table **must have at least one key column**. If here are several columns with this property, OnTask :ref:`allows you to unmark some of them as non-key <details>` as long as there is always one of them wih such mark. Additionally, you may :ref:`mark any column as a key column <details>` if the values are all different. The operations to manipulate column information is described in the section :ref:`details`.
 
 Before finishing the upload step and storing the data in the table, OnTask also allows you to change the name of the columns or change the **Key** attribute as shown in the following figure.
 
@@ -157,7 +140,7 @@ After this step the data is stored and the platform shows the :ref:`table` page.
 Data Merge
 ==========
 
-.. sidebar:: Merge a.k.a "Join"
+.. note:: Merge a.k.a "Join"
 
    Merging is a common operation in databases and is commonly known as *join*. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist in OnTask when combining the data already existing in the table. The operation relies on the **key column** to merge the two sources.
 

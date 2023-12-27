@@ -30,7 +30,10 @@ LOGGER = get_task_logger('celery_execution')
 _canvas_api_map = {}
 if settings.CANVAS_INFO_DICT:
     _canvas_api_map = {
-        'get_course_quizzes': (requests.get, '{0}/api/v1/courses/{1}/quizzes'),
+        'get_course_quizzes': (
+            requests.get,
+            '{0}/api/v1/courses/{1}/quizzes',
+            status.HTTP_200_OK),
         'get_quiz_questions': (
             requests.get,
             '{0}/api/v1/courses/{1}/quizzes/{2}/questions',

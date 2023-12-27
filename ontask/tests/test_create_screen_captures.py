@@ -424,11 +424,11 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.go_to_table()
 
         #
-        # Dataops/Merge Canvas Course Enrollment List
+        # Dataops/Merge Canvas Course Upload List
         #
-        # Go to Canvas Course Enrollment List
+        # Go to Canvas Course Upload
         self.go_to_canvas_upload_merge_step_1()
-        self.body_ss('dataops_upload_canvas_course_enrollment.png')
+        self.body_ss('dataops_upload_canvas_course.png')
         self.go_to_table()
 
         #
@@ -822,8 +822,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         ).click()
         self.wait_for_id_and_spinner('action-index')
 
-        # Picture of Canvas scheduling
-        # self.open_action_schedule('Send Canvas reminder')
+        # # Picture of Canvas scheduling
+        # self.open_action_schedule('Midterm comments')
         # self.body_ss('scheduler_action_canvas_email.png')
         # self.go_to_actions()
 
@@ -938,7 +938,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         self.scroll_element_into_view(track_read_element)
         track_read_element.click()
 
-        # Take picture of the export page.
+        # Take picture of the schedule form.
         self.body_ss('schedule_action_email.png')
 
         # Click the schedule button
@@ -980,7 +980,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
             'afabkvaidlfvsidkfe..kekfioroelallasifjjf;alksid'
         )
 
-        # Take picture of the export page.
+        # Take picture page.
         self.body_ss('schedule_action_json.png')
 
         # Click the schedule button

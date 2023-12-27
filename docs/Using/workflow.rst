@@ -12,7 +12,7 @@ After logging into OnTask, the platform shows the buttons to create or import a 
    :align: center
    :width: 100%
 
-.. sidebar:: Going back
+.. tip:: Going back
 
    The **Workflows** link at the left corner of the top menu *closes* the workflow being manipulated and shows you the list of available workflows. The workflow is also *unlocked* so that it can be accessed by those users :ref:`sharing <details_sharing>` its access.
 

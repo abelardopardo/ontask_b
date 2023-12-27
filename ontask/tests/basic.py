@@ -782,7 +782,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.click_on_element(
             By.XPATH,
             '//table[@id="dataops-table"]'
-            '//a[normalize-space()="Canvas Course Enrollment List"]')
+            '//a[normalize-space()="Canvas Course"]')
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.XPATH, '//form')))
 

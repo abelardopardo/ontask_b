@@ -75,11 +75,11 @@ class Log(Owner):
     ATHENA_CONNECTION_DELETE = 'athena_connection_delete'
     ATHENA_CONNECTION_CLONE = 'athena_connection_clone'
     ATHENA_CONNECTION_TOGGLE = 'athena_connection_toggle'
-    CANVAS_COURSE_QUIZ_UPDATE_CREATE = 'canvas_course_quiz_connection_create'
-    CANVAS_COURSE_QUIZ_UPDATE_EDIT = 'canvas_course_quiz_connection_edit'
-    CANVAS_COURSE_QUIZ_UPDATE_DELETE = 'canvas_course_quiz_connection_delete'
-    CANVAS_COURSE_QUIZ_UPDATE_CLONE = 'canvas_course_quiz_connection_clone'
-    CANVAS_COURSE_QUIZ_UPDATE_TOGGLE = 'canvas_course_quiz_connection_toggle'
+    CANVAS_COURSE_UPLOAD_CREATE = 'canvas_course_upload_create'
+    CANVAS_COURSE_UPLOAD_EDIT = 'canvas_course_upload_edit'
+    CANVAS_COURSE_UPLOAD_DELETE = 'canvas_course_upload_delete'
+    CANVAS_COURSE_UPLOAD_CLONE = 'canvas_course_upload_clone'
+    CANVAS_COURSE_UPDATE_TOGGLE = 'canvas_course_upload_toggle'
     COLUMN_ADD = 'column_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
     COLUMN_ADD_RANDOM = 'column_add_random'
@@ -117,12 +117,8 @@ class Log(Owner):
     WORKFLOW_DATA_ROW_UPDATE = 'tablerow_update'
     WORKFLOW_DATA_ROW_CREATE = 'tablerow_create'
     WORKFLOW_DATA_ATHENA_UPLOAD = 'workflow_athena_data_upload'
-    WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD = \
-        'workflow_canvas_course_enrollment_data_upload'
-    WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD = \
-        'workflow_canvas_course_quizzes_data_upload'
-    WORKFLOW_DATA_CANVAS_COURSE_ASSIGNMENTS_UPLOAD = \
-        'workflow_canvas_course_assignments_data_upload'
+    WORKFLOW_DATA_CANVAS_COURSE_UPLOAD = \
+        'workflow_canvas_course_data_upload'
     WORKFLOW_DATA_CSV_UPLOAD = 'workflow_csv_data_upload'
     WORKFLOW_DATA_EXCEL_UPLOAD = 'workflow_excel_data_upload'
     WORKFLOW_DATA_GSHEET_UPLOAD = 'workflow_gsheet_data_upload'
@@ -178,11 +174,11 @@ class Log(Owner):
         ATHENA_CONNECTION_DELETE: _('Athena connection deleted'),
         ATHENA_CONNECTION_EDIT: _('Athena connection updated'),
         ATHENA_CONNECTION_TOGGLE: _('Athena connection toggled'),
-        CANVAS_COURSE_QUIZ_UPDATE_CLONE: _('Canvas connection cloned'),
-        CANVAS_COURSE_QUIZ_UPDATE_CREATE: _('Canvas connection created'),
-        CANVAS_COURSE_QUIZ_UPDATE_DELETE: _('Canvas connection deleted'),
-        CANVAS_COURSE_QUIZ_UPDATE_EDIT: _('Canvas connection updated'),
-        CANVAS_COURSE_QUIZ_UPDATE_TOGGLE: _('Canvas connection toggled'),
+        CANVAS_COURSE_UPLOAD_CLONE: _('Canvas course upload cloned'),
+        CANVAS_COURSE_UPLOAD_CREATE: _('Canvas course upload created'),
+        CANVAS_COURSE_UPLOAD_DELETE: _('Canvas course upload deleted'),
+        CANVAS_COURSE_UPLOAD_EDIT: _('Canvas course upload updated'),
+        CANVAS_COURSE_UPDATE_TOGGLE: _('Canvas course upload toggled'),
         COLUMN_ADD: _('Column added'),
         COLUMN_ADD_FORMULA: _('Column with formula created'),
         COLUMN_ADD_RANDOM: _('Column with random values created'),
@@ -220,12 +216,8 @@ class Log(Owner):
         WORKFLOW_DATA_ROW_CREATE: _('Table row created'),
         WORKFLOW_DATA_ROW_UPDATE: _('Table row updated'),
         WORKFLOW_DATA_ATHENA_UPLOAD: _('Athena data uploaded to workflow'),
-        WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD: _(
-            'Canvas course enrollment data uploaded to workflow'),
-        WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD: _(
-            'Canvas course quizzes data uploaded to workflow'),
-        WORKFLOW_DATA_CANVAS_COURSE_ASSIGNMENTS_UPLOAD: _(
-            'Canvas course assignments data uploaded to workflow'),
+        WORKFLOW_DATA_CANVAS_COURSE_UPLOAD: _(
+            'Canvas course data uploaded to workflow'),
         WORKFLOW_DATA_CSV_UPLOAD: _('Upload Data from CSV File'),
         WORKFLOW_DATA_EXCEL_UPLOAD: _('Upload Data from Excel Sheet'),
         WORKFLOW_DATA_GSHEET_UPLOAD: _('Upload Data from Google Sheet'),

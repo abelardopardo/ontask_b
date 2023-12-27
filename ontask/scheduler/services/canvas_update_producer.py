@@ -32,7 +32,7 @@ class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
 
         payload.update({
             'workflow_id': self.workflow.id,
-            'page_title': self.form_page_title})
+            'page_title': gettext('Canvas Course Upload')})
 
         if self.object:
             payload['target_url'] = self.object.payload['target_url']
@@ -51,21 +51,3 @@ class ScheduledOperationUpdateCanvasUpload(ScheduledOperationUpdateBaseView):
             self.op_payload['target_url'],
             'scheduler:finish_scheduling',
             'scheduler:index')
-
-
-class ScheduledOperationUpdateCanvasCourseEnrollmentUpload(
-        ScheduledOperationUpdateCanvasUpload):
-    """Class to CRUD a Canvas Course Enrollment Upload operation."""
-    operation_type = models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD
-    form_page_title = gettext('Canvas Course Enrollment Data Upload')
-
-
-class ScheduledOperationUpdateCanvasCourseQuizzesUpload(
-        ScheduledOperationUpdateCanvasUpload):
-    """Class to CRUD a Canvas Course Quizzes Upload operation."""
-
-    # Override form_class because it requires the column selection widget
-    form_class = forms.ScheduleUploadCanvasQuizForm
-
-    operation_type = models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD
-    form_page_title = gettext('Canvas Course Quizzes Data Upload')

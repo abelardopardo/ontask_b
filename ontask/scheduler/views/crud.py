@@ -98,11 +98,11 @@ def create_sql_upload(
 
 @user_passes_test(is_instructor)
 @get_workflow()
-def create_canvas_course_enrollment_upload(
+def create_canvas_course_upload(
         request: http.HttpRequest,
         workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
-    """Create a new Canvas Course Enrollment Update operation.
+    """Create a new Canvas Course Upload operation.
 
     :param request: HTTP request
     :param workflow: Workflow of the current context.
@@ -113,28 +113,7 @@ def create_canvas_course_enrollment_upload(
 
     return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
-        models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
-        workflow=workflow)
-
-
-@user_passes_test(is_instructor)
-@get_workflow()
-def create_canvas_course_quizzes_upload(
-        request: http.HttpRequest,
-        workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Create a new Canvas Course Quizzes Update operation.
-
-    :param request: HTTP request
-    :param workflow: Workflow of the current context.
-    :return: HTTP response
-    """
-    # Remove the payload dictionary from the session
-    session_ops.flush_payload(request)
-
-    return ontask.scheduler.SCHEDULE_CRUD_FACTORY.crud_view(
-        request,
-        models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
+        models.Log.WORKFLOW_DATA_CANVAS_COURSE_UPLOAD,
         workflow=workflow)
 
 

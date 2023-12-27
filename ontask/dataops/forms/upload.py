@@ -174,6 +174,31 @@ class UploadCanvasForm(UploadBasic):
         help_text=_('Name of the Canvas host to extract data.'),
         choices=[])
 
+    upload_enrollment = forms.BooleanField(
+        label=_('Upload Enrolment'),
+        required=False,
+        help_text=_(
+            'To upload information about all enrolled students. Select this '
+            'option combine with any other below if you want to upload '
+            'data for all students regarding its activity.'))
+
+    upload_quizzes = forms.BooleanField(
+        label=_('Upload Quizzes'),
+        required=False,
+        help_text=_('To upload information about all quizzes in the course'))
+
+    upload_assignments = forms.BooleanField(
+        label=_('Upload Assignments'),
+        required=False,
+        help_text=_(
+            'To upload information about all assignments in the course'))
+
+    include_course_id_column = forms.BooleanField(
+        label=_('Include a column with the Course ID?'),
+        required=False,
+        help_text=_(
+            'If selected an extra column with the course ID is added.'))
+
     def __init__(self, *args, **kwargs):
         """Modify certain field data."""
         # Needed for authentication purposes
@@ -199,12 +224,31 @@ class UploadCanvasForm(UploadBasic):
         if 'CANVAS COURSE ID' in self.workflow.attributes:
             # There is an attribute with a course ID, use it and hide the
             # field in the form with a fixed value and disable it.
-            self.fields['canvas_course_id'].widget = forms.HiddenInput()
             self.fields['canvas_course_id'].initial = self.workflow.attributes[
                 'CANVAS COURSE ID']
             self.fields['canvas_course_id'].disabled = True
+            self.fields['canvas_course_id'].help_text += _(
+                '. Value taken from the Workflow Attribute CANVAS COURSE ID')
 
-        self.order_fields(['target_url', 'canvas_course_id'])
+        self.order_fields([
+            'target_url',
+            'canvas_course_id',
+            'upload_enrollment',
+            'upload_quizzes',
+            'upload_assignments',
+            'include_course_id_column'])
+
+    def clean(self) -> Dict:
+        """At least one of the three upload options needs to be true."""
+        form_data = super().clean()
+        if not (
+                form_data['upload_enrollment'] or form_data['upload_quizzes'] or form_data['upload_assignments']
+        ):
+            self.add_error(
+                None,
+                _('At least one upload option needs to be selected.'),
+            )
+        return form_data
 
 
 class UploadGoogleSheetForm(UploadBasic):

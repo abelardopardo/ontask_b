@@ -11,9 +11,7 @@ def initialize_task_factory():
     from ontask.dataops import services as dataops_services
     from ontask.workflow import services as workflow_services
     from ontask.dataops.services.sql_upload import ExecuteSQLUpload
-    from ontask.dataops.services.canvas_upload import (
-        ExecuteCanvasCourseQuizzesUpload,
-        ExecuteCanvasCourseEnrollmentsUpload)
+    from ontask.dataops.services.canvas_upload import ExecuteCanvasCourseUpload
 
     # Catalogue of Tasks. Tuples have:
     # - Operation Type: Log model value
@@ -41,12 +39,9 @@ def initialize_task_factory():
         (Log.PLUGIN_EXECUTE, dataops_services.ExecuteRunPlugin),
         # EXECUTE AN SQL UPLOAD
         (Log.WORKFLOW_DATA_SQL_UPLOAD, ExecuteSQLUpload),
-        # EXECUTE A CANVAS COURSE ENROLLMENT UPLOAD
-        (Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD,
-         ExecuteCanvasCourseEnrollmentsUpload),
-        # EXECUTE A CANVAS COURSE QUIZZES UPLOAD
-        (Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD,
-         ExecuteCanvasCourseQuizzesUpload),
+        # EXECUTE A CANVAS COURSE UPLOAD
+        (Log.WORKFLOW_DATA_CANVAS_COURSE_UPLOAD,
+         ExecuteCanvasCourseUpload),
         # UPDATE LUSER FIELD IN WORKFLOW
         (Log.WORKFLOW_UPDATE_LUSERS,
          workflow_services.ExecuteUpdateWorkflowLUser),

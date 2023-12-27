@@ -16,18 +16,11 @@
 
     <a type="button"
        class="dropdown-item {% if not canvasconnection %}disabled{% endif %}"
-       href="{% url 'scheduler:canvas_course_enrollment_upload' %}"
+       href="{% url 'scheduler:canvas_course_upload' %}"
        data-bs-toggle="tooltip"
-       title="{% trans 'Schedule a Canvas Course Enrollment upload/merge operation' %}">
-      {% trans 'Canvas Course Enrollment upload/merge' %}
+       title="{% trans 'Schedule a Canvas Course upload/merge operation' %}">
+      {% trans 'Canvas Course upload/merge' %}
     </a>
 
-    <a type="button"
-       class="dropdown-item {% if not canvasconnection %}disabled{% endif %}"
-       href="{% url 'scheduler:canvas_course_quizzes_upload' %}"
-       data-bs-toggle="tooltip"
-       title="{% trans 'Schedule a Canvas Course Assignment and Quiz upload/merge operation' %}">
-      {% trans 'Canvas Course Assignment and Quiz upload/merge' %}
-    </a>
   </div>
 </div>

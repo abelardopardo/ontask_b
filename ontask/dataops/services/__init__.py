@@ -13,7 +13,6 @@ from ontask.dataops.services.row import create_row, update_row_values
 from ontask.dataops.services.sql_upload import (
     ExecuteSQLUpload, load_df_from_sqlconnection)
 from ontask.dataops.services.canvas_upload import (
-    ExecuteCanvasCourseQuizzesUpload, create_df_from_canvas_course_enrollment,
-    create_df_from_canvas_course_quizzes, ExecuteCanvasCourseEnrollmentsUpload)
+    create_df_from_canvas_course, ExecuteCanvasCourseUpload)
 from ontask.dataops.services.upload_steps import (
     upload_prepare_step_four, upload_step_four, upload_step_two)
