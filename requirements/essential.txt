@@ -14,12 +14,12 @@
 #    python3 -m pip install --upgrade wheel
 # 4. Install essential:
 #    LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip install -r requirements/essential.txt
-# 5. LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip freeze | sort > requirements/freeze.txt
+# 5. python3 -m pip freeze | sort > requirements/freeze.txt
 # 6. python3 -m pip check
 # 7. cp requirements/freeze.txt requirements/base.txt
 # 8. Move lines in base.txt to development.txt
 #
-Django[argon2]==4.2.7  # BSD-3-Clause
+Django[argon2]==4.2.8  # BSD-3-Clause
 celery  # BSD
 coverage  # Apache License 2.0
 crispy-bootstrap5 # MIT
