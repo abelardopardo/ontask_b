@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 10.6 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 11.0 ([documentation](http://ontask-version-b.readthedocs. io/en/latest/))
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
@@ -13,13 +13,15 @@ Current Version: 10.6 ([documentation](http://ontask-version-b.readthedocs.io/en
 
 ## OnTask in a nutshell
 
+- **NEW** Canvas Upload for course enrollment, quizzes and assignments.
+
 - **NEW** Canvas Email actions can now be scheduled regularly
-- 
+
 - **NEW** Revamped interface using bootstrap 5
 
 - **NEW** Uses TinyMCE as text editor
 
-- **NEW** Creation of actions with filter defined in views 
+- Creation of actions with filter defined in views 
 
 - Repeated action execution. 
 

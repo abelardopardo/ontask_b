@@ -13,13 +13,6 @@
     {% include 'step_by_step.html' with value_range=value_range step=2 %}
     <h1 class="text-center">{% trans 'Select' %} {{ data_type_select }}</h1>
     <div class="row justify-content-center">
-      {% if only_sql_connection_name %}
-        <p class="text-center">
-          {% blocktrans with n=only_sql_connection_name %}
-            The operation will use the SQL connection "{{ n }}".
-          {% endblocktrans %}
-        </p>
-      {% endif %}
       <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}

@@ -178,20 +178,20 @@ class UploadCanvasForm(UploadBasic):
         label=_('Upload Enrolment'),
         required=False,
         help_text=_(
-            'To upload information about all enrolled students. Select this '
-            'option combine with any other below if you want to upload '
+            'Upload information about all enrolled students. Select this '
+            'option combined with any other below if you want to upload '
             'data for all students regarding its activity.'))
 
     upload_quizzes = forms.BooleanField(
         label=_('Upload Quizzes'),
         required=False,
-        help_text=_('To upload information about all quizzes in the course'))
+        help_text=_('Upload information about all quizzes in the course'))
 
     upload_assignments = forms.BooleanField(
         label=_('Upload Assignments'),
         required=False,
         help_text=_(
-            'To upload information about all assignments in the course'))
+            'Upload information about all assignments in the course'))
 
     include_course_id_column = forms.BooleanField(
         label=_('Include a column with the Course ID?'),
@@ -219,7 +219,7 @@ class UploadCanvasForm(UploadBasic):
             self.fields['target_url'].disabled = True
         else:
             raise OnTaskException(
-                _('Incorrect invocation of upload Canvas Form'))
+                _('Incorrect invocation of UploadCanvasForm'))
 
         if 'CANVAS COURSE ID' in self.workflow.attributes:
             # There is an attribute with a course ID, use it and hide the
@@ -383,7 +383,6 @@ class UploadSQLForm(UploadBasic):
                 [('', '---')] + [(sc.id, sc.name) for sc in sql_connections])
         else:
             # There is a single SQL connection, set the field to that value
-            self.fields['sql_connection'].widget = forms.HiddenInput()
             sc = sql_connections.first()
             self.fields['sql_connection'].choices = [(sc.id, sc.name)]
             self.fields['sql_connection'].disabled = True
@@ -397,7 +396,7 @@ class UploadSQLForm(UploadBasic):
         if not (conn_id := cleaned_data.get('sql_connection')):
             self.add_error(
                 'sql_connection',
-                _('SQL connection information not present'))
+                _('SQL connection information not given'))
 
         try:
             # Make sure the connection id is an integer

@@ -43,13 +43,6 @@ class SQLUploadStart(upload_steps.UploadStepOneView):
         kwargs['sql_connections'] = self.sql_connections
         return kwargs
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if len(self.sql_connections) == 1:
-            context['only_sql_connection_name'] = (
-                self.sql_connections.first().name)
-        return context
-
     def form_valid(self, form):
         # Process SQL connection using pandas
         try:
