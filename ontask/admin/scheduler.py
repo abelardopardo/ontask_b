@@ -13,7 +13,9 @@ class ScheduledOperationAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'created',
-        'execute',
+        'execute_start',
+        'frequency',
+        'execute_until',
         'status',
         'action',
         'last_executed_log')

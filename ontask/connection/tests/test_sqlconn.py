@@ -138,6 +138,9 @@ class DataopsRunSQLConnections(
     user_pwd = 'boguspwd'
 
     def test(self):
+        # Create the new table in the DB for the scheduled operation
+        tests.create_mock_sql_table()
+
         sql_conn = models.SQLConnection.objects.get(pk=1)
         self.assertIsNotNone(sql_conn)
 
@@ -152,17 +155,14 @@ class DataopsRunSQLConnections(
         sql_conn.save()
 
         # Load the first step for the sql upload form (GET)
-        resp = self.get_response(
-            'dataops:sqlupload_start',
-            {'pk': sql_conn.id})
+        resp = self.get_response('dataops:sqlupload_start')
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertIn('Establish a SQL connection', str(resp.content))
+        self.assertIn('Select SQL connection', str(resp.content))
 
         # Load the first step for the sql upload form (POST)
         resp = self.get_response(
             'dataops:sqlupload_start',
-            {'pk': sql_conn.id},
             method='POST',
-            req_params={'db_password': 'boguspwd'})
+            req_params={'sql_connection': '1'})
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('dataops:upload_s2'))

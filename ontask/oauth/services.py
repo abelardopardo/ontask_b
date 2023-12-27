@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
 from ontask import models
-from ontask.core import SessionPayload
+from ontask.core import session_ops
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'
@@ -30,7 +30,7 @@ def get_initial_token_step1(
     :param request: Received request
     :param oauth_info: a dict with the following fields:
         # {
-        #   domain_port: VALUE,
+        #   domain_port: VALUE (format example https://host:port),
         #   client_id: VALUE,
         #   client_secret: VALUE ,
         #   authorize_url: VALUE (format {0} for domain_port),
@@ -64,7 +64,6 @@ def get_initial_token_step1(
                 'client_id': oauth_info['client_id'],
                 'response_type': 'code',
                 'redirect_uri': request.session[callback_url_key],
-                'scopes': 'url:POST|/api/v1/conversations',
                 'state': request.session[oauth_hash_key],
             },
         ).prepare().url,
@@ -80,7 +79,7 @@ def refresh_token(
     :param user_token: User token to be refreshed
     :param oauth_info: a dict with the following fields:
     # {
-    #   domain_port: VALUE,
+    #   domain_port: VALUE (format example https://host:port,
     #   client_id: VALUE,
     #   client_secret: VALUE ,
     #   authorize_url: VALUE (format {0} for domain_port),
@@ -118,14 +117,10 @@ def refresh_token(
     return user_token
 
 
-def process_callback(
-    request: http.HttpRequest,
-    payload: SessionPayload,
-) -> Optional[str]:
+def process_callback(request: http.HttpRequest) -> Optional[str]:
     """Extract the token and store for future calls.
 
     :param request: Http Request received
-    :param payload: Session payload with dictionary with additional info.
     :return: Error message or None if everything has gone correctly.
     """
     # Correct response from a previous request. Obtain the access token,
@@ -136,8 +131,10 @@ def process_callback(
         # went wrong.
         return _('Inconsistent OAuth response. Unable to authorize')
 
-    oauth_instance = payload.get('target_url')
-    if not oauth_instance:
+    if not (payload := session_ops.get_payload(request)):
+        return _('Internal error. Empty payload in callback')
+
+    if not (oauth_instance := payload.get('target_url')):
         return _('Internal error. Empty OAuth Instance name')
 
     oauth_info = settings.CANVAS_INFO_DICT.get(oauth_instance)

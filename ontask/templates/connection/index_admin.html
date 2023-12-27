@@ -53,8 +53,8 @@
       <button type="button" class="shadow btn btn-outline-dark js-connection-addedit"
               data-url="{{ data_url }}"
               data-bs-toggle="tooltip"
-              title="{% trans 'Add a new connection' %}">
-        <i class="bi-plus"></i> {% trans 'Connection' %}</button>
+              title="{% trans 'Add a new item' %}">
+        <i class="bi-plus"></i> {% if view.item_name %}{{ view.item_name }} {% else %}{% trans 'Connection' %}{% endif %}</button>
     </div>
     <div class="justify-content-center">
       {% render_table table %}

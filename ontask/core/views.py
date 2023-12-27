@@ -8,10 +8,12 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from ontask import models, tasks
+from ontask import models
+from ontask.tasks.execute import execute_operation
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import UserIsInstructor, is_admin, is_instructor
 from ontask.core.services import ontask_handler404
+from ontask.core import session_ops
 from ontask.django_auth_lti.decorators import lti_role_required
 from ontask.workflow.views import WorkflowIndexView
 
@@ -28,6 +30,8 @@ class HomeView(generic.View):
     http_method_names = ['get']
 
     def get(self, request, *args, **kwargs) -> http.HttpResponse:
+        # Remove the payload dictionary from the session
+        session_ops.flush_payload(request)
         if not request.user.is_authenticated:
             return redirect(reverse('accounts:login'))
 
@@ -61,7 +65,7 @@ class TrackView(generic.View):
 
     def get(self, request, *args, **kwargs) -> http.HttpResponse:
         # Push the tracking to the asynchronous queue
-        tasks.execute_operation.delay(
+        execute_operation.delay(
             operation_type=models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
             payload={'method': request.method, 'get_dict': request.GET})
 
@@ -79,7 +83,7 @@ class KeepAliveView(generic.View):
         return http.JsonResponse({})
 
 
-class Custon404View(generic.TemplateView):
+class Custom404View(generic.TemplateView):
     """Render the home page."""
 
     def get(self, request, *args, **kwargs):

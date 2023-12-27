@@ -5,7 +5,7 @@ OnTask is a platform offering instructors and educational designers the capacity
 
 Learning is complex, highly situated, and requires interacting with peers, instructors, resources, platforms, etc. This complexity can be alleviated providing learners with the right support actions such as feedback, recommendations, discussions, etc. However, all these actions become increasingly complex when the number of learners grows. The larger the number of learners, the more difficult is for instructors to provide adequate support. Typical solutions include providing generic resources or sending announcements that are only relevant to a subset of the audience.
 
-.. sidebar:: Learner testimonials
+.. important:: Learner testimonials
 
    "its not the email itself, but what it represents: the accountability for
    your learning"
@@ -20,7 +20,7 @@ The existing data is uploaded and stored in a table so that instructors and desi
    :align: center
    :width: 100%
 
-.. sidebar:: Instructor testimonials
+.. important:: Instructor testimonials
 
    "A number of the participants were highly complimentary of the OnTask software tool and several of the teaching staff [...] are actively planning and preparing to use OnTask in the second semester of this academic year."
 

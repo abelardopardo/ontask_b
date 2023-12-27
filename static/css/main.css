@@ -30,13 +30,13 @@ body.regular-body {
 }
 
 #div_id_multiple_executions {
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
+  border-top: 1px solid rgb(128, 128, 128);
+  border-bottom: 1px solid rgb(128, 128, 128);
 }
 
 #div_id_execute_until {
   padding-bottom: 0.5em;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid rgb(128, 128, 128);
 }
 
 #workflows-star {
@@ -142,8 +142,8 @@ body>.navbar-transparent {
 }
 
 .navbar-brand {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 .navbar-brand > img {
@@ -162,9 +162,9 @@ body>.navbar-transparent {
 
 .btn {
     background-image: none;
-    -webkit-box-shadow: 0px 1px 0px #ddd;
-    -moz-box-shadow: 0px 1px 0px #ddd;
-    box-shadow: 0px 1px 0px #ddd;
+    -webkit-box-shadow: 0 1px 0 #ddd;
+    -moz-box-shadow: 0 1px 0 #ddd;
+    box-shadow: 0 1px 0 #ddd;
 }
 
 /* Home page styling */
@@ -188,7 +188,7 @@ body>.navbar-transparent {
 
 .corporate-jumbo p, .corporate-jumbo h1 {
     color: #eee;
-    text-shadow: 0px 0px 2px black;
+    text-shadow: 0 0 2px black;
 }
 
 .corporate-jumbo p {
@@ -224,10 +224,10 @@ body>.navbar-transparent {
 /* Profile page styling */
 .profile-head {
     background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQIW2NkAIILFy78NzAwYATRjCABZEGwAEwFiA1WBlIOUwkA72gTdDIYVO4AAAAASUVORK5CYII=) repeat;
-    padding: 70px 0px 30px 20px;
+    padding: 70px 0 30px 20px;
 }
 .profile-body {
-    padding: 4px 0px;
+    padding: 4px 0;
 }
 
 .text-page {
@@ -247,7 +247,7 @@ body>.navbar-transparent {
 
 .img-dim {
     opacity: 0.5;
-    box-shadow: inset 0px 0px 64px 64px #EA1717, 0px 0px 4px 4px #EA1717;
+    box-shadow: inset 0 0 64px 64px #EA1717, 0 0 4px 4px #EA1717;
 }
 
 /* Authentication forms */
@@ -345,7 +345,7 @@ div[aria-labelledby="rowMoreOperations"] > button {
 
 /* Wflow name */
 #wflow-name {
- padding: 0ex;
+ padding: 0;
  background: #d2f4ea;
 }
 
@@ -457,7 +457,7 @@ ul.timeline > li:before {
 :not(.btn):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
   background-color: #79dfc1ff !important;
   box-shadow: 0 0 0 0.2rem rgba(121, 223, 193, 0.5); }
-}
+
 
 /* Fix error in django-datetimepicker-plus with validation messages */
 .invalid-feedback { display: inherit; }

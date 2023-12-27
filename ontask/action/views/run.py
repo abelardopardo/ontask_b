@@ -10,11 +10,12 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+import ontask.action
 from ontask import models
-from ontask.action import forms, services
+from ontask.action import forms, services, ACTION_RUN_FACTORY
 from ontask.celery import celery_is_up
 from ontask.core import (
-    ActionView, DataTablesServerSidePaging, SessionPayload,
+    ActionView, DataTablesServerSidePaging, session_ops,
     UserIsInstructor, WorkflowView, ajax_required, get_action, get_workflow,
     is_instructor)
 
@@ -44,12 +45,14 @@ def action_run_initiate(
                 'queueing.'))
         return redirect(reverse('action:index'))
 
-    reason = action.is_executable()
-    if reason:
-        messages.error(request, reason)
+    # Remove the upload_data payload from the session
+    session_ops.flush_payload(request)
+
+    if error_reason := action.is_executable():
+        messages.error(request, error_reason)
         return redirect(reverse('action:index'))
 
-    return services.ACTION_RUN_FACTORY.process_request(
+    return ACTION_RUN_FACTORY.process_request(
         request,
         action.action_type,
         workflow=workflow,
@@ -69,7 +72,7 @@ def action_run_finish(
     :param workflow: Workflow object.
     :return: Schedule an action execution
     """
-    payload = SessionPayload(request.session)
+    payload = session_ops.get_payload(request)
     if payload is None:
         # Something is wrong with this execution. Return to action table.
         messages.error(
@@ -77,7 +80,7 @@ def action_run_finish(
             _('Incorrect action run invocation.'))
         return redirect('action:index')
 
-    return services.ACTION_RUN_FACTORY.finish(
+    return ACTION_RUN_FACTORY.finish(
         payload.get('operation_type'),
         request=request,
         workflow=workflow,
@@ -92,7 +95,7 @@ def action_run_zip(
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None
 ) -> http.HttpResponse:
-    return services.ACTION_RUN_FACTORY.process_request(
+    return ACTION_RUN_FACTORY.process_request(
         request,
         models.action.ZIP_OPERATION,
         workflow=workflow,
@@ -125,7 +128,7 @@ class ActionRunActionItemFilterView(
     def _extract_payload(self, request) -> Optional[http.HttpResponse]:
         """Verify that data in the payload is correct."""
 
-        self.payload = SessionPayload(request.session)
+        self.payload = session_ops.get_payload(request)
         if self.payload is None:
             # Something is wrong. Return to the action table.
             messages.error(request, _('Incorrect item filter invocation.'))
@@ -183,7 +186,7 @@ class ActionZipExportView(UserIsInstructor, WorkflowView):
     http_method_names = ['get']
 
     def get(self, request, *args, **kwargs) -> http.HttpResponse:
-        payload = SessionPayload(request.session)
+        payload = session_ops.get_payload(request)
         if not payload:
             # Something is wrong with this execution. Return to action table.
             messages.error(request, _('Incorrect ZIP action invocation.'))
@@ -220,7 +223,7 @@ class ActionZipExportView(UserIsInstructor, WorkflowView):
 
         # Create the ZIP with the eval data tuples and return it for download
         return services.create_and_send_zip(
-            request.session,
+            request,
             action,
             item_column,
             user_fname_column,

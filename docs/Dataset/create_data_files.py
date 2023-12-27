@@ -192,12 +192,11 @@ def read_initial_file(file_name, num_students=500):
     if num_students < max_l:
         # Trim the result
         all_students = all_students.drop(
-            random.sample(range(len(all_students)),
-                max_l - num_students),
+            random.sample(range(len(all_students)), max_l - num_students),
             axis=0)
 
     all_students['Full name'] = (
-        all_students['GivenName'] + ' ' + all_students['Surname'])
+            all_students['GivenName'] + ' ' + all_students['Surname'])
     return all_students
 
 
@@ -238,7 +237,7 @@ def create_midterm_data(all_students):
         for enrolment, rate in midterm_dropout_rates:
             # print random.random(), rate
             if student_info['Enrolment Type'] == enrolment and \
-                random.random() <= rate:
+                    random.random() <= rate:
                 skip = True
         if skip:
             continue
@@ -282,7 +281,8 @@ def create_midterm_data(all_students):
             midterm_score[field] = answer
             midterm_score[field[1:]] = score
 
-        midterm_answers = midterm_answers.append(midterm_score,
+        midterm_answers = midterm_answers.append(
+            midterm_score,
             ignore_index=True)
 
     return midterm_answers
@@ -292,7 +292,7 @@ def create_forum_data(all_students):
     """Create the data for the forum.
 
     Fields:
-       - Days on line
+       - Days online
        - Views
        - Contributions
        - questions
@@ -437,7 +437,7 @@ def create_forum_data(all_students):
             if views < 0:
                 views = 0
 
-            # Make sure "views" is not less than contr or quesitons
+            # Make sure "views" is not less than contr or questions
             if views < contr or views < questions:
                 views = max(contr, questions)
 
@@ -452,7 +452,8 @@ def create_forum_data(all_students):
         forum_student_data['Contributions'] = contributions_acc
         forum_student_data['Questions'] = questions_acc
 
-        forum_participation = forum_participation.append(forum_student_data,
+        forum_participation = forum_participation.append(
+            forum_student_data,
             ignore_index=True)
 
     return forum_participation
@@ -506,7 +507,7 @@ def create_blended_file(all_students):
     #
     # Times weeks 2-5
     #
-    # Total: 24 columns (2 activites X 3 indicators X 4 weeks)
+    # Total: 24 columns (2 activities X 3 indicators X 4 weeks)
     #
     # All variables correlate with the midterm score
 
@@ -527,9 +528,11 @@ def create_blended_file(all_students):
         for week_n in range(2, 6):
 
             # Generate random percentages
-            perc = [random.normalvariate(midterm_score,
-                20 - (midterm_score * 1.0) / 10)
-                    for _ in range(0, 4)]
+            perc = [
+                random.normalvariate(
+                    midterm_score,
+                    20 - (midterm_score * 1.0) / 10)
+                for _ in range(0, 4)]
             perc = [100 if x > 100 else x for x in perc]
             perc = [0 if x < 0 else x for x in perc]
 
@@ -626,7 +629,8 @@ def main(file_name=None, num_students=500):
     for column_name, values, weights in additional_columns:
         print('Step', step_num, 'Adding column', column_name)
         step_num += 1
-        add_column(all_students,
+        add_column(
+            all_students,
             column_name,
             values,
             weights)
@@ -670,7 +674,8 @@ def main(file_name=None, num_students=500):
     forum_participation = create_forum_data(all_students)
 
     # Update all data
-    all_students = pd.merge(all_students,
+    all_students = pd.merge(
+        all_students,
         forum_participation[forum_fields],
         how='left',
         on='SID')
@@ -684,9 +689,9 @@ def main(file_name=None, num_students=500):
 
     # Update all data
     all_students = pd.merge(all_students,
-        project_rubric[project_fields],
-        how='left',
-        on='SID')
+                            project_rubric[project_fields],
+                            how='left',
+                            on='SID')
 
     #
     # Creating blended information
@@ -696,7 +701,8 @@ def main(file_name=None, num_students=500):
     blended_indicators = create_blended_file(all_students)
 
     # Update all data
-    all_students = pd.merge(all_students,
+    all_students = pd.merge(
+        all_students,
         blended_indicators[blended_fields],
         how='left',
         on='SID')
@@ -708,27 +714,36 @@ def main(file_name=None, num_students=500):
     all_students.to_csv('all_data.csv', index=False)
 
     # Student info file
-    generate_csv_file(all_students,
+    generate_csv_file(
+        all_students,
         student_list_name,
         student_list_fields,
         'Surname')
 
     # Midterm answers
     generate_csv_file(midterm_answers, midterm_answers_name,
-        midterm_answers_fields, 'SID')
+                      midterm_answers_fields, 'SID')
 
     # Midterm results
     generate_csv_file(midterm_answers[1:], midterm_results_name,
-        result_fields, 'SID')
+                      result_fields, 'SID')
 
     # Forum data
-    generate_csv_file(forum_participation, forum_name, forum_fields, 'SID')
+    generate_csv_file(
+        forum_participation,
+        forum_name,
+        forum_fields,
+        'SID')
 
     # Project data
     generate_csv_file(project_rubric, project_name, project_fields, 'SID')
 
     # Blended data
-    generate_csv_file(blended_indicators, blended_name, blended_fields, 'SID')
+    generate_csv_file(
+        blended_indicators,
+        blended_name,
+        blended_fields,
+        'SID')
 
 
 # Execution as script

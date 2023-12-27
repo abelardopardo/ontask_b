@@ -5,11 +5,15 @@ from zoneinfo import ZoneInfo
 
 from django import http
 from django.conf import settings
-from django.shortcuts import redirect
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import core, models
+from ontask.core import session_ops
+from ontask.scheduler.services.items import create_timedelta_string
 
 
 class SchedulerCRUDFactory(core.FactoryBase):
@@ -84,9 +88,6 @@ class SchedulerCRUDFactory(core.FactoryBase):
         return api_producer.create_or_update(user, data_dict, s_item)
 
 
-SCHEDULE_CRUD_FACTORY = SchedulerCRUDFactory()
-
-
 class ScheduledOperationUpdateBaseView(generic.UpdateView):
     """Base class for all the scheduled operation CRUD producers.
 
@@ -101,26 +102,34 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
     object = None  # Placeholder for the schedule operation item
 
     workflow = None  # Fetched from the preliminary step.
-    action = None  # Only valid for action execution (not uploads)
-    connection = None  # For SQL Upload operations
     scheduled_item = None  # When editing a previously scheduled op
 
-    # Dictionary stored in the session for multi-page form filling
+    # Dictionary stored in the session for multipage form filling
     op_payload = None
 
     is_finish_request = None  # Flagging if the request is the last step.
 
-    @staticmethod
     def _create_payload(
-        request: http.HttpRequest,
-        **kwargs
-    ) -> core.SessionPayload:
+            self,
+            request: http.HttpRequest,
+            **kwargs
+    ) -> dict:
         """Create the session payload to carry through the operation.
 
         :param kwargs: key/value pairs for the call
         :return: Session payload object
         """
-        raise NotImplementedError
+        payload = {
+            'operation_type': self.operation_type,
+            'value_range': [],
+        }
+
+        if self.object:
+            payload.update(self.object.payload)
+            payload['schedule_id'] = self.object.id
+
+        session_ops.set_payload(request, payload)
+        return payload
 
     @staticmethod
     def create_or_update(
@@ -147,10 +156,10 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         s_item.name = data_dict.pop('name')
         s_item.description_text = data_dict.pop('description_text')
 
-        execute = data_dict.pop('execute', '')
+        execute = data_dict.pop('execute_start', '')
         if isinstance(execute, str):
             execute = parse_datetime(execute)
-        s_item.execute = execute
+        s_item.execute_start = execute
 
         s_item.frequency = data_dict.pop('frequency', '')
 
@@ -181,25 +190,14 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         """Store various fields in view, not kwargs."""
         super().setup(request, *args, **kwargs)
         self.workflow = kwargs.get('workflow', None)
-        self.action = kwargs.get('action', None)
-        self.scheduled_item = kwargs.get('scheduled_item', None)
-        if self.scheduled_item:
-            self.object = self.scheduled_item
-            self.action = self.scheduled_item.action
-        self.connection = kwargs.pop('connection', None)
-        if (
-            not self.connection
-                and self.scheduled_item
-                and 'connection_id' in self.scheduled_item.payload
-        ):
-            self.connection = models.SQLConnection.objects.get(
-                pk=self.scheduled_item.payload['connection_id'])
-        self.op_payload = kwargs.get('payload', self._create_payload(request))
+        self.object = kwargs.get('scheduled_item', None)
         self.is_finish_request = self.kwargs.get('is_finish_request', False)
         return
 
     def dispatch(self, request, *args, **kwargs):
         """If this is "finish" request, invoke the finish method."""
+        self.op_payload = kwargs.get('payload', self._create_payload(request))
+
         if self.is_finish_request:
             return self.finish(request, self.op_payload)
 
@@ -207,7 +205,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
 
     def get_object(self, queryset=None) -> Optional[models.ScheduledOperation]:
         """Modify to use the view for Create and Update."""
-        return self.scheduled_item
+        return self.object
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -216,36 +214,30 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         if not frequency:
             frequency = '0 5 * * 0'
 
-        all_false_conditions = False
-        if self.action:
-            all_false_conditions = any(
-                cond.selected_count == 0
-                for cond in self.action.conditions.all())
-
         context.update({
             'now': datetime.now(ZoneInfo(settings.TIME_ZONE)),
             'payload': self.op_payload,
             'frequency': frequency,
-            'value_range': range(2),
-            'all_false_conditions': all_false_conditions})
+            'value_range': range(2)})
         return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        columns = None
+        if self.workflow:
+            columns = self.workflow.columns.filter(is_key=True)
         kwargs.update({
             'workflow': self.workflow,
-            'action': self.action,
-            'connection': self.connection,
-            'columns': self.workflow.columns.filter(is_key=True),
+            'columns': columns,
             'form_info': self.op_payload})
         return kwargs
 
     def finish(
         self,
         request: http.HttpRequest,
-        payload: core.SessionPayload,
+        payload: dict,
     ) -> Optional[http.HttpResponse]:
-        """Finalize the creation of a scheduled operation.
+        """Finalize the creation of an operation update.
 
         All required data is passed through the payload.
 
@@ -255,5 +247,48 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
         previous requests.
         :return: Http Response
         """
-        del request
-        return None
+        s_item_id = payload.pop('schedule_id', None)
+        if s_item_id:
+            # Get the item being processed
+            if not self.object:
+                self.object = models.ScheduledOperation.objects.filter(
+                    id=s_item_id).first()
+            if not self.object:
+                messages.error(
+                    request,
+                    _('Incorrect request for operation scheduling'))
+                return redirect('scheduler:index')
+        else:
+            payload['workflow'] = models.Workflow.objects.get(
+                pk=payload.pop('workflow_id'))
+
+        # Remove some parameters from the payload
+        for key in ['value_range', 'page_title']:
+            payload.pop(key, None)
+
+        try:
+            schedule_item = self.create_or_update(
+                request.user,
+                payload,
+                self.object)
+        except Exception as exc:
+            messages.error(
+                request,
+                str(_('Unable to create scheduled operation ({0})')).format(
+                    str(exc)))
+            return redirect('scheduler:index')
+
+        schedule_item.log(models.Log.SCHEDULE_EDIT)
+
+        # Reset session payload as we are done with the CRUD
+        session_ops.flush_payload(request)
+
+        # Successful processing.
+        tdelta = create_timedelta_string(
+            schedule_item.execute_start,
+            schedule_item.frequency,
+            schedule_item.execute_until)
+        return render(
+            request,
+            'scheduler/schedule_done.html',
+            {'tdelta': tdelta, 's_item': schedule_item})

@@ -11,7 +11,7 @@ from django.views import generic
 from ontask import OnTaskServiceException
 from ontask.core import (
     DataTablesServerSidePaging, JSONFormResponseMixin, UserIsInstructor,
-    ViewView, WorkflowView, ajax_required)
+    ViewView, WorkflowView, ajax_required, session_ops)
 from ontask.table import services
 from ontask.visualizations.plotly import PlotlyHandler
 
@@ -68,6 +68,10 @@ class TableDiplayCompleteView(WorkflowView, TableDisplayBasicView):
         # Add information for all the columns in the workflow
         self.add_column_information(context, self.workflow.columns.all())
         return context
+
+    def get(self, request, *args, **kwargs):
+        session_ops.flush_payload(request)
+        return super().get(request, *args, **kwargs)
 
 
 class TableDisplayViewView(ViewView, TableDisplayBasicView):

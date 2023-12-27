@@ -31,6 +31,9 @@ $(function () {
   $("#checkAll").click(function () {
        $("input[id*='id_upload_']").prop("checked", this.checked);
   });
+  $("#checkAllKey").click(function () {
+       $("input[id*='id_make_key_']").prop("checked", this.checked);
+  });
 
   // Delete column
   $("#rowview-table").on("click", ".js-rowview-delete", loadForm)

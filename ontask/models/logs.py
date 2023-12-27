@@ -75,6 +75,11 @@ class Log(Owner):
     ATHENA_CONNECTION_DELETE = 'athena_connection_delete'
     ATHENA_CONNECTION_CLONE = 'athena_connection_clone'
     ATHENA_CONNECTION_TOGGLE = 'athena_connection_toggle'
+    CANVAS_COURSE_UPLOAD_CREATE = 'canvas_course_upload_create'
+    CANVAS_COURSE_UPLOAD_EDIT = 'canvas_course_upload_edit'
+    CANVAS_COURSE_UPLOAD_DELETE = 'canvas_course_upload_delete'
+    CANVAS_COURSE_UPLOAD_CLONE = 'canvas_course_upload_clone'
+    CANVAS_COURSE_UPDATE_TOGGLE = 'canvas_course_upload_toggle'
     COLUMN_ADD = 'column_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
     COLUMN_ADD_RANDOM = 'column_add_random'
@@ -112,6 +117,8 @@ class Log(Owner):
     WORKFLOW_DATA_ROW_UPDATE = 'tablerow_update'
     WORKFLOW_DATA_ROW_CREATE = 'tablerow_create'
     WORKFLOW_DATA_ATHENA_UPLOAD = 'workflow_athena_data_upload'
+    WORKFLOW_DATA_CANVAS_COURSE_UPLOAD = \
+        'workflow_canvas_course_data_upload'
     WORKFLOW_DATA_CSV_UPLOAD = 'workflow_csv_data_upload'
     WORKFLOW_DATA_EXCEL_UPLOAD = 'workflow_excel_data_upload'
     WORKFLOW_DATA_GSHEET_UPLOAD = 'workflow_gsheet_data_upload'
@@ -167,6 +174,11 @@ class Log(Owner):
         ATHENA_CONNECTION_DELETE: _('Athena connection deleted'),
         ATHENA_CONNECTION_EDIT: _('Athena connection updated'),
         ATHENA_CONNECTION_TOGGLE: _('Athena connection toggled'),
+        CANVAS_COURSE_UPLOAD_CLONE: _('Canvas course upload cloned'),
+        CANVAS_COURSE_UPLOAD_CREATE: _('Canvas course upload created'),
+        CANVAS_COURSE_UPLOAD_DELETE: _('Canvas course upload deleted'),
+        CANVAS_COURSE_UPLOAD_EDIT: _('Canvas course upload updated'),
+        CANVAS_COURSE_UPDATE_TOGGLE: _('Canvas course upload toggled'),
         COLUMN_ADD: _('Column added'),
         COLUMN_ADD_FORMULA: _('Column with formula created'),
         COLUMN_ADD_RANDOM: _('Column with random values created'),
@@ -203,7 +215,9 @@ class Log(Owner):
         WORKFLOW_DATA_FLUSH: _('Workflow data flushed'),
         WORKFLOW_DATA_ROW_CREATE: _('Table row created'),
         WORKFLOW_DATA_ROW_UPDATE: _('Table row updated'),
-        WORKFLOW_DATA_ATHENA_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_ATHENA_UPLOAD: _('Athena data uploaded to workflow'),
+        WORKFLOW_DATA_CANVAS_COURSE_UPLOAD: _(
+            'Canvas course data uploaded to workflow'),
         WORKFLOW_DATA_CSV_UPLOAD: _('Upload Data from CSV File'),
         WORKFLOW_DATA_EXCEL_UPLOAD: _('Upload Data from Excel Sheet'),
         WORKFLOW_DATA_GSHEET_UPLOAD: _('Upload Data from Google Sheet'),
@@ -268,11 +282,16 @@ class Log(Owner):
         """
         self.payload = json.dumps(payload)
 
+    def set_error_in_payload(self, msg: str):
+        """Set the given MSG in error field in payload."""
+        self.payload['error'] = msg
+        self.save(update_fields=['payload'])
+
     def __str__(self):
         """Return the name translation."""
         return str(self.LOG_TYPES[self.name])
 
     @cached_property
-    def log_useremail(self):
+    def log_user_email(self):
         """Return the user email."""
         return self.user.email

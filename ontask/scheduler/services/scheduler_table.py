@@ -25,7 +25,7 @@ class ScheduleActionTable(tables.Table):
 
     operation_type = tables.Column(verbose_name=_('Type'))
 
-    execute = tables.DateTimeColumn(verbose_name=_('From'))
+    execute_start = tables.DateTimeColumn(verbose_name=_('From'))
 
     frequency = tables.Column(verbose_name=_('Frequency'))
 
@@ -83,7 +83,7 @@ class ScheduleActionTable(tables.Table):
         fields = (
             'name',
             'operation_type',
-            'execute',
+            'execute_start',
             'frequency',
             'execute_until',
             'status')
@@ -92,7 +92,7 @@ class ScheduleActionTable(tables.Table):
             'operations',
             'name',
             'operation_type',
-            'execute',
+            'execute_start',
             'frequency',
             'execute_until',
             'enabled',

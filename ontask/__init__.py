@@ -29,7 +29,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = '10.6'
+__version__ = '11.0'
 
 LOGGER = logging.getLogger('ontask')
 
@@ -44,7 +44,8 @@ class OnTaskDBIdentifier(sql.Identifier):
         if not strings:
             raise TypeError('Identifier cannot be empty')
 
-        super().__init__(*[str_val.replace('%', '%%') for str_val in strings])
+        super().__init__(
+            *[str_val.replace('%', '%%') for str_val in strings])
 
 
 class OnTaskSharedState:
@@ -135,7 +136,7 @@ def is_legal_name(str_val: str) -> Optional[str]:
       to handle all possible cases and translations.
 
     In principle, arbitrary combinations of the following symbols should be
-    handle by OnTask::
+    handled by OnTask::
 
       !#$%&()*+,-./:;<=>?@[\\]^_`{|}~
 

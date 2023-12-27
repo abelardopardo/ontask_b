@@ -14,4 +14,4 @@ from ontask.dataops.pandas.dataframe import (
 from ontask.dataops.pandas.datatypes import datatype_names
 from ontask.dataops.pandas.merge import (
     perform_dataframe_upload_merge, validate_merge_parameters,
-)
+    perform_dataframe_set_or_update)

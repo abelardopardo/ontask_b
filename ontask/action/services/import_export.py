@@ -38,13 +38,6 @@ def run_compatibility_patches(json_data: List) -> List:
         # Remove columns field
         action_obj.pop('columns', None)
 
-        if action_obj.get('action_type') is not None:
-            if action_obj.pop('is_out', True):
-                action_type = models.Action.PERSONALIZED_TEXT
-            else:
-                action_type = models.Action.SURVEY
-            action_obj['action_type'] = action_type
-
         # Replace content field (if it exists, with text_content)
         action_obj['text_content'] = action_obj.get(
             'content',

@@ -16,11 +16,11 @@ class ConnectionForm(forms.ModelForm):
 
 
 class SQLConnectionForm(ConnectionForm):
-    """Form to read data from SQL.
+    """Form to manipulate an SQL connection.
 
     We collect information to create a Database URI to be used by SQLAlchemy:
 
-    dialect[+driver]://user:password@host/dbname[?key=value..]
+    dialect[+driver]://user:password@host/dbname[?key=value...]
     """
 
     def clean(self) -> Dict:
@@ -58,45 +58,45 @@ class SQLConnectionForm(ConnectionForm):
         ]
 
 
-class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
-    """Form to ask for a password for a SQL connection execution."""
-
-    def __init__(self, *args, **kwargs):
-        self.connection = kwargs.pop('connection')
-        super().__init__(*args, **kwargs)
-
-        if not self.connection.db_password:
-            self.fields['db_password'] = forms.CharField(
-                max_length=models.CHAR_FIELD_MID_SIZE,
-                label=_('Password'),
-                widget=forms.PasswordInput,
-                required=True,
-                help_text=_('Authentication for the database connection'))
-
-        if not self.connection.db_table:
-            self.fields['db_table'] = forms.CharField(
-                max_length=models.CHAR_FIELD_MID_SIZE,
-                label=_('Table name'),
-                required=True,
-                help_text=_('Table to load'))
-            self.set_fields_from_dict(['db_table'])
-
-    def clean(self) -> Dict:
-        """Store the fields in the Form Payload"""
-        form_data = super().clean()
-
-        if 'db_password' in self.fields:
-            self.store_fields_in_dict([
-                ('db_password', signing.dumps(form_data['db_password']))])
-
-        if 'db_table' in self.fields:
-            self.store_fields_in_dict([('db_table', None)])
-
-        return form_data
+# class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
+#     """Form to ask for a password for a SQL connection execution."""
+#
+#     def __init__(self, *args, **kwargs):
+#         self.connection = kwargs.pop('connection')
+#         super().__init__(*args, **kwargs)
+#
+#         if not self.connection.db_password:
+#             self.fields['db_password'] = forms.CharField(
+#                 max_length=models.CHAR_FIELD_MID_SIZE,
+#                 label=_('Password'),
+#                 widget=forms.PasswordInput,
+#                 required=True,
+#                 help_text=_('Authentication for the database connection'))
+#
+#         if not self.connection.db_table:
+#             self.fields['db_table'] = forms.CharField(
+#                 max_length=models.CHAR_FIELD_MID_SIZE,
+#                 label=_('Table name'),
+#                 required=True,
+#                 help_text=_('Table to load'))
+#             self.set_fields_from_dict(['db_table'])
+#
+#     def clean(self) -> Dict:
+#         """Store the fields in the Form Payload"""
+#         form_data = super().clean()
+#
+#         if 'db_password' in self.fields:
+#             self.store_fields_in_dict([
+#                 ('db_password', signing.dumps(form_data['db_password']))])
+#
+#         if 'db_table' in self.fields:
+#             self.store_fields_in_dict([('db_table', None)])
+#
+#         return form_data
 
 
 class AthenaConnectionForm(ConnectionForm):
-    """Form to read data from SQL.
+    """Form to manipulate an Athena data connection.
 
     We collect information to open a connection to an Athena instance
     """

@@ -50,7 +50,7 @@ class ActionViewRunZIPExport(ActionViewZIPBasic):
 
         resp = self.get_response(
             'action:zip_export',
-            session_payload={
+            payload={
                 'action_id': action.id,
                 'exclude_values': [],
                 'prev_url': reverse('action:run', kwargs={'pk': action.id}),

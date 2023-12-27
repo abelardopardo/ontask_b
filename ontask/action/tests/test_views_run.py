@@ -10,7 +10,7 @@ from rest_framework import status
 
 from ontask import (
     OnTaskSharedState, models, settings as ontask_settings, tests)
-from ontask.core import SessionPayload
+from ontask.core import session_ops
 
 
 class ActionViewRunBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
@@ -53,7 +53,7 @@ class ActionViewRunEmailActionNoFilter(ActionViewRunBasic):
         resp = self.get_response(
             'action:run',
             url_params={'pk': action.id})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(action.id == payload['action_id'])
         self.assertTrue(
             payload['prev_url'] == reverse(
@@ -73,8 +73,8 @@ class ActionViewRunEmailActionNoFilter(ActionViewRunBasic):
                 'bcc_email': 'user03@bogus.com user04@bogus.com',
                 'item_column': column.pk,
                 'subject': 'message subject'})
-        payload = SessionPayload.get_session_payload(self.last_request)
-        self.assertTrue(payload == {})
+        payload = session_ops.get_payload(self.last_request)
+        self.assertIsNone(payload)
         self.assertTrue(len(mail.outbox) == action.get_rows_selected())
         self._verify_content()
         self.assertTrue(status.is_success(resp.status_code))
@@ -96,7 +96,7 @@ class ActionViewRunEmailActionOverrideFrom(ActionViewRunBasic):
         resp = self.get_response(
             'action:run',
             url_params={'pk': action.id})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(action.id == payload['action_id'])
         self.assertTrue(
             payload['prev_url'] == reverse(
@@ -116,8 +116,8 @@ class ActionViewRunEmailActionOverrideFrom(ActionViewRunBasic):
                 'bcc_email': 'user03@bogus.com user04@bogus.com',
                 'item_column': column.pk,
                 'subject': 'message subject'})
-        payload = SessionPayload.get_session_payload(self.last_request)
-        self.assertTrue(payload == {})
+        payload = session_ops.get_payload(self.last_request)
+        self.assertIsNone(payload)
         self.assertTrue(len(mail.outbox) == action.get_rows_selected())
         self._verify_content(from_email=override_from)
         self.assertTrue(status.is_success(resp.status_code))
@@ -138,7 +138,7 @@ class ActionViewRunEmailWithFilter(ActionViewRunBasic):
         resp = self.get_response(
             'action:run',
             url_params={'pk': action.id})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(action.id == payload['action_id'])
         self.assertTrue(
             payload['prev_url'] == reverse(
@@ -159,14 +159,14 @@ class ActionViewRunEmailWithFilter(ActionViewRunBasic):
                 'bcc_email': 'user03@bogus.com user04@bogus.com',
                 'confirm_items': True,
                 'subject': 'message subject'})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(payload['confirm_items'])
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
         # Load the Filter page with a GET
         resp = self.get_response(
             'action:item_filter',
-            session_payload=payload)
+            payload=payload)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Emulate the filter page with a POST
@@ -174,15 +174,15 @@ class ActionViewRunEmailWithFilter(ActionViewRunBasic):
             'action:item_filter',
             method='POST',
             req_params={'exclude_values': exclude_values})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(payload['exclude_values'] == exclude_values)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, payload['post_url'])
 
         # Emulate the redirection to run_done
         resp = self.get_response('action:run_done')
-        payload = SessionPayload.get_session_payload(self.last_request)
-        self.assertTrue(payload == {})
+        payload = session_ops.get_payload(self.last_request)
+        self.assertIsNone(payload)
         self._verify_content()
         self.assertTrue(
             len(mail.outbox) == (
@@ -206,7 +206,7 @@ class ActionViewRunEmailWithItemFilter(ActionViewRunBasic):
             'post_url': reverse('action:run_done')}
         resp = self.get_response(
             'action:item_filter',
-            session_payload=payload)
+            payload=payload)
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST
@@ -216,7 +216,7 @@ class ActionViewRunEmailWithItemFilter(ActionViewRunBasic):
             req_params={
                 'exclude_values': ['ctfh9946@bogus.com'],
             },
-            session_payload=payload)
+            payload=payload)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('action:run_done'))
 
@@ -244,7 +244,7 @@ class ActionViewRunEmailReportAction(ActionViewRunBasic):
         resp = self.get_response(
             'action:run',
             url_params={'pk': action.id})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(action.id == payload['action_id'])
         self.assertTrue(
             payload['prev_url'] == reverse(
@@ -264,8 +264,8 @@ class ActionViewRunEmailReportAction(ActionViewRunBasic):
                 'cc_email': 'user01@bogus.com user02@bogus.com',
                 'bcc_email': 'user03@bogus.com user04@bogus.com',
                 'subject': 'Email to instructor'})
-        payload = SessionPayload.get_session_payload(self.last_request)
-        self.assertTrue(payload == {})
+        payload = session_ops.get_payload(self.last_request)
+        self.assertIsNone(payload)
         self.assertTrue(len(mail.outbox) == 1)
         self.assertTrue(status.is_success(resp.status_code))
 
@@ -282,7 +282,7 @@ class ActionViewRunJSONActionNoFilter(ActionViewRunBasic):
         resp = self.get_response(
             'action:run',
             url_params={'pk': action.id})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(action.id == payload['action_id'])
         self.assertTrue(
             payload['prev_url'] == reverse(
@@ -300,8 +300,8 @@ class ActionViewRunJSONActionNoFilter(ActionViewRunBasic):
             req_params={
                 'item_column': column.pk,
                 'token': 'fake token'})
-        payload = SessionPayload.get_session_payload(self.last_request)
-        self.assertTrue(payload == {})
+        payload = session_ops.get_payload(self.last_request)
+        self.assertIsNone(payload)
         self.assertTrue(
             len(OnTaskSharedState.json_outbox) == action.get_rows_selected())
         self._verify_json_content()
@@ -321,7 +321,7 @@ class ActionViewRunJSONActionWithFilter(ActionViewRunBasic):
         resp = self.get_response(
             'action:run',
             url_params={'pk': action.id})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(action.id == payload['action_id'])
         self.assertTrue(
             payload['prev_url'] == reverse(
@@ -340,14 +340,14 @@ class ActionViewRunJSONActionWithFilter(ActionViewRunBasic):
                 'item_column': column.pk,
                 'confirm_items': True,
                 'token': 'fake token'})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(payload['confirm_items'])
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
         # Load the Filter page with a GET
         resp = self.get_response(
             'action:item_filter',
-            session_payload=payload)
+            payload=payload)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Emulate the filter page with a POST
@@ -355,15 +355,15 @@ class ActionViewRunJSONActionWithFilter(ActionViewRunBasic):
             'action:item_filter',
             method='POST',
             req_params={'exclude_values': exclude_values})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(payload['exclude_values'] == exclude_values)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, payload['post_url'])
 
         # Emulate the redirection to run_done
         resp = self.get_response('action:run_done')
-        payload = SessionPayload.get_session_payload(self.last_request)
-        self.assertTrue(payload == {})
+        payload = session_ops.get_payload(self.last_request)
+        self.assertIsNone(payload)
         self.assertTrue(
             len(OnTaskSharedState.json_outbox) == (
                 action.get_rows_selected() - len(exclude_values)))
@@ -381,7 +381,7 @@ class ActionViewRunJSONReportAction(ActionViewRunBasic):
         resp = self.get_response(
             'action:run',
             url_params={'pk': action.id})
-        payload = SessionPayload.get_session_payload(self.last_request)
+        payload = session_ops.get_payload(self.last_request)
         self.assertTrue(action.id == payload['action_id'])
         self.assertTrue(
             payload['prev_url'] == reverse(
@@ -398,8 +398,8 @@ class ActionViewRunJSONReportAction(ActionViewRunBasic):
             method='POST',
             req_params={
                 'token': 'fake token'})
-        payload = SessionPayload.get_session_payload(self.last_request)
-        self.assertTrue(payload == {})
+        payload = session_ops.get_payload(self.last_request)
+        self.assertIsNone(payload)
         self.assertTrue(len(OnTaskSharedState.json_outbox) == 1)
         self.assertTrue(
             OnTaskSharedState.json_outbox[0]['auth'] == 'Bearer fake token')
@@ -425,7 +425,7 @@ class ActionViewRunCanvasEmailAction(ActionViewRunBasic):
                 'item_column': column.pk,
                 'target_url': 'Server one',
             },
-            session_payload={
+            payload={
                 'item_column': column.pk,
                 'action_id': action.id,
                 'target_url': 'Server one',
@@ -457,7 +457,7 @@ class ActionViewRunCanvasEmailDone(ActionViewRunBasic):
         resp = self.get_response(
             'action:run_done',
             method='POST',
-            session_payload={
+            payload={
                 'item_column': column.pk,
                 'operation_type': action.action_type,
                 'action_id': action.id,

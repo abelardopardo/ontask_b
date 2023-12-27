@@ -1,10 +1,6 @@
 """Model is to store process to execute in the platform at a certain time."""
 import json
-from datetime import datetime
-from typing import Optional
-from zoneinfo import ZoneInfo
 
-from django.conf import settings
 from django.db import models
 from django.db.models import JSONField
 from django.utils.translation import gettext_lazy as _
@@ -47,6 +43,8 @@ OPERATION_TYPES = {
         Log.WORKFLOW_INCREASE_TRACK_COUNT],
     Log.PLUGIN_EXECUTE: Log.LOG_TYPES[Log.PLUGIN_EXECUTE],
     Log.WORKFLOW_UPDATE_LUSERS: Log.LOG_TYPES[Log.WORKFLOW_UPDATE_LUSERS],
+    Log.WORKFLOW_DATA_CANVAS_COURSE_UPLOAD:
+        Log.LOG_TYPES[Log.WORKFLOW_DATA_CANVAS_COURSE_UPLOAD],
 }
 
 
@@ -64,10 +62,10 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         choices=[(key, value) for key, value in OPERATION_TYPES.items()])
 
     # Time of execution
-    execute = models.DateTimeField(
+    execute_start = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=_('When to execute this action'))
+        verbose_name=_('Start of execution period'))
 
     # Crontab string encoding the frequency of execution (if  needed
     frequency = models.CharField(
@@ -131,74 +129,20 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         null=True,
         verbose_name=_('payload'))
 
-    @staticmethod
-    def validate_times(execute, frequency, execute_until) -> Optional[str]:
-        """Verify that fields execute, frequency and execute_until are correct.
-
-        There are eight possible combinations when specifying the start,
-        stop and frequency parameters in the item depending on their values
-        None or a valid value (execute, frequency, execute_until:
-
-        1) None, None, None -> ERROR. Something is needed
-        2) None, None, True -> ERROR. Only execute_until. Not allowed
-        3) None, True, None -> Never ending crontab starting immediately
-        4) None, True, True -> Crontab with an expiry date
-        5) True, None, None -> SINGLE execution at a given date/time
-        6) True, None, True -> ERROR: Missing frequency
-        7) True, True, None -> Crontab that starts at a time in the future
-        8) True, True, True -> Crontab starting and stopping at a given time.
-
-        :param execute: Datetime to start execution
-        :param frequency: String with a crontab format
-        :param execute_until: Datetime to stop execution
-        :return: Error message, or Nothing if everything is fine.
-        """
-        if not execute and not frequency:
-            # Cases 1 and 2
-            return _('Incorrect execution time specification.')
-
-        # Start and end are given, but there is no frequency.
-        if execute and not frequency and execute_until:
-            # Case 6
-            return _('Frequency of execution is missing.')
-
-        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
-        if execute_until and execute_until < now:
-            # Case 4 and 8 when current date/time is later
-            return _('Execution times in the past. No execution possible.')
-
-        if execute and not frequency and not execute_until and execute < now:
-            # Case 5 when the start time is in the past
-            return _('Execution time is in the past. No execution possible.')
-
-        if execute and execute_until and execute_until < execute:
-            return _('Incorrect execution dates.')
-
-        return None
-
     def delete_task(self):
         """Delete the task if present."""
         if self.task:
             self.task.delete()
-
-    def are_times_valid(self) -> Optional[str]:
-        """Verify that execute, frequency and execute_until are correct.
-
-        :return: An error message or None if everything is fine
-        """
-        return self.validate_times(
-            self.execute,
-            self.frequency,
-            self.execute_until)
 
     def log(self, operation_type: str, **kwargs):
         """Log the operation with the object."""
         payload = {
             'Scheduled id': self.id,
             'Scheduled name': self.name,
-            'Scheduled execute': simplify_datetime_str(self.execute),
+            'Scheduled execute': simplify_datetime_str(self.execute_start),
             'Scheduled frequency': self.frequency,
-            'Scheduled execute until': simplify_datetime_str(self.execute_until),
+            'Scheduled execute until': simplify_datetime_str(
+                self.execute_until),
             'Scheduled status': self.status,
             'Scheduled workflow': self.workflow.name,
             'Scheduled payload': json.dumps(self.payload)}
@@ -219,6 +163,6 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         return self.name
 
     class Meta:
-        """Define the criteria of uniqueness with name and action."""
+        """Define the uniqueness criteria with name and workflow."""
 
         unique_together = ('name', 'workflow')

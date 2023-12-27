@@ -10,7 +10,8 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from ontask import models, tasks
+from ontask import models
+from ontask.tasks.execute import execute_operation
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 from ontask.dataops.services.plugin_admin import refresh_plugin_data
 
@@ -148,7 +149,7 @@ def plugin_queue_execution(
         parameters=json.dumps(run_parameters['params'], default=str),
         status='preparing execution')
 
-    tasks.execute_operation.delay(
+    execute_operation.delay(
         models.Log.PLUGIN_EXECUTE,
         user_id=request.user.id,
         log_id=log_item.id,

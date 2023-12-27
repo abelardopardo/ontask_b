@@ -153,6 +153,7 @@ class UserCreationForm(forms.ModelForm):
 
     def clean_password2(self):
         # Check that the two password entries match
+        password2 = ''
         if (
             (password1 := self.cleaned_data.get("password1"))
             and (password2 := self.cleaned_data.get("password2"))

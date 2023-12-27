@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from ontask import models
-from ontask.core import store_workflow_in_session
+from ontask.core import session_ops
 from ontask.dataops import pandas, sql
 
 
@@ -51,7 +51,7 @@ def upload_step_two(
     pandas.store_workflow_table(workflow, upload_data)
 
     # Update the session information
-    store_workflow_in_session(request.session, workflow)
+    session_ops.store_workflow_in_session(request, workflow)
 
     col_info = workflow.get_column_info()
     workflow.log(
@@ -207,7 +207,9 @@ def upload_step_four(
         column_names=col_info[0],
         column_types=col_info[1],
         column_unique=col_info[2])
-    store_workflow_in_session(request.session, workflow)
-    request.session.pop('upload_data', None)
+    session_ops.store_workflow_in_session(request, workflow)
+
+    # Remove the upload_data payload from the session
+    session_ops.flush_payload(request)
 
     return redirect(reverse('table:display'))

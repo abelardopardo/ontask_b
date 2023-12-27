@@ -13,8 +13,7 @@ from django.views.generic import base, detail
 from rest_framework import permissions
 
 from ontask import models
-from ontask.core.session_ops import (
-    SessionStore, acquire_workflow_access, expand_query_with_related)
+from ontask.core import session_ops
 
 GROUP_NAMES = ['student', 'instructor']
 
@@ -41,18 +40,6 @@ def error_redirect(
     return redirect(where)
 
 
-def store_workflow_in_session(session: SessionStore, wflow: models.Workflow):
-    """Store the workflow id, name, and number of rows in the session.
-
-    :param session: object of SessionStore
-    :param wflow: Workflow object
-    :return: Nothing. Store the id, name and nrows in the session
-    """
-    session['ontask_workflow_id'] = wflow.id
-    session['ontask_workflow_name'] = wflow.name
-    session['ontask_workflow_rows'] = wflow.nrows
-
-
 def get_session_workflow(
     request: http.HttpRequest,
     wid: int = None,
@@ -67,14 +54,14 @@ def get_session_workflow(
     :param wid: ID of the requested workflow
     :return
     """
-    workflow = acquire_workflow_access(
+    workflow = session_ops.acquire_workflow_access(
         request.user,
         request.session,
         wid=wid,
         select_related=s_related,
         prefetch_related=pf_related)
 
-    store_workflow_in_session(request.session, workflow)
+    session_ops.store_workflow_in_session(request, workflow)
 
     return workflow
 
@@ -241,7 +228,7 @@ class ActionView(detail.SingleObjectMixin, WorkflowView):
 
     def get_queryset(self):
         """Consider only the actions attached to this workflow."""
-        return expand_query_with_related(
+        return session_ops.expand_query_with_related(
             self.workflow.actions.all(),
             getattr(self, 's_related', None),
             getattr(self, 'pf_related', None))
@@ -264,7 +251,7 @@ class ColumnConditionView(detail.SingleObjectMixin, WorkflowView):
     def get_queryset(self):
         """Consider only the items attached to this workflow."""
 
-        return expand_query_with_related(
+        return session_ops.expand_query_with_related(
             models.ActionColumnConditionTuple.objects.filter(
                 Q(action__workflow__user=self.request.user)
                 | Q(action__workflow__shared=self.request.user),
@@ -289,7 +276,7 @@ class ColumnView(detail.SingleObjectMixin, WorkflowView):
     def get_queryset(self):
         """Consider only the items attached to this workflow."""
 
-        return expand_query_with_related(
+        return session_ops.expand_query_with_related(
             self.workflow.columns.all(),
             getattr(self, 's_related', None),
             getattr(self, 'pf_related', None))
@@ -311,7 +298,7 @@ class ConditionView(detail.SingleObjectMixin, WorkflowView):
     def get_queryset(self):
         """Consider only the items attached to this workflow."""
 
-        return expand_query_with_related(
+        return session_ops.expand_query_with_related(
             self.workflow.conditions.all(),
             getattr(self, 's_related', None),
             getattr(self, 'pf_related', None))
@@ -333,7 +320,7 @@ class LogView(detail.SingleObjectMixin, WorkflowView):
     def get_queryset(self):
         """Consider only the items attached to this workflow."""
 
-        return expand_query_with_related(
+        return session_ops.expand_query_with_related(
             self.workflow.logs.filter(user=self.request.user),
             getattr(self, 's_related', None),
             getattr(self, 'pf_related', None))
@@ -354,7 +341,7 @@ class ScheduledOperationView(detail.SingleObjectMixin, WorkflowView):
 
     def get_queryset(self):
         """Consider only the items attached to this workflow."""
-        return expand_query_with_related(
+        return session_ops.expand_query_with_related(
             self.workflow.scheduled_operations.all(),
             getattr(self, 's_related', None),
             getattr(self, 'pf_related', None))
@@ -375,7 +362,7 @@ class ViewView(detail.SingleObjectMixin, WorkflowView):
 
     def get_queryset(self):
         """Consider only the items attached to this workflow."""
-        return expand_query_with_related(
+        return session_ops.expand_query_with_related(
             self.workflow.views.all(),
             getattr(self, 's_related', None),
             getattr(self, 'pf_related', None))

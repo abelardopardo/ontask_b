@@ -17,6 +17,7 @@ from django.db import connection
 from django.template.response import SimpleTemplateResponse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve, reverse
+from psycopg2 import sql
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
@@ -29,7 +30,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import OnTaskSharedState, models
-from ontask.core import GROUP_NAMES, SessionPayload
+from ontask.core import GROUP_NAMES, session_ops
 from ontask.core.checks import sanity_checks
 from ontask.dataops import pandas
 
@@ -41,7 +42,75 @@ user_info = [
     ('Instructor Two', 'instructor02@bogus.com', [GROUP_NAMES[1]], False),
     ('Instructor Three', 'instructor03@bogus.com', [GROUP_NAMES[1]], False),
     ('Super User', 'superuser@bogus.com', GROUP_NAMES, True)]
-boguspwd = 'boguspwd'
+
+boguspwd: str = 'boguspwd'
+
+SQL_QUERIES = [
+    (
+        sql.SQL("DROP TABLE IF EXISTS {0}").format(
+            sql.Identifier('__ONTASK_TEST_TABLE')),
+        []),
+    (
+        sql.SQL(
+            """SELECT {2}, {3}, {4} INTO {0} FROM {1}
+               WHERE {4} = {5} ORDER BY {3} LIMIT 3""").format(
+                sql.Identifier('__ONTASK_TEST_TABLE'),
+                sql.Identifier('__ONTASK_WORKFLOW_TABLE_1'),
+                sql.Identifier('SID'),
+                sql.Identifier('email'),
+                sql.Identifier('Enrolment Type'),
+                sql.Placeholder()),
+        ['HECS']),
+    (
+        sql.SQL("ALTER TABLE {0} ADD COLUMN {1} bigint").format(
+                sql.Identifier('__ONTASK_TEST_TABLE'),
+                sql.Identifier('NEW COLUMN')),
+        []),
+    (
+        sql.SQL("INSERT INTO {0} VALUES ({1}, {2}, {3})").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Placeholder(),
+            sql.Placeholder(),
+            sql.Placeholder()),
+        ['111111111', 'newuser1@bogus.com', 'HECS']),
+    (
+        sql.SQL("INSERT INTO {0} VALUES ({1}, {2}, {3})").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Placeholder(),
+            sql.Placeholder(),
+            sql.Placeholder()),
+        ['222222222', 'newuser2@bogus.com', 'HECS']),
+    (
+        sql.SQL("INSERT INTO {0} VALUES ({1}, {2}, {3})").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Placeholder(),
+            sql.Placeholder(),
+            sql.Placeholder()),
+        ['333333333', 'newuser3@bogus.com', 'HECS']),
+    (
+        sql.SQL("UPDATE {0} SET {1} = {2}").format(
+            sql.Identifier('__ONTASK_TEST_TABLE'),
+            sql.Identifier('Enrolment Type'),
+            sql.Placeholder()),
+        ['Local']),
+    (
+        sql.SQL(
+            """WITH rnq AS (
+               SELECT {2}, row_number() OVER (ORDER BY {2}) AS rn FROM {0})
+               UPDATE {0} tt SET {1} =
+               (SELECT rn FROM rnq WHERE tt.email = rnq.email)""").format(
+                sql.Identifier('__ONTASK_TEST_TABLE'),
+                sql.Identifier('NEW COLUMN'),
+                sql.Identifier('email')),
+        [])]
+
+
+def create_mock_sql_table():
+    # Create the new table in the DB for testing purposes
+    with connection.connection.cursor() as cursor:
+        # Add the extra table to the database
+        for query, fields in SQL_QUERIES:
+            cursor.execute(query, fields)
 
 
 class ElementHasFullOpacity:
@@ -159,18 +228,6 @@ class OnTaskTestCase(OnTaskBasicTestCase):
 
     last_request = None
 
-    @classmethod
-    def _store_workflow_in_session(cls, session, wflow: models.Workflow):
-        """Store the workflow id, name, and number of rows in the session.
-
-        :param session: Current session used to store the information
-        :param wflow: Workflow object
-        :return: Nothing. Store the id, name and nrows in the session
-        """
-        session['ontask_workflow_rows'] = wflow.nrows
-        session['ontask_workflow_id'] = wflow.id
-        session['ontask_workflow_name'] = wflow.name
-
     def setUp(self):
         super().setUp()
         # Every test needs access to the request factory.
@@ -195,8 +252,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         # adding messages
         setattr(request, '_messages', FallbackStorage(request))
         if self.workflow:
-            self._store_workflow_in_session(request.session, self.workflow)
-        request.session.save()
+            session_ops.store_workflow_in_session(request, self.workflow)
 
         return request
 
@@ -208,7 +264,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         req_params: Optional[Mapping] = None,
         meta=None,
         is_ajax: Optional[bool] = False,
-        session_payload: Optional[Dict] = None,
+        payload: Optional[Dict] = None,
         **kwargs
     ) -> http.HttpResponse:
         """Create a request and send it to a processing function.
@@ -220,7 +276,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         POST requests)
         :param meta: Dictionary of name, value for META
         :param is_ajax: Generate an ajax request or not
-        :param session_payload: Dictionary to add to the request session
+        :param payload: Dictionary to add to the request session
         :param kwargs: Additional arguments to attach to the URL
         :return:
         """
@@ -245,15 +301,14 @@ class OnTaskTestCase(OnTaskBasicTestCase):
 
         old_payload = {}
         if self.last_request:
-            old_payload = SessionPayload.get_session_payload(
-                self.last_request)
+            old_payload = session_ops.get_payload(self.last_request)
 
-        if session_payload:
-            old_payload.update(session_payload)
+        if payload:
+            old_payload.update(payload)
 
         self.last_request = self.add_middleware(request)
 
-        SessionPayload(self.last_request.session, old_payload)
+        session_ops.set_payload(self.last_request, old_payload)
 
         response = resolve(url_str).func(self.last_request, **url_params)
 
@@ -335,9 +390,6 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         cls.device_pixel_ratio = cls.selenium.execute_script(
             'return window.devicePixelRatio'
         )
-        # print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
-        # print('Viewport width: {0}'.format(cls.viewport_width))
-        # print('viewport height: {0}'.format(cls.viewport_height))
 
         cls.selenium.set_window_size(
             cls.viewport_width * cls.device_pixel_ratio,
@@ -373,6 +425,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         :return: Element
         """
         element = self.selenium.find_element(by_string, string_value)
+        self.scroll_element_into_view(element)
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(element))
         element.click()
@@ -722,6 +775,17 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.XPATH, '//form')))
 
+    def go_to_canvas_upload_merge_step_1(self):
+        self.go_to_upload_merge()
+
+        # Go to Canvas Upload/Merge
+        self.click_on_element(
+            By.XPATH,
+            '//table[@id="dataops-table"]'
+            '//a[normalize-space()="Canvas Course"]')
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//form')))
+
     def go_to_google_sheet_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
@@ -744,7 +808,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.XPATH, '//form')))
 
-    def go_to_sql_upload_merge(self):
+    def go_to_sql_upload_merge_step_1(self):
         self.go_to_upload_merge()
 
         # Goto SQL option
@@ -753,8 +817,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             '//table[@id="dataops-table"]//a[normalize-space()="SQL '
             'Connection"]')
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//div[@id = "connection-instructor"]')))
+            EC.visibility_of_element_located((By.XPATH, '//form')))
 
     def go_to_athena_upload_merge(self):
         self.go_to_upload_merge()

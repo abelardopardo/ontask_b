@@ -16,10 +16,10 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from ontask.dataops import pandas, sql
 from ontask.models.column import Column
 from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
+from ontask.dataops import pandas, sql
 
 CHAR_FIELD_MD5_SIZE = 32
 
@@ -378,10 +378,6 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """
         # Step 1: Delete the data frame from the database
         sql.delete_table(self.get_data_frame_table_name())
-        try:
-            del self.has_data_frame
-        except AttributeError:
-            pass
 
         # Reset some workflow fields
         self.nrows = 0

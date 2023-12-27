@@ -65,6 +65,11 @@
         be created by the system administrator.{% endblocktrans %}</p>
       {% endif %}
     {% endif %}
+    {% if select_sql_connection %}
+    <div class="text-center">
+      <a class="btn btn-outline-dark spin" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
+    </div>
+    {% endif %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}

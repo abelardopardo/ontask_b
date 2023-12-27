@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
-from ontask.core.permissions import (
-    error_redirect, store_workflow_in_session, get_session_workflow)
+from ontask.core.permissions import error_redirect, get_session_workflow
+from ontask.core import session_ops
 
 
 def ajax_required(func: Callable) -> Callable:
@@ -50,7 +50,7 @@ def get_workflow(
                 return error_redirect(request)
 
             # Update the session
-            store_workflow_in_session(request.session, workflow)
+            session_ops.store_workflow_in_session(request, workflow)
 
             kwargs['workflow'] = workflow
 

@@ -1,3 +1,18 @@
+# 11.0 (2023-12-27)
+
+## Fixed
+
+- OAuth tokens are now stored encrypted
+
+- Upload operations against SQL databases are now simplified. User does not 
+  get to choose any parameters (database name, table, user, password), just the 
+  administrator.
+
+## Added
+
+- New functionality to load Canvas Course information into a workflow (with 
+  thanks to the University of Copenhagen for sponsoring this addition.)
+
 # 10.6 (2023-12-5)
 
 ## Added

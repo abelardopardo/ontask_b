@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-04 09:50+1030\n"
+"POT-Creation-Date: 2023-12-27 17:41+1030\n"
 "PO-Revision-Date: 2019-09-14 19:37+0930\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: ontask/__init__.py:148
+#: ontask/__init__.py:149
 msgid "The symbol ' cannot be used in the name."
 msgstr "'  符号不能在名称中使用。"
 
-#: ontask/__init__.py:151
+#: ontask/__init__.py:152
 msgid "The symbol \" cannot be used in the name."
 msgstr "\"  符号不能在名称中使用。"
 
-#: ontask/__init__.py:154
+#: ontask/__init__.py:155
 msgid "The name cannot start with \"__\""
 msgstr "名称不能以”__”符号开头"
 
-#: ontask/__init__.py:161
+#: ontask/__init__.py:162
 msgid "Copy of "
 msgstr "副本 "
 
@@ -86,8 +86,8 @@ msgstr ""
 msgid "A user with that %(username)s already exists."
 msgstr "具有该名称的列已经存在"
 
-#: ontask/accounts/forms.py:124 ontask/accounts/forms.py:190
-#: ontask/connection/forms.py:71 ontask/models/sqlconnection.py:56
+#: ontask/accounts/forms.py:124 ontask/accounts/forms.py:191
+#: ontask/models/sqlconnection.py:54
 #, fuzzy
 #| msgid "Enter Password"
 msgid "Password"
@@ -179,8 +179,8 @@ msgid "Space-separated list of BCC emails"
 msgstr "密件抄送邮件的逗号分隔列表"
 
 #: ontask/action/forms/run.py:141 ontask/action/forms/run.py:147
-#: ontask/scheduler/serializers.py:170 ontask/scheduler/serializers.py:182
-#: ontask/scheduler/serializers.py:193
+#: ontask/scheduler/serializers.py:171 ontask/scheduler/serializers.py:183
+#: ontask/scheduler/serializers.py:194
 #, fuzzy, python-brace-format
 #| msgid "Incorrect initial value"
 msgid "Incorrect email value \"{0}\"."
@@ -211,7 +211,7 @@ msgid "Track email reading in an extra column?"
 msgstr "是否跟踪电子邮件阅读额外列？"
 
 #: ontask/action/forms/run.py:241
-msgid "Adds an extra column to the workflow. Results are aproximate."
+msgid "Adds an extra column to the workflow. Results are approximate."
 msgstr ""
 
 #: ontask/action/forms/run.py:249 ontask/action/forms/run.py:309
@@ -224,7 +224,7 @@ msgstr "用于目标邮件地址的列"
 msgid "Incorrect email address \"{0}\"."
 msgstr "无效列名{0}。"
 
-#: ontask/action/forms/run.py:296 ontask/scheduler/serializers.py:173
+#: ontask/action/forms/run.py:296 ontask/scheduler/serializers.py:174
 msgid "The column with email addresses has incorrect values."
 msgstr "具有电子邮件地址的列含有不正确的值。"
 
@@ -260,7 +260,7 @@ msgstr "一个Moodle压缩文件需要两个列名"
 msgid "Values in column must have format \"Participant [number]\""
 msgstr "列中的值必须具有”Participant [number]”格式"
 
-#: ontask/action/forms/run.py:472
+#: ontask/action/forms/run.py:472 ontask/dataops/forms/upload.py:172
 msgid "Canvas Host"
 msgstr "Canvas主机"
 
@@ -331,23 +331,8 @@ msgstr "不能用空数据表导入操作进入工作流"
 msgid "Action with name \"{0}\" already exists"
 msgstr "本名称命名的操作已经存在"
 
-#: ontask/action/services/canvas_email.py:38
-msgid "OAuth token refreshed"
-msgstr "OAuth令牌已刷新"
-
-#: ontask/action/services/canvas_email.py:78
-#, fuzzy
-#| msgid "Message successfuly sent"
-msgid "Message successfully sent"
-msgstr "信息已发送"
-
-#: ontask/action/services/canvas_email.py:101
-#, python-brace-format
-msgid "Unable to deliver message (code {0})"
-msgstr "无法传递信息（code{0}）"
-
-#: ontask/action/services/canvas_email.py:130
-#: ontask/action/services/run_factory.py:149
+#: ontask/action/services/canvas_email.py:44
+#: ontask/action/services/run_factory.py:147
 #: ontask/templates/action/action_zip_step1.html:35
 #: ontask/templates/action/request_email_data.html:36
 #: ontask/templates/action/request_email_report_data.html:27
@@ -356,13 +341,16 @@ msgstr "无法传递信息（code{0}）"
 msgid "Send"
 msgstr "发送"
 
-#: ontask/action/services/canvas_email.py:181
-msgid "Unable to find OAuth Information Record"
-msgstr "找不到OAUTH信息记录"
+#: ontask/action/services/canvas_email.py:130
+#, python-brace-format
+msgid "Unable to deliver message (code {0})"
+msgstr "无法传递信息（code{0}）"
 
-#: ontask/action/services/canvas_email.py:189
-msgid "Incorrect execution due to absence of token"
-msgstr "因为令牌缺失造成的不正确的执行"
+#: ontask/action/services/canvas_email.py:133
+#, fuzzy
+#| msgid "Message successfuly sent"
+msgid "Message successfully sent"
+msgstr "信息已发送"
 
 #: ontask/action/services/email.py:64
 #, python-brace-format
@@ -385,13 +373,13 @@ msgstr "抄送电子邮件中的无效电子邮件地址"
 msgid "Error when sending the list email: {0}"
 msgstr "发送邮件列表{0}时发生错误"
 
-#: ontask/action/services/import_export.py:106
+#: ontask/action/services/import_export.py:99
 #, fuzzy
 #| msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgid "Incorrect file. Expecting a GZIP file (exported action)."
 msgstr "文件不正确。期待GZIP文件 (导出工作流）。"
 
-#: ontask/action/services/import_export.py:120
+#: ontask/action/services/import_export.py:113
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "无法导入操作：{0}"
@@ -432,7 +420,7 @@ msgstr "表中未找到数据"
 #: ontask/templates/column/detail.html:100
 #: ontask/templates/dataops/upload_s2.html:38
 #: ontask/workflow/forms/attribute_shared.py:19
-#: ontask/workflow/services/workflow_ops.py:14
+#: ontask/workflow/services/workflow_ops.py:16
 msgid "Name"
 msgstr "名称"
 
@@ -452,17 +440,17 @@ msgstr "条件"
 #: ontask/action/services/survey.py:249 ontask/connection/services/athena.py:38
 #: ontask/connection/services/athena.py:71 ontask/connection/services/sql.py:51
 #: ontask/templates/column/detail.html:99
-#: ontask/workflow/services/workflow_ops.py:44
+#: ontask/workflow/services/workflow_ops.py:46
 #, fuzzy
 #| msgid "Operation"
 msgid "Operations"
 msgstr "操作"
 
-#: ontask/action/views/action.py:160
+#: ontask/action/views/action.py:161
 msgid "Action successfully cloned."
 msgstr "操作被成功克隆。"
 
-#: ontask/action/views/action.py:179
+#: ontask/action/views/action.py:180
 #, fuzzy
 #| msgid "Action successfully cloned."
 msgid "Action successfully deleted."
@@ -496,34 +484,34 @@ msgstr "无法导入文件：{0}"
 msgid "Actions imported: {0}"
 msgstr "动作已导入"
 
-#: ontask/action/views/run.py:42
+#: ontask/action/views/run.py:43
 msgid ""
 "Unable to execute actions due to a misconfiguration. Ask your system "
 "administrator to enable message queueing."
 msgstr "由于错误配置，无法安排操作。请系统管理员启用队列。"
 
-#: ontask/action/views/run.py:77
+#: ontask/action/views/run.py:80
 #, fuzzy
 #| msgid "Incorrect ZIP action invocation."
 msgid "Incorrect action run invocation."
 msgstr "不正确的压缩文件操作调动。"
 
-#: ontask/action/views/run.py:131 ontask/action/views/run.py:142
+#: ontask/action/views/run.py:134 ontask/action/views/run.py:145
 msgid "Incorrect item filter invocation."
 msgstr "不正确的项目筛选标签调用。"
 
-#: ontask/action/views/run.py:189
+#: ontask/action/views/run.py:192
 msgid "Incorrect ZIP action invocation."
 msgstr "不正确的压缩文件操作调动。"
 
-#: ontask/action/views/run.py:201 ontask/action/views/run.py:213
+#: ontask/action/views/run.py:204 ontask/action/views/run.py:216
 #, fuzzy
 #| msgid "Incorrect ZIP action invocation."
 msgid "Incorrect payload in ZIP action invocation"
 msgstr "不正确的压缩文件操作调动。"
 
-#: ontask/action/views/run.py:242 ontask/column/views/index.py:115
-#: ontask/table/views/table_display.py:116
+#: ontask/action/views/run.py:245 ontask/column/views/index.py:115
+#: ontask/table/views/table_display.py:120
 msgid "Incorrect request. Unable to process"
 msgstr "不正确的请求。不能处理"
 
@@ -824,24 +812,6 @@ msgstr "条件被成功克隆。"
 msgid "There is already a connection with this name."
 msgstr "已存在以此命名的链接。"
 
-#: ontask/connection/forms.py:74
-#, fuzzy
-#| msgid "Password to authenticate the database connection"
-msgid "Authentication for the database connection"
-msgstr "用于验证数据库连接的密码"
-
-#: ontask/connection/forms.py:79 ontask/models/athenaconnection.py:93
-#, fuzzy
-#| msgid "Table View"
-msgid "Table name"
-msgstr "表格视图"
-
-#: ontask/connection/forms.py:81 ontask/connection/forms.py:163
-#, fuzzy
-#| msgid "Table row updated"
-msgid "Table to load"
-msgstr "表行已更新"
-
 #: ontask/connection/forms.py:150
 #, fuzzy
 #| msgid "Authentication Token"
@@ -854,6 +824,12 @@ msgstr "身份验证令牌"
 msgid "Authentication for the session"
 msgstr "身份验证令牌"
 
+#: ontask/connection/forms.py:163
+#, fuzzy
+#| msgid "Table row updated"
+msgid "Table to load"
+msgstr "表行已更新"
+
 #: ontask/connection/forms.py:176 ontask/dataops/forms/select.py:143
 msgid "Key Column in Existing Table"
 msgstr "现有表中的关键列"
@@ -864,7 +840,7 @@ msgstr "现有表中的关键列"
 msgid "Method to select rows to merge"
 msgstr "选择要合并/更新的行的方法"
 
-#: ontask/connection/services/crud.py:15
+#: ontask/connection/services/crud.py:15 ontask/models/connection.py:20
 #: ontask/scheduler/services/scheduler_table.py:35
 #, fuzzy
 #| msgid "Enabled"
@@ -872,35 +848,86 @@ msgid "Enabled?"
 msgstr "启用"
 
 #: ontask/connection/urls.py:15 ontask/connection/urls.py:22
-#: ontask/scheduler/views/index.py:42 ontask/templates/base.html:135
+#: ontask/templates/base.html:135
 msgid "SQL Connections"
 msgstr "SQL连接"
 
-#: ontask/connection/urls.py:62 ontask/connection/urls.py:69
+#: ontask/connection/urls.py:66 ontask/connection/urls.py:73
 #: ontask/templates/base.html:140
 #, fuzzy
 #| msgid "SQL Connections"
 msgid "Athena Connections"
 msgstr "SQL连接"
 
-#: ontask/core/canvas_ops.py:62
+#: ontask/core/canvas_ops.py:146
 msgid "Unable to obtain Canvas OAuth information"
 msgstr "无法获取Canvas OAUTH信息"
 
-#: ontask/core/canvas_ops.py:87
+#: ontask/core/canvas_ops.py:171
 #, python-brace-format
 msgid "Error when invoking Canvas API: {0}."
 msgstr "调用Canvas API时出错：{0}。"
 
-#: ontask/core/checks.py:141
+#: ontask/core/canvas_ops.py:185
+msgid "Unable to find OAuth Information Record"
+msgstr "找不到OAUTH信息记录"
+
+#: ontask/core/canvas_ops.py:193
+msgid "Incorrect execution due to absence of token"
+msgstr "因为令牌缺失造成的不正确的执行"
+
+#: ontask/core/canvas_ops.py:203
+msgid "Empty course_id detected."
+msgstr ""
+
+#: ontask/core/canvas_ops.py:211
+msgid "Negative course id given."
+msgstr ""
+
+#: ontask/core/canvas_ops.py:216
+#, fuzzy
+#| msgid "Incorrect action id."
+msgid "Incorrect course id given."
+msgstr "无效操作ID{0}。"
+
+#: ontask/core/canvas_ops.py:264
+#, python-brace-format
+msgid "Incorrect response from API call {0}"
+msgstr ""
+
+#: ontask/core/checks.py:144
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
 msgstr "新数据不保留列“{0}”的键属性"
 
+#: ontask/core/checks.py:195
+#, fuzzy
+#| msgid "Incorrect execution due to absence of token"
+msgid "Incorrect execution time specification."
+msgstr "因为令牌缺失造成的不正确的执行"
+
+#: ontask/core/checks.py:200
+msgid "Frequency of execution is missing."
+msgstr ""
+
+#: ontask/core/checks.py:205
+msgid "Execution times in the past. No execution possible."
+msgstr ""
+
+#: ontask/core/checks.py:209
+msgid "Execution time is in the past. No execution possible."
+msgstr ""
+
+#: ontask/core/checks.py:212
+#, fuzzy
+#| msgid "Incorrect execution"
+msgid "Incorrect execution dates."
+msgstr "不正确的执行"
+
 #: ontask/core/decorators.py:88 ontask/core/decorators.py:136
 #: ontask/core/decorators.py:184 ontask/core/decorators.py:232
 #: ontask/core/decorators.py:280 ontask/core/decorators.py:329
-#: ontask/core/permissions.py:22 ontask/workflow/views/workflow_ops.py:117
+#: ontask/core/permissions.py:21 ontask/workflow/views/workflow_ops.py:117
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr "工作流没有数据。到\"管理桌面数据\"上传数据 。"
 
@@ -914,23 +941,23 @@ msgstr "文件大小必须小于%(max)s。当前文件大小为%(current)s。"
 msgid "File type ({0}) is not supported."
 msgstr "不支持文件类型({0})"
 
-#: ontask/core/permissions.py:216
+#: ontask/core/permissions.py:203
 #, fuzzy, python-brace-format
 #| msgid "Unable to clone workflow: {0}"
 msgid "Unable to detect workflow ({0})."
 msgstr "无法克隆工作流： {0}"
 
-#: ontask/core/permissions.py:224
+#: ontask/core/permissions.py:211
 msgid "ERROR: "
 msgstr ""
 
-#: ontask/core/session_ops.py:107
+#: ontask/core/session_ops.py:126
 #, fuzzy
 #| msgid "Delete workflow"
 msgid "Select a workflow"
 msgstr "删除工作流"
 
-#: ontask/core/session_ops.py:180
+#: ontask/core/session_ops.py:199
 #, python-brace-format
 msgid "The workflow is being modified by user {0}"
 msgstr "工作流正在被用户{0}修改。"
@@ -1026,93 +1053,173 @@ msgstr "-选择合并选项-"
 msgid "Key Column in New Table"
 msgstr "新表中的关键列"
 
-#: ontask/dataops/forms/upload.py:62
+#: ontask/dataops/forms/upload.py:50 ontask/dataops/forms/upload.py:56
+#: ontask/dataops/forms/upload.py:352 ontask/dataops/forms/upload.py:358
+msgid "This number has to be zero or positive"
+msgstr "这个数字必须是零或正数"
+
+#: ontask/dataops/forms/upload.py:87
 #, python-brace-format
 msgid "Unable to process file ({0})."
 msgstr "不能处理文件({0})。"
 
-#: ontask/dataops/forms/upload.py:80
+#: ontask/dataops/forms/upload.py:105
 msgid ""
 "File in CSV format (typically produced by a statistics package or Excel)"
 msgstr "CSV格式的文件(通常由统计软件包或Excel生成)"
 
-#: ontask/dataops/forms/upload.py:84 ontask/dataops/forms/upload.py:208
-#: ontask/dataops/forms/upload.py:292
+#: ontask/dataops/forms/upload.py:109 ontask/dataops/forms/upload.py:270
+#: ontask/dataops/forms/upload.py:329
 msgid "Lines to skip at the top"
 msgstr "在顶部跳过的行"
 
-#: ontask/dataops/forms/upload.py:86 ontask/dataops/forms/upload.py:210
-#: ontask/dataops/forms/upload.py:294
+#: ontask/dataops/forms/upload.py:111 ontask/dataops/forms/upload.py:272
+#: ontask/dataops/forms/upload.py:331
 msgid "Number of lines to skip at the top when reading the file"
 msgstr "读取文件时在顶部跳过的行数"
 
-#: ontask/dataops/forms/upload.py:91 ontask/dataops/forms/upload.py:215
-#: ontask/dataops/forms/upload.py:299
+#: ontask/dataops/forms/upload.py:116 ontask/dataops/forms/upload.py:277
+#: ontask/dataops/forms/upload.py:336
 msgid "Lines to skip at the bottom"
 msgstr "在底部跳过的行"
 
-#: ontask/dataops/forms/upload.py:93 ontask/dataops/forms/upload.py:217
-#: ontask/dataops/forms/upload.py:301
+#: ontask/dataops/forms/upload.py:118 ontask/dataops/forms/upload.py:279
+#: ontask/dataops/forms/upload.py:338
 msgid "Number of lines to skip at the bottom when reading the file"
 msgstr "读取文件时在底部跳过的行数"
 
-#: ontask/dataops/forms/upload.py:106
+#: ontask/dataops/forms/upload.py:133
 msgid "CSV upload form is not multiform"
 msgstr "CSV文件上传表单不是多形式的"
 
-#: ontask/dataops/forms/upload.py:115 ontask/dataops/forms/upload.py:122
-#: ontask/dataops/forms/upload.py:231 ontask/dataops/forms/upload.py:237
-#: ontask/dataops/forms/upload.py:315 ontask/dataops/forms/upload.py:322
-msgid "This number has to be zero or positive"
-msgstr "这个数字必须是零或正数"
-
-#: ontask/dataops/forms/upload.py:137
-#, python-brace-format
-msgid "File could not be processed ({0})"
-msgstr "无法处理文件({0})"
-
-#: ontask/dataops/forms/upload.py:159
+#: ontask/dataops/forms/upload.py:153
 msgid "File in Excel format (.xls or .xlsx)"
 msgstr "Excel格式的文件(.xls or .xlsx)"
 
-#: ontask/dataops/forms/upload.py:165
+#: ontask/dataops/forms/upload.py:159
 msgid "Sheet within the excelsheet to upload"
 msgstr "Excel表单内上传的表单"
 
-#: ontask/dataops/forms/upload.py:182 ontask/dataops/forms/upload.py:248
-#, python-brace-format
-msgid "File could not be processed: {0}"
-msgstr "无法处理文件：{0}"
+#: ontask/dataops/forms/upload.py:166
+msgid "Canvas course id to retrieve the data."
+msgstr ""
 
-#: ontask/dataops/forms/upload.py:204
+#: ontask/dataops/forms/upload.py:169
+msgid "This is an integer used by Canvas to uniquely identify a course"
+msgstr ""
+
+#: ontask/dataops/forms/upload.py:174
+#, fuzzy
+#| msgid "Name of the Canvas host to send the messages"
+msgid "Name of the Canvas host to extract data."
+msgstr "用于发送信息的Canvas主机名称"
+
+#: ontask/dataops/forms/upload.py:178
+#, fuzzy
+#| msgid "Upload or merge data"
+msgid "Upload Enrolment"
+msgstr "上传或合并数据"
+
+#: ontask/dataops/forms/upload.py:181
+msgid ""
+"Upload information about all enrolled students. Select this option combined "
+"with any other below if you want to upload data for all students regarding "
+"its activity."
+msgstr ""
+
+#: ontask/dataops/forms/upload.py:186
+#, fuzzy
+#| msgid "Uploads"
+msgid "Upload Quizzes"
+msgstr "上传"
+
+#: ontask/dataops/forms/upload.py:188
+#, fuzzy
+#| msgid "Upload data from a CSV file in a S3 Bucket."
+msgid "Upload information about all quizzes in the course"
+msgstr "从S3存储桶中上传一个CSV文件中的数据。"
+
+#: ontask/dataops/forms/upload.py:191
+msgid "Upload Assignments"
+msgstr ""
+
+#: ontask/dataops/forms/upload.py:194
+#, fuzzy
+#| msgid "Upload data from a CSV file in a S3 Bucket."
+msgid "Upload information about all assignments in the course"
+msgstr "从S3存储桶中上传一个CSV文件中的数据。"
+
+#: ontask/dataops/forms/upload.py:197
+#, fuzzy
+#| msgid "Column with the Canvas ID"
+msgid "Include a column with the Course ID?"
+msgstr "具有Canvas账户的列"
+
+#: ontask/dataops/forms/upload.py:200
+msgid "If selected an extra column with the course ID is added."
+msgstr ""
+
+#: ontask/dataops/forms/upload.py:222
+#, fuzzy
+#| msgid "Incorrect action scheduling invocation."
+msgid "Incorrect invocation of UploadCanvasForm"
+msgstr "不正确的操作排程调用。"
+
+#: ontask/dataops/forms/upload.py:231
+msgid ". Value taken from the Workflow Attribute CANVAS COURSE ID"
+msgstr ""
+
+#: ontask/dataops/forms/upload.py:249
+msgid "At least one upload option needs to be selected."
+msgstr ""
+
+#: ontask/dataops/forms/upload.py:266
 #: ontask/templates/action/includes/partial_action_card.html:76
 msgid "URL"
 msgstr "网址"
 
-#: ontask/dataops/forms/upload.py:205
+#: ontask/dataops/forms/upload.py:267
 msgid "URL to access the Google Spreadsheet in CSV format"
 msgstr "以csv格式访问谷歌电子表格的网址"
 
-#: ontask/dataops/forms/upload.py:271
+#: ontask/dataops/forms/upload.py:308
 msgid "AWS S3 Bucket access key"
 msgstr "AWS S3存储桶访问公匙"
 
-#: ontask/dataops/forms/upload.py:277
+#: ontask/dataops/forms/upload.py:314
 msgid "AWS S3 Bucket secret access key"
 msgstr "AWS S3存储桶访问私钥"
 
-#: ontask/dataops/forms/upload.py:283
+#: ontask/dataops/forms/upload.py:320
 msgid "AWS S3 Bucket name"
 msgstr "AWS S3存储桶名称"
 
-#: ontask/dataops/forms/upload.py:289 ontask/models/athenaconnection.py:77
+#: ontask/dataops/forms/upload.py:326 ontask/models/athenaconnection.py:77
 msgid "AWS S3 Bucket file path"
 msgstr "AWS S3存储桶文件路径"
 
-#: ontask/dataops/forms/upload.py:338
-#, python-brace-format
-msgid "S3 bucket file could not be processed: {0}"
-msgstr "S3存储桶文件无法处理：{0}"
+#: ontask/dataops/forms/upload.py:368
+#: ontask/templates/dataops/uploadmerge.html:134
+msgid "SQL Connection"
+msgstr "SQL连接"
+
+#: ontask/dataops/forms/upload.py:370
+#, fuzzy
+#| msgid "Delete SQL connection"
+msgid "Select the SQL connection to use."
+msgstr "删除SQL连接"
+
+#: ontask/dataops/forms/upload.py:399
+#, fuzzy
+#| msgid "SQL connection created"
+msgid "SQL connection information not given"
+msgstr "SQL连接已创建"
+
+#: ontask/dataops/forms/upload.py:407
+#, fuzzy
+#| msgid "Incorrect JSON action invocation."
+msgid "Incorrect SQL connection information"
+msgstr "不正确的JSON操作调动。"
 
 #: ontask/dataops/formula/operands.py:423
 #, python-brace-format
@@ -1140,13 +1247,13 @@ msgstr "评估错误：操作为GREATER或EQUAL时，类型{0}无法执行"
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr "评估错误：操作为BETWEEN时，类型{0}无法执行"
 
-#: ontask/dataops/pandas/database.py:151 ontask/dataops/pandas/database.py:193
+#: ontask/dataops/pandas/database.py:156 ontask/dataops/pandas/database.py:198
 #: ontask/dataops/sql/column_queries.py:141
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr ""
 
-#: ontask/dataops/pandas/database.py:188
+#: ontask/dataops/pandas/database.py:193
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -1195,7 +1302,7 @@ msgstr "列移除操作无效。"
 msgid "Type {0} not found"
 msgstr "未找到类型{0}"
 
-#: ontask/dataops/pandas/merge.py:190
+#: ontask/dataops/pandas/merge.py:191
 #, fuzzy
 #| msgid "how must be one of left, right, outer or inner"
 msgid "Merge method must be one of left, right, outer or inner"
@@ -1219,11 +1326,27 @@ msgstr "列{0}不包含唯一密钥。"
 msgid "Column {0} not found in new data frame"
 msgstr "数据帧中未找到列{0}"
 
-#: ontask/dataops/pandas/merge.py:321
+#: ontask/dataops/pandas/merge.py:232
+#, fuzzy
+#| msgid "Key Column in New Table"
+msgid "Missing key column in table to upload/merge."
+msgstr "新表中的关键列"
+
+#: ontask/dataops/pandas/merge.py:251
+msgid "Unexpected empty dataframe in update operation."
+msgstr ""
+
+#: ontask/dataops/pandas/merge.py:271
+#, fuzzy
+#| msgid "Unable to perform merge operation: {0}"
+msgid "Unable to perform merge operation"
+msgstr "无法执行合并操作 {0}"
+
+#: ontask/dataops/pandas/merge.py:391
 msgid "Merge operation produced a result with no rows"
 msgstr "合并操作产生没有行的结果"
 
-#: ontask/dataops/pandas/merge.py:327
+#: ontask/dataops/pandas/merge.py:397
 msgid ""
 "Merge operation produced a result without any key columns. Review the key "
 "columns in the data to upload."
@@ -1232,6 +1355,21 @@ msgstr "合并操作产生了一个没有键列的结果。请检查待上传数
 #: ontask/dataops/plugin/ontask_plugin.py:66
 msgid "This method should be implemented!"
 msgstr "这个方法应该实现！"
+
+#: ontask/dataops/services/common.py:24
+#, fuzzy
+#| msgid "Unable to access the workflow"
+msgid "Unable to acquire access to workflow."
+msgstr "无法访问工作流"
+
+#: ontask/dataops/services/common.py:40
+msgid "Missing merge method."
+msgstr ""
+
+#: ontask/dataops/services/common.py:51
+#, python-brace-format
+msgid "Missing key name \"{0}\""
+msgstr ""
 
 #: ontask/dataops/services/dataframeupload.py:271
 #, python-brace-format
@@ -1275,7 +1413,7 @@ msgid "Column %s does not exist"
 msgstr "列{0}不存在"
 
 #: ontask/dataops/services/plugin_admin.py:27
-#: ontask/dataops/services/plugin_run.py:26
+#: ontask/dataops/services/plugin_run.py:27
 #: ontask/templates/action/includes/partial_rubric_cell.html:2
 #: ontask/templates/column/detail.html:101
 #: ontask/templates/dataops/includes/partial_plugin_long_description.html:4
@@ -1285,7 +1423,7 @@ msgid "Description"
 msgstr "描述"
 
 #: ontask/dataops/services/plugin_admin.py:31
-#: ontask/dataops/services/plugin_run.py:30
+#: ontask/dataops/services/plugin_run.py:31
 msgid "Last executed"
 msgstr "上次执行的"
 
@@ -1493,38 +1631,16 @@ msgstr "使用id{pid}无法加载插件"
 msgid "Error: {0}"
 msgstr "错误 {0}"
 
-#: ontask/dataops/services/plugin_run.py:47
+#: ontask/dataops/services/plugin_run.py:48
 #: ontask/templates/dataops/plugin_info_for_run.html:35
 msgid "Execute the transformation"
 msgstr "执行转换"
 
-#: ontask/dataops/services/sql_upload.py:131
+#: ontask/dataops/services/sql_upload.py:78
 #, fuzzy
 #| msgid "Incorrect action id."
 msgid "Incorrect connection identifier."
 msgstr "无效操作ID{0}。"
-
-#: ontask/dataops/services/sql_upload.py:145
-#, fuzzy
-#| msgid "Unable to access the workflow"
-msgid "Unable to acquire access to workflow."
-msgstr "无法访问工作流"
-
-#: ontask/dataops/services/sql_upload.py:163
-#, fuzzy
-#| msgid "Key Column in Existing Table"
-msgid "Missing key column name of existing table."
-msgstr "现有表中的关键列"
-
-#: ontask/dataops/services/sql_upload.py:170
-#, fuzzy
-#| msgid "Key Column in New Table"
-msgid "Missing key column name of new table."
-msgstr "新表中的关键列"
-
-#: ontask/dataops/services/sql_upload.py:177
-msgid "Missing merge method."
-msgstr ""
 
 #: ontask/dataops/services/upload_steps.py:137
 #: ontask/dataops/services/upload_steps.py:140
@@ -1551,39 +1667,88 @@ msgstr "加载数据框时异常"
 msgid "Merge operation failed. "
 msgstr "合并操作失败。 "
 
-#: ontask/dataops/views/athenaupload.py:24
-#, fuzzy
-#| msgid "Add connection"
-msgid "Athena connection"
-msgstr "添加连接"
-
-#: ontask/dataops/views/csvupload.py:34
+#: ontask/dataops/urls.py:68
 msgid "CSV file"
 msgstr "CSV文件"
 
-#: ontask/dataops/views/excelupload.py:34
+#: ontask/dataops/urls.py:80
 #, fuzzy
 #| msgid "Excel"
 msgid "Excel file"
 msgstr "Excel"
 
-#: ontask/dataops/views/googlesheetupload.py:34
+#: ontask/dataops/urls.py:92 ontask/templates/dataops/uploadmerge.html:68
+#, fuzzy
+#| msgid "Canvas Host"
+msgid "Canvas Course"
+msgstr "Canvas主机"
+
+#: ontask/dataops/urls.py:104
 msgid "Google Sheet URL"
 msgstr "谷歌工作表网址"
+
+#: ontask/dataops/urls.py:116
+msgid "S3 CSV file"
+msgstr "S3 CSV文件"
+
+#: ontask/dataops/urls.py:128
+msgid "SQL connection"
+msgstr "SQL连接"
+
+#: ontask/dataops/urls.py:137
+#, fuzzy
+#| msgid "Add connection"
+msgid "Athena connection"
+msgstr "添加连接"
+
+#: ontask/dataops/views/athena_upload.py:27
+#, fuzzy
+#| msgid "Incorrect action scheduling invocation."
+msgid "Incorrect invocation of Athena Upload (zero connections)"
+msgstr "不正确的操作排程调用。"
+
+#: ontask/dataops/views/canvas_upload.py:77
+msgid "There are no students enrolled in the Canvas course."
+msgstr ""
+
+#: ontask/dataops/views/canvas_upload.py:85
+#, python-brace-format
+msgid "Canvas upload was not successful: {0}"
+msgstr ""
+
+#: ontask/dataops/views/csv_upload.py:26
+#, python-brace-format
+msgid "File could not be processed ({0})"
+msgstr "无法处理文件({0})"
+
+#: ontask/dataops/views/excel_upload.py:22
+#, python-brace-format
+msgid "File could not be processed: {0}"
+msgstr "无法处理文件：{0}"
+
+#: ontask/dataops/views/googlesheet_upload.py:23
+#, fuzzy, python-brace-format
+#| msgid "File could not be processed: {0}"
+msgid "Google Sheet could not be processed: {0}"
+msgstr "无法处理文件：{0}"
 
 #: ontask/dataops/views/row.py:114
 msgid "Unable to update table row"
 msgstr "无法更新表格行"
 
-#: ontask/dataops/views/s3upload.py:34
-msgid "S3 CSV file"
-msgstr "S3 CSV文件"
+#: ontask/dataops/views/s3_upload.py:25
+#, python-brace-format
+msgid "S3 bucket file could not be processed: {0}"
+msgstr "S3存储桶文件无法处理：{0}"
 
-#: ontask/dataops/views/sql_upload.py:35
-msgid "SQL connection"
-msgstr "SQL连接"
+#: ontask/dataops/views/sql_upload.py:37
+#, fuzzy
+#| msgid "Incorrect action scheduling invocation."
+msgid "Incorrect invocation of SQL Upload (zero connections)"
+msgstr "不正确的操作排程调用。"
 
-#: ontask/dataops/views/sql_upload.py:61
+#: ontask/dataops/views/sql_upload.py:55
+#: ontask/dataops/views/upload_steps.py:116
 #, python-brace-format
 msgid "Unable to obtain data: {0}"
 msgstr "无法获取数据：{0}"
@@ -1594,12 +1759,12 @@ msgid ""
 "administrator to enable queueing."
 msgstr "由于错误配置，无法运行插件。请系统管理员启用队列。"
 
-#: ontask/dataops/views/upload_steps.py:150
-#: ontask/dataops/views/upload_steps.py:335
+#: ontask/dataops/views/upload_steps.py:247
+#: ontask/dataops/views/upload_steps.py:432
 msgid "Finish"
 msgstr "完成"
 
-#: ontask/dataops/views/upload_steps.py:191
+#: ontask/dataops/views/upload_steps.py:288
 #, python-brace-format
 msgid "Unable to upload the data: {0}"
 msgstr "无法上传数据：{0}"
@@ -1793,8 +1958,14 @@ msgstr "AWS S3存储桶名称"
 msgid "AWS region name"
 msgstr "问题名称"
 
+#: ontask/models/athenaconnection.py:93 ontask/models/sqlconnection.py:84
+#, fuzzy
+#| msgid "Table View"
+msgid "Table name"
+msgstr "表格视图"
+
 #: ontask/models/athenaconnection.py:122 ontask/models/athenaconnection.py:126
-#: ontask/models/sqlconnection.py:108
+#: ontask/models/sqlconnection.py:104
 msgid "REMOVED"
 msgstr ""
 
@@ -1876,437 +2047,459 @@ msgstr "在这种情况下出现的列"
 msgid "Columns present in this filter"
 msgstr "在这种情况下出现的列"
 
-#: ontask/models/connection.py:20
-#, fuzzy
-#| msgid "URL available to users?"
-msgid "Available to users?"
-msgstr "用户可用的网址？"
-
-#: ontask/models/logs.py:130
+#: ontask/models/logs.py:137
 #, fuzzy
 #| msgid "Canvas Emails sent"
 msgid "Canvas emails sent"
 msgstr "Canvas 电子邮件已发送"
 
-#: ontask/models/logs.py:131
+#: ontask/models/logs.py:138
 msgid "Action cloned"
 msgstr "动作已克隆"
 
-#: ontask/models/logs.py:132
+#: ontask/models/logs.py:139
 msgid "Action created"
 msgstr "动作已创建"
 
-#: ontask/models/logs.py:133
+#: ontask/models/logs.py:140
 msgid "Action deleted"
 msgstr "动作已删除"
 
-#: ontask/models/logs.py:134
+#: ontask/models/logs.py:141
 #, fuzzy
 #| msgid "Download a ZIP with personalized text"
 msgid "Download a ZIP with one file per text"
 msgstr "下载有个性化文本的压缩文件"
 
-#: ontask/models/logs.py:135
+#: ontask/models/logs.py:142
 msgid "Notification email sent"
 msgstr "提醒电子邮件已发送"
 
-#: ontask/models/logs.py:136
+#: ontask/models/logs.py:143
 msgid "Email read"
 msgstr "电子邮件已读"
 
-#: ontask/models/logs.py:137
+#: ontask/models/logs.py:144
 msgid "Emails sent"
 msgstr "电子邮件已发送"
 
-#: ontask/models/logs.py:138
+#: ontask/models/logs.py:145
 msgid "Action imported"
 msgstr "动作已导入"
 
-#: ontask/models/logs.py:139
+#: ontask/models/logs.py:146
 #, fuzzy
 #| msgid "%(n)s JSON objects will be sent."
 msgid "JSON object sent"
 msgstr "%(n)sJSON目标将被发送。"
 
-#: ontask/models/logs.py:140
+#: ontask/models/logs.py:147
 #, fuzzy
 #| msgid "Email with data list sent"
 msgid "Email with data report sent"
 msgstr "包含数据列表的电子邮件已发送"
 
-#: ontask/models/logs.py:141
+#: ontask/models/logs.py:148
 #, fuzzy
 #| msgid "Question name"
 msgid "Question added"
 msgstr "问题名称"
 
-#: ontask/models/logs.py:142
+#: ontask/models/logs.py:149
 #, fuzzy
 #| msgid "Question name"
 msgid "Question removed"
 msgstr "问题名称"
 
-#: ontask/models/logs.py:143
+#: ontask/models/logs.py:150
 msgid "TODO item added"
 msgstr ""
 
-#: ontask/models/logs.py:144
+#: ontask/models/logs.py:151
 #, fuzzy
 #| msgid "Question name"
 msgid "Question toggle changes"
 msgstr "问题名称"
 
-#: ontask/models/logs.py:145
+#: ontask/models/logs.py:152
 #, fuzzy
 #| msgid "Question name"
 msgid "TODO item toggle changes"
 msgstr "问题名称"
 
-#: ontask/models/logs.py:146
+#: ontask/models/logs.py:153
 msgid "Add a rubric criterion"
 msgstr ""
 
-#: ontask/models/logs.py:147
+#: ontask/models/logs.py:154
 #, fuzzy
 #| msgid "Edit description"
 msgid "Edit rubric criterion"
 msgstr "编辑描述"
 
-#: ontask/models/logs.py:148
+#: ontask/models/logs.py:155
 #, fuzzy
 #| msgid "Delete action"
 msgid "Delete rubric criterion"
 msgstr "删除操作"
 
-#: ontask/models/logs.py:149
+#: ontask/models/logs.py:156
 msgid "Rubric cell edit"
 msgstr ""
 
-#: ontask/models/logs.py:150
+#: ontask/models/logs.py:157
 msgid "Rubric level of attainment edit"
 msgstr ""
 
-#: ontask/models/logs.py:151
+#: ontask/models/logs.py:158
 #, fuzzy
 #| msgid "Execute scheduled send list action"
 msgid "Execute scheduled send report action"
 msgstr "执行预定发送的电子邮件行动"
 
-#: ontask/models/logs.py:152
+#: ontask/models/logs.py:159
 #, fuzzy
 #| msgid "Execute scheduled JSON action"
 msgid "Execute scheduled JSON report action"
 msgstr "执行已排程的JSON行动"
 
-#: ontask/models/logs.py:154
+#: ontask/models/logs.py:161
 msgid "Execute scheduled canvas email action"
 msgstr "执行已排程的canvas电子邮件操作"
 
-#: ontask/models/logs.py:155
+#: ontask/models/logs.py:162
 msgid "Execute scheduled email action"
 msgstr "执行已排程的电子邮件行动"
 
-#: ontask/models/logs.py:156
+#: ontask/models/logs.py:163
 msgid "Execute scheduled JSON action"
 msgstr "执行已排程的JSON行动"
 
-#: ontask/models/logs.py:157
+#: ontask/models/logs.py:164
 #, fuzzy
 #| msgid "Execute plugin"
 msgid "Execute survey"
 msgstr "执行插件"
 
-#: ontask/models/logs.py:158
+#: ontask/models/logs.py:165
 #, fuzzy
 #| msgid "Execute plugin"
 msgid "Execute TODO list"
 msgstr "执行插件"
 
-#: ontask/models/logs.py:159
+#: ontask/models/logs.py:166
 #, fuzzy
 #| msgid "URL to the personalised content"
 msgid "Create a zip with personalized content"
 msgstr "个性化类容的网址"
 
-#: ontask/models/logs.py:160
+#: ontask/models/logs.py:167
 msgid "Action URL toggled"
 msgstr "动作URL切换"
 
-#: ontask/models/logs.py:161
+#: ontask/models/logs.py:168
 msgid "Action served"
 msgstr "动作已提供"
 
-#: ontask/models/logs.py:162
+#: ontask/models/logs.py:169
 msgid "Survey data input"
 msgstr "调查数据输入"
 
-#: ontask/models/logs.py:163
+#: ontask/models/logs.py:170
 #, fuzzy
 #| msgid "Survey data input"
 msgid "TODO data input"
 msgstr "调查数据输入"
 
-#: ontask/models/logs.py:164
+#: ontask/models/logs.py:171
 msgid "Action updated"
 msgstr "动作已更新"
 
-#: ontask/models/logs.py:165
+#: ontask/models/logs.py:172
 #, fuzzy
 #| msgid "SQL connection cloned"
 msgid "Athena connection cloned"
 msgstr "SQL连接已克隆"
 
-#: ontask/models/logs.py:166
+#: ontask/models/logs.py:173
 #, fuzzy
 #| msgid "SQL connection created"
 msgid "Athena connection created"
 msgstr "SQL连接已创建"
 
-#: ontask/models/logs.py:167
+#: ontask/models/logs.py:174
 #, fuzzy
 #| msgid "SQL connection deleted"
 msgid "Athena connection deleted"
 msgstr "SQL连接已删除"
 
-#: ontask/models/logs.py:168
+#: ontask/models/logs.py:175
 #, fuzzy
 #| msgid "SQL connection updated"
 msgid "Athena connection updated"
 msgstr "SQL连接已更新"
 
-#: ontask/models/logs.py:169
+#: ontask/models/logs.py:176
 #, fuzzy
 #| msgid "SQL connection cloned"
 msgid "Athena connection toggled"
 msgstr "SQL连接已克隆"
 
-#: ontask/models/logs.py:170
+#: ontask/models/logs.py:177
+msgid "Canvas course upload cloned"
+msgstr ""
+
+#: ontask/models/logs.py:178
+msgid "Canvas course upload created"
+msgstr ""
+
+#: ontask/models/logs.py:179
+msgid "Canvas course upload deleted"
+msgstr ""
+
+#: ontask/models/logs.py:180
+msgid "Canvas course upload updated"
+msgstr ""
+
+#: ontask/models/logs.py:181
+msgid "Canvas course upload toggled"
+msgstr ""
+
+#: ontask/models/logs.py:182
 msgid "Column added"
 msgstr "加入列"
 
-#: ontask/models/logs.py:171
+#: ontask/models/logs.py:183
 msgid "Column with formula created"
 msgstr "公式化的列已创建"
 
-#: ontask/models/logs.py:172
+#: ontask/models/logs.py:184
 msgid "Column with random values created"
 msgstr "随机值列已创建"
 
-#: ontask/models/logs.py:173
+#: ontask/models/logs.py:185
 msgid "Column cloned"
 msgstr "列已克隆"
 
-#: ontask/models/logs.py:174
+#: ontask/models/logs.py:186
 msgid "Column deleted"
 msgstr "列已删除"
 
-#: ontask/models/logs.py:175
+#: ontask/models/logs.py:187
 #, fuzzy
 #| msgid "Column deleted"
 msgid "Column edited"
 msgstr "列已删除"
 
-#: ontask/models/logs.py:176
+#: ontask/models/logs.py:188
 msgid "Column restricted"
 msgstr "列受限"
 
-#: ontask/models/logs.py:177
+#: ontask/models/logs.py:189
 msgid "Condition cloned"
 msgstr "条件已克隆"
 
-#: ontask/models/logs.py:178
+#: ontask/models/logs.py:190
 msgid "Condition created"
 msgstr "条件已创建"
 
-#: ontask/models/logs.py:179
+#: ontask/models/logs.py:191
 msgid "Condition deleted"
 msgstr "条件已删除"
 
-#: ontask/models/logs.py:180
+#: ontask/models/logs.py:192
 msgid "Condition updated"
 msgstr "条件已更新"
 
-#: ontask/models/logs.py:181
+#: ontask/models/logs.py:193
 msgid "Plugin created"
 msgstr "插件已创建"
 
-#: ontask/models/logs.py:182
+#: ontask/models/logs.py:194
 msgid "Plugin deleted"
 msgstr "插件已删除"
 
-#: ontask/models/logs.py:183
+#: ontask/models/logs.py:195
 msgid "Plugin executed"
 msgstr "插件已执行"
 
-#: ontask/models/logs.py:184
+#: ontask/models/logs.py:196
 msgid "Plugin updated"
 msgstr "插件已更新"
 
-#: ontask/models/logs.py:185
+#: ontask/models/logs.py:197
 #, fuzzy
 #| msgid "Delete scheduled operation"
 msgid "Create scheduled operation"
 msgstr "删除已排程的操作"
 
-#: ontask/models/logs.py:186
+#: ontask/models/logs.py:198
 #, fuzzy
 #| msgid "Delete scheduled operation"
 msgid "Edit scheduled operation"
 msgstr "删除已排程的操作"
 
-#: ontask/models/logs.py:187
+#: ontask/models/logs.py:199
 msgid "Delete scheduled operation"
 msgstr "删除已排程的操作"
 
-#: ontask/models/logs.py:188
+#: ontask/models/logs.py:200
 msgid "SQL connection cloned"
 msgstr "SQL连接已克隆"
 
-#: ontask/models/logs.py:189
+#: ontask/models/logs.py:201
 msgid "SQL connection created"
 msgstr "SQL连接已创建"
 
-#: ontask/models/logs.py:190
+#: ontask/models/logs.py:202
 msgid "SQL connection deleted"
 msgstr "SQL连接已删除"
 
-#: ontask/models/logs.py:191
+#: ontask/models/logs.py:203
 msgid "SQL connection updated"
 msgstr "SQL连接已更新"
 
-#: ontask/models/logs.py:192
+#: ontask/models/logs.py:204
 #, fuzzy
 #| msgid "SQL connection cloned"
 msgid "SQL connection toggled"
 msgstr "SQL连接已克隆"
 
-#: ontask/models/logs.py:193
+#: ontask/models/logs.py:205
 msgid "Table view created"
 msgstr "表视图已创建"
 
-#: ontask/models/logs.py:194
+#: ontask/models/logs.py:206
 msgid "Table view edited"
 msgstr "表视图已编辑"
 
-#: ontask/models/logs.py:195
+#: ontask/models/logs.py:207
 msgid "Table view deleted"
 msgstr "表视图已删除"
 
-#: ontask/models/logs.py:196
+#: ontask/models/logs.py:208
 msgid "Table view cloned"
 msgstr "表视图已克隆"
 
-#: ontask/models/logs.py:197
+#: ontask/models/logs.py:209
 msgid "New attribute in workflow"
 msgstr "工作流新属性"
 
-#: ontask/models/logs.py:198
+#: ontask/models/logs.py:210
 msgid "Attributes updated in workflow"
 msgstr "工作流属性更新完成"
 
-#: ontask/models/logs.py:199
+#: ontask/models/logs.py:211
 msgid "Attribute deleted"
 msgstr "属性已删除"
 
-#: ontask/models/logs.py:200
+#: ontask/models/logs.py:212
 msgid "Workflow cloned"
 msgstr "工作流已克隆"
 
-#: ontask/models/logs.py:201
+#: ontask/models/logs.py:213
 msgid "Workflow created"
 msgstr "工作流已创建"
 
-#: ontask/models/logs.py:202
+#: ontask/models/logs.py:214
 msgid "Failed data merge into workflow"
 msgstr "不能将数据合并到工作流"
 
-#: ontask/models/logs.py:203
+#: ontask/models/logs.py:215
 msgid "Workflow data flushed"
 msgstr "工作流数据刷新"
 
-#: ontask/models/logs.py:204
+#: ontask/models/logs.py:216
 msgid "Table row created"
 msgstr "表行已创建"
 
-#: ontask/models/logs.py:205
+#: ontask/models/logs.py:217
 msgid "Table row updated"
 msgstr "表行已更新"
 
-#: ontask/models/logs.py:206
-msgid "Data uploaded to workflow"
+#: ontask/models/logs.py:218
+#, fuzzy
+#| msgid "Data uploaded to workflow"
+msgid "Athena data uploaded to workflow"
 msgstr "数据已上传至工作流"
 
-#: ontask/models/logs.py:207
+#: ontask/models/logs.py:220
+#, fuzzy
+#| msgid "Data uploaded to workflow"
+msgid "Canvas course data uploaded to workflow"
+msgstr "数据已上传至工作流"
+
+#: ontask/models/logs.py:221
 #, fuzzy
 #| msgid "Upload data from Excel file."
 msgid "Upload Data from CSV File"
 msgstr "从Excel文件中上传数据。"
 
-#: ontask/models/logs.py:208
+#: ontask/models/logs.py:222
 #, fuzzy
 #| msgid "Upload data from Excel file."
 msgid "Upload Data from Excel Sheet"
 msgstr "从Excel文件中上传数据。"
 
-#: ontask/models/logs.py:209
+#: ontask/models/logs.py:223
 #, fuzzy
 #| msgid "Upload data from a Google Sheet file."
 msgid "Upload Data from Google Sheet"
 msgstr "从谷歌表格文件中上传数据。"
 
-#: ontask/models/logs.py:210
+#: ontask/models/logs.py:224
 #, fuzzy
 #| msgid "Upload data from a CSV file in a S3 Bucket."
 msgid "Upload Data from S3 CSV source"
 msgstr "从S3存储桶中上传一个CSV文件中的数据。"
 
-#: ontask/models/logs.py:211
+#: ontask/models/logs.py:225
 #, fuzzy
 #| msgid "Upload data from Excel file."
 msgid "Upload Data from SQL source"
 msgstr "从Excel文件中上传数据。"
 
-#: ontask/models/logs.py:212
+#: ontask/models/logs.py:226
 msgid "Workflow deleted"
 msgstr "工作流已删除"
 
-#: ontask/models/logs.py:213 ontask/templates/ontask/workflow_list.html:33
+#: ontask/models/logs.py:227 ontask/templates/ontask/workflow_list.html:33
 #: ontask/templates/workflow/import.html:7
 #: ontask/templates/workflow/import.html:13
 msgid "Import workflow"
 msgstr "导入工作流"
 
-#: ontask/models/logs.py:214
+#: ontask/models/logs.py:228
 #, fuzzy
 #| msgid "Incorrect workflow request"
 msgid "Increase workflow track count."
 msgstr "不正确的工作流请求"
 
-#: ontask/models/logs.py:215
+#: ontask/models/logs.py:229
 msgid "User share added"
 msgstr "用户分享已添加"
 
-#: ontask/models/logs.py:216
+#: ontask/models/logs.py:230
 msgid "User share deleted"
 msgstr "用户分享已删除"
 
-#: ontask/models/logs.py:217
+#: ontask/models/logs.py:231
 msgid "Toggle workflow star"
 msgstr "切换工作流程明星"
 
-#: ontask/models/logs.py:218
+#: ontask/models/logs.py:232
 msgid "Workflow updated"
 msgstr "工作流已更新"
 
-#: ontask/models/logs.py:219
+#: ontask/models/logs.py:233
 msgid "Update list of workflow users"
 msgstr "更新工作流用户列表"
 
-#: ontask/models/logs.py:244 ontask/models/scheduler.py:132
+#: ontask/models/logs.py:258 ontask/models/scheduler.py:130
 msgid "payload"
 msgstr "有效载荷"
 
-#: ontask/models/oauth.py:32
+#: ontask/models/oauth.py:37
 msgid "Token valid until"
 msgstr "令牌有效，直到"
 
@@ -2346,61 +2539,39 @@ msgstr ""
 msgid "feedback"
 msgstr ""
 
-#: ontask/models/scheduler.py:30
+#: ontask/models/scheduler.py:26
 msgid "Creating"
 msgstr "正在创建"
 
-#: ontask/models/scheduler.py:31
+#: ontask/models/scheduler.py:27
 msgid "Pending"
 msgstr "正在等待"
 
-#: ontask/models/scheduler.py:32
+#: ontask/models/scheduler.py:28
 msgid "Executing"
 msgstr "正在执行"
 
-#: ontask/models/scheduler.py:33
+#: ontask/models/scheduler.py:29
 msgid "Finished"
 msgstr "已完成"
 
-#: ontask/models/scheduler.py:34
+#: ontask/models/scheduler.py:30
 msgid "Finished with error"
 msgstr "已完成，错误"
 
-#: ontask/models/scheduler.py:70
-msgid "When to execute this action"
-msgstr "何时执行此操作"
+#: ontask/models/scheduler.py:68
+#, fuzzy
+#| msgid "Error while executing plugin: {0}"
+msgid "Start of execution period"
+msgstr "执行插件：{0}时出错"
 
-#: ontask/models/scheduler.py:84
+#: ontask/models/scheduler.py:82
 msgid "End of execution period (Optional)"
 msgstr ""
 
-#: ontask/models/scheduler.py:92
+#: ontask/models/scheduler.py:90
 msgid "Execution Status"
 msgstr "执行状态"
-
-#: ontask/models/scheduler.py:158
-#, fuzzy
-#| msgid "Incorrect execution due to absence of token"
-msgid "Incorrect execution time specification."
-msgstr "因为令牌缺失造成的不正确的执行"
-
-#: ontask/models/scheduler.py:163
-msgid "Frequency of execution is missing."
-msgstr ""
-
-#: ontask/models/scheduler.py:168
-msgid "Execution times in the past. No execution possible."
-msgstr ""
-
-#: ontask/models/scheduler.py:172
-msgid "Execution time is in the past. No execution possible."
-msgstr ""
-
-#: ontask/models/scheduler.py:175
-#, fuzzy
-#| msgid "Incorrect execution"
-msgid "Incorrect execution dates."
-msgstr "不正确的执行"
 
 #: ontask/models/sqlconnection.py:32
 #: ontask/scheduler/services/scheduler_table.py:26
@@ -2422,29 +2593,25 @@ msgid "Driver implementing the DBAPI"
 msgstr "实现数据库API的驱动程序"
 
 #: ontask/models/sqlconnection.py:47
-#: ontask/workflow/services/workflow_ops.py:37
+#: ontask/workflow/services/workflow_ops.py:39
 msgid "User"
 msgstr "用户"
 
-#: ontask/models/sqlconnection.py:59 ontask/models/sqlconnection.py:88
-msgid "Leave empty to enter at execution"
-msgstr ""
-
-#: ontask/models/sqlconnection.py:63
+#: ontask/models/sqlconnection.py:61
 msgid "Host"
 msgstr "主机"
 
-#: ontask/models/sqlconnection.py:70
+#: ontask/models/sqlconnection.py:68
 msgid "Port"
 msgstr "端口"
 
-#: ontask/models/sqlconnection.py:77
+#: ontask/models/sqlconnection.py:75
 #, fuzzy
 #| msgid "Database name: %(n)s"
 msgid "Database name"
 msgstr "数据库名称：%(n)s"
 
-#: ontask/models/sqlconnection.py:84
+#: ontask/models/sqlconnection.py:82
 #, fuzzy
 #| msgid "Database table: %(n)s"
 msgid "Database table"
@@ -2504,33 +2671,39 @@ msgstr "行数"
 msgid "number of columns"
 msgstr "列数"
 
-#: ontask/oauth/services.py:106
+#: ontask/oauth/services.py:105
 msgid "Unable to refresh OAuth token."
 msgstr "无法刷新OAuth令牌。"
 
-#: ontask/oauth/services.py:139
+#: ontask/oauth/services.py:132
 msgid "Inconsistent OAuth response. Unable to authorize"
 msgstr "OAuth响应不一致。无法授权"
 
-#: ontask/oauth/services.py:143
+#: ontask/oauth/services.py:135
+#, fuzzy
+#| msgid "Internal error. Empty OAuth Instance name"
+msgid "Internal error. Empty payload in callback"
+msgstr "内部错误。清空OAuth事例名称"
+
+#: ontask/oauth/services.py:138
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "内部错误。清空OAuth事例名称"
 
-#: ontask/oauth/services.py:147
+#: ontask/oauth/services.py:142
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "内部错误。无效的OAuth Dict元素"
 
-#: ontask/oauth/services.py:161
+#: ontask/oauth/services.py:156
 msgid "Unable to obtain access token from OAuth"
 msgstr "无法从OAuth获取访问令牌"
 
-#: ontask/oauth/views.py:31
+#: ontask/oauth/views.py:28
 #, fuzzy
 #| msgid "Incorrect Canvas callback invocation."
 msgid "Incorrect callback invocation."
 msgstr "Canvas回调调用不正确。"
 
-#: ontask/oauth/views.py:39
+#: ontask/oauth/views.py:35
 #, python-brace-format
 msgid "Error in OAuth2 step 1 ({0})"
 msgstr "OAuth2步骤1({0})出错"
@@ -2543,148 +2716,175 @@ msgstr "表格有问题。请检查详细信息。"
 msgid "Profile details saved!"
 msgstr "用户资料详细信息已保存！"
 
-#: ontask/scheduler/forms/basic.py:33
+#: ontask/scheduler/forms/basic.py:36
 #, fuzzy
 #| msgid "Action execution"
 msgid "Multiple executions?"
 msgstr "操作执行"
 
-#: ontask/scheduler/forms/basic.py:34
+#: ontask/scheduler/forms/basic.py:37
 msgid "Select if you want to execute multiple times."
 msgstr ""
 
-#: ontask/scheduler/forms/basic.py:84
+#: ontask/scheduler/forms/basic.py:87
 #, fuzzy
 #| msgid "There is a condition already with this name."
 msgid "There is an operation scheduled with this name"
 msgstr "已存在以此命名的条件。"
 
-#: ontask/scheduler/forms/sql.py:35
+#: ontask/scheduler/forms/basic.py:130
 #, fuzzy
-#| msgid "Key column in the existing table to match with the new table."
-msgid ""
-"Key column in the existing table. Leave empty if uploading to empty workflow"
-msgstr "现有表中能与新表匹配的键列。"
+#| msgid "Key Column in Existing Table"
+msgid "Key column in the existing table."
+msgstr "现有表中的关键列"
 
-#: ontask/scheduler/forms/sql.py:43
-msgid "Key column in new table. Leave empty if uploading to empty workflow"
-msgstr ""
+#: ontask/scheduler/forms/basic.py:137
+#, fuzzy
+#| msgid "Key Column in New Table"
+msgid "Key column in new table."
+msgstr "新表中的关键列"
 
-#: ontask/scheduler/forms/sql.py:68
+#: ontask/scheduler/forms/basic.py:160
 #, fuzzy
 #| msgid "There needs to be at least one key column"
 msgid "The operation requires the names of two key columns."
 msgstr "需要至少有一个键列"
 
-#: ontask/scheduler/forms/sql.py:75
+#: ontask/scheduler/forms/basic.py:166
 #, fuzzy
 #| msgid "Incorrect column selected. Please select a key column."
 msgid "The column selected is not a key column."
 msgstr "列选择错误。请选择一个键列。"
 
-#: ontask/scheduler/forms/sql.py:80
+#: ontask/scheduler/forms/basic.py:171
 #, fuzzy
 #| msgid "The operation returned an undocumented error."
 msgid "The operation requires a merge method."
 msgstr "操作返回了一个未记录的错误。"
 
-#: ontask/scheduler/serializers.py:43
+#: ontask/scheduler/forms/basic.py:222
+#, fuzzy
+#| msgid "Key Column in New Table"
+msgid "Key column in the workflow table"
+msgstr "新表中的关键列"
+
+#: ontask/scheduler/forms/basic.py:224
+#, fuzzy
+#| msgid "Key Column in Existing Table"
+msgid "Key column in the external table"
+msgstr "现有表中的关键列"
+
+#: ontask/scheduler/forms/basic.py:264
+msgid "Columns to upload. Leave blank to use all of them."
+msgstr ""
+
+#: ontask/scheduler/serializers.py:44
 #, fuzzy
 #| msgid "Incorrect permission to manipulate action."
 msgid "Incorrect permission to manipulate workflow."
 msgstr "处理操作的不正确的权限。"
 
-#: ontask/scheduler/serializers.py:49
+#: ontask/scheduler/serializers.py:50
 msgid "Incorrect permission to manipulate action."
 msgstr "处理操作的不正确的权限。"
 
-#: ontask/scheduler/serializers.py:62
+#: ontask/scheduler/serializers.py:63
 #, fuzzy
 #| msgid "Scheduled objects needs a payload."
 msgid "Scheduled objects need a payload."
 msgstr "已排程的对象需要有效载荷。"
 
-#: ontask/scheduler/serializers.py:72
+#: ontask/scheduler/serializers.py:73
 #, fuzzy
 #| msgid "Invalid column name for selecting items"
 msgid "Invalid column name for selecting items."
 msgstr "用于选择项目的无效列名称"
 
-#: ontask/scheduler/serializers.py:77
+#: ontask/scheduler/serializers.py:78
 #, fuzzy
 #| msgid "Exclude_values must be a list"
 msgid "Exclude values must be a list."
 msgstr "Exclude_values必须是一个列表"
 
-#: ontask/scheduler/serializers.py:82
+#: ontask/scheduler/serializers.py:83
 #, fuzzy
 #| msgid "Exclude items needs a value in item_column"
 msgid "Exclude items needs a column in item_column."
 msgstr "排除项目需要item_column有一个值"
 
-#: ontask/scheduler/serializers.py:144 ontask/scheduler/serializers.py:214
+#: ontask/scheduler/serializers.py:145 ontask/scheduler/serializers.py:215
 #, fuzzy
 #| msgid "Personalized text needs an item_column"
 msgid "Personalized text need a column name in payload field item_column."
 msgstr "个性化的文本需要一个 item_column"
 
-#: ontask/scheduler/serializers.py:151 ontask/scheduler/serializers.py:221
+#: ontask/scheduler/serializers.py:152 ontask/scheduler/serializers.py:222
 #, fuzzy
 #| msgid "Incorrect column name {0}."
 msgid "Incorrect column name in field item_column."
 msgstr "无效列名{0}。"
 
-#: ontask/scheduler/serializers.py:154 ontask/scheduler/serializers.py:208
+#: ontask/scheduler/serializers.py:155 ontask/scheduler/serializers.py:209
 msgid "Incorrect type of action to schedule."
 msgstr "不正确的待排程的操作类型。"
 
-#: ontask/scheduler/serializers.py:158
+#: ontask/scheduler/serializers.py:159
 msgid "Personalized text needs a subject."
 msgstr "个性化的文本需要一个主题。"
 
-#: ontask/scheduler/serializers.py:185
+#: ontask/scheduler/serializers.py:186
 #, fuzzy
 #| msgid "cc_email must be a comma-separated list of emails."
 msgid "cc_email must be a space-separated list of emails."
 msgstr "cc_email必须是一个逗号分隔的电子邮件列表。"
 
-#: ontask/scheduler/serializers.py:196
+#: ontask/scheduler/serializers.py:197
 #, fuzzy
 #| msgid "bcc_email must be a comma-separated list of emails."
 msgid "bcc_email must be a space-separated list of emails."
 msgstr "bcc_email必须是一个逗号分隔的电子邮件列表。"
 
-#: ontask/scheduler/serializers.py:226
+#: ontask/scheduler/serializers.py:227
 msgid "Personalized JSON needs a token in payload."
 msgstr "个性化JSON需要有效载荷中的令牌。"
 
-#: ontask/scheduler/services/action_producers.py:53
+#: ontask/scheduler/services/action_producers.py:72
 #, fuzzy
 #| msgid "Schedule Action Execution"
 msgid "Schedule Action Execution"
 msgstr "安排操作执行"
 
-#: ontask/scheduler/services/action_producers.py:64
-#: ontask/scheduler/services/action_producers.py:165
+#: ontask/scheduler/services/action_producers.py:85
+#: ontask/scheduler/services/action_producers.py:186
 #: ontask/templates/action/includes/partial_action_card.html:96
-#: ontask/templates/scheduler/edit.html:71
+#: ontask/templates/scheduler/edit.html:73
 msgid "Schedule"
 msgstr "预定"
 
-#: ontask/scheduler/services/action_producers.py:98
-#: ontask/scheduler/services/sql_producer.py:82
+#: ontask/scheduler/services/action_producers.py:119
+#: ontask/scheduler/services/edit_factory.py:259
 #, fuzzy
 #| msgid "Incorrect request in action scheduling"
 msgid "Incorrect request for operation scheduling"
 msgstr "行动调度中的请求不正确"
 
-#: ontask/scheduler/services/action_producers.py:126
+#: ontask/scheduler/services/action_producers.py:147
 #, fuzzy, python-brace-format
 #| msgid "Unable to update scheduled action: {0}"
 msgid "Unable to create scheduled operation: {0}"
 msgstr "无法更新已排程的操作：{0}"
 
-#: ontask/scheduler/services/items.py:75
+#: ontask/scheduler/services/canvas_update_producer.py:35
+msgid "Canvas Course Upload"
+msgstr ""
+
+#: ontask/scheduler/services/edit_factory.py:277
+#, fuzzy, python-brace-format
+#| msgid "Unable to update scheduled action: {0}"
+msgid "Unable to create scheduled operation ({0})"
+msgstr "无法更新已排程的操作：{0}"
+
+#: ontask/scheduler/services/items.py:76
 #, fuzzy
 #| msgid "Settings"
 msgid "Starting at "
@@ -2707,19 +2907,17 @@ msgstr ""
 msgid "Status"
 msgstr "状态"
 
-#: ontask/scheduler/services/sql_producer.py:41
+#: ontask/scheduler/services/sql_producer.py:39
 #, fuzzy
 #| msgid "Data upload/merge operations"
 msgid "Schedule SQL Upload"
 msgstr "数据上传/合并操作"
 
-#: ontask/scheduler/services/sql_producer.py:100
-#, fuzzy, python-brace-format
-#| msgid "Unable to update scheduled action: {0}"
-msgid "Unable to create scheduled operation ({0})"
-msgstr "无法更新已排程的操作：{0}"
+#: ontask/scheduler/services/sql_producer.py:50
+msgid "Incorrect scheduling of SQL Upload (zero connections)"
+msgstr ""
 
-#: ontask/scheduler/views/crud.py:141
+#: ontask/scheduler/views/crud.py:163
 msgid "Incorrect action scheduling invocation."
 msgstr "不正确的操作排程调用。"
 
@@ -2799,17 +2997,11 @@ msgstr "加载数据框时异常"
 msgid "Post request requires workflow without a table"
 msgstr "发布请求需要没有表格的工作流"
 
-#: ontask/table/api.py:265
+#: ontask/table/api.py:263
 #, fuzzy
 #| msgid "Post request requires workflow without a table"
 msgid "Merge request requires a workflow with a non-empty table"
 msgstr "发布请求需要没有表格的工作流"
-
-#: ontask/table/api.py:302
-#, fuzzy
-#| msgid "Unable to perform merge operation: {0}"
-msgid "Unable to perform merge operation"
-msgstr "无法执行合并操作 {0}"
 
 #: ontask/table/forms.py:23
 msgid "View name"
@@ -2928,11 +3120,11 @@ msgstr "无法可视化表格行"
 msgid "Workflow has no data."
 msgstr "列没有数据"
 
-#: ontask/table/views/table_display.py:95
+#: ontask/table/views/table_display.py:99
 msgid "Formula is excluding all rows from the table"
 msgstr ""
 
-#: ontask/table/views/table_display.py:111
+#: ontask/table/views/table_display.py:115
 msgid "There is no data in the table"
 msgstr "表格中没有数据"
 
@@ -2956,6 +3148,10 @@ msgstr "使用id{0}无法找到用户"
 #| msgid "Error while executing plugin: {0}"
 msgid "Error executing operation: {0}"
 msgstr "执行插件：{0}时出错"
+
+#: ontask/tasks/execute_factory.py:32
+msgid "Invalid operation type in task factory."
+msgstr ""
 
 #: ontask/templates/400.html:4
 #, fuzzy
@@ -2997,6 +3193,7 @@ msgstr "无法访问工作流"
 #: ontask/templates/action/run_survey.html:70
 #: ontask/templates/action/run_survey_row.html:21
 #: ontask/templates/action/run_survey_row.html:32
+#: ontask/templates/connection/index.html:70
 #: ontask/templates/dataops/includes/upload_buttons.html:6
 #: ontask/templates/dataops/operation_done.html:13
 #: ontask/templates/table/stat_column.html:27
@@ -3265,7 +3462,7 @@ msgstr "%(n)s文件的压缩文件即将被创建。"
 #: ontask/templates/dataops/row_create.html:33
 #: ontask/templates/dataops/row_filter.html:24
 #: ontask/templates/dataops/row_filter.html:34
-#: ontask/templates/scheduler/edit.html:60
+#: ontask/templates/scheduler/edit.html:62
 #: ontask/templates/workflow/export.html:60
 #: ontask/templates/workflow/import.html:20
 msgid "Cancel"
@@ -3280,7 +3477,7 @@ msgstr "取消"
 #: ontask/templates/action/request_email_report_data.html:24
 #: ontask/templates/action/request_json_data.html:30
 #: ontask/templates/action/request_json_report_data.html:24
-#: ontask/templates/scheduler/edit.html:64
+#: ontask/templates/scheduler/edit.html:66
 msgid "Preview"
 msgstr "预览"
 
@@ -3290,7 +3487,7 @@ msgstr "预览"
 #: ontask/templates/action/request_email_data.html:33
 #: ontask/templates/action/request_json_data.html:33
 #: ontask/templates/dataops/includes/upload_buttons.html:10
-#: ontask/templates/scheduler/edit.html:68
+#: ontask/templates/scheduler/edit.html:70
 msgid "Next"
 msgstr "下一步"
 
@@ -4568,13 +4765,13 @@ msgstr "添加连接"
 msgid "View connection details"
 msgstr "查看日志"
 
-#: ontask/templates/connection/includes/partial_adminop.html:13
+#: ontask/templates/connection/includes/partial_adminop.html:14
 #, fuzzy
 #| msgid "Create an exact duplicate of this connection"
 msgid "Create an exact duplicate of this connection"
 msgstr "创建此连接的精确副本"
 
-#: ontask/templates/connection/includes/partial_adminop.html:17
+#: ontask/templates/connection/includes/partial_adminop.html:19
 #, fuzzy
 #| msgid "Delete connection"
 msgid "Delete the connection"
@@ -4663,9 +4860,9 @@ msgstr ""
 
 #: ontask/templates/connection/index_admin.html:56
 #, fuzzy
-#| msgid "Add connection"
-msgid "Add a new connection"
-msgstr "添加连接"
+#| msgid "Add Filter"
+msgid "Add a new item"
+msgstr "添加筛选标签"
 
 #: ontask/templates/critical_error.html:4 ontask/templates/error.html:4
 #: ontask/templates/error.html:8
@@ -4690,75 +4887,6 @@ msgstr "下面的信息将试图解释发生了什么。"
 msgid "Referrer:"
 msgstr "推荐人："
 
-#: ontask/templates/dataops/athenaupload_start.html:7
-#: ontask/templates/dataops/sqlupload_start.html:7
-#, python-format
-msgid "Upload/Merge %(n)s"
-msgstr "上传/合并%(n)s"
-
-#: ontask/templates/dataops/athenaupload_start.html:14
-#, fuzzy, python-format
-#| msgid "Upload/Merge %(n)s"
-msgid "Upload/Merge using %(n)s"
-msgstr "上传/合并%(n)s"
-
-#: ontask/templates/dataops/athenaupload_start.html:16
-#: ontask/templates/dataops/sqlupload_start.html:16
-msgid "The data will be accessed with the following parameters:"
-msgstr "数据将以下列参数访问："
-
-#: ontask/templates/dataops/athenaupload_start.html:19
-#, fuzzy, python-format
-#| msgid ""
-#| "Connection type:\n"
-#| "        %(n)s"
-msgid ""
-"Description:\n"
-"        %(n)s"
-msgstr ""
-"连接类型：\n"
-"        %(n)s"
-
-#: ontask/templates/dataops/athenaupload_start.html:23
-#, fuzzy, python-format
-#| msgid ""
-#| "Connection type:\n"
-#| "        %(n)s"
-msgid ""
-"Access key:\n"
-"        %(n)s"
-msgstr ""
-"连接类型：\n"
-"        %(n)s"
-
-#: ontask/templates/dataops/athenaupload_start.html:27
-#, fuzzy, python-format
-#| msgid "Database name: %(n)s"
-msgid "Bucket name: %(n)s"
-msgstr "数据库名称：%(n)s"
-
-#: ontask/templates/dataops/athenaupload_start.html:30
-#, fuzzy, python-format
-#| msgid ""
-#| "Username: %(n)s\n"
-#| "        "
-msgid ""
-"File path: %(n)s\n"
-"        "
-msgstr "用户名：%(n)s "
-
-#: ontask/templates/dataops/athenaupload_start.html:34
-#, fuzzy, python-format
-#| msgid "Host: %(n)s"
-msgid "Region: %(n)s"
-msgstr "主机：%(n)s"
-
-#: ontask/templates/dataops/athenaupload_start.html:38
-#, fuzzy, python-format
-#| msgid "Database table: %(n)s"
-msgid "Table: %(n)s"
-msgstr "数据库表格：%(n)s"
-
 #: ontask/templates/dataops/includes/partial_diagnostics.html:4
 #: ontask/templates/dataops/transform_model.html:50
 msgid "Diagnostics"
@@ -4782,7 +4910,7 @@ msgstr "显示此插件的诊断信息"
 msgid "Diagnose"
 msgstr "诊断"
 
-#: ontask/templates/dataops/merge_help.html:4
+#: ontask/templates/dataops/merge_help.html:6
 #, fuzzy
 #| msgid ""
 #| "Selects all the rows from\n"
@@ -4804,11 +4932,11 @@ msgstr ""
 "有键的行中的单元格，\n"
 "如果新表具有非空值 (单元格4B保留值<i>b</i>)，则更新值。"
 
-#: ontask/templates/dataops/merge_help.html:10
+#: ontask/templates/dataops/merge_help.html:12
 msgid "Merge using all the keys in either the existing or new table"
 msgstr "合并使用现有或新表中的所有键"
 
-#: ontask/templates/dataops/merge_help.html:14
+#: ontask/templates/dataops/merge_help.html:18
 #, fuzzy
 #| msgid ""
 #| "Selects only those rows for\n"
@@ -4835,11 +4963,11 @@ msgstr ""
 "第一和第二行以及新表中的第五和第六行被删除。只有当新值为非空时，\n"
 "结果行中的单元格才会更新 (单元格4B保留值<i> b</i>)。"
 
-#: ontask/templates/dataops/merge_help.html:22
+#: ontask/templates/dataops/merge_help.html:26
 msgid "Merge using only the keys in both the existing and new table"
 msgstr "仅使用同时在现有表和新表中的键合并"
 
-#: ontask/templates/dataops/merge_help.html:26
+#: ontask/templates/dataops/merge_help.html:33
 #, fuzzy
 #| msgid ""
 #| "Selects only the rows with\n"
@@ -4867,11 +4995,11 @@ msgstr ""
 "单元格\n"
 "才会被更新 (单元格4B保留值<i> b</i>)。"
 
-#: ontask/templates/dataops/merge_help.html:34
+#: ontask/templates/dataops/merge_help.html:41
 msgid "Merge using only the keys in the existing table"
 msgstr "仅使用现有表中的键合并"
 
-#: ontask/templates/dataops/merge_help.html:38
+#: ontask/templates/dataops/merge_help.html:46
 #, fuzzy
 #| msgid ""
 #| "Selects only the rows with\n"
@@ -4884,18 +5012,19 @@ msgstr "仅使用现有表中的键合并"
 #| "4B\n"
 #| "        remains with value <i>b</i>)."
 msgid ""
-"Selects only the rows with\n"
-"    key values present in the new table. This\n"
-"  method drops those rows from the existing table with key values not\n"
-"  in the new table (rows 1 and 2 in the figure below). The cells in the\n"
-"  result rows are updated only if the new value is non-empty (cell 4B\n"
-"  remains with value \"b\")."
+"Selects only\n"
+"    the rows with key values present\n"
+"    in the new table. This method drops those rows from the existing table "
+"with\n"
+"    key values not in the new table (rows 1 and 2 in the figure below). The\n"
+"    cells in the result rows are updated only if the new value is non-empty\n"
+"    (cell 4B remains with value \"b\")."
 msgstr ""
 "仅选择具有新表中存在的键值的行。此方法从现有表中\n"
 "删除那些不在新表中的键值 (如下图中的行1和2)。只有当新值为非空时，结果行中的\n"
 "单元格才会更新 (单元格4B保留值<i> b</i>)。"
 
-#: ontask/templates/dataops/merge_help.html:45
+#: ontask/templates/dataops/merge_help.html:53
 msgid "Merge using only the keys in the new table"
 msgstr "仅使用新表中的键合并"
 
@@ -4996,60 +5125,6 @@ msgstr "此工作流没有可用的数据"
 msgid "Edit learner data"
 msgstr "编辑学生数据"
 
-#: ontask/templates/dataops/sqlupload_start.html:14
-#, python-format
-msgid "Establish a %(n)s"
-msgstr "建立一个 %(n)s"
-
-#: ontask/templates/dataops/sqlupload_start.html:19
-#, python-format
-msgid ""
-"Connection type:\n"
-"        %(n)s"
-msgstr ""
-"连接类型：\n"
-"        %(n)s"
-
-#: ontask/templates/dataops/sqlupload_start.html:23
-#, python-format
-msgid ""
-"Connection\n"
-"        driver: %(n)s"
-msgstr ""
-"连接\n"
-"    驱动程序：%(n)s"
-
-#: ontask/templates/dataops/sqlupload_start.html:27
-#, python-format
-msgid ""
-"Username: %(n)s\n"
-"        "
-msgstr "用户名：%(n)s "
-
-#: ontask/templates/dataops/sqlupload_start.html:31
-msgid "Password: Requested below"
-msgstr "密码：下方请求"
-
-#: ontask/templates/dataops/sqlupload_start.html:35
-#, python-format
-msgid "Host: %(n)s"
-msgstr "主机：%(n)s"
-
-#: ontask/templates/dataops/sqlupload_start.html:39
-#, python-format
-msgid "Port: %(n)s"
-msgstr "端口：%(n)s"
-
-#: ontask/templates/dataops/sqlupload_start.html:42
-#, python-format
-msgid "Database name: %(n)s"
-msgstr "数据库名称：%(n)s"
-
-#: ontask/templates/dataops/sqlupload_start.html:45
-#, python-format
-msgid "Database table: %(n)s"
-msgstr "数据库表格：%(n)s"
-
 #: ontask/templates/dataops/transform_model.html:8
 msgid "Transform"
 msgstr "转换"
@@ -5087,7 +5162,7 @@ msgstr "加载"
 msgid "Rename to"
 msgstr "重命名至"
 
-#: ontask/templates/dataops/upload_s2.html:41
+#: ontask/templates/dataops/upload_s2.html:42
 #: ontask/templates/dataops/upload_s4.html:34
 #: ontask/templates/dataops/upload_s4.html:36
 #: ontask/templates/dataops/upload_s4.html:40
@@ -5095,7 +5170,7 @@ msgstr "重命名至"
 msgid "Key"
 msgstr "密钥"
 
-#: ontask/templates/dataops/upload_s2.html:54
+#: ontask/templates/dataops/upload_s2.html:57
 msgid "Keep?"
 msgstr "是否保留？"
 
@@ -5128,7 +5203,7 @@ msgid "Select the type of data source"
 msgstr "选择数据资源类型"
 
 #: ontask/templates/dataops/uploadmerge.html:16
-#: ontask/templates/scheduler/includes/add_op_menu.html:5
+#: ontask/templates/scheduler/includes/add_op_menu.html:6
 msgid "Operation"
 msgstr "操作"
 
@@ -5137,14 +5212,19 @@ msgid "CSV"
 msgstr "CSV文件"
 
 #: ontask/templates/dataops/uploadmerge.html:29
+#, fuzzy
+#| msgid ""
+#| "Upload data contained in a CSV file (typically\n"
+#| "            saved using a spreadsheet or other data manipulation package)."
 msgid ""
 "Upload data contained in a CSV file (typically\n"
-"            saved using a spreadsheet or other data manipulation package)."
+"            saved using a spreadsheet or other data manipulation\n"
+"            package)."
 msgstr ""
 "上传包含在CSV文件中的数据(通常\n"
 "使用电子表格或其他数据操作包保存)。"
 
-#: ontask/templates/dataops/uploadmerge.html:31
+#: ontask/templates/dataops/uploadmerge.html:32
 msgid ""
 "If the table is empty, the data will be simply\n"
 "            loaded detecting those columns that have unique values for "
@@ -5155,26 +5235,33 @@ msgstr ""
 "则仅仅那些检测每个行具有唯一值的列\n"
 "的数据将被加载。"
 
-#: ontask/templates/dataops/uploadmerge.html:34
+#: ontask/templates/dataops/uploadmerge.html:35
+#, fuzzy
+#| msgid ""
+#| "If the workflow table has data, the operation will\n"
+#| "            ask you to match a key column in your table with a key column "
+#| "in\n"
+#| "            the file to upload so that the rows can be matched."
 msgid ""
 "If the workflow table has data, the operation will\n"
 "            ask you to match a key column in your table with a key column "
 "in\n"
-"            the file to upload so that the rows can be matched."
+"            the file to upload so that the rows can be\n"
+"            matched."
 msgstr ""
 "如果工作流表具有数据，则操作将\n"
 "表中的键列\n"
 "与要上传的文件中的键列匹配，继而可以匹配行。"
 
-#: ontask/templates/dataops/uploadmerge.html:43
+#: ontask/templates/dataops/uploadmerge.html:46
 msgid "Excel"
 msgstr "Excel"
 
-#: ontask/templates/dataops/uploadmerge.html:47
+#: ontask/templates/dataops/uploadmerge.html:50
 msgid "Upload data from Excel file."
 msgstr "从Excel文件中上传数据。"
 
-#: ontask/templates/dataops/uploadmerge.html:48
+#: ontask/templates/dataops/uploadmerge.html:51
 msgid ""
 "\n"
 "            Given a file name and the name of a sheet, upload or merge the\n"
@@ -5186,7 +5273,7 @@ msgstr ""
 "上传或合并Excel文件的内容。\n"
 " "
 
-#: ontask/templates/dataops/uploadmerge.html:53
+#: ontask/templates/dataops/uploadmerge.html:56
 msgid ""
 "\n"
 "            If the workflow table has data, the operation will ask you\n"
@@ -5201,15 +5288,55 @@ msgstr ""
 "键列与要上传的文件中的键列匹配,\n"
 "以便可以匹配行。 "
 
-#: ontask/templates/dataops/uploadmerge.html:64
+#: ontask/templates/dataops/uploadmerge.html:72
+#, fuzzy
+#| msgid "Upload data from a CSV file in a S3 Bucket."
+msgid "Upload information from a Canvas Course."
+msgstr "从S3存储桶中上传一个CSV文件中的数据。"
+
+#: ontask/templates/dataops/uploadmerge.html:73
+msgid ""
+"\n"
+"            Given a Canvas course ID, upload and merge course information\n"
+"            such as enrollment, quizzes or assignments. If the workflow\n"
+"            has an attribute with name \"CANVAS COURSE ID\" is defined, it "
+"is\n"
+"            used as the course ID.\n"
+"            "
+msgstr ""
+
+#: ontask/templates/dataops/uploadmerge.html:80
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "            If the workflow table has data, the operation will ask you\n"
+#| "            to match a key column in your table with a key column in the "
+#| "file\n"
+#| "            to upload so that the rows can be matched.\n"
+#| "            "
+msgid ""
+"\n"
+"            If the workflow table has data, the operation will ask you\n"
+"            to match a key column in your table with the \"id\" column of "
+"canvas\n"
+"            data containing the student id so that the rows can be matched.\n"
+"            "
+msgstr ""
+"\n"
+"如果工作流表具有数据，\n"
+"则操作将要求您将表中的\n"
+"键列与要上传的文件中的键列匹配,\n"
+"以便可以匹配行。 "
+
+#: ontask/templates/dataops/uploadmerge.html:91
 msgid "Google Sheet"
 msgstr "谷歌工作表网址"
 
-#: ontask/templates/dataops/uploadmerge.html:68
+#: ontask/templates/dataops/uploadmerge.html:95
 msgid "Upload data from a Google Sheet file."
 msgstr "从谷歌表格文件中上传数据。"
 
-#: ontask/templates/dataops/uploadmerge.html:69
+#: ontask/templates/dataops/uploadmerge.html:96
 msgid ""
 "\n"
 "            Given the URL pointing to a publicly available Google Sheet "
@@ -5221,8 +5348,8 @@ msgstr ""
 "上传或合并其内容的URL。\n"
 " "
 
-#: ontask/templates/dataops/uploadmerge.html:73
-#: ontask/templates/dataops/uploadmerge.html:95
+#: ontask/templates/dataops/uploadmerge.html:100
+#: ontask/templates/dataops/uploadmerge.html:122
 msgid ""
 "\n"
 "            If the workflow table has data, the operation will ask you\n"
@@ -5237,15 +5364,15 @@ msgstr ""
 "键列与工作表中的键列匹配,\n"
 "以便可以匹配行。 "
 
-#: ontask/templates/dataops/uploadmerge.html:85
+#: ontask/templates/dataops/uploadmerge.html:112
 msgid "S3 Bucket CSV"
 msgstr "S3 存储桶 CSV"
 
-#: ontask/templates/dataops/uploadmerge.html:89
+#: ontask/templates/dataops/uploadmerge.html:116
 msgid "Upload data from a CSV file in a S3 Bucket."
 msgstr "从S3存储桶中上传一个CSV文件中的数据。"
 
-#: ontask/templates/dataops/uploadmerge.html:90
+#: ontask/templates/dataops/uploadmerge.html:117
 msgid ""
 "\n"
 "            Given the key, secret, bucket name and file path to a CSV file,\n"
@@ -5255,11 +5382,7 @@ msgstr ""
 "\n"
 "给定键，密钥，存储桶名称以及文件路径指向的CSV文件，上传或合并其内容的URL。"
 
-#: ontask/templates/dataops/uploadmerge.html:106
-msgid "SQL Connection"
-msgstr "SQL连接"
-
-#: ontask/templates/dataops/uploadmerge.html:110
+#: ontask/templates/dataops/uploadmerge.html:138
 #, fuzzy
 #| msgid ""
 #| "Upload data stored in a remote database by\n"
@@ -5270,13 +5393,13 @@ msgstr ""
 "通过定义连接来上传\n"
 "存储在远程数据库中的数据。"
 
-#: ontask/templates/dataops/uploadmerge.html:117
+#: ontask/templates/dataops/uploadmerge.html:145
 #, fuzzy
 #| msgid "SQL Connections"
 msgid "Athena Connection"
 msgstr "SQL连接"
 
-#: ontask/templates/dataops/uploadmerge.html:121
+#: ontask/templates/dataops/uploadmerge.html:149
 #, fuzzy
 #| msgid ""
 #| "Upload data stored in a remote database by\n"
@@ -5481,25 +5604,37 @@ msgstr "删除"
 msgid "Scheduled Execution"
 msgstr "预定的操作"
 
-#: ontask/templates/scheduler/edit.html:44
+#: ontask/templates/scheduler/edit.html:46
 #, python-format
 msgid "Time now is %(n)s"
 msgstr "现在的时间是%(n)s"
 
-#: ontask/templates/scheduler/edit.html:48
+#: ontask/templates/scheduler/edit.html:50
 msgid "Edit the action scheduled for execution"
 msgstr "编辑已预订执行的操作"
 
-#: ontask/templates/scheduler/includes/add_op_menu.html:11
+#: ontask/templates/scheduler/includes/add_op_menu.html:13
 #, fuzzy
 #| msgid "Data upload/merge operations"
 msgid "Schedule a SQL upload/merge operation"
 msgstr "数据上传/合并操作"
 
-#: ontask/templates/scheduler/includes/add_op_menu.html:12
+#: ontask/templates/scheduler/includes/add_op_menu.html:14
 #, fuzzy
 #| msgid "CSV Upload/Merge"
 msgid "SQL upload/merge"
+msgstr "CSV上传/合并"
+
+#: ontask/templates/scheduler/includes/add_op_menu.html:21
+#, fuzzy
+#| msgid "Data upload/merge operations"
+msgid "Schedule a Canvas Course upload/merge operation"
+msgstr "数据上传/合并操作"
+
+#: ontask/templates/scheduler/includes/add_op_menu.html:22
+#, fuzzy
+#| msgid "CSV Upload/Merge"
+msgid "Canvas Course upload/merge"
 msgstr "CSV上传/合并"
 
 #: ontask/templates/scheduler/includes/partial_scheduler_delete.html:6
@@ -6399,11 +6534,11 @@ msgstr "学生邮件已成功更新。"
 msgid "Error while cloning workflow: {0}"
 msgstr "合并结果时出错：{0}。"
 
-#: ontask/workflow/services/workflow_ops.py:16
+#: ontask/workflow/services/workflow_ops.py:18
 msgid "Value"
 msgstr "数值"
 
-#: ontask/workflow/services/workflow_ops.py:111
+#: ontask/workflow/services/workflow_ops.py:113
 #, fuzzy, python-brace-format
 #| msgid "Incorrect column name {0}."
 msgid "Incorrect email addresses \"{0}\"."
@@ -6449,6 +6584,142 @@ msgid ""
 msgstr ""
 "OnTask API提供操作工作流、表和日志的功能。该接口提供对这些对象的CRUD操作。"
 
+#~ msgid "OAuth token refreshed"
+#~ msgstr "OAuth令牌已刷新"
+
+#, fuzzy
+#~| msgid "Password to authenticate the database connection"
+#~ msgid "Authentication for the database connection"
+#~ msgstr "用于验证数据库连接的密码"
+
+#, fuzzy
+#~| msgid "Key Column in Existing Table"
+#~ msgid "Missing key column name of existing table."
+#~ msgstr "现有表中的关键列"
+
+#, fuzzy
+#~| msgid "URL available to users?"
+#~ msgid "Available to users?"
+#~ msgstr "用户可用的网址？"
+
+#~ msgid "When to execute this action"
+#~ msgstr "何时执行此操作"
+
+#, fuzzy
+#~| msgid "Key column in the existing table to match with the new table."
+#~ msgid ""
+#~ "Key column in the existing table. Leave empty if uploading to empty "
+#~ "workflow"
+#~ msgstr "现有表中能与新表匹配的键列。"
+
+#, fuzzy
+#~| msgid "Add connection"
+#~ msgid "Add a new connection"
+#~ msgstr "添加连接"
+
+#, python-format
+#~ msgid "Upload/Merge %(n)s"
+#~ msgstr "上传/合并%(n)s"
+
+#, fuzzy, python-format
+#~| msgid "Upload/Merge %(n)s"
+#~ msgid "Upload/Merge using %(n)s"
+#~ msgstr "上传/合并%(n)s"
+
+#~ msgid "The data will be accessed with the following parameters:"
+#~ msgstr "数据将以下列参数访问："
+
+#, fuzzy, python-format
+#~| msgid ""
+#~| "Connection type:\n"
+#~| "        %(n)s"
+#~ msgid ""
+#~ "Description:\n"
+#~ "        %(n)s"
+#~ msgstr ""
+#~ "连接类型：\n"
+#~ "        %(n)s"
+
+#, fuzzy, python-format
+#~| msgid ""
+#~| "Connection type:\n"
+#~| "        %(n)s"
+#~ msgid ""
+#~ "Access key:\n"
+#~ "        %(n)s"
+#~ msgstr ""
+#~ "连接类型：\n"
+#~ "        %(n)s"
+
+#, fuzzy, python-format
+#~| msgid "Database name: %(n)s"
+#~ msgid "Bucket name: %(n)s"
+#~ msgstr "数据库名称：%(n)s"
+
+#, fuzzy, python-format
+#~| msgid ""
+#~| "Username: %(n)s\n"
+#~| "        "
+#~ msgid ""
+#~ "File path: %(n)s\n"
+#~ "        "
+#~ msgstr "用户名：%(n)s "
+
+#, fuzzy, python-format
+#~| msgid "Host: %(n)s"
+#~ msgid "Region: %(n)s"
+#~ msgstr "主机：%(n)s"
+
+#, fuzzy, python-format
+#~| msgid "Database table: %(n)s"
+#~ msgid "Table: %(n)s"
+#~ msgstr "数据库表格：%(n)s"
+
+#, python-format
+#~ msgid "Establish a %(n)s"
+#~ msgstr "建立一个 %(n)s"
+
+#, python-format
+#~ msgid ""
+#~ "Connection type:\n"
+#~ "        %(n)s"
+#~ msgstr ""
+#~ "连接类型：\n"
+#~ "        %(n)s"
+
+#, python-format
+#~ msgid ""
+#~ "Connection\n"
+#~ "        driver: %(n)s"
+#~ msgstr ""
+#~ "连接\n"
+#~ "    驱动程序：%(n)s"
+
+#, python-format
+#~ msgid ""
+#~ "Username: %(n)s\n"
+#~ "        "
+#~ msgstr "用户名：%(n)s "
+
+#~ msgid "Password: Requested below"
+#~ msgstr "密码：下方请求"
+
+#, python-format
+#~ msgid "Host: %(n)s"
+#~ msgstr "主机：%(n)s"
+
+#, python-format
+#~ msgid "Port: %(n)s"
+#~ msgstr "端口：%(n)s"
+
+#, python-format
+#~ msgid "Database name: %(n)s"
+#~ msgstr "数据库名称：%(n)s"
+
+#, python-format
+#~ msgid "Database table: %(n)s"
+#~ msgstr "数据库表格：%(n)s"
+
 #~ msgid "Column needs to have all unique values (no empty cells)"
 #~ msgstr "列需要具有所有唯一值（没有空单元格）"
 
@@ -6479,16 +6750,6 @@ msgstr ""
 #~| msgid "Cannot add a view to a workflow without data"
 #~ msgid "Cannot add criteria to a workflow without data"
 #~ msgstr "无法在没有数据的情况下向工作流添加视图"
-
-#, fuzzy
-#~| msgid "Incorrect action scheduling invocation."
-#~ msgid "Incorrect invocation of criterion edit function"
-#~ msgstr "不正确的操作排程调用。"
-
-#, fuzzy
-#~| msgid "Incorrect action scheduling invocation."
-#~ msgid "Incorrect invocation of criterion delete function"
-#~ msgstr "不正确的操作排程调用。"
 
 #, fuzzy
 #~| msgid "Cannot add a view to a workflow without data"
@@ -6713,9 +6974,6 @@ msgstr ""
 
 #~ msgid "Incorrect email action invocation."
 #~ msgstr "错误的电子邮件操作调动。"
-
-#~ msgid "Incorrect JSON action invocation."
-#~ msgstr "不正确的JSON操作调动。"
 
 #~ msgid "Create ZIP"
 #~ msgstr "创建压缩文件"
@@ -7038,9 +7296,6 @@ msgstr ""
 
 #~ msgid "Edit SQL connection parameters"
 #~ msgstr "编辑SQL连接参数"
-
-#~ msgid "Delete SQL connection"
-#~ msgstr "删除SQL连接"
 
 #~ msgid "Add SQL connection"
 #~ msgstr "添加SQL连接"

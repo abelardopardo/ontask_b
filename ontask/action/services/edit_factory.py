@@ -34,9 +34,6 @@ class ActionEditFactory(core.FactoryBase):
         return edit_view(request, **kwargs)
 
 
-ACTION_EDIT_FACTORY = ActionEditFactory()
-
-
 class ActionEditProducerBase(generic.UpdateView):
     """Base class for edit view for the actions."""
 

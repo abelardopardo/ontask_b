@@ -10,7 +10,7 @@ from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import gettext as _
 
-from ontask import LOGGER, OnTaskDataFrameNoKey, OnTaskSharedState
+from ontask import LOGGER, OnTaskSharedState, OnTaskDataFrameNoKey
 from ontask.dataops import pandas, sql
 
 # Translation between OnTask data types and SQLAlchemy
@@ -43,7 +43,7 @@ def create_db_engine(**kwargs):
     Function that creates the engine object to connect to the database. The
     object is required by the pandas functions to_sql and from_sql
     :param kwargs: Dictionary with the following driver parameters:
-      - dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
+      - dialect: Dialect for the engine (oracle, mysql, postgresql, etc.)
       - driver: DB API driver (psycopg2, ...)
       - username: Username to connect with the database
       - password: Password to connect with the database
@@ -52,12 +52,17 @@ def create_db_engine(**kwargs):
 
     :return: the engine
     """
-    database_url = '{dial}{drv}://{usr}:{pwd}@{h}/{dbname}'.format(
+
+    if usr_pwd := kwargs.get('username', ''):
+        if pwd := parse.quote(kwargs.get('password', '')):
+            usr_pwd += ':' + pwd
+        usr_pwd += '@'
+
+    database_url = '{dial}{drv}://{usr_pwd}{host}/{dbname}'.format(
         dial=kwargs.get('dialect'),
         drv=kwargs.get('driver'),
-        usr=kwargs.get('username'),
-        pwd=parse.quote(kwargs.get('password')),
-        h=kwargs.get('host'),
+        usr_pwd=usr_pwd,
+        host=kwargs.get('host'),
         dbname=kwargs.get('dbname'))
 
     if settings.DEBUG:

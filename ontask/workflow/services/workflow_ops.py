@@ -3,7 +3,9 @@ import django_tables2 as tables
 from django import http
 from django.utils.translation import gettext_lazy as _
 
-from ontask import core, get_incorrect_email, models, tasks
+from ontask import core, get_incorrect_email, models
+from ontask.tasks.execute import execute_operation
+from ontask.core import session_ops
 from ontask.dataops import sql
 from ontask.workflow import services
 
@@ -129,7 +131,7 @@ def update_luser_email_column(
     log_item = workflow.log(user, models.Log.WORKFLOW_UPDATE_LUSERS)
 
     # Push the update of lusers to batch processing
-    tasks.execute_operation.delay(
+    execute_operation.delay(
         operation_type=models.Log.WORKFLOW_UPDATE_LUSERS,
         user_id=user.id,
         workflow_id=workflow.id,
@@ -147,5 +149,5 @@ def do_flush(request: http.HttpRequest, workflow: models.Workflow):
     workflow.flush()
     workflow.refresh_from_db()
     # update the request object with the new number of rows
-    core.store_workflow_in_session(request.session, workflow)
+    session_ops.store_workflow_in_session(request, workflow)
     workflow.log(request.user, models.Log.WORKFLOW_DATA_FLUSH)

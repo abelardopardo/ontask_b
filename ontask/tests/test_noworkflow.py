@@ -53,8 +53,8 @@ class BackToHome(
             reverse('dataops:upload_s2'),
             reverse('dataops:upload_s3'),
             reverse('dataops:upload_s4'),
-            reverse('dataops:sqlupload_start', kwargs={'pk': 1}),
-            reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
+            reverse('dataops:sqlupload_start'),
+            # reverse('dataops:athenaupload_start'),
             # Logs
             reverse('logs:page_view', kwargs={'pk': 1}),
             # Table
@@ -132,10 +132,10 @@ class BackToHome(
             reverse('table:view_clone', kwargs={'pk': 1}),
             reverse('table:view_delete', kwargs={'pk': 1}),
         ]
-
+        home_url = reverse('home')
         self.client.login(email='instructor01@bogus.com', password='boguspwd')
 
-        resp = self.client.get(reverse('home'))
+        resp = self.client.get(home_url)
         self.assertTrue(status.is_success(resp.status_code))
 
         for url_name in redirect:
@@ -144,7 +144,7 @@ class BackToHome(
                 resp.status_code,
                 status.HTTP_302_FOUND,
                 msg='URL name: {0}'.format(url_name))
-            self.assertEqual(resp.url, reverse('home'))
+            self.assertEqual(resp.url, home_url)
 
         for url_name in bad_request:
             resp = self.client.get(url_name)

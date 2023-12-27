@@ -239,7 +239,7 @@ class EmailActionForm(
         required=False,
         label=_('Track email reading in an extra column?'),
         help_text=_('Adds an extra column to the workflow. '
-                    'Results are aproximate.'))
+                    'Results are approximate.'))
 
     def __init__(self, *args, **kwargs):
         """Store column names and adjust initial values."""

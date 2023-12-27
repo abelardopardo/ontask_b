@@ -9,10 +9,11 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
+import ontask.action
 from ontask import create_new_name, models
-from ontask.action import forms, services
+from ontask.action import forms, services, ACTION_EDIT_FACTORY
 from ontask.core import (
-    ActionView, JSONFormResponseMixin, SessionPayload, UserIsInstructor,
+    ActionView, JSONFormResponseMixin, UserIsInstructor, session_ops,
     WorkflowView, ajax_required, get_action, is_instructor)
 
 
@@ -34,7 +35,7 @@ class ActionIndexView(UserIsInstructor, WorkflowView, generic.ListView):
         return context
 
     def get(self, request, *args, **kwargs):
-        SessionPayload.flush(request.session)
+        session_ops.flush_payload(request)
         return super().get(request, *args, **kwargs)
 
 
@@ -127,7 +128,7 @@ def action_edit(
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None
 ) -> http.HttpResponse:
-    return services.ACTION_EDIT_FACTORY.process_request(
+    return ACTION_EDIT_FACTORY.process_request(
         request,
         action.action_type,
         workflow=workflow,

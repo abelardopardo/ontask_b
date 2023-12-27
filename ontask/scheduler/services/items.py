@@ -10,6 +10,7 @@ from django.forms.models import model_to_dict
 from django.utils.translation import gettext
 
 from ontask import models
+from ontask.core.checks import validate_crontab
 
 
 def get_item_value_dictionary(sch_obj: models.ScheduledOperation) -> Dict:
@@ -46,7 +47,7 @@ def create_timedelta_string(
     :param utime: until datetime object
     :return: String rendering
     """
-    diagnostic_msg = models.ScheduledOperation.validate_times(
+    diagnostic_msg = validate_crontab(
         ftime,
         frequency,
         utime)

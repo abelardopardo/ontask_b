@@ -8,8 +8,7 @@ from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
-from ontask.core import SessionPayload
-from ontask.core import canvas_get_or_set_oauth_token
+from ontask.core import canvas_ops, session_ops
 from ontask.scheduler.forms import (
     ScheduleEmailForm, ScheduleJSONForm, ScheduleJSONReportForm,
     ScheduleSendListForm, ScheduleCanvasEmailForm)
@@ -21,40 +20,62 @@ from ontask.scheduler.services.items import create_timedelta_string
 class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
     """Base class for those saving Action Run operations."""
 
+    action = None  # Action being considered (only used when executing)
+
+    def setup(self, request, *args, **kwargs):
+        """Store action field in view."""
+        super().setup(request, *args, **kwargs)
+
+        if self.object:
+            # Editing an existing scheduled op
+            self.action = self.object.action
+        else:
+            # Creating a new op. Action is given to the view through URL field
+            self.action = kwargs.get('action', None)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_false_conditions = False
+        if self.action:
+            all_false_conditions = any(
+                cond.selected_count == 0
+                for cond in self.action.conditions.all())
+
+        context['all_false_conditions'] = all_false_conditions
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['action'] = self.action
+        return kwargs
+
     def _create_payload(
         self,
         request: http.HttpRequest,
         **kwargs
-    ) -> SessionPayload:
-        """Create a payload dictionary to store in the session.
+    ) -> dict:
+        """Create a payload dictionary stored in the session.
 
         :param request: HTTP request
         :param action: Corresponding action for the schedule operation type, or
-        if empty, it is contained in the scheduled_item (Optional)
+        if empty, it is contained in the object (Optional)
         :return: Dictionary with pairs name: value
         """
-        if self.scheduled_item:
-            exclude_values = self.scheduled_item.payload.get(
-                'exclude_values',
-                [])
-        else:
-            exclude_values = []
+        payload = super()._create_payload(request, **kwargs)
 
-        # Get the payload from the session, and if not, use the given one
-        payload = SessionPayload(
-            request.session,
-            initial_values={
+        # Update payload
+        payload.update({
                 'action_id': self.action.id if self.action else None,
-                'exclude_values': exclude_values,
-                'operation_type': self.operation_type,
                 'value_range': list(range(2)),
                 'prev_url': request.path_info,
                 'post_url': reverse('scheduler:finish_scheduling'),
-                'page_title': gettext('Schedule Action Execution'),
-            })
-        if self.scheduled_item:
-            payload.update(self.scheduled_item.payload)
-            payload['schedule_id'] = self.scheduled_item.id
+                'page_title': gettext('Schedule Action Execution')})
+
+        if self.object:
+            payload['exclude_values'] = self.object.payload.get(
+                'exclude_values', [])
+        else:
+            payload['exclude_values'] = []
 
         return payload
 
@@ -64,7 +85,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
             self.op_payload['button_label'] = gettext('Schedule')
             self.op_payload['value_range'] = 2
             self.op_payload['step'] = 2
-            self.op_payload.store_in_session(self.request.session)
+            session_ops.set_payload(self.request, self.op_payload)
 
             return redirect('action:item_filter')
 
@@ -74,7 +95,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
     def finish(
         self,
         request: http.HttpRequest,
-        payload: SessionPayload,
+        payload: dict,
     ) -> Optional[http.HttpResponse]:
         """Finalize the creation of a scheduled operation.
 
@@ -89,10 +110,10 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
         s_item_id = payload.pop('schedule_id', None)
         if s_item_id:
             # Get the item being processed
-            if not self.scheduled_item:
-                self.scheduled_item = models.ScheduledOperation.objects.filter(
+            if not self.object:
+                self.object = models.ScheduledOperation.objects.filter(
                     id=s_item_id).first()
-                if not self.scheduled_item:
+                if not self.object:
                     messages.error(
                         request,
                         _('Incorrect request for operation scheduling'))
@@ -118,8 +139,8 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
         try:
             scheduled_item = self.create_or_update(
                 request.user,
-                payload.get_store(),
-                self.scheduled_item)
+                payload,
+                self.object)
         except Exception as exc:
             messages.error(
                 request,
@@ -130,11 +151,11 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
         scheduled_item.log(models.Log.SCHEDULE_EDIT)
 
         # Reset object to carry action info throughout dialogs
-        SessionPayload.flush(request.session)
+        session_ops.flush_payload(request)
 
         # Successful processing.
         tdelta = create_timedelta_string(
-            scheduled_item.execute,
+            scheduled_item.execute_start,
             scheduled_item.frequency,
             scheduled_item.execute_until)
         return render(
@@ -169,10 +190,10 @@ class ScheduledOperationCanvasEmailUpdateView(
         else:
             continue_url = 'scheduler:finish_scheduling'
 
-        self.op_payload.store_in_session(self.request.session)
+        session_ops.set_payload(self.request, self.op_payload)
 
         # Check for the CANVAS token and proceed to the continue_url
-        return canvas_get_or_set_oauth_token(
+        return canvas_ops.set_oauth_token(
             self.request,
             self.op_payload['target_url'],
             continue_url,

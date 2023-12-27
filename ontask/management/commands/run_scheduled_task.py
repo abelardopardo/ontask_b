@@ -1,5 +1,5 @@
 """Command to execute a scheduled task given a scheduled task ID."""
-from ontask.tasks import execute_scheduled_operation
+from ontask.tasks.scheduled_ops import execute_scheduled_operation
 
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand

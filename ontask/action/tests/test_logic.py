@@ -7,12 +7,15 @@ from django.core import signing
 from django.shortcuts import reverse
 from rest_framework import status
 
-from ontask import models, tests
 from ontask.action import services
+from ontask.models import Workflow, Action
+from ontask.tests import (
+    SimpleEmailActionFixture, OnTaskTestCase, WrongEmailFixture,
+    FilterCorrectEmailsFixture, user_info)
 from ontask.dataops import pandas
 
 
-class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
+class EmailActionTracking(SimpleEmailActionFixture, OnTaskTestCase):
     """Test Email tracking."""
 
     def test(self):
@@ -44,13 +47,14 @@ class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
                 self.client.get(reverse('trck') + '?v=' + track)
 
             # Get the workflow and the data frame
-            workflow = models.Workflow.objects.get(name=self.wflow_name)
+            workflow = Workflow.objects.get(name=self.wflow_name)
             data_frame = pandas.load_table(
                 workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
             for user_email in [
-                x[1] for x in tests.user_info if x[1].startswith('student')]:
+                x[1] for x in user_info if x[1].startswith('student')
+            ]:
                 self.assertEqual(
                     int(
                         data_frame.loc[
@@ -59,12 +63,12 @@ class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
                     idx)
 
 
-class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
+class ActionImport(SimpleEmailActionFixture, OnTaskTestCase):
     """Test action import."""
 
     def test(self):
         user = get_user_model().objects.get(email='instructor01@bogus.com')
-        wflow = models.Workflow.objects.get(name=self.wflow_name)
+        wflow = Workflow.objects.get(name=self.wflow_name)
 
         with open(
                 os.path.join(
@@ -74,12 +78,12 @@ class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
         ) as file_obj:
             services.do_import_action(user, workflow=wflow, file_item=file_obj)
 
-        models.Action.objects.get(name='Initial survey')
+        Action.objects.get(name='Initial survey')
 
 
 class EmailActionDetectIncorrectEmail(
-    tests.WrongEmailFixture,
-    tests.OnTaskTestCase,
+    WrongEmailFixture,
+    OnTaskTestCase,
 ):
     """Test if incorrect email addresses are detected."""
 
@@ -87,7 +91,7 @@ class EmailActionDetectIncorrectEmail(
     user_pwd = 'boguspwd'
 
     def test(self):
-        wflow = models.Workflow.objects.get(name=self.wflow_name)
+        wflow = Workflow.objects.get(name=self.wflow_name)
         email_column = wflow.columns.get(name='email')
         action = wflow.actions.first()
 
@@ -107,8 +111,8 @@ class EmailActionDetectIncorrectEmail(
 
 
 class EmailActionChecksOnlySelectedEmails(
-    tests.FilterCorrectEmailsFixture,
-    tests.OnTaskTestCase,
+    FilterCorrectEmailsFixture,
+    OnTaskTestCase,
 ):
     """Test if incorrect email addresses filtered out are allowed."""
 
@@ -116,7 +120,7 @@ class EmailActionChecksOnlySelectedEmails(
     user_pwd = 'boguspwd'
 
     def test(self):
-        wflow = models.Workflow.objects.get(name=self.wflow_name)
+        wflow = Workflow.objects.get(name=self.wflow_name)
         email_column = wflow.columns.get(name='email')
         action = wflow.actions.first()
 

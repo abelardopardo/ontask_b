@@ -422,6 +422,15 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.go_to_excel_upload_merge_step_1()
         self.body_ss('dataops_upload_excel.png')
         self.go_to_table()
+
+        #
+        # Dataops/Merge Canvas Course Upload List
+        #
+        # Go to Canvas Course Upload
+        self.go_to_canvas_upload_merge_step_1()
+        self.body_ss('dataops_upload_canvas_course.png')
+        self.go_to_table()
+
         #
         # Google doc merge
         #
@@ -440,19 +449,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         #
         # Dataops/Merge SQL Connection
         #
-        self.go_to_sql_upload_merge()
+        self.go_to_sql_upload_merge_step_1()
         self.body_ss('dataops_SQL_available.png')
-
-        # Click on the link RUN
-        element = self.search_table_row_by_string(
-            'conn-instructor-table',
-            1,
-            'remote server')
-        element.find_element(By.XPATH, 'td[1]/a').click()
-        self.wait_for_page(None, 'sql-load-step1')
-
-        # Picture of the RUN menu in SQL
-        self.body_ss('dataops_SQL_run.png')
         self.go_to_table()
 
         #
@@ -824,8 +822,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         ).click()
         self.wait_for_id_and_spinner('action-index')
 
-        # Picture of Canvas scheduling
-        # self.open_action_schedule('Send Canvas reminder')
+        # # Picture of Canvas scheduling
+        # self.open_action_schedule('Midterm comments')
         # self.body_ss('scheduler_action_canvas_email.png')
         # self.go_to_actions()
 
@@ -929,7 +927,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         ).select_by_visible_text('email')
         dt_widget = self.selenium.find_element(
             By.XPATH,
-            "//input[@id='id_execute']"
+            "//input[@id='id_execute_start']"
         )
         dt_widget.clear()
         dt_widget.send_keys('2110-07-05 17:30:51')
@@ -940,7 +938,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         self.scroll_element_into_view(track_read_element)
         track_read_element.click()
 
-        # Take picture of the export page.
+        # Take picture of the schedule form.
         self.body_ss('schedule_action_email.png')
 
         # Click the schedule button
@@ -973,7 +971,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         ).select_by_visible_text('email')
         dt_widget = self.selenium.find_element(
             By.XPATH,
-            "//input[@id='id_execute']"
+            "//input[@id='id_execute_start']"
         )
         dt_widget.clear()
         dt_widget.send_keys('2110-07-25 17:00:00')
@@ -982,7 +980,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
             'afabkvaidlfvsidkfe..kekfioroelallasifjjf;alksid'
         )
 
-        # Take picture of the export page.
+        # Take picture page.
         self.body_ss('schedule_action_json.png')
 
         # Click the schedule button
