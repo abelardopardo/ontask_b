@@ -17,8 +17,8 @@ class SQLConnection(Connection):
 
     The parameters for the connection are:
 
-    name
     conn_type
+    conn_driver
     db_user
     db_password
     db_host

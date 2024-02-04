@@ -33,7 +33,7 @@ def load_df_from_sqlconnection(
     # Try to fetch the data
     data_frame = pd.read_sql_table(conn_item.db_table, db_engine)
 
-    # Remove the engine
+    # Remove the engine. This operation is considered to be sporadic
     db_engine.dispose()
 
     # Strip white space from all string columns and try to convert to
