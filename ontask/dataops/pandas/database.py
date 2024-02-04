@@ -155,17 +155,16 @@ def store_table(
         dict_type = {}
 
     with cache.lock(table_name):
-        # We overwrite the content and do not create an index
-        data_frame.to_sql(
-            table_name,
-            OnTaskSharedState.engine,
-            if_exists='replace',
-            index=False,
-            dtype={
-                key: ONTASK_TO_SQLALCHEMY[type_value]
-                for key, type_value in dict_type.items()
-            },
-        )
+        with OnTaskSharedState.engine.connect() as sqlalchemy_connection:
+            # We overwrite the content and do not create an index
+            data_frame.to_sql(
+                table_name,
+                sqlalchemy_connection,
+                if_exists='replace',
+                index=False,
+                dtype={
+                    key: ONTASK_TO_SQLALCHEMY[type_value]
+                    for key, type_value in dict_type.items()})
 
 
 def verify_data_frame(data_frame: pd.DataFrame):
