@@ -18,13 +18,17 @@ def load_df_from_sqlconnection(
     :param conn_item: SQLConnection object with the connection parameters.
     :return: Data frame or raise an exception.
     """
+    drivername = conn_item.conn_type
+    if conn_item.conn_driver:
+        drivername += '+' + conn_item.conn_driver
+
     db_engine = pandas.create_db_engine(
-        dialect=conn_item.conn_type,
-        driver=conn_item.conn_driver,
+        drivername=drivername,
         username=conn_item.db_user,
         password=conn_item.db_password,
         host=conn_item.db_host,
-        dbname=conn_item.db_name)
+        port=conn_item.db_port,
+        database=conn_item.db_name)
 
     # Try to fetch the data
     data_frame = pd.read_sql_table(conn_item.db_table, db_engine)
