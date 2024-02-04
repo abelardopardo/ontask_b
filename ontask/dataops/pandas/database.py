@@ -4,7 +4,6 @@ from urllib import parse
 
 import pandas as pd
 import sqlalchemy
-import sqlalchemy.engine
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
