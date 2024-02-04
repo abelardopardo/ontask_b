@@ -103,11 +103,6 @@ class AthenaConnection(Connection):
     edit_event = Log.ATHENA_CONNECTION_EDIT
     toggle_event = Log.ATHENA_CONNECTION_TOGGLE
 
-    optional_fields = [
-        'aws_secret_access_key',
-        'aws_session_token',
-        'table_name']
-
     @classmethod
     def get(cls, pk):
         """Get the object with the given PK."""
