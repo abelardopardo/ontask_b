@@ -53,6 +53,8 @@ class OnTaskSharedState:
 
     __shared_state = {}
 
+    engine = None
+
     def __init__(self):
         """Stored the shared state as the dictionary."""
         self.__dict__ = self.__shared_state

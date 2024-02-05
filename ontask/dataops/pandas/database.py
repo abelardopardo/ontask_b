@@ -1,6 +1,5 @@
 """Functions to manipulate Pandas DataFrames and related operations."""
 from typing import Dict, List, Mapping, Optional
-from urllib import parse
 from sqlalchemy.engine.url import URL
 
 import pandas as pd
