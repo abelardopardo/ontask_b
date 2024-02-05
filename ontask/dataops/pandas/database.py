@@ -120,13 +120,18 @@ def load_table(
             table_name,
             column_names=columns,
             filter_formula=filter_exp)
-        return pd.read_sql_query(
-            query,
-            OnTaskSharedState.engine,
-            params=tuple(query_fields))
+        with OnTaskSharedState.engine.connect() as sqlalchemy_connection:
+            data_frame = pd.read_sql_query(
+                query,
+                sqlalchemy_connection,
+                params=tuple(query_fields))
+            return data_frame
 
     # No special fields given, load the whole thing
-    return pd.read_sql_table(table_name, OnTaskSharedState.engine)
+    with OnTaskSharedState.engine.connect() as sqlalchemy_connection:
+        data_frame = pd.read_sql_table(table_name, sqlalchemy_connection)
+
+    return data_frame
 
 
 def store_table(
