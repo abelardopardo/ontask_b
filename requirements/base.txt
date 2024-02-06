@@ -34,7 +34,7 @@ click-repl==0.3.0
 click==8.1.7
 crispy-bootstrap5==2023.10
 cron-descriptor==1.4.0
-cryptography==41.0.7
+cryptography==42.0.0
 css-html-js-minify==2.5.5
 defusedxml==0.7.1
 diff-match-patch==20230430
