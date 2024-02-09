@@ -192,9 +192,9 @@ class MultiLTILaunchAuthMiddleware:
         setattr(request, 'LTI',
                 request.session.get('LTI_LAUNCH', {}).get(resource_link_id, {}))
         set_current_request(request)
-        if not request.LTI and settings.DEBUG:
-            LOGGER.warning("Could not find LTI launch for resource_link_id %s",
-                           resource_link_id)
+        # if not request.LTI and settings.DEBUG:
+        #     LOGGER.warning("Could not find LTI launch for resource_link_id %s",
+        #                    resource_link_id)
 
     def clean_username(self, username, request):
         """
