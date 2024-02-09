@@ -67,7 +67,8 @@ def create_db_engine(**kwargs):
         database_url,
         client_encoding=str('utf8'),
         echo=False,
-        paramstyle='format')
+        paramstyle='format',
+        connect_args={'connect_timeout': 300})
 
 
 def destroy_db_engine(db_engine=None):
