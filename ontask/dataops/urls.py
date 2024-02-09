@@ -135,7 +135,7 @@ urlpatterns = [
     # Canvas Course Quizzes Upload/Merge
     path(
         'canvas_course_quizzess_upload_start/',
-        views.CanvasUploadStart.as_view(
+        views.CanvasCourseQuizzesUploadStart.as_view(
             form_class=forms.UploadCanvasForm,
             template_name='dataops/upload1.html',
             data_type='Canvas Course Quizzes',

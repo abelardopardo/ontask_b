@@ -149,7 +149,7 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
                 range(5) if self.workflow.has_data_frame else range(3)),
             'df_info': df_info,
             'next_name':
-                _('Finish') if self.workflow.has_data_frame else None})
+                _('Finish') if not self.workflow.has_data_frame else None})
 
         return context
 

@@ -18,4 +18,4 @@ from ontask.dataops.views.upload_steps import (
     UploadShowSourcesView)
 from ontask.dataops.views.canvas_upload import (
     CanvasUploadStart, CanvasCourseEnrollmentsUploadStart,
-    canvas_upload_start_finish)
+    CanvasCourseQuizzesUploadStart, canvas_upload_start_finish)
