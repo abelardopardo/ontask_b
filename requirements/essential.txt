@@ -19,7 +19,7 @@
 # 7. cp requirements/freeze.txt requirements/base.txt
 # 8. Move lines in base.txt to development.txt
 #
-Django[argon2]==4.2.8  # BSD-3-Clause
+Django[argon2]==4.2.10  # BSD-3-Clause
 celery  # BSD
 coverage  # Apache License 2.0
 crispy-bootstrap5 # MIT
