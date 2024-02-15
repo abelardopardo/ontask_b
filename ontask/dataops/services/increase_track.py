@@ -1,11 +1,12 @@
 """Function to increase the tracking column in a workflow."""
 from typing import Dict, Optional
 
+from celery.utils.log import get_task_logger
 from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import gettext
 
-from ontask import models
+from ontask import models, CELERY_LOGGER
 from ontask.dataops import sql
 
 
@@ -36,25 +37,36 @@ class ExecuteIncreaseTrackCount:
         :return: Nothing
         """
         del user, workflow, action, log_item
+
+        CELERY_LOGGER.debug('Executing increase track count')
+
         method = payload.get('method')
         if method != 'GET':
             # Only GET requests are accepted
-            raise Exception(gettext('Non-GET request received in Track URL'))
+            msg = gettext('Non-GET request received in Track URL')
+            CELERY_LOGGER.error(msg)
+            raise Exception(msg)
 
         get_dict = payload.get('get_dict')
         if get_dict is None:
-            raise Exception(gettext('No dictionary in Track URL'))
+            msg = gettext('No dictionary in Track URL')
+            CELERY_LOGGER.error(msg)
+            raise Exception(msg)
 
         # Obtain the track_id from the request
         track_id = get_dict.get('v')
         if not track_id:
-            raise Exception(gettext('No track_id found in request'))
+            msg = gettext('No track_id found in request')
+            CELERY_LOGGER.error(msg)
+            raise Exception(msg)
 
         # If the track_id is not correctly signed, finish.
         try:
             track_id = signing.loads(track_id)
         except signing.BadSignature:
-            raise Exception(gettext('Bad signature in track_id'))
+            msg = gettext('Bad signature in track_id')
+            CELERY_LOGGER.error(msg)
+            raise Exception(msg)
 
         # The request is legit and the value has been verified. Track_id has
         # now the dictionary with the tracking information
@@ -63,9 +75,9 @@ class ExecuteIncreaseTrackCount:
         user = get_user_model().objects.filter(
             email=track_id['sender']).first()
         if not user:
-            raise Exception(
-                gettext('Incorrect user email %s'),
-                track_id['sender'])
+            msg = gettext('Incorrect user email %s')
+            CELERY_LOGGER.error(msg, track_id['sender'])
+            raise Exception(msg, track_id['sender'])
 
         action = models.Action.objects.filter(pk=track_id['action']).first()
         if not action:

@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 from zoneinfo import ZoneInfo
 
+from celery.utils.log import get_task_logger
 from django import conf
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
@@ -33,7 +34,7 @@ __version__ = '10.6'
 
 LOGGER = logging.getLogger('ontask')
 
-CELERY_LOGGER = logging.getLogger('celery_execution')
+CELERY_LOGGER = get_task_logger('celery_execution')
 
 
 class OnTaskDBIdentifier(sql.Identifier):

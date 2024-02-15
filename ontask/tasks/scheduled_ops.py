@@ -3,12 +3,15 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from celery import shared_task
+from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.core.cache import cache
 
-from ontask import CELERY_LOGGER, models
+from ontask import models
 from ontask.core import ONTASK_SCHEDULED_LOCKED_ITEM
 from ontask.tasks.execute_factory import TASK_EXECUTE_FACTORY
+
+LOGGER = get_task_logger(__name__)
 
 
 def _update_item_status(s_item: models.ScheduledOperation):
@@ -31,7 +34,7 @@ def _update_item_status(s_item: models.ScheduledOperation):
     s_item.refresh_from_db(fields=['status'])
 
     if settings.DEBUG:
-        CELERY_LOGGER.info('Status set to %s', s_item.status)
+        LOGGER.info('Status set to %s', s_item.status)
 
 
 @shared_task
@@ -42,10 +45,12 @@ def execute_scheduled_operation(s_item_id: int):
     :return: Nothing, execution carries out normally.
     """
 
+    LOGGER.debug('Executing scheduled operation %s', s_item_id)
+
     s_item = models.ScheduledOperation.objects.filter(pk=s_item_id).first()
     if not s_item:
         if settings.DEBUG:
-            CELERY_LOGGER.info('Operation without scheduled item.')
+            LOGGER.info('Operation without scheduled item.')
         return
 
     with cache.lock(ONTASK_SCHEDULED_LOCKED_ITEM.format(s_item.id)):
@@ -53,7 +58,7 @@ def execute_scheduled_operation(s_item_id: int):
         s_item.refresh_from_db()
         if s_item.status != models.scheduler.STATUS_PENDING:
             if settings.DEBUG:
-                CELERY_LOGGER.info('Operation with status %s.', s_item.status)
+                LOGGER.info('Operation with status %s.', s_item.status)
             return
 
         now = datetime.now(ZoneInfo(settings.TIME_ZONE))
@@ -63,17 +68,17 @@ def execute_scheduled_operation(s_item_id: int):
                 now < s_item.execute_start):
             # Not yet
             if settings.DEBUG:
-                CELERY_LOGGER.info('Too soon to execute operation.')
+                LOGGER.info('Too soon to execute operation.')
             return
 
         if s_item.execute_until and now > s_item.execute_until:
             # Too late
             if settings.DEBUG:
-                CELERY_LOGGER.info('Too late to execute operation.')
+                LOGGER.info('Too late to execute operation.')
             return
 
         if settings.DEBUG:
-            CELERY_LOGGER.info('EXECUTING execute_scheduled_operation')
+            LOGGER.info('EXECUTING execute_scheduled_operation')
 
         try:
             # Set item to running
@@ -104,7 +109,7 @@ def execute_scheduled_operation(s_item_id: int):
             msg = 'Error processing action {0}: {1}'.format(
                 s_item.name,
                 str(exc))
-            CELERY_LOGGER.error(msg)
+            LOGGER.error(msg)
             log_item.payload['error'] = msg
             log_item.save()
             models.ScheduledOperation.objects.filter(pk=s_item.id).update(
