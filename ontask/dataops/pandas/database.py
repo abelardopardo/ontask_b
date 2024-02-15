@@ -115,22 +115,37 @@ def load_table(
     if settings.DEBUG:
         LOGGER.debug('Loading table %s', table_name)
 
+    engine = create_db_engine(
+        dialect='postgresql',
+        driver='+psycopg2',
+        username=settings.DATABASES['default']['USER'],
+        password=settings.DATABASES['default']['PASSWORD'],
+        host=settings.DATABASES['default']['HOST'],
+        dbname=settings.DATABASES['default']['NAME'])
+
     if columns or filter_exp:
         # A list of columns or a filter exp is given
         query, query_fields = sql.get_select_query_txt(
             table_name,
             column_names=columns,
             filter_formula=filter_exp)
-        with OnTaskSharedState.engine.connect() as sqlalchemy_connection:
-            data_frame = pd.read_sql_query(
-                query,
-                sqlalchemy_connection,
-                params=tuple(query_fields))
-            return data_frame
+        try:
+            with engine.begin() as sqlalchemy_connection:
+                data_frame = pd.read_sql_query(
+                    query,
+                    sqlalchemy_connection,
+                    params=tuple(query_fields))
+        except Exception as exc:
+            LOGGER.error('Error ' + str(exc))
+    else:
+        # No special fields given, load the whole thing
+        try:
+            with engine.begin() as sqlalchemy_connection:
+                data_frame = pd.read_sql_table(table_name, sqlalchemy_connection)
+        except Exception as exc:
+            LOGGER.error('Error ' + str(exc))
 
-    # No special fields given, load the whole thing
-    with OnTaskSharedState.engine.connect() as sqlalchemy_connection:
-        data_frame = pd.read_sql_table(table_name, sqlalchemy_connection)
+    engine.dispose()
 
     return data_frame
 
@@ -173,18 +188,30 @@ def store_table(
     if dict_type is None:
         dict_type = {}
 
-    with cache.lock(table_name):
-        with OnTaskSharedState.engine.connect() as sqlalchemy_connection:
-            # We overwrite the content and do not create an index
-            data_frame.to_sql(
-                table_name,
-                sqlalchemy_connection,
-                if_exists='replace',
-                index=False,
-                dtype={
-                    key: ONTASK_TO_SQLALCHEMY[type_value]
-                    for key, type_value in dict_type.items()})
+    engine = create_db_engine(
+        dialect='postgresql',
+        driver='+psycopg2',
+        username=settings.DATABASES['default']['USER'],
+        password=settings.DATABASES['default']['PASSWORD'],
+        host=settings.DATABASES['default']['HOST'],
+        dbname=settings.DATABASES['default']['NAME'])
 
+    try:
+        with cache.lock(table_name):
+            with engine.begin() as sqlalchemy_connection:
+                # We overwrite the content and do not create an index
+                data_frame.to_sql(
+                    table_name,
+                    sqlalchemy_connection,
+                    if_exists='replace',
+                    index=False,
+                    dtype={
+                        key: ONTASK_TO_SQLALCHEMY[type_value]
+                        for key, type_value in dict_type.items()})
+    except Exception as exc:
+        LOGGER.error('Error: ' + str(exc))
+
+    engine.dispose()
 
 def verify_data_frame(data_frame: pd.DataFrame):
     """Verify consistency properties in a DF.

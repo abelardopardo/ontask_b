@@ -1,14 +1,14 @@
 """Celery definitions and a test function."""
 import os
-
-from celery import Celery
+import celery
+from celery.signals import setup_logging  # noqa
 from celery.utils.log import get_task_logger
 from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.production')
 
-app = Celery('ontask')
+app = celery.Celery('ontask')
 
 LOGGER = get_task_logger('celery_execution')
 
@@ -18,6 +18,14 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks(['ontask.tasks'])
+
+
+@setup_logging.connect
+def on_celery_setup_logging(**kwargs):
+    from logging.config import dictConfig  # noqa
+    from django.conf import settings  # noqa
+
+    dictConfig(settings.LOGGING)
 
 
 @app.task(bind=True)

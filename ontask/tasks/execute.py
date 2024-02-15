@@ -9,7 +9,7 @@ from django.utils.translation import gettext
 from ontask import models
 from ontask.tasks import TASK_EXECUTE_FACTORY
 
-CELERY_LOGGER = get_task_logger('celery_execution')
+LOGGER = get_task_logger(__name__)
 
 
 def _get_execution_items(
@@ -78,6 +78,8 @@ def execute_operation(
     :param payload: Rest of parameters.
     :return: Nothing
     """
+    LOGGER.debug('Execute operation %s', operation_type)
+
     log_item = None
     try:
         user, workflow, action = _get_execution_items(
@@ -85,11 +87,19 @@ def execute_operation(
             workflow_id=workflow_id,
             action_id=action_id)
 
+        LOGGER.debug(
+            'User: %s, Workflow: %s, Action: %s, Log ID %s',
+            user,
+            workflow,
+            action,
+            log_id)
+
         if log_id:
             log_item = models.Log.objects.get(pk=log_id)
             log_item.workflow = workflow
             log_item.payload['status'] = 'Executing'
             log_item.save(update_fields=['payload', 'workflow'])
+            LOGGER.debug('Log id: ', log_id)
 
         TASK_EXECUTE_FACTORY.execute_operation(
             operation_type=operation_type,
@@ -100,11 +110,12 @@ def execute_operation(
             log_item=log_item)
 
     except Exception as exc:
+        LOGGER.debug('Error detected in task execution')
         if log_item is not None:
             log_item.payload['status'] = 'Error: {0}'.format(exc)
             log_item.save(update_fields=['payload'])
 
-        CELERY_LOGGER.error(
+        LOGGER.error(
             gettext('Error executing operation: {0}').format(exc))
         return
 
