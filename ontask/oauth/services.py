@@ -112,7 +112,7 @@ def refresh_token(
     user_token.valid_until = timezone.now() + timedelta(
         seconds=response_data.get('expires_in', 0))
 
-    user_token.save(update_fields=['access_token', 'valid_until'])
+    user_token.save()
 
     return user_token
 

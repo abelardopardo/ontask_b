@@ -78,10 +78,15 @@ def request_refresh_and_retry(
         response.status_code == status.HTTP_401_UNAUTHORIZED
         and response.headers.get('WWW-Authenticate')
     ):
-        user_token = services.refresh_token(user_token, oauth_info)
-        headers['Authorization'] = headers['Authorization'].format(
-            user_token.access_token)
-        response = request_method(url, headers, **kwargs)
+        services.refresh_token(user_token, oauth_info)
+        # Retry request with updated headers
+        response = request_method(
+            url,
+            headers=get_authorization_header(user_token.access_token),
+            **kwargs)
+
+    if response.status_code == status.HTTP_403_FORBIDDEN:
+        LOGGER.error('Unable to refresh OAuth access token')
 
     # Loop while the Rate Limit Exceeded is reached
     while (
