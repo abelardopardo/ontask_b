@@ -278,8 +278,7 @@ def create_df_from_canvas_course_enrollment(
     for student in students:
         data_frame_source.append({
             'id': student['user']['id'],
-            'canvas course id': course_id,
-            'name': student['user']['name']})
+            'canvas course id': course_id})
 
     # Create the data frame with the collected data
     return pd.DataFrame(data_frame_source)
@@ -322,8 +321,7 @@ def create_df_from_canvas_course_quizzes(
         student_id = student['user']['id']
         data_frame_source[student_id] = {
             'id': student_id,
-            'canvas course id': course_id,
-            'name': student['user']['name']}
+            'canvas course id': course_id}
 
     # Fetch all quizzes for the course
     quizzes = canvas_ops.get_course_quizzes(
