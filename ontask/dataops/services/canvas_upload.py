@@ -381,7 +381,7 @@ def create_df_from_canvas_course_quizzes(
     # result.loc[:, 'canvas course id'] = canvas_course_id
     #
     # Sort the columns leaving ID as the first one
-    result = result[['id', 'canvas course id', 'name'] + sorted(column_names)]
+    result = result[['id', 'canvas course id'] + sorted(column_names)]
 
     return result
 
