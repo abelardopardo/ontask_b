@@ -73,7 +73,7 @@ def request_refresh_and_retry(
     """
     response = request_method(url, headers=headers, **kwargs)
 
-    # Check if hte token needs refreshing
+    # Check if the token needs refreshing
     if (
         response.status_code == status.HTTP_401_UNAUTHORIZED
         and response.headers.get('WWW-Authenticate')

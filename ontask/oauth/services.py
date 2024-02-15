@@ -30,7 +30,7 @@ def get_initial_token_step1(
     :param request: Received request
     :param oauth_info: a dict with the following fields:
         # {
-        #   domain_port: VALUE (format example https://host:port,
+        #   domain_port: VALUE (format example https://host:port),
         #   client_id: VALUE,
         #   client_secret: VALUE ,
         #   authorize_url: VALUE (format {0} for domain_port),
