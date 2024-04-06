@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework import status
 
 from ontask import models
@@ -125,14 +125,6 @@ def _request_refresh_and_retry(
         response = request_method(url, headers, **kwargs)
 
     return response
-
-
-def _get_authorization_header(token: str) -> dict:
-    """Returns header with the given token as Authorization element."""
-    return {
-        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Authorization': 'Bearer {0}'.format(token),
-    }
 
 
 @user_passes_test(is_instructor)
