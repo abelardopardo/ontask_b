@@ -19,7 +19,7 @@
 # 7. cp requirements/freeze.txt requirements/base.txt
 # 8. Move lines in base.txt to development.txt
 #
-Django[argon2]==4.2.10  # BSD-3-Clause
+Django[argon2]==4.2.11  # BSD-3-Clause
 celery  # BSD
 coverage  # Apache License 2.0
 crispy-bootstrap5 # MIT
@@ -66,6 +66,7 @@ sorl-thumbnail  # BSD
 Sphinx  # BSD
 sphinx-material # As Is
 sphinx-copybutton # MIT
-SQLAlchemy<2.0   # MIT # Bug in SQLAlchemy 2.0 breaks pandas
+SQLAlchemy   # MIT
+# SQLAlchemy<2.0   # MIT # Bug in SQLAlchemy 2.0 breaks pandas
 supervisor  # BSD-derived
 Werkzeug  # BSD-3-Clause

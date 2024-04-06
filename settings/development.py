@@ -53,9 +53,15 @@ THUMBNAIL_DEBUG = True
 INTERNAL_IPS = ['127.0.0.1', '0.0.0.1', 'localhost']
 
 LOGGING['loggers'] = {
+    # Default logger for any logger name
+    "": {
+        'handlers': ['django_log_file'],
+        "propagate": True,
+        "level": "DEBUG",
+    },
     'django': {
         'handlers': ['django_log_file'],
-        'propagate': False,
+        'propagate': True,
         'level': 'DEBUG',
     },
     'ontask': {
@@ -64,27 +70,27 @@ LOGGING['loggers'] = {
     },
     'scripts': {
         'handlers': ['script_log_file'],
-        'propagate': False,
+        'propagate': True,
         'level': 'DEBUG',
     },
     'celery_execution': {
         'handlers': ['celery_log_file'],
-        'propagate': False,
+        'propagate': True,
         'level': 'DEBUG',
     },
     'django.security.DisallowedHost': {
         'handlers': ['django_log_file'],
-        'propagate': False,
+        'propagate': True,
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.backends': {
         'handlers': ['django_log_file'],
-        'propagate': False,
+        'propagate': True,
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.middleware_patched': {
         'handlers': ['django_log_file'],
-        'propagate': False,
+        'propagate': True,
         'level': 'DEBUG'}}
 
 logging.config.dictConfig(LOGGING)
