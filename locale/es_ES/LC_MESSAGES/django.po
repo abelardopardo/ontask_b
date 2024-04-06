@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-27 17:41+1030\n"
-"PO-Revision-Date: 2023-12-27 17:43+1030\n"
+"POT-Creation-Date: 2024-04-06 17:11+1030\n"
+"PO-Revision-Date: 2024-04-06 17:12+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
 "Language: es\n"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: ontask/__init__.py:149
+#: ontask/__init__.py:152
 msgid "The symbol ' cannot be used in the name."
 msgstr "El símbolo ' no puede utilizarse en el nombre."
 
-#: ontask/__init__.py:152
+#: ontask/__init__.py:155
 msgid "The symbol \" cannot be used in the name."
 msgstr "El símbolo \" no se puede utilizar en el nombre."
 
-#: ontask/__init__.py:155
+#: ontask/__init__.py:158
 msgid "The name cannot start with \"__\""
 msgstr "El nombre no puede comenzar con “__”"
 
-#: ontask/__init__.py:162
+#: ontask/__init__.py:165
 msgid "Copy of "
 msgstr "Copia de "
 
@@ -782,36 +782,40 @@ msgstr "Conexiones SQL"
 msgid "Athena Connections"
 msgstr "Conexiones a Athena"
 
-#: ontask/core/canvas_ops.py:146
+#: ontask/core/canvas_ops.py:114
+msgid "Unable to refresh OAuth access token"
+msgstr "Imposible refrescar el token de acceso de OAuth."
+
+#: ontask/core/canvas_ops.py:153
 msgid "Unable to obtain Canvas OAuth information"
 msgstr "Incapaz de obtener la información de Canvas OAuth"
 
-#: ontask/core/canvas_ops.py:171
+#: ontask/core/canvas_ops.py:178
 #, python-brace-format
 msgid "Error when invoking Canvas API: {0}."
 msgstr "Error al invocar Canvas API: {0}"
 
-#: ontask/core/canvas_ops.py:185
+#: ontask/core/canvas_ops.py:192
 msgid "Unable to find OAuth Information Record"
 msgstr "No se ha encontrado información de OAuth para este elemento"
 
-#: ontask/core/canvas_ops.py:193
+#: ontask/core/canvas_ops.py:200
 msgid "Incorrect execution due to absence of token"
 msgstr "Ejecución incorrecta debido a la ausencia de token"
 
-#: ontask/core/canvas_ops.py:203
+#: ontask/core/canvas_ops.py:210
 msgid "Empty course_id detected."
 msgstr "Detectado course_id vacío."
 
-#: ontask/core/canvas_ops.py:211
+#: ontask/core/canvas_ops.py:218
 msgid "Negative course id given."
 msgstr "Detectado course_id negativo."
 
-#: ontask/core/canvas_ops.py:216
+#: ontask/core/canvas_ops.py:223
 msgid "Incorrect course id given."
 msgstr "Identificador de curso incorrecto."
 
-#: ontask/core/canvas_ops.py:264
+#: ontask/core/canvas_ops.py:271
 #, python-brace-format
 msgid "Incorrect response from API call {0}"
 msgstr "Respuesta incorrecta tras la llamada a la API {0}"
@@ -1158,13 +1162,13 @@ msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador BETWEEN"
 
-#: ontask/dataops/pandas/database.py:156 ontask/dataops/pandas/database.py:198
+#: ontask/dataops/pandas/database.py:185 ontask/dataops/pandas/database.py:238
 #: ontask/dataops/sql/column_queries.py:141
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr "El nombre de la columna el más largo de {0} letras"
 
-#: ontask/dataops/pandas/database.py:193
+#: ontask/dataops/pandas/database.py:233
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -1278,33 +1282,33 @@ msgstr "La clave “{0}” no está presente"
 msgid "Unable to perform merge operation: {0}"
 msgstr "No se ha podido ejecutar la operación de mezcla: {0}"
 
-#: ontask/dataops/services/increase_track.py:42
+#: ontask/dataops/services/increase_track.py:46
 msgid "Non-GET request received in Track URL"
 msgstr "Request de tipo no GET recibido en Track URL"
 
-#: ontask/dataops/services/increase_track.py:46
+#: ontask/dataops/services/increase_track.py:52
 msgid "No dictionary in Track URL"
 msgstr "No se ha encontrado el diccionario en la URL de Track"
 
-#: ontask/dataops/services/increase_track.py:51
+#: ontask/dataops/services/increase_track.py:59
 msgid "No track_id found in request"
 msgstr "No se ha encontrado track_id en el Request"
 
-#: ontask/dataops/services/increase_track.py:57
+#: ontask/dataops/services/increase_track.py:67
 msgid "Bad signature in track_id"
 msgstr "Signatura incorrecta in track_id"
 
-#: ontask/dataops/services/increase_track.py:67
+#: ontask/dataops/services/increase_track.py:78
 #, python-format
 msgid "Incorrect user email %s"
 msgstr "Correo de usuario incorrecto %s"
 
-#: ontask/dataops/services/increase_track.py:73
+#: ontask/dataops/services/increase_track.py:85
 #, python-format
 msgid "Incorrect action id %s"
 msgstr "Identificador de acción incorrecto %s"
 
-#: ontask/dataops/services/increase_track.py:84
+#: ontask/dataops/services/increase_track.py:96
 #, python-format
 msgid "Column %s does not exist"
 msgstr "La columna %s no existe"
@@ -1539,7 +1543,7 @@ msgstr "Error: {0}"
 msgid "Execute the transformation"
 msgstr "Ejecutar la transformación"
 
-#: ontask/dataops/services/sql_upload.py:78
+#: ontask/dataops/services/sql_upload.py:82
 msgid "Incorrect connection identifier."
 msgstr "Identificador de conexión incorrecto."
 
@@ -1838,8 +1842,8 @@ msgstr "Nombre de la región AWS"
 msgid "Table name"
 msgstr "Nombre de la tabla"
 
-#: ontask/models/athenaconnection.py:122 ontask/models/athenaconnection.py:126
-#: ontask/models/sqlconnection.py:104
+#: ontask/models/athenaconnection.py:117 ontask/models/athenaconnection.py:121
+#: ontask/models/sqlconnection.py:102
 msgid "REMOVED"
 msgstr "OCULTADO"
 
@@ -2875,7 +2879,7 @@ msgstr "No se ha podido encontrar el flujo con identificador {0}"
 msgid "Unable to find action with id {0}"
 msgstr "No se ha encontrado una acción con identificador {0}"
 
-#: ontask/tasks/execute.py:108
+#: ontask/tasks/execute.py:119
 #, python-brace-format
 msgid "Error executing operation: {0}"
 msgstr "Error al ejecutar operación: {0}"

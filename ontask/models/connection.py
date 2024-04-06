@@ -21,8 +21,6 @@ class Connection(NameAndDescription):
         null=False,
         blank=False)
 
-    optional_fields = []
-
     @classmethod
     def get(cls, primary_key):
         """Get the object with the given PK. Must be overwritten."""
@@ -31,21 +29,6 @@ class Connection(NameAndDescription):
     def __str__(self):
         """Render with name field."""
         return self.name
-
-    def has_missing_fields(self) -> bool:
-        """Check if the connection has any parameter missing"""
-        return any(
-            not bool(getattr(self, field_name))
-            for field_name in self.optional_fields)
-
-    def get_missing_fields(self, form_values: Dict) -> Dict:
-        """Get the missing fields from the given form"""
-        to_return = {}
-        for fname in self.optional_fields:
-            to_return[fname] = getattr(self, fname)
-            if not to_return[fname]:
-                to_return[fname] = form_values[fname]
-        return to_return
 
     def get_display_dict(self) -> Dict:
         """Create dictionary with (verbose_name, value)"""

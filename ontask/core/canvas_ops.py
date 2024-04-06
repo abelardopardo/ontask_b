@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework import status
 
 from ontask import models
@@ -65,6 +65,14 @@ if settings.CANVAS_INFO_DICT:
             status.HTTP_201_CREATED)}
 
 
+def _get_authorization_header(token: str) -> dict:
+    """Returns header with the given token as Authorization element."""
+    return {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Authorization': 'Bearer {0}'.format(token),
+    }
+
+
 def _request_refresh_and_retry(
         oauth_info: dict,
         user_token: models.OAuthUserToken,
@@ -90,15 +98,22 @@ def _request_refresh_and_retry(
     """
     response = request_method(url, headers=headers, **kwargs)
 
-    # Check if hte token needs refreshing
+    # Check if the token needs refreshing
     if (
         response.status_code == status.HTTP_401_UNAUTHORIZED
         and response.headers.get('WWW-Authenticate')
     ):
-        user_token = services.refresh_token(user_token, oauth_info)
-        headers['Authorization'] = headers['Authorization'].format(
-            user_token.access_token)
-        response = request_method(url, headers, **kwargs)
+        services.refresh_token(user_token, oauth_info)
+        # Retry request with updated headers
+        response = request_method(
+            url,
+            headers=_get_authorization_header(user_token.access_token),
+            **kwargs)
+
+    if response.status_code == status.HTTP_403_FORBIDDEN:
+        msg = gettext('Unable to refresh OAuth access token')
+        LOGGER.error(msg)
+        raise OnTaskException(msg)
 
     # Loop while the Rate Limit Exceeded is reached
     while (
@@ -110,14 +125,6 @@ def _request_refresh_and_retry(
         response = request_method(url, headers, **kwargs)
 
     return response
-
-
-def _get_authorization_header(token: str) -> dict:
-    """Returns header with the given token as Authorization element."""
-    return {
-        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Authorization': 'Bearer {0}'.format(token),
-    }
 
 
 @user_passes_test(is_instructor)

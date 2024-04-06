@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 from zoneinfo import ZoneInfo
 
+from celery.utils.log import get_task_logger
 from django import conf
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
@@ -29,11 +30,11 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = '11.0'
+__version__ = '11.1'
 
 LOGGER = logging.getLogger('ontask')
 
-CELERY_LOGGER = logging.getLogger('celery_execution')
+CELERY_LOGGER = get_task_logger('celery_execution')
 
 
 class OnTaskDBIdentifier(sql.Identifier):
@@ -52,6 +53,8 @@ class OnTaskSharedState:
     """Global dictionary."""
 
     __shared_state = {}
+
+    engine = None
 
     def __init__(self):
         """Stored the shared state as the dictionary."""

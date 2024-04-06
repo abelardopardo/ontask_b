@@ -1,10 +1,9 @@
 """Functions to manipulate Pandas DataFrames and related operations."""
 from typing import Dict, List, Mapping, Optional
-from urllib import parse
+from sqlalchemy.engine.url import URL
 
 import pandas as pd
 import sqlalchemy
-import sqlalchemy.engine
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
@@ -29,50 +28,60 @@ def set_engine() -> None:
         return
 
     OnTaskSharedState.engine = create_db_engine(
-        dialect='postgresql',
-        driver='+psycopg2',
-        username=settings.DATABASES['default']['USER'],
-        password=settings.DATABASES['default']['PASSWORD'],
-        host=settings.DATABASES['default']['HOST'],
-        dbname=settings.DATABASES['default']['NAME'])
+        drivername='postgresql+psycopg2',
+        username=settings.DATABASES['default'].get('USER'),
+        password=settings.DATABASES['default'].get('PASSWORD'),
+        host=settings.DATABASES['default'].get('HOST'),
+        port=settings.DATABASES['default'].get('PORT'),
+        database=settings.DATABASES['default'].get('NAME'))
 
 
-def create_db_engine(**kwargs):
+def create_db_engine(
+        drivername: str = None,
+        username: str = None,
+        password: str = None,
+        host: str = None,
+        port: int = None,
+        database: str = None,
+        query: dict = None
+):
     """Create SQLAlchemy DB Engine to connect Pandas <-> DB.
 
     Function that creates the engine object to connect to the database. The
     object is required by the pandas functions to_sql and from_sql
-    :param kwargs: Dictionary with the following driver parameters:
-      - dialect: Dialect for the engine (oracle, mysql, postgresql, etc.)
-      - driver: DB API driver (psycopg2, ...)
-      - username: Username to connect with the database
-      - password: Password to connect with the database
-      - host: Host to connect with the database
-      - dbname: database name
+
+    :param drivername: Dialect (oracle, mysql, postgresql, etc.) and DB API
+      driver (psycopg2, ...) for the engine
+    :param username: Username to connect with the database
+    :param password: Password to connect with the database
+    :param host: Host for the connection
+    :param port: Port for the connection
+    :param database: database name
+    :param query: A dictionary with additional parameters for the connection
 
     :return: the engine
+
+    See create_engine in SQLAlchemy Documentation for details
     """
 
-    if usr_pwd := kwargs.get('username', ''):
-        if pwd := parse.quote(kwargs.get('password', '')):
-            usr_pwd += ':' + pwd
-        usr_pwd += '@'
-
-    database_url = '{dial}{drv}://{usr_pwd}{host}/{dbname}'.format(
-        dial=kwargs.get('dialect'),
-        drv=kwargs.get('driver'),
-        usr_pwd=usr_pwd,
-        host=kwargs.get('host'),
-        dbname=kwargs.get('dbname'))
+    engine_url = URL.create(
+        drivername,
+        username,
+        password,
+        host,
+        port,
+        database,
+        query)
 
     if settings.DEBUG:
         LOGGER.debug('Creating engine with database parameters')
 
     return sqlalchemy.create_engine(
-        database_url,
+        engine_url,
         client_encoding=str('utf8'),
         echo=False,
-        paramstyle='format')
+        paramstyle='format',
+        connect_args={'connect_timeout': 300})
 
 
 def destroy_db_engine(db_engine=None):
@@ -106,19 +115,39 @@ def load_table(
     if settings.DEBUG:
         LOGGER.debug('Loading table %s', table_name)
 
+    engine = create_db_engine(
+        drivername='postgresql+psycopg2',
+        username=settings.DATABASES['default']['USER'],
+        password=settings.DATABASES['default']['PASSWORD'],
+        host=settings.DATABASES['default']['HOST'],
+        port=settings.DATABASES['default']['PORT'],
+        database=settings.DATABASES['default']['NAME'])
+
     if columns or filter_exp:
         # A list of columns or a filter exp is given
         query, query_fields = sql.get_select_query_txt(
             table_name,
             column_names=columns,
             filter_formula=filter_exp)
-        return pd.read_sql_query(
-            query,
-            OnTaskSharedState.engine,
-            params=tuple(query_fields))
+        try:
+            with engine.begin() as sqlalchemy_connection:
+                data_frame = pd.read_sql_query(
+                    query,
+                    sqlalchemy_connection,
+                    params=tuple(query_fields))
+        except Exception as exc:
+            LOGGER.error('Error ' + str(exc))
+    else:
+        # No special fields given, load the whole thing
+        try:
+            with engine.begin() as sqlalchemy_connection:
+                data_frame = pd.read_sql_table(table_name, sqlalchemy_connection)
+        except Exception as exc:
+            LOGGER.error('Error ' + str(exc))
 
-    # No special fields given, load the whole thing
-    return pd.read_sql_table(table_name, OnTaskSharedState.engine)
+    engine.dispose()
+
+    return data_frame
 
 
 def store_table(
@@ -159,19 +188,30 @@ def store_table(
     if dict_type is None:
         dict_type = {}
 
-    with cache.lock(table_name):
-        # We overwrite the content and do not create an index
-        data_frame.to_sql(
-            table_name,
-            OnTaskSharedState.engine,
-            if_exists='replace',
-            index=False,
-            dtype={
-                key: ONTASK_TO_SQLALCHEMY[type_value]
-                for key, type_value in dict_type.items()
-            },
-        )
+    engine = create_db_engine(
+        drivername='postgresql+psycopg2',
+        username=settings.DATABASES['default']['USER'],
+        password=settings.DATABASES['default']['PASSWORD'],
+        host=settings.DATABASES['default']['HOST'],
+        port=settings.DATABASES['default']['PORT'],
+        database=settings.DATABASES['default']['NAME'])
 
+    try:
+        with cache.lock(table_name):
+            with engine.begin() as sqlalchemy_connection:
+                # We overwrite the content and do not create an index
+                data_frame.to_sql(
+                    table_name,
+                    sqlalchemy_connection,
+                    if_exists='replace',
+                    index=False,
+                    dtype={
+                        key: ONTASK_TO_SQLALCHEMY[type_value]
+                        for key, type_value in dict_type.items()})
+    except Exception as exc:
+        LOGGER.error('Error: ' + str(exc))
+
+    engine.dispose()
 
 def verify_data_frame(data_frame: pd.DataFrame):
     """Verify consistency properties in a DF.

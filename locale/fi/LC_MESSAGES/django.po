@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-27 17:41+1030\n"
+"POT-Creation-Date: 2024-04-06 17:11+1030\n"
 "PO-Revision-Date: 2020-06-01 19:53+0300\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3.1\n"
 
-#: ontask/__init__.py:149
+#: ontask/__init__.py:152
 msgid "The symbol ' cannot be used in the name."
 msgstr "Symbolia ’ ei voi käyttää nimessä."
 
-#: ontask/__init__.py:152
+#: ontask/__init__.py:155
 msgid "The symbol \" cannot be used in the name."
 msgstr "Symbolia \" ei voi käyttää nimessä."
 
-#: ontask/__init__.py:155
+#: ontask/__init__.py:158
 msgid "The name cannot start with \"__\""
 msgstr "Nimi ei voi alkaa ”__”"
 
-#: ontask/__init__.py:162
+#: ontask/__init__.py:165
 msgid "Copy of "
 msgstr "Kopio kohteesta "
 
@@ -828,38 +828,44 @@ msgstr "SQL-yhteydet"
 msgid "Athena Connections"
 msgstr "Athena-yhteydet"
 
-#: ontask/core/canvas_ops.py:146
+#: ontask/core/canvas_ops.py:114
+#, fuzzy
+#| msgid "Unable to refresh OAuth token."
+msgid "Unable to refresh OAuth access token"
+msgstr "OAuth tokenia ei voitu päivittää."
+
+#: ontask/core/canvas_ops.py:153
 msgid "Unable to obtain Canvas OAuth information"
 msgstr "Canvas OAuth -tietoja ei löytynyt"
 
-#: ontask/core/canvas_ops.py:171
+#: ontask/core/canvas_ops.py:178
 #, python-brace-format
 msgid "Error when invoking Canvas API: {0}."
 msgstr "Virhe kutsuessa Canvas API: {0}."
 
-#: ontask/core/canvas_ops.py:185
+#: ontask/core/canvas_ops.py:192
 msgid "Unable to find OAuth Information Record"
 msgstr "OAuth Information Record ei löytynyt"
 
-#: ontask/core/canvas_ops.py:193
+#: ontask/core/canvas_ops.py:200
 msgid "Incorrect execution due to absence of token"
 msgstr "Virheellinen suoritus, token puuttuu"
 
-#: ontask/core/canvas_ops.py:203
+#: ontask/core/canvas_ops.py:210
 msgid "Empty course_id detected."
 msgstr ""
 
-#: ontask/core/canvas_ops.py:211
+#: ontask/core/canvas_ops.py:218
 msgid "Negative course id given."
 msgstr ""
 
-#: ontask/core/canvas_ops.py:216
+#: ontask/core/canvas_ops.py:223
 #, fuzzy
 #| msgid "Incorrect action id."
 msgid "Incorrect course id given."
 msgstr "Virheellinen toiminto-id {0}"
 
-#: ontask/core/canvas_ops.py:264
+#: ontask/core/canvas_ops.py:271
 #, python-brace-format
 msgid "Incorrect response from API call {0}"
 msgstr ""
@@ -1222,13 +1228,13 @@ msgstr ""
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin BETWEEN yhteydessä"
 
-#: ontask/dataops/pandas/database.py:156 ontask/dataops/pandas/database.py:198
+#: ontask/dataops/pandas/database.py:185 ontask/dataops/pandas/database.py:238
 #: ontask/dataops/sql/column_queries.py:141
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr "Sarakkeen nimi on pidempi kuin {0} merkkiä"
 
-#: ontask/dataops/pandas/database.py:193
+#: ontask/dataops/pandas/database.py:233
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -1346,33 +1352,33 @@ msgstr ""
 msgid "Unable to perform merge operation: {0}"
 msgstr "Yhdistämistoimintoa ei voida suorittaa: {0}"
 
-#: ontask/dataops/services/increase_track.py:42
+#: ontask/dataops/services/increase_track.py:46
 msgid "Non-GET request received in Track URL"
 msgstr "Muu kuin GET-pyyntö vastaanotettu, Track URL"
 
-#: ontask/dataops/services/increase_track.py:46
+#: ontask/dataops/services/increase_track.py:52
 msgid "No dictionary in Track URL"
 msgstr "Ei sanakirjaa seurannan URL-osoitteessa"
 
-#: ontask/dataops/services/increase_track.py:51
+#: ontask/dataops/services/increase_track.py:59
 msgid "No track_id found in request"
 msgstr "Pyynnöstä puuttuu track_id"
 
-#: ontask/dataops/services/increase_track.py:57
+#: ontask/dataops/services/increase_track.py:67
 msgid "Bad signature in track_id"
 msgstr "Väärä allekirjoitus track_id:ssa"
 
-#: ontask/dataops/services/increase_track.py:67
+#: ontask/dataops/services/increase_track.py:78
 #, python-format
 msgid "Incorrect user email %s"
 msgstr "Virheellinen käyttäjän sähköposti %s"
 
-#: ontask/dataops/services/increase_track.py:73
+#: ontask/dataops/services/increase_track.py:85
 #, python-format
 msgid "Incorrect action id %s"
 msgstr "Virheellinen toiminto-id %s"
 
-#: ontask/dataops/services/increase_track.py:84
+#: ontask/dataops/services/increase_track.py:96
 #, python-format
 msgid "Column %s does not exist"
 msgstr "Saraketta %s ei ole olemassa"
@@ -1605,7 +1611,7 @@ msgstr "Virhe: {0}"
 msgid "Execute the transformation"
 msgstr "Suorita muutos"
 
-#: ontask/dataops/services/sql_upload.py:78
+#: ontask/dataops/services/sql_upload.py:82
 msgid "Incorrect connection identifier."
 msgstr "Virheellinen yhteyden tunniste."
 
@@ -1914,8 +1920,8 @@ msgstr "AWS-alueen nimi"
 msgid "Table name"
 msgstr "Taulun nimi"
 
-#: ontask/models/athenaconnection.py:122 ontask/models/athenaconnection.py:126
-#: ontask/models/sqlconnection.py:104
+#: ontask/models/athenaconnection.py:117 ontask/models/athenaconnection.py:121
+#: ontask/models/sqlconnection.py:102
 msgid "REMOVED"
 msgstr "POISTETTU"
 
@@ -3007,7 +3013,7 @@ msgstr "Ei löydetty työnkulkua, jolla id {0}"
 msgid "Unable to find action with id {0}"
 msgstr "Ei löydetty toimintoa, jolla id {0}"
 
-#: ontask/tasks/execute.py:108
+#: ontask/tasks/execute.py:119
 #, python-brace-format
 msgid "Error executing operation: {0}"
 msgstr "Virhe suorittaessa toimenpidettä: {0}"

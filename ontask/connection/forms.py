@@ -185,7 +185,7 @@ class AthenaRequestConnectionParam(forms.Form):
 
     def get_field_dict(self):
         """Return a dictionary with the resulting fields"""
-        to_return = self.instance.get_missing_fields(self.cleaned_data)
+        to_return = self.cleaned_data
 
         if self.workflow.has_data_frame:
             try:

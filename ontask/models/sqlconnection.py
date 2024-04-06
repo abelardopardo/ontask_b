@@ -17,8 +17,8 @@ class SQLConnection(Connection):
 
     The parameters for the connection are:
 
-    name
     conn_type
+    conn_driver
     db_user
     db_password
     db_host
@@ -49,7 +49,7 @@ class SQLConnection(Connection):
         default='',
         blank=True)
 
-    # db_password is optional (will be asked in run time, if not stored here)
+    # password for the connection
     db_password = EncryptedCharField(
         verbose_name=_('Password'),
         max_length=CHAR_FIELD_LONG_SIZE,
@@ -76,7 +76,7 @@ class SQLConnection(Connection):
         default='',
         blank=False)
 
-    # DB table name: Optional, requested upon execution if not given here.
+    # DB table name
     db_table = models.CharField(
         max_length=CHAR_FIELD_LONG_SIZE,
         verbose_name=_('Database table'),
@@ -88,8 +88,6 @@ class SQLConnection(Connection):
     delete_event = Log.SQL_CONNECTION_DELETE
     edit_event = Log.SQL_CONNECTION_EDIT
     toggle_event = Log.SQL_CONNECTION_TOGGLE
-
-    optional_fields = ['db_password', 'db_table']
 
     @classmethod
     def get(cls, primary_key):

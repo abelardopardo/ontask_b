@@ -16,7 +16,7 @@ stages:
 test:
   stage: Run tests
   script:
-    - coverage run ./manage.py test ontask.action ontask.column ontask.condition ontask.connection ontask.dataops ontask.logs ontask.scheduler ontask.table ontask.tasks ontask.workflow ontask.tests
+    - coverage run ./manage.py test -v2 --failfast ontask.action ontask.column ontask.condition ontask.connection ontask.dataops ontask.logs ontask.scheduler ontask.table ontask.tasks ontask.workflow ontask.tests
     - coverage html
     - coverage report
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'

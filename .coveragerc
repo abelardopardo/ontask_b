@@ -7,7 +7,7 @@ source =
 source=ontask
 omit = 
     */tests/*
-    */migration*
+    */migrations/*
     ontask/accounts/*
     ontask/lti/*
     ontask/management/*
