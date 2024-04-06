@@ -116,12 +116,12 @@ def load_table(
         LOGGER.debug('Loading table %s', table_name)
 
     engine = create_db_engine(
-        dialect='postgresql',
-        driver='+psycopg2',
+        drivername='postgresql+psycopg2',
         username=settings.DATABASES['default']['USER'],
         password=settings.DATABASES['default']['PASSWORD'],
         host=settings.DATABASES['default']['HOST'],
-        dbname=settings.DATABASES['default']['NAME'])
+        port=settings.DATABASES['default']['PORT'],
+        database=settings.DATABASES['default']['NAME'])
 
     if columns or filter_exp:
         # A list of columns or a filter exp is given
@@ -189,12 +189,12 @@ def store_table(
         dict_type = {}
 
     engine = create_db_engine(
-        dialect='postgresql',
-        driver='+psycopg2',
+        drivername='postgresql+psycopg2',
         username=settings.DATABASES['default']['USER'],
         password=settings.DATABASES['default']['PASSWORD'],
         host=settings.DATABASES['default']['HOST'],
-        dbname=settings.DATABASES['default']['NAME'])
+        port=settings.DATABASES['default']['PORT'],
+        database=settings.DATABASES['default']['NAME'])
 
     try:
         with cache.lock(table_name):
