@@ -99,7 +99,7 @@ def execute_operation(
             log_item.workflow = workflow
             log_item.payload['status'] = 'Executing'
             log_item.save(update_fields=['payload', 'workflow'])
-            LOGGER.debug('Log id: ', log_id)
+            LOGGER.debug('Log id: %s', log_id)
 
         TASK_EXECUTE_FACTORY.execute_operation(
             operation_type=operation_type,

@@ -1,3 +1,19 @@
+# 11.1 (2024-04-06)
+
+## Fixed
+
+- OAuth token refresh when expired
+
+## Added
+
+- New configuration to improve logging when executing through Celery
+
+## Changed
+
+- Removed name from dictionary when getting students enrolled in Canvas Course
+
+- SQLAlchemy engine management
+
 # 11.0 (2023-12-27)
 
 ## Fixed
