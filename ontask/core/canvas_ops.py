@@ -65,6 +65,14 @@ if settings.CANVAS_INFO_DICT:
             status.HTTP_201_CREATED)}
 
 
+def _get_authorization_header(token: str) -> dict:
+    """Returns header with the given token as Authorization element."""
+    return {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Authorization': 'Bearer {0}'.format(token),
+    }
+
+
 def _request_refresh_and_retry(
         oauth_info: dict,
         user_token: models.OAuthUserToken,
@@ -99,11 +107,13 @@ def _request_refresh_and_retry(
         # Retry request with updated headers
         response = request_method(
             url,
-            headers=get_authorization_header(user_token.access_token),
+            headers=_get_authorization_header(user_token.access_token),
             **kwargs)
 
     if response.status_code == status.HTTP_403_FORBIDDEN:
-        LOGGER.error('Unable to refresh OAuth access token')
+        msg = gettext('Unable to refresh OAuth access token')
+        LOGGER.error(msg)
+        raise OnTaskException(msg)
 
     # Loop while the Rate Limit Exceeded is reached
     while (
