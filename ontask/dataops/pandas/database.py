@@ -80,12 +80,7 @@ def create_db_engine(
         engine_url,
         echo=False,
         paramstyle='format',
-        connect_args=
-            {
-                'connect_timeout': 300,
-                'client_encoding': 'utf8',
-            }
-        )
+        connect_args={'connect_timeout': 300})
 
 
 def destroy_db_engine(db_engine=None):
