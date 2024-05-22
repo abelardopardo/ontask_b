@@ -78,10 +78,14 @@ def create_db_engine(
 
     return sqlalchemy.create_engine(
         engine_url,
-        client_encoding=str('utf8'),
         echo=False,
         paramstyle='format',
-        connect_args={'connect_timeout': 300})
+        connect_args=
+            {
+                'connect_timeout': 300,
+                'client_encoding': 'utf8',
+            }
+        )
 
 
 def destroy_db_engine(db_engine=None):
