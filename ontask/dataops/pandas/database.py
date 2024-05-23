@@ -78,7 +78,6 @@ def create_db_engine(
 
     return sqlalchemy.create_engine(
         engine_url,
-        client_encoding=str('utf8'),
         echo=False,
         paramstyle='format',
         connect_args={'connect_timeout': 300})
