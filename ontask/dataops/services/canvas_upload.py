@@ -147,7 +147,7 @@ def _extract_quiz_answer_information(
     # Loop over all elements with quiz statistics
     for qstat in quiz_stats['quiz_statistics']:
         # Loop over all questions
-        debug_msg('Quiz ID: {}'.format(qstat['quiz_id']))
+        debug_msg('Quiz ID: {}'.format(qstat['id']))
         for question_stat in qstat['question_statistics']:
             _process_question_statistic(
                 canvas_course_id,
@@ -175,7 +175,7 @@ def _extract_quiz_submission_information(
         debug_msg('Quiz Submission: {0}/{1}/{2}'.format(
             submission['quiz_id'],
             submission['user_id'],
-            submission['submission_id']))
+            submission['id']))
         # Create the required column names
         (
             _,
