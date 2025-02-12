@@ -130,7 +130,7 @@ def canvas_upload_start_finish(
         messages.error(
             request,
             _('Canvas course upload could not be processed: {0}, {1}').format(
-                str(exc),
+                getattr(exc, 'message', repr(exc)),
                 LAST_DEBUG_MESSAGE))
         return redirect('dataops:canvas_course_enrollments_upload_start')
 
