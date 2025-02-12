@@ -4,7 +4,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from ontask import models
-from ontask.core import canvas_ops
+from ontask.core import canvas_ops, debug_msg
 from ontask.dataops.services import common
 from ontask.dataops import pandas
 
@@ -147,6 +147,7 @@ def _extract_quiz_answer_information(
     # Loop over all elements with quiz statistics
     for qstat in quiz_stats['quiz_statistics']:
         # Loop over all questions
+        debug_msg('Quiz ID: {}'.format(qstat['quiz_id']))
         for question_stat in qstat['question_statistics']:
             _process_question_statistic(
                 canvas_course_id,
@@ -171,6 +172,10 @@ def _extract_quiz_submission_information(
 
     # Loop over all submissions in a quiz
     for submission in quiz_submission['quiz_submissions']:
+        debug_msg('Quiz Submission: {0}/{1}/{2}'.format(
+            submission['quiz_id'],
+            submission['user_id'],
+            submission['submission_id']))
         # Create the required column names
         (
             _,
@@ -262,20 +267,27 @@ def create_df_from_canvas_course_enrollment(
     """
 
     # Verify parameter
+    debug_msg('')
     canvas_course_id = canvas_ops.verify_course_id(course_id)
+    debug_msg('')
 
     # Get the oauth info
+    debug_msg('')
     oauth_info, user_token = canvas_ops.get_oauth_and_user_token(
         user,
         target_url)
+    debug_msg('')
 
+    debug_msg('')
     students = canvas_ops.get_course_enrolment(
         oauth_info,
         user_token,
         canvas_course_id)
+    debug_msg('')
 
     data_frame_source = []
     for student in students:
+        debug_msg('Student ID: {}'.format(student['user']['id']))
         data_frame_source.append({
             'id': student['user']['id'],
             'canvas course id': course_id})
@@ -302,28 +314,34 @@ def create_df_from_canvas_course_quizzes(
     :return: Data Frame after obtaining it from Canvas.
     """
     # Verify parameter
+    debug_msg('')
     if columns_to_upload is None:
         columns_to_upload = []
     canvas_course_id = canvas_ops.verify_course_id(course_id)
 
     # Get the oauth info
+    debug_msg('')
     oauth_info, user_token = canvas_ops.get_oauth_and_user_token(
         user,
         target_url)
 
+    debug_msg('')
     students = canvas_ops.get_course_enrolment(
         oauth_info,
         user_token,
         canvas_course_id)
 
+    debug_msg('')
     data_frame_source = {}
     for student in students:
+        debug_msg('Student ID: {}'.format(student['user']['id']))
         student_id = student['user']['id']
         data_frame_source[student_id] = {
             'id': student_id,
             'canvas course id': course_id}
 
     # Fetch all quizzes for the course
+    debug_msg('')
     quizzes = canvas_ops.get_course_quizzes(
         oauth_info,
         user_token,
@@ -331,6 +349,7 @@ def create_df_from_canvas_course_quizzes(
 
     # Build the data frame source with the information from quizzes
     for quiz in quizzes:
+        debug_msg('Quiz Title: {}'.format(quiz['title']))
         quiz_id = quiz['id']
 
         # Get the answer information
@@ -356,6 +375,8 @@ def create_df_from_canvas_course_quizzes(
         canvas_course_id)
 
     for assignment in assignments:
+        debug_msg('Course Assignment: {0}'.format(
+            assignment['name']))
         # Get the assignment submission information
         _extract_assignment_submission_information(
             oauth_info,

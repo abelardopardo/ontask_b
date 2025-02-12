@@ -11,7 +11,8 @@ from django.views import generic
 
 from ontask import models, OnTaskException
 from ontask.core import (
-    SessionPayload, canvas_ops, get_workflow, is_instructor)
+    SessionPayload, canvas_ops, get_workflow, is_instructor, debug_msg,
+    LAST_DEBUG_MESSAGE)
 from ontask.dataops import services
 from ontask.dataops.views import common
 
@@ -90,22 +91,27 @@ def canvas_upload_start_finish(
     :return: Load the data from Canvas and store it in the temporary DB
     """
     # Process Canvas API call to get the list of students
+    debug_msg('')
     try:
         op_type = request.session['upload_data'].get('log_upload')
         target_url = request.session['upload_data'].pop('target_url')
         course_id = request.session['upload_data'].pop('canvas_course_id')
         if (op_type ==
                 models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD):
+            debug_msg('')
             data_frame = services.create_df_from_canvas_course_enrollment(
                     request.user,
                     target_url,
                     course_id)
+            debug_msg('')
         elif (op_type ==
               models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD):
+            debug_msg('')
             data_frame = services.create_df_from_canvas_course_quizzes(
                 request.user,
                 target_url,
                 course_id)
+            debug_msg('')
         else:
             raise OnTaskException(
                 _('Unexpected Canvas operation not supported.'))
@@ -115,6 +121,7 @@ def canvas_upload_start_finish(
                 _('There are no students enrolled in the Canvas course.'))
 
         # Check validity of the data frame and store in temporary table in DB
+        debug_msg('')
         frame_info = common.validate_and_store_temporary_data_frame(
             workflow,
             data_frame)
@@ -122,8 +129,9 @@ def canvas_upload_start_finish(
     except Exception as exc:
         messages.error(
             request,
-            _('Canvas course upload could not be processed: {0}').format(
-                str(exc)))
+            _('Canvas course upload could not be processed: {0}, {1}').format(
+                str(exc),
+                LAST_DEBUG_MESSAGE))
         return redirect('dataops:canvas_course_enrollments_upload_start')
 
     # Dictionary to populate gradually throughout the sequence of steps.
