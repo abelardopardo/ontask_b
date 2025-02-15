@@ -11,8 +11,7 @@ from django.views import generic
 
 from ontask import models, OnTaskException
 from ontask.core import (
-    SessionPayload, canvas_ops, get_workflow, is_instructor, debug_msg,
-    LAST_DEBUG_MESSAGE)
+    SessionPayload, canvas_ops, get_workflow, is_instructor, OnTaskDebug)
 from ontask.dataops import services
 from ontask.dataops.views import common
 
@@ -91,27 +90,27 @@ def canvas_upload_start_finish(
     :return: Load the data from Canvas and store it in the temporary DB
     """
     # Process Canvas API call to get the list of students
-    debug_msg('')
+    OnTaskDebug.set_trace('')
     try:
         op_type = request.session['upload_data'].get('log_upload')
         target_url = request.session['upload_data'].pop('target_url')
         course_id = request.session['upload_data'].pop('canvas_course_id')
         if (op_type ==
                 models.Log.WORKFLOW_DATA_CANVAS_COURSE_ENROLLMENT_UPLOAD):
-            debug_msg('')
+            OnTaskDebug.set_trace('')
             data_frame = services.create_df_from_canvas_course_enrollment(
                     request.user,
                     target_url,
                     course_id)
-            debug_msg('')
+            OnTaskDebug.set_trace('')
         elif (op_type ==
               models.Log.WORKFLOW_DATA_CANVAS_COURSE_QUIZZES_UPLOAD):
-            debug_msg('')
+            OnTaskDebug.set_trace('')
             data_frame = services.create_df_from_canvas_course_quizzes(
                 request.user,
                 target_url,
                 course_id)
-            debug_msg('')
+            OnTaskDebug.set_trace('')
         else:
             raise OnTaskException(
                 _('Unexpected Canvas operation not supported.'))
@@ -121,7 +120,7 @@ def canvas_upload_start_finish(
                 _('There are no students enrolled in the Canvas course.'))
 
         # Check validity of the data frame and store in temporary table in DB
-        debug_msg('')
+        OnTaskDebug.set_trace('')
         frame_info = common.validate_and_store_temporary_data_frame(
             workflow,
             data_frame)
@@ -131,7 +130,8 @@ def canvas_upload_start_finish(
             request,
             _('Canvas course upload could not be processed: {0}, {1}').format(
                 getattr(exc, 'message', repr(exc)),
-                LAST_DEBUG_MESSAGE))
+                OnTaskDebug.last_trace_message))
+        OnTaskDebug.last_trace_message = ''
         return redirect('dataops:canvas_course_enrollments_upload_start')
 
     # Dictionary to populate gradually throughout the sequence of steps.
