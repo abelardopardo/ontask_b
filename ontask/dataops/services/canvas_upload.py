@@ -289,6 +289,7 @@ def create_df_from_canvas_course_enrollment(
         data_frame_source.append({
             'id': student['user']['id'],
             'student': student['user']['name'],
+            'shortname': student['user']['short_name'],
             'canvas course id': course_id})
 
     # Create the data frame with the collected data
