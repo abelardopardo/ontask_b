@@ -295,8 +295,8 @@ def create_df_from_canvas_course_enrollment(
         OnTaskDebug.set_trace('')
         data_frame_source.append({
             'id': student['user']['id'],
-            'name': user_details['name'],
-            'first name': user_details['first_name'],
+            'name': user_details[0]['name'],
+            'first name': user_details[0]['first_name'],
             'canvas course id': course_id})
         OnTaskDebug.set_trace('')
 
