@@ -4,7 +4,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from ontask import models
-from ontask.core import canvas_ops, OnTaskDebug
+from ontask.core import canvas_ops
 from ontask.dataops.services import common
 from ontask.dataops import pandas
 
@@ -71,7 +71,6 @@ def _process_question_answers(
 
             # Update value in the row
             response = user_row.get(question_name, [])
-            OnTaskDebug.set_trace(answer.get('text', 'No text key in answer'))
             response.append(answer.get('text', ''))
             user_row[question_name] = response
             to_concat.add(user_id)
@@ -133,15 +132,11 @@ def _extract_quiz_answer_information(
         user_token,
         canvas_course_id,
         quiz_id)
-    OnTaskDebug.set_trace(
-        str([qinfo['question_name'] for qinfo in question_names])
-    )
     question_names = dict([
         (
             str(qinfo['id']),
             BeautifulSoup(qinfo['question_name'], 'lxml').text)
         for qinfo in question_names])
-    OnTaskDebug.set_trace()
 
     quiz_stats = canvas_ops.get_quiz_statistics(
         oauth_info,
@@ -152,7 +147,6 @@ def _extract_quiz_answer_information(
     # Loop over all elements with quiz statistics
     for qstat in quiz_stats['quiz_statistics']:
         # Loop over all questions
-        OnTaskDebug.set_trace('Quiz ID: {}'.format(qstat['id']))
         for question_stat in qstat['question_statistics']:
             _process_question_statistic(
                 canvas_course_id,
@@ -177,10 +171,6 @@ def _extract_quiz_submission_information(
 
     # Loop over all submissions in a quiz
     for submission in quiz_submission['quiz_submissions']:
-        OnTaskDebug.set_trace('Quiz Submission: {0}/{1}/{2}'.format(
-            submission['quiz_id'],
-            submission['user_id'],
-            submission['id']))
         # Create the required column names
         (
             _,
@@ -286,21 +276,18 @@ def create_df_from_canvas_course_enrollment(
 
     data_frame_source = []
     for student in students:
-        OnTaskDebug.set_trace('')
         # TODO: Modify to use "List users in course"
         # user_details = canvas_ops.get_user_details(
         #     oauth_info,
         #     user_token,
         #     student['user']['id']
         # )
-        OnTaskDebug.set_trace('')
         name = student['user']['name']
         data_frame_source.append({
             'id': student['user']['id'],
             'name': student['user']['name'],
             'first name': name.split(' ')[0],
             'canvas course id': course_id})
-        OnTaskDebug.set_trace('')
 
     # Create the data frame with the collected data
     return pd.DataFrame(data_frame_source)
@@ -340,7 +327,6 @@ def create_df_from_canvas_course_quizzes(
 
     data_frame_source = {}
     for student in students:
-        OnTaskDebug.set_trace('Student ID: {}'.format(student['user']['id']))
         student_id = student['user']['id']
         data_frame_source[student_id] = {
             'id': student_id,
@@ -354,7 +340,6 @@ def create_df_from_canvas_course_quizzes(
 
     # Build the data frame source with the information from quizzes
     for quiz in quizzes:
-        OnTaskDebug.set_trace('Quiz Title: {}'.format(quiz['title']))
         quiz_id = quiz['id']
 
         # Get the answer information
@@ -380,8 +365,6 @@ def create_df_from_canvas_course_quizzes(
         canvas_course_id)
 
     for assignment in assignments:
-        OnTaskDebug.set_trace('Course Assignment: {0}'.format(
-            assignment['name']))
         # Get the assignment submission information
         _extract_assignment_submission_information(
             oauth_info,
