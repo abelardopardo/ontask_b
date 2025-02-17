@@ -287,6 +287,7 @@ def create_df_from_canvas_course_enrollment(
     data_frame_source = []
     for student in students:
         OnTaskDebug.set_trace('')
+        # TODO: Modify to use "List users in course"
         # user_details = canvas_ops.get_user_details(
         #     oauth_info,
         #     user_token,
