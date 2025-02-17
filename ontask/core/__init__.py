@@ -23,7 +23,7 @@ from ontask.core.session_ops import (
     _store_workflow_nrows_in_session, remove_workflow_from_session)
 from ontask.core.tables import DataTablesServerSidePaging, OperationsColumn
 from ontask.core.canvas_ops import (
-    get_or_set_oauth_token, get_oauth_and_user_token,
+    get_user_details, get_or_set_oauth_token, get_oauth_and_user_token,
     verify_course_id, get_course_quizzes)
 from ontask.core.debug import OnTaskDebug
 

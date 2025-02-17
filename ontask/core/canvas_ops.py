@@ -25,6 +25,7 @@ LOGGER = get_task_logger('celery_execution')
 canvas_api_map = {}
 if settings.CANVAS_INFO_DICT:
     canvas_api_map = {
+        'get_user_details': (requests.get, '{0}/api/v1/users/{1}'),
         'get_course_quizzes': (requests.get, '{0}/api/v1/courses/{1}/quizzes'),
         'get_quiz_questions': (
             requests.get,
@@ -273,6 +274,23 @@ def verify_course_id(
         raise OnTaskException(msg)
 
     return result
+
+
+def get_user_details(
+        oauth_info: dict,
+        user_token: models.OAuthUserToken,
+        user_id: int
+) -> dict:
+    """Get user information."""
+    # Get request method and URL for the endpoint from the map in this module
+    request_method, endpoint = canvas_api_map['get_user_details']
+
+    return request_and_access(
+        oauth_info,
+        user_token,
+        request_method,
+        endpoint.format(oauth_info['domain_port'], user_id),
+        get_authorization_header(user_token.access_token))
 
 
 def get_course_enrolment(
