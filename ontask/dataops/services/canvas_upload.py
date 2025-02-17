@@ -72,7 +72,7 @@ def _process_question_answers(
             # Update value in the row
             response = user_row.get(question_name, [])
             OnTaskDebug.set_trace(answer.get('text', 'No text key in answer'))
-            response.append(answer['text'])
+            response.append(answer.get('text', ''))
             user_row[question_name] = response
             to_concat.add(user_id)
 
