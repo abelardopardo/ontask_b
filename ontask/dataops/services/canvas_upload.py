@@ -286,16 +286,19 @@ def create_df_from_canvas_course_enrollment(
 
     data_frame_source = []
     for student in students:
+        OnTaskDebug.set_trace('')
         user_details = canvas_ops.get_user_details(
             oauth_info,
             user_token,
             student['user']['id']
         )
+        OnTaskDebug.set_trace('')
         data_frame_source.append({
             'id': student['user']['id'],
             'name': user_details['name'],
             'first name': user_details['first_name'],
             'canvas course id': course_id})
+        OnTaskDebug.set_trace('')
 
     # Create the data frame with the collected data
     return pd.DataFrame(data_frame_source)
